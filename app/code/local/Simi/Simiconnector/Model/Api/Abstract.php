@@ -97,7 +97,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
         $this->pluralKey = $pluralKey;
         return $this;
     }
-
+    //start
     public function store()
     {
         return $this->getDetail(array());
@@ -106,6 +106,8 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
     public function index()
     {
         $collection = $this->builderQuery;
+        $this->filter();
+        $this->_order();
         $data = $this->getData();
         $parameters = $data['params'];
         $page = 1;
@@ -164,6 +166,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
         return $this->getDetail(array());
     }
 
+    //end
     public function getBuilderQuery()
     {
         return $this->builderQuery;
@@ -218,8 +221,9 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
         return $query;
     }
 
-    protected function _order(&$query, $parameters)
+    protected function _order($parameters)
     {
+        $query = $this->builderQuery;
         $order = isset($parameters[self::ORDER]) ? $parameters[self::ORDER] : self::DEFAULT_ORDER;
         $order = str_replace('|', '.', $order);
         $dir = isset($parameters[self::DIR]) ? $parameters[self::DIR] : self::DEFAULT_DIR;
