@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<config>
+	<menu>
+		<simiconnector module="simiconnector" translate="title">
+			<title>Simiconnector</title>
+			<sort_order>71</sort_order>               
+			<children>
+				<simiconnector module="simiconnector" translate="title">
+					<title>Manage Items</title>
+					<sort_order>0</sort_order>
+					<action>simiconnectoradmin/adminhtml_simiconnector</action>
+				</simiconnector>
+				<settings module="simiconnector" translate="title">
+					<title>Settings</title>
+					<sort_order>1000</sort_order>
+					<action>adminhtml/system_config/edit/section/simiconnector</action>
+				</settings>
+			</children>
+		</simiconnector>
+	</menu>
+	<acl>
+		<resources>
+			<all>
+				<title>Allow Everything</title>
+			</all>
+			<admin>
+				<children>
+					<system>
+						<children>
+							<config>
+								<children>
+									<simiconnector module="simiconnector" translate="title">
+										<title>Simiconnector</title>
+										<sort_order>71</sort_order>									
+									</simiconnector>								
+								</children>
+							</config>
+						</children>
+					</system>
+					<simiconnector module="simiconnector" translate="title">
+						<title>Simiconnector</title>
+						<sort_order>71</sort_order>               
+						<children>
+							<simiconnector module="simiconnector" translate="title">
+								<title>Manage Items</title>
+								<sort_order>0</sort_order>
+								<action>simiconnectoradmin/adminhtml_simiconnector</action>
+							</simiconnector>
+							<settings module="simiconnector" translate="title">
+								<title>Settings</title>
+								<sort_order>1000</sort_order>
+								<action>adminhtml/system_config/edit/section/simiconnector</action>
+							</settings>
+						</children>
+					</simiconnector>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>

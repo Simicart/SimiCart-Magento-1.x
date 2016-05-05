@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<simiconnectoradmin_adminhtml_simiconnector_index>
+		<reference name="content">
+			<block type="simiconnector/adminhtml_simiconnector" name="simiconnector" />
+		</reference>
+	</simiconnectoradmin_adminhtml_simiconnector_index>
+</layout>
