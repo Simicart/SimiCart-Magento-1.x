@@ -133,6 +133,11 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
         if ($offset > $total)
             throw new Exception($this->_helper->__('Invalid method.'), 4);
 
+        $fields = array();
+        if(isset($parameters['fields']) && $parameters['fields']){
+            $fields = explode(',', $parameters['fields']);
+        }
+
         $check_limit = 0;
         $check_offset = 0;
 
@@ -143,7 +148,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
             if (++$check_limit > $limit)
                 break;
 
-            $info[] = $entity->toArray();
+            $info[] = $entity->toArray($fields);
             $all_ids[] = $entity->getId();
         }
         return $this->getList($info, $all_ids, $total, $limit, $offset);
@@ -152,7 +157,13 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
     public function show()
     {
         $entity = $this->builderQuery;
-        $info = $entity->toArray();
+        $data = $this->getData();
+        $parameters = $data['params'];
+        $fields = array();
+        if(isset($parameters['fields']) && $parameters['fields']){
+            $fields = explode(',', $parameters['fields']);
+        }
+        $info = $entity->toArray($fields);
         return $this->getDetail($info);
     }
 
