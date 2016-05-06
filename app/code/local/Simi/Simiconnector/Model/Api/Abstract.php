@@ -107,7 +107,6 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
     {
         $collection = $this->builderQuery;
         $this->filter();
-        $this->_order();
         $data = $this->getData();
         $parameters = $data['params'];
         $page = 1;
@@ -225,9 +224,8 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
         $data = $this->_data;
         $parameters = $data['params'];
         $query = $this->builderQuery;
-
         $this->_whereFilter($query, $parameters);
-        $this->_order($query, $parameters);
+        $this->_order($parameters);
 
         return $query;
     }
