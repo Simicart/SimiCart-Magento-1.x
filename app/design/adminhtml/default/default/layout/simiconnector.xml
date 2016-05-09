@@ -1,8 +1,18 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-	<simiconnectoradmin_adminhtml_simiconnector_index>
-		<reference name="content">
-			<block type="simiconnector/adminhtml_simiconnector" name="simiconnector" />
-		</reference>
-	</simiconnectoradmin_adminhtml_simiconnector_index>
+    <adminhtml_simiconnector_simicategory_index>
+        <reference name="content">
+            <block type="simiconnector/adminhtml_simicategory" name="simicategory" />
+        </reference>
+    </adminhtml_simiconnector_simicategory_index>
+	    <adminhtml_simiconnector_banner_index>
+        <reference name="content">
+            <block type="simiconnector/adminhtml_web_switcher" name="simiconnector_web_switcher" as="simiconnector_web_switcher">
+                <action method="setUseConfirm">
+                    <params>0</params>
+                </action>
+            </block>
+            <block type="simiconnector/adminhtml_banner" name="simiconnector_banner"/>
+        </reference>
+    </adminhtml_simiconnector_banner_index>  
 </layout>

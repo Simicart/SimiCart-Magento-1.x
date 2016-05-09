@@ -1,60 +1,91 @@
 <?xml version="1.0"?>
 <config>
-	<menu>
-		<simiconnector module="simiconnector" translate="title">
-			<title>Simiconnector</title>
-			<sort_order>71</sort_order>               
-			<children>
-				<simiconnector module="simiconnector" translate="title">
-					<title>Manage Items</title>
-					<sort_order>0</sort_order>
-					<action>simiconnectoradmin/adminhtml_simiconnector</action>
-				</simiconnector>
-				<settings module="simiconnector" translate="title">
-					<title>Settings</title>
-					<sort_order>1000</sort_order>
-					<action>adminhtml/system_config/edit/section/simiconnector</action>
-				</settings>
-			</children>
-		</simiconnector>
-	</menu>
-	<acl>
-		<resources>
-			<all>
-				<title>Allow Everything</title>
-			</all>
-			<admin>
-				<children>
-					<system>
-						<children>
-							<config>
-								<children>
-									<simiconnector module="simiconnector" translate="title">
-										<title>Simiconnector</title>
-										<sort_order>71</sort_order>									
-									</simiconnector>								
-								</children>
-							</config>
-						</children>
-					</system>
-					<simiconnector module="simiconnector" translate="title">
-						<title>Simiconnector</title>
-						<sort_order>71</sort_order>               
-						<children>
-							<simiconnector module="simiconnector" translate="title">
-								<title>Manage Items</title>
-								<sort_order>0</sort_order>
-								<action>simiconnectoradmin/adminhtml_simiconnector</action>
-							</simiconnector>
-							<settings module="simiconnector" translate="title">
-								<title>Settings</title>
-								<sort_order>1000</sort_order>
-								<action>adminhtml/system_config/edit/section/simiconnector</action>
-							</settings>
-						</children>
-					</simiconnector>
-				</children>
-			</admin>
-		</resources>
-	</acl>
+    <menu>
+        <simiconnector module="simiconnector" translate="title">
+            <title>Simiconnector</title>
+            <sort_order>71</sort_order>               
+            <children>                
+                <simi_theme module="simiconnector" translate="title">
+                    <title>Themes</title>      
+                    <sort_order>10</sort_order>
+                    <children>
+                        <default_theme module="simiconnector" translate="title">
+                            <title>Default Theme</title>
+                            <sort_order>0</sort_order>
+                            <children>
+                                <banner module="simiconnector" translate="title">
+                                    <title>Banners</title>
+                                    <sort_order>10</sort_order>
+                                    <action>adminhtml/simiconnector_banner</action>
+                                </banner>
+                                <simicategory module="simiconnector" translate="title">
+                                    <title>Home Category</title>
+                                    <sort_order>50</sort_order>
+                                    <action>adminhtml/simiconnector_simicategory</action>
+                                </simicategory>
+                            </children>
+                        </default_theme>
+                    </children>
+                </simi_theme>
+                <settings module="simiconnector" translate="title">
+                    <title>Settings</title>
+                    <sort_order>1000</sort_order>
+                    <action>adminhtml/system_config/edit/section/simiconnector</action>
+                </settings>
+            </children>
+        </simiconnector>
+    </menu>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <simiconnector module="simiconnector" translate="title">
+                                        <title>Simiconnector</title>
+                                        <sort_order>71</sort_order>									
+                                    </simiconnector>								
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                    <simiconnector module="simiconnector" translate="title">
+                        <title>Simiconnector</title>
+                        <sort_order>71</sort_order>               
+                        <children>
+                            <simi_theme>
+                                <title>Themes</title>      
+                                <sort_order>10</sort_order>
+                                <children>
+                                    <default_theme>
+                                        <title>Default Theme</title>
+                                        <sort_order>0</sort_order>
+                                        <children>
+                                            <banner module="simiconnector" translate="title">
+                                                <title>Banners</title>
+                                                <sort_order>10</sort_order>
+                                            </banner>
+                                            <simicategory module="simiconnector" translate="title">
+                                                <title>Home Category</title>
+                                                <sort_order>50</sort_order>
+                                            </simicategory>
+                                        </children>
+                                    </default_theme>
+                                </children>
+                            </simi_theme>
+                            <settings module="simiconnector" translate="title">
+                                <title>Settings</title>
+                                <sort_order>1000</sort_order>
+                            </settings>                            
+                        </children>                        
+                    </simiconnector>                    
+                </children>
+            </admin>
+        </resources>
+    </acl>
 </config>

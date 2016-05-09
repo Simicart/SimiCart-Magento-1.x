@@ -1,0 +1,48 @@
+<?php $url = Mage::helper("adminhtml")->getUrl('adminhtml/connector_connector/saveKey'); ?>
+<?php
+    $webisteId = Mage::getBlockSingleton('connector/adminhtml_web_switcher')->getWebsiteId();
+?>
+<?php $key = $this->getKey(); ?>
+
+<div class="div_key">    
+
+    <form id="save_app_key" action="<?php echo $url; ?>" method="post" enctype="multipart/form-data">
+
+        <input type="hidden" name="form_key" value="<?php echo $this->getFormKey() ?>" />
+        <input type="hidden" name="website_id" value="<?php echo $webisteId; ?>" />
+
+        <div class="keyleft">
+
+            <span class="key_lable"><?php echo $this->__("Secret Key"); ?>:</span>
+
+            <input id="key_app" name="key_app" value="<?php echo $key ?>" class="required-entry input-text required-entry" type="password">           
+
+        </div> 
+
+        <div class="keyright">
+
+            <button id="save_key" title="Save Key" type="button" class="scalable save" onclick="saveKey.submit()" style="">
+
+                <span><span>
+
+                        <span><?php echo $this->__("Save Key") ?></span>
+
+                    </span></span>
+
+            </button>        
+
+        </div>
+
+        <p class="note" id="note_key_app"><span><?php echo $this->__("Enter the secret key you got from"); ?> <a href="https://www.magestore.com/simicart/usermanagement/configuration"><?php echo $this->__("App Management"); ?></a> <?php echo $this->__("section in SimiCart"); ?></span></p>
+
+    </form>
+
+</div>
+
+
+
+<script type="text/javascript">   
+
+    saveKey = new varienForm('save_app_key', '');   
+
+</script>

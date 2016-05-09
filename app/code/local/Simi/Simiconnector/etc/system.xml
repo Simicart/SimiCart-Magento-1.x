@@ -1,43 +1,43 @@
 <?xml version="1.0"?>
 <config>
-	<tabs>
-		<magestore translate="label">
-			<label>Magestore Extension</label>
-			<sort_order>400</sort_order>
-		</magestore>
-	</tabs>
-	<sections>
-		<simiconnector translate="label" module="simiconnector">
-			<class>separator-top</class>
-			<label>Simiconnector</label>
-			<tab>magestore</tab>
-			<frontend_type>text</frontend_type>
-			<sort_order>299</sort_order>
-			<show_in_default>1</show_in_default>
-			<show_in_website>1</show_in_website>
-			<show_in_store>1</show_in_store>
-			<groups>
-				<general translate="label">
-					<label>General Configuration</label>
-					<frontend_type>text</frontend_type>
-					<sort_order>1</sort_order>
-					<show_in_default>1</show_in_default>
-					<show_in_website>1</show_in_website>
-					<show_in_store>1</show_in_store>
-					<fields>		
-						<enable translate="label">
-							<label>Enable</label>
-							<frontend_type>select</frontend_type>
-							<sort_order>1</sort_order>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-							<comment></comment>
-						</enable>						
-					</fields>				
-				</general>
-			</groups>
-		</simiconnector>
-	</sections>
+    <tabs>
+        <magestore translate="label">
+            <label>Magestore Extension</label>
+            <sort_order>400</sort_order>
+        </magestore>
+    </tabs>
+    <sections>
+        <simiconnector translate="label" module="simiconnector">
+            <class>separator-top</class>
+            <label>Simiconnector</label>
+            <tab>simiconnector</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>299</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label">
+                    <label>General Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>		
+                        <enable translate="label">
+                            <label>Enable</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable>						
+                    </fields>				
+                </general>
+            </groups>
+        </simiconnector>        
+    </sections>
 </config>

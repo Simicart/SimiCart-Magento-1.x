@@ -22,7 +22,7 @@
                 </simiconnector>
             </updates>
         </layout>
-		<translate>
+        <translate>
             <modules>
                 <Simi_Simiconnector>
                     <files>
@@ -34,24 +34,24 @@
     </frontend>
     <admin>
         <routers>
-			<simiconnectoradmin>
-				<use>admin</use>
-				<args>
-					<module>Simi_Simiconnector</module>
-					<frontName>simiconnectoradmin</frontName>
-				</args>
-			</simiconnectoradmin>
+            <adminhtml> 
+                <args> 
+                    <modules> 
+                        <Simi_Simiconnector after="Mage_Adminhtml">Simi_Simiconnector_Adminhtml</Simi_Simiconnector>
+                    </modules> 
+                </args> 
+            </adminhtml>
         </routers>
     </admin>
     <adminhtml>
-		<layout>
-			<updates>
-				<simiconnector>
-					<file>simiconnector.xml</file>
-				</simiconnector>
-			</updates>
-		</layout>
-		<translate>
+        <layout>
+            <updates>
+                <simiconnector>
+                    <file>simiconnector.xml</file>
+                </simiconnector>
+            </updates>
+        </layout>
+        <translate>
             <modules>
                 <Simi_Simiconnector>
                     <files>
@@ -70,9 +70,12 @@
             <simiconnector_mysql4>
                 <class>Simi_Simiconnector_Model_Mysql4</class>
                 <entities>
-                    <simiconnector>
-                        <table>simiconnector</table>
-                    </simiconnector>
+                    <simicategory>
+                        <table>simicategory</table>
+                    </simicategory>
+                    <banner>
+                        <table>connector_banner</table>
+                    </banner> 
                 </entities>
             </simiconnector_mysql4>
         </models>
@@ -100,6 +103,9 @@
             <simiconnector>
                 <class>Simi_Simiconnector_Block</class>
             </simiconnector>
+            <simicategory>
+                <class>Simi_Simicategory_Block</class>
+            </simicategory>
         </blocks>
         <helpers>
             <simiconnector>

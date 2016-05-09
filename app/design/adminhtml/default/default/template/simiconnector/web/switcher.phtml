@@ -1,0 +1,52 @@
+<?php
+/**
+ * 
+ * DISCLAIMER
+ * 
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ * 
+ * @category    
+ * @package     Connector
+ * @copyright   Copyright (c) 2012 
+ * @license     
+ */
+?>
+<?php /* @var $this Mage_Core_Block_Template */?>
+<?php if ($websites = $this->getWebsites()): ?>
+    <p class="switcher"><label for="store_switcher"><?php echo $this->__('Choose Website:') ?></label>
+        <?php if (strcmp(Mage::app()->getRequest()->getControllerName(), "adminhtml_banner") != 0 && strcmp(Mage::app()->getRequest()->getControllerName(), "adminhtml_popup") != 0):?>
+            <select name="store_switcher" id="store_switcher" onchange="return switchWeb(this);">            
+            <?php foreach ($websites as $website): ?>
+                <option value="<?php echo $this->escapeHtml($website->getId()) ?>"<?php if ($this->getWebsiteId() == $website->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($website->getName()) ?></option>
+            <?php endforeach; ?>
+            </select>
+        <?php else: ?>
+            <select name="store_switcher" id="store_switcher" onchange="return switchWeb(this);">            
+                <option value="">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->__('All') ?></option>
+            <?php foreach ($websites as $website): ?>
+                <option value="<?php echo $this->escapeHtml($website->getId()) ?>" <?php if ($website->getId()== $this->getRequest()->getParam('website')):?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($website->getName()) ?></option>
+            <?php endforeach; ?>
+            </select>
+        <?php endif; ?>                
+    </p>
+    <script type="text/javascript">
+        function switchWeb(obj) {
+            var storeParam = obj.value ? 'website/' + obj.value + '/' : '';
+            if (obj.switchParams) {
+                storeParam += obj.switchParams;
+            }
+    <?php if ($this->getUseConfirm()): ?>
+                if (confirm("<?php echo $this->__('Please confirm site switching. All data that hasn\'t been saved will be lost.') ?>")) {
+                    setLocation('<?php echo $this->getSwitchUrl() ?>' + storeParam);
+                    return true;
+                } else {
+                    obj.value = '<?php echo $this->getStoreId() ?>';
+                }
+                return false;
+    <?php else: ?>
+                setLocation('<?php echo $this->getSwitchUrl() ?>' + storeParam);
+    <?php endif; ?>
+        }
+    </script>
+<?php endif; ?>
