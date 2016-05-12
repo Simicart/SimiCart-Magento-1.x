@@ -27,11 +27,4 @@ class Simi_Simiconnector_Model_Mysql4_Banner_Collection extends Mage_Core_Model_
         $this->_init('simiconnector/banner');
     }
 
-    public function setOrder($entity, $order) {
-        if ($entity == 'entity_id') {
-            $entity = 'banner_id';
-        }
-        return parent::setOrder($entity, $order);
-    }
-
 }

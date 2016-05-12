@@ -7,11 +7,4 @@ class Simi_Simiconnector_Model_Mysql4_Simicategory_Collection extends Mage_Core_
         $this->_init('simiconnector/simicategory');
     }
 
-    public function setOrder($entity, $order) {
-        if ($entity == 'entity_id') {
-            $entity = 'simicategory_id';
-        }
-        return parent::setOrder($entity, $order);
-    }
-
 }

@@ -9,7 +9,6 @@
 abstract class Simi_Simiconnector_Model_Api_Abstract
 {
     const DEFAULT_DIR = 'asc';
-    const DEFAULT_ORDER = 'entity_id';
     const DEFAULT_LIMIT = 15;
     const DIR = 'dir';
     const ORDER = 'order';
@@ -20,6 +19,8 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
     const ALL_IDS = 'all_ids';
     const LIMIT_COUNT = 200;
 
+    protected $_DEFAULT_ORDER = 'entity_id';
+     
     protected $_helper;
     /**
      * Singular key.
@@ -233,7 +234,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
     protected function _order($parameters)
     {
         $query = $this->builderQuery;
-        $order = isset($parameters[self::ORDER]) ? $parameters[self::ORDER] : self::DEFAULT_ORDER;
+        $order = isset($parameters[self::ORDER]) ? $parameters[self::ORDER] : $this->_DEFAULT_ORDER;
         $order = str_replace('|', '.', $order);
         $dir = isset($parameters[self::DIR]) ? $parameters[self::DIR] : self::DEFAULT_DIR;
         $query->setOrder($order, $dir);

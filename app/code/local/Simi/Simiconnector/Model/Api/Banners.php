@@ -8,6 +8,8 @@
  */
 class Simi_Simiconnector_Model_Api_Banners extends Simi_Simiconnector_Model_Api_Abstract
 {
+    protected $_DEFAULT_ORDER = 'banner_id';
+    
     public function setBuilderQuery($query)
     {
         $data = $this->getData();

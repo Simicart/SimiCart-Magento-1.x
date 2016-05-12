@@ -8,6 +8,8 @@
  */
 class Simi_Simiconnector_Model_Api_Simicategories extends Simi_Simiconnector_Model_Api_Abstract
 {
+    protected $_DEFAULT_ORDER = 'simicategory_id';
+    
     public function setBuilderQuery($query)
     {
         $data = $this->getData();
