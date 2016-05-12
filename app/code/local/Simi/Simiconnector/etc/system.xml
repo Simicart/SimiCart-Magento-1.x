@@ -40,7 +40,7 @@
                             <comment>It use to send notification to IOS</comment>
                             <frontend_type>file</frontend_type>
                             <backend_model>adminhtml/system_config_backend_file</backend_model>
-                            <upload_dir config="system/filesystem/media/simi/simicart/pem/ios" scope_info="1">admin-config-uploads</upload_dir>
+                            <upload_dir config="system/filesystem/media" scope_info="1">simi/simicart/pem/ios</upload_dir>
                             <base_url type="media" scope_info="1">admin-config-uploads</base_url>
                             <sort_order>1</sort_order>
                             <show_in_default>1</show_in_default>

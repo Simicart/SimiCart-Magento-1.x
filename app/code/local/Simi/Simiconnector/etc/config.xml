@@ -124,6 +124,7 @@
             <android_sendid>518903118242</android_sendid>
             <general>                                               
                 <enable>1</enable>
+                <upload_pem_file>0</upload_pem_file>
                 <is_show_price_zero>1</is_show_price_zero>
                 <is_show_all_product>1</is_show_all_product>
                 <cms_shipping_condition></cms_shipping_condition>
