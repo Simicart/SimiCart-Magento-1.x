@@ -6,6 +6,7 @@ $installer->startSetup();
 $installer->run("
     DROP TABLE IF EXISTS {$installer->getTable('simicategory')};
     DROP TABLE IF EXISTS {$installer->getTable('connector_banner')};
+    DROP TABLE IF EXISTS {$installer->getTable('connector_cms')};
 
     CREATE TABLE {$installer->getTable('simicategory')} (
       `simicategory_id` int(11) unsigned NOT NULL auto_increment,
@@ -29,6 +30,18 @@ $installer->run("
         `product_id` int(10) unsigned  NOT NULL,        
 	PRIMARY KEY (`banner_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;    
+    
+    CREATE TABLE {$installer->getTable('connector_cms')} (
+      `cms_id` int(11) unsigned NOT NULL auto_increment,
+      `cms_title` varchar(255) NULL, 
+      `cms_image` varchar(255) NULL default '', 
+      `cms_content` text NULL default '',  
+      `cms_status` tinyint(4) NOT NULL default '1',
+      `website_id` smallint(5) NULL,
+      PRIMARY KEY (`cms_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    
+    
 
 ");
 

@@ -5,7 +5,7 @@
             <block type="simiconnector/adminhtml_simicategory" name="simicategory" />
         </reference>
     </adminhtml_simiconnector_simicategory_index>
-	    <adminhtml_simiconnector_banner_index>
+    <adminhtml_simiconnector_banner_index>
         <reference name="content">
             <block type="simiconnector/adminhtml_web_switcher" name="simiconnector_web_switcher" as="simiconnector_web_switcher">
                 <action method="setUseConfirm">
@@ -14,5 +14,61 @@
             </block>
             <block type="simiconnector/adminhtml_banner" name="simiconnector_banner"/>
         </reference>
-    </adminhtml_simiconnector_banner_index>  
+    </adminhtml_simiconnector_banner_index> 
+    <adminhtml_simiconnector_cms_index>
+        <reference name="content">
+            <block type="simiconnector/adminhtml_web_switcher" name="simiconnector_web_switcher" as="simiconnector_web_switcher">
+                <action method="setUseConfirm">
+                    <params>0</params>
+                </action>
+            </block>
+            <block type="simiconnector/adminhtml_cms" name="simiconnector_cms"/>
+        </reference>
+    </adminhtml_simiconnector_cms_index> 
+    <adminhtml_simiconnector_cms_edit>
+        <reference name="head">
+            <action method="setCanLoadTinyMce">
+                <flag>1</flag>
+            </action>
+            <action method="addJs">
+                <script>mage/adminhtml/variables.js</script>
+            </action>
+            <action method="addJs">
+                <script>mage/adminhtml/wysiwyg/widget.js</script>
+            </action>
+            <action method="addJs">
+                <script>lib/flex.js</script>
+            </action>
+            <action method="addJs">
+                <script>lib/FABridge.js</script>
+            </action>
+            <action method="addJs">
+                <script>mage/adminhtml/flexuploader.js</script>
+            </action>
+            <action method="addJs">
+                <script>mage/adminhtml/browser.js</script>
+            </action>
+            <action method="addJs">
+                <script>prototype/window.js</script>
+            </action>
+            <action method="addItem">
+                <type>js_css</type>
+                <name>prototype/windows/themes/default.css</name>
+            </action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>lib/prototype/windows/themes/magento.css</name>
+            </action>
+            <action method="addItem">
+                <type>js</type>
+                <name>mage/adminhtml/wysiwyg/tiny_mce/setup.js</name>
+                <params/>
+            </action>
+            <action method="addItem">
+                <type>js</type>
+                <name>tiny_mce/tiny_mce.js</name>
+                <params/>
+            </action>
+        </reference>
+    </adminhtml_simiconnector_cms_edit>
 </layout>

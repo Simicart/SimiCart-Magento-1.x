@@ -23,6 +23,16 @@
                                     <sort_order>50</sort_order>
                                     <action>adminhtml/simiconnector_simicategory</action>
                                 </simicategory>
+                                <cms module="simiconnector" translate="title">
+                                    <title>CMS</title>
+                                    <sort_order>150</sort_order>
+                                    <action>adminhtml/simiconnector_cms</action>
+                                </cms>
+                                <spotproduct module="simiconnector" translate="title">				
+                                    <title>Spot Products</title>
+                                    <sort_order>160</sort_order>
+                                    <action>adminhtml/system_config/edit/section/spotproduct</action>
+                                </spotproduct>
                             </children>
                         </default_theme>
                     </children>
@@ -47,9 +57,13 @@
                             <config>
                                 <children>
                                     <simiconnector module="simiconnector" translate="title">
-                                        <title>Simiconnector</title>
-                                        <sort_order>71</sort_order>									
-                                    </simiconnector>								
+                                        <title>SimiCart Connector</title>
+                                        <sort_order>1</sort_order>									
+                                    </simiconnector>
+                                    <spotproduct module="simiconnector" translate="title">
+                                        <title>Spot Product</title>
+                                        <sort_order>99</sort_order>									
+                                    </spotproduct>						
                                 </children>
                             </config>
                         </children>
@@ -74,6 +88,14 @@
                                                 <title>Home Category</title>
                                                 <sort_order>50</sort_order>
                                             </simicategory>
+                                            <cms module="simiconnector" translate="title">
+                                                <title>CMS</title>
+                                                <sort_order>150</sort_order>
+                                            </cms>
+                                            <spotproduct module="simiconnector" translate="title">				
+                                                <title>Spot Products</title>
+                                                <sort_order>160</sort_order>
+                                            </spotproduct>
                                         </children>
                                     </default_theme>
                                 </children>
@@ -86,6 +108,6 @@
                     </simiconnector>                    
                 </children>
             </admin>
-        </resources>
+        </resources>       
     </acl>
 </config>

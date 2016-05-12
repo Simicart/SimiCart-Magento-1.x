@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 
  * DISCLAIMER
@@ -14,24 +13,18 @@
  */
 
 /**
- * Connector Resource Collection
+ * Connector Model
  * 
  * @category    
  * @package     Connector
  * @author      Developer
  */
-class Simi_Simiconnector_Model_Mysql4_Banner_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract {
+class Simi_Simiconnector_Model_Cms extends Mage_Core_Model_Abstract {
 
     public function _construct() {
         parent::_construct();
-        $this->_init('simiconnector/banner');
+        $this->_init('simiconnector/cms');
     }
-
-    public function setOrder($entity, $order) {
-        if ($entity == 'entity_id') {
-            $entity = 'banner_id';
-        }
-        return parent::setOrder($entity, $order);
-    }
-
+	
+		
 }
