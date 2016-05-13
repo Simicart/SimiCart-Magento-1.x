@@ -47,11 +47,17 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tab_Form extends Mage_Adminhtm
             'directives_url_quoted' => preg_quote(Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/cms_wysiwyg/directive')),
             'files_browser_window_url' => Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/cms_wysiwyg_images/index'),
         ));
-        $fieldset->addField('website_id', 'select', array(
-            'label' => Mage::helper('simiconnector')->__('Choose website'),
-            'name' => 'website_id',
-            'values' => Mage::getSingleton('simiconnector/status')->getWebsite(),
+
+
+        $field = $fieldset->addField('storeview_id', 'multiselect', array(
+            'name' => 'storeview_id[]',
+            'label' => Mage::helper('cms')->__('Store View'),
+            'title' => Mage::helper('cms')->__('Store View'),
+            'required' => true,
+            'values' => Mage::getSingleton('adminhtml/system_store')->getStoreValuesForForm(false, true),
         ));
+        $renderer = $this->getLayout()->createBlock('adminhtml/store_switcher_form_renderer_fieldset_element');
+        $field->setRenderer($renderer);
 
         $fieldset->addField('cms_title', 'text', array(
             'label' => Mage::helper('simiconnector')->__('Title'),
@@ -59,11 +65,6 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tab_Form extends Mage_Adminhtm
             'required' => true,
             'name' => 'cms_title',
         ));
-
-        if (isset($data['cms_image']) && $data['cms_image']) {
-
-            $data['cms_image'] = Mage::getBaseUrl('media') . 'simi/simicart/cms/' . $data['website_id'] . '/' . $data['cms_image'];
-        }
 
         $fieldset->addField('cms_image', 'image', array(
             'label' => Mage::helper('simiconnector')->__('Icon (width:64px, height:64px)'),
@@ -80,6 +81,11 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tab_Form extends Mage_Adminhtm
             'style' => 'width: 600px;',
         ));
 
+        $fieldset->addField('sort_order', 'text', array(
+            'label' => Mage::helper('simiconnector')->__('Sort Order'),
+            'required' => false,
+            'name' => 'sort_order',
+        ));
 
         $fieldset->addField('cms_status', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Enable'),

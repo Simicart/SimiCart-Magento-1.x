@@ -38,12 +38,23 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
             $data = Mage::registry('banner_data')->getData();
 
         $fieldset = $form->addFieldset('simiconnector_form', array('legend' => Mage::helper('simiconnector')->__('Banner information')));
+        /*
+          $fieldset->addField('website_id', 'select', array(
+          'label' => Mage::helper('simiconnector')->__('Choose website'),
+          'name' => 'website_id',
+          'values' => Mage::getSingleton('simiconnector/status')->getWebsite(),
+          ));
+         */
 
-        $fieldset->addField('website_id', 'select', array(
-            'label' => Mage::helper('simiconnector')->__('Choose website'),
-            'name' => 'website_id',
-            'values' => Mage::getSingleton('simiconnector/status')->getWebsite(),
+        $field = $fieldset->addField('storeview_id', 'multiselect', array(
+            'name' => 'storeview_id[]',
+            'label' => Mage::helper('cms')->__('Store View'),
+            'title' => Mage::helper('cms')->__('Store View'),
+            'required' => true,
+            'values' => Mage::getSingleton('adminhtml/system_store')->getStoreValuesForForm(false, true),
         ));
+        $renderer = $this->getLayout()->createBlock('adminhtml/store_switcher_form_renderer_fieldset_element');
+        $field->setRenderer($renderer);
 
 
         $fieldset->addField('banner_title', 'text', array(
@@ -53,10 +64,6 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
             'name' => 'banner_title',
         ));
 
-        if (isset($data['banner_name']) && $data['banner_name']) {
-
-            $data['banner_name'] = Mage::getBaseUrl('media') . 'simi/simicart/banner/' . $data['website_id'] . '/' . $data['banner_name'];
-        }
         $fieldset->addField('banner_name', 'image', array(
             'label' => Mage::helper('simiconnector')->__('Image (width:640px, height:340px)'),
             'required' => FALSE,
@@ -70,7 +77,7 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
             'name' => 'type',
             'values' => Mage::getModel('simiconnector/banner')->toOptionArray(),
             'onchange' => 'onchangeNoticeType(this.value)',
-            'after_element_html' => '<script> Event.observe(window, "load", function(){onchangeNoticeType(\''.$data['type'].'\');});</script>',
+            'after_element_html' => '<script> Event.observe(window, "load", function(){onchangeNoticeType(\'' . $data['type'] . '\');});</script>',
         ));
 
         $productIds = implode(", ", Mage::getResourceModel('catalog/product_collection')->getAllIds());
@@ -79,8 +86,8 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
             'class' => 'required-entry',
             'required' => true,
             'label' => Mage::helper('simiconnector')->__('Product ID'),
-            'note'  => Mage::helper('simiconnector')->__('Choose a product'),
-            'after_element_html' => '<a id="product_link" href="javascript:void(0)" onclick="toggleMainProducts()"><img src="' . $this->getSkinUrl('images/rule_chooser_trigger.gif') . '" alt="" class="v-middle rule-chooser-trigger" title="Select Products"></a><input type="hidden" value="'.$productIds.'" id="product_all_ids"/><div id="main_products_select" style="display:none;width:640px"></div>
+            'note' => Mage::helper('simiconnector')->__('Choose a product'),
+            'after_element_html' => '<a id="product_link" href="javascript:void(0)" onclick="toggleMainProducts()"><img src="' . $this->getSkinUrl('images/rule_chooser_trigger.gif') . '" alt="" class="v-middle rule-chooser-trigger" title="Select Products"></a><input type="hidden" value="' . $productIds . '" id="product_all_ids"/><div id="main_products_select" style="display:none;width:640px"></div>
                 <script type="text/javascript">
                     function toggleMainProducts(){
                         if($("main_products_select").style.display == "none"){
@@ -175,7 +182,7 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
             'class' => 'required-entry',
             'required' => true,
             'label' => Mage::helper('simiconnector')->__('Category ID'),
-            'note'  => Mage::helper('simiconnector')->__('Choose a category'),
+            'note' => Mage::helper('simiconnector')->__('Choose a category'),
             'after_element_html' => '<a id="category_link" href="javascript:void(0)" onclick="toggleMainCategories()"><img src="' . $this->getSkinUrl('images/rule_chooser_trigger.gif') . '" alt="" class="v-middle rule-chooser-trigger" title="Select Category"></a>
                 <div id="main_categories_select" style="display:none"></div>
                     <script type="text/javascript">
@@ -213,10 +220,16 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
         ));
 
         $fieldset->addField('banner_url', 'editor', array(
-            'name' => 'banner_url',           
+            'name' => 'banner_url',
             'label' => Mage::helper('simiconnector')->__('Url'),
             'title' => Mage::helper('simiconnector')->__('Url'),
             'required' => false,
+        ));
+        
+        $fieldset->addField('sort_order', 'text', array(
+            'label' => Mage::helper('simiconnector')->__('Sort Order'),
+            'required' => false,
+            'name' => 'sort_order',
         ));
 
         $fieldset->addField('status', 'select', array(

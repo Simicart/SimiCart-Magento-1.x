@@ -13,11 +13,6 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Grid extends Mage_Adminhtml_Block_W
         $this->setSaveParametersInSession(true);
     }
 
-    /**
-     * prepare collection for block to display
-     *
-     * @return Simi_Connector_Block_Adminhtml_Banner_Grid
-     */
     protected function _prepareCollection() {
         $webId = 0;
         $collection = Mage::getModel('simiconnector/cms')->getCollection();
@@ -29,11 +24,6 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Grid extends Mage_Adminhtml_Block_W
         return parent::_prepareCollection();
     }
 
-    /**
-     * prepare columns for this grid
-     *
-     * @return Simi_Connector_Block_Adminhtml_Banner_Grid
-     */
     protected function _prepareColumns() {
         $this->addColumn('cms_id', array(
             'header' => Mage::helper('simiconnector')->__('ID'),
@@ -48,13 +38,12 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Grid extends Mage_Adminhtml_Block_W
             'index' => 'cms_title',
         ));
 
-        $this->addColumn('website_id', array(
-            'header' => Mage::helper('simiconnector')->__('Website'),
+        
+        $this->addColumn('sort_order', array(
+            'header' => Mage::helper('simiconnector')->__('Sort Order'),
             'align' => 'left',
-            'width' => '200px',
-            'index' => 'website_id',
-            'type' => 'options',
-            'options' => Mage::getSingleton('simiconnector/status')->getWebGird(),
+            'width' => '50px',
+            'index' => 'sort_order',
             'filter' => false
         ));
 
@@ -88,17 +77,10 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Grid extends Mage_Adminhtml_Block_W
             'is_system' => true,
         ));
 
-//        $this->addExportType('*/*/exportCsv', Mage::helper('connector')->__('CSV'));
-//        $this->addExportType('*/*/exportXml', Mage::helper('connector')->__('XML'));
 
         return parent::_prepareColumns();
     }
 
-    /**
-     * prepare mass action for this grid
-     *
-     * @return Magestore_Madapter_Block_Adminhtml_Madapter_Grid
-     */
     protected function _prepareMassaction() {
         $this->setMassactionIdField('cms_id');
         $this->getMassactionBlock()->setFormFieldName('simiconnector');
@@ -112,11 +94,6 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Grid extends Mage_Adminhtml_Block_W
         return $this;
     }
 
-    /**
-     * get url for each row in grid
-     *
-     * @return string
-     */
     public function getRowUrl($row) {
         return $this->getUrl('*/*/edit', array('id' => $row->getId()));
     }

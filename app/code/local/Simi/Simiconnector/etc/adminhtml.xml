@@ -14,11 +14,27 @@
                             <sort_order>0</sort_order>
                             <action>adminhtml/connector_connector</action>
                         </connector_app>
-                        <notice module="simiconnector" translate="title">
-                            <title>Notifications (pending)</title>
-                            <sort_order>100</sort_order>
-                            <action>adminhtml/connector_notice</action>
-                        </notice>
+                        <siminotification module="simiconnector" translate="title">
+                            <title>Notifications</title>
+                            <sort_order>2</sort_order>
+                            <children>
+                                <notification module="simiconnector" translate="title">
+                                    <title>Manage Notifications</title>
+                                    <sort_order>10</sort_order>
+                                    <action>adminhtml/simiconnector_siminotification</action>
+                                </notification>
+                                <device_list module="simiconnector" translate="title">
+                                    <title>View Devices</title>
+                                    <sort_order>20</sort_order>
+                                    <action>adminhtml/simiconnector_device</action>
+                                </device_list>
+                                <history module="simiconnector" translate="title">
+                                    <title>History</title>
+                                    <sort_order>30</sort_order>
+                                    <action>adminhtml/simiconnector_history</action>
+                                </history>
+                            </children>
+                        </siminotification>
                         <promoteapp module="simiconnector" translate="title">				
                             <title>Promote Apps (pending)</title>
                             <sort_order>170</sort_order>
@@ -36,7 +52,7 @@
                     <sort_order>10</sort_order>
                     <children>
                         <default_theme module="simiconnector" translate="title">
-                            <title>Default Theme</title>
+                            <title>Home Content</title>
                             <sort_order>0</sort_order>
                             <children>
                                 <banner module="simiconnector" translate="title">
@@ -45,22 +61,22 @@
                                     <action>adminhtml/simiconnector_banner</action>
                                 </banner>
                                 <simicategory module="simiconnector" translate="title">
-                                    <title>Home Category</title>
+                                    <title>Home Categories</title>
                                     <sort_order>50</sort_order>
                                     <action>adminhtml/simiconnector_simicategory</action>
                                 </simicategory>
-                                <cms module="simiconnector" translate="title">
-                                    <title>CMS</title>
-                                    <sort_order>150</sort_order>
-                                    <action>adminhtml/simiconnector_cms</action>
-                                </cms>
                                 <spotproduct module="simiconnector" translate="title">				
-                                    <title>Spot Products (pending)</title>
+                                    <title>Custom Product Lists (Pending)</title>
                                     <sort_order>160</sort_order>
                                     <action>adminhtml/system_config/edit/section/spotproduct</action>
                                 </spotproduct>
                             </children>
                         </default_theme>
+                        <cms module="simiconnector" translate="title">
+                            <title>CMS Pages</title>
+                            <sort_order>150</sort_order>
+                            <action>adminhtml/simiconnector_cms</action>
+                        </cms>
                     </children>
                 </simi_theme>
             </children>
@@ -101,6 +117,24 @@
                                         <title>Apps</title>
                                         <sort_order>0</sort_order>
                                     </connector_app>
+                                    <siminotification module="simiconnector" translate="title">
+                                        <title>Notifications</title>
+                                        <sort_order>2</sort_order>
+                                        <children>
+                                            <notification module="simiconnector" translate="title">
+                                                <title>Manage Notifications</title>
+                                                <sort_order>10</sort_order>
+                                            </notification>
+                                            <device_list module="simiconnector" translate="title">
+                                                <title>View Devices</title>
+                                                <sort_order>20</sort_order>
+                                            </device_list>
+                                            <history module="simiconnector" translate="title">
+                                                <title>History</title>
+                                                <sort_order>30</sort_order>
+                                            </history>
+                                        </children>
+                                    </siminotification>
                                     <notice module="simiconnector" translate="title">
                                         <title>Notifications</title>
                                         <sort_order>100</sort_order>
@@ -131,16 +165,16 @@
                                                 <title>Home Category</title>
                                                 <sort_order>50</sort_order>
                                             </simicategory>
-                                            <cms module="simiconnector" translate="title">
-                                                <title>CMS</title>
-                                                <sort_order>150</sort_order>
-                                            </cms>
                                             <spotproduct module="simiconnector" translate="title">				
-                                                <title>Spot Products</title>
+                                                <title>Custom Product List (Pending)</title>
                                                 <sort_order>160</sort_order>
                                             </spotproduct>
                                         </children>
                                     </default_theme>
+                                    <cms module="simiconnector" translate="title">
+                                        <title>CMS Pages</title>
+                                        <sort_order>150</sort_order>
+                                    </cms>
                                 </children>
                             </simi_theme>                            
                         </children>                        

@@ -79,6 +79,15 @@
                     <cms>
                         <table>connector_cms</table>
                     </cms> 
+                    <device>
+                        <table>connector_device</table>
+                    </device>                    
+                    <siminotification>
+                        <table>connector_notice</table>
+                    </siminotification>
+                    <history>
+                        <table>connector_notice_history</table>
+                    </history>
                 </entities>
             </simiconnector_mysql4>
         </models>

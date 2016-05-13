@@ -42,7 +42,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
             }
         }
 
-        $rtlCountry = Mage::getStoreConfig('connector/general/rtl_country', Mage::app()->getStore()->getId());
+        $rtlCountry = Mage::getStoreConfig('simiconnector/general/rtl_country', Mage::app()->getStore()->getId());
         $isRtl = '0';
         $rtlCountry = explode(',', $rtlCountry);
         if (in_array($country_code, $rtlCountry)) {
@@ -63,7 +63,6 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'is_show_zero_price' => Mage::getStoreConfig('simiconnector/general/is_show_price_zero'),
                 'is_show_link_all_product' => Mage::getStoreConfig('simiconnector/general/is_show_all_product'),
                 'use_store' => Mage::getStoreConfig('web/url/use_store'),
-                // 'is_use_default_address' => Mage::getStoreConfig('connector/general/is_use_default_address'),
                 'is_reload_payment_method' => Mage::getStoreConfig('simiconnector/general/is_reload_payment_method'),
                 'is_rtl' => $isRtl,
             ),

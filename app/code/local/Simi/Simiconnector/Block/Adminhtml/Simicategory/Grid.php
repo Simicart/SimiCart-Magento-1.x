@@ -30,13 +30,11 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Grid extends Mage_Adminhtm
             'index' => 'simicategory_name',
         ));
 
-        $this->addColumn('website_id', array(
-            'header' => Mage::helper('simiconnector')->__('Website'),
+        $this->addColumn('sort_order', array(
+            'header' => Mage::helper('simiconnector')->__('Sort Order'),
             'align' => 'left',
-            'width' => '200px',
-            'index' => 'website_id',
-            'type' => 'options',
-            'options' => Mage::getSingleton('simiconnector/status')->getWebGird(),
+            'width' => '50px',
+            'index' => 'sort_order',
             'filter' => false
         ));
 

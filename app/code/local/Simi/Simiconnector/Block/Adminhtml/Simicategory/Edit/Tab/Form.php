@@ -14,11 +14,15 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
 
         $fieldset = $form->addFieldset('simicategory_form', array('legend' => Mage::helper('simiconnector')->__('Item information')));
 
-        $fieldset->addField('website_id', 'select', array(
-            'label' => Mage::helper('simiconnector')->__('Choose website'),
-            'name' => 'website_id',
-            'values' => Mage::getSingleton('simiconnector/status')->getWebsite(),
+        $field = $fieldset->addField('storeview_id', 'multiselect', array(
+            'name' => 'storeview_id[]',
+            'label' => Mage::helper('cms')->__('Store View'),
+            'title' => Mage::helper('cms')->__('Store View'),
+            'required' => true,
+            'values' => Mage::getSingleton('adminhtml/system_store')->getStoreValuesForForm(false, true),
         ));
+        $renderer = $this->getLayout()->createBlock('adminhtml/store_switcher_form_renderer_fieldset_element');
+        $field->setRenderer($renderer);
 
         $fieldset->addField('simicategory_filename', 'image', array(
             'label' => Mage::helper('simiconnector')->__('Image (width:220px, height:220px)'),
@@ -66,6 +70,12 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
                 };
         </script>
             '
+        ));
+
+        $fieldset->addField('sort_order', 'text', array(
+            'label' => Mage::helper('simiconnector')->__('Sort Order'),
+            'required' => false,
+            'name' => 'sort_order',
         ));
 
         $fieldset->addField('status', 'select', array(

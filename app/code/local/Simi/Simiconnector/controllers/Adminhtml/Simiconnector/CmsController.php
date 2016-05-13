@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 
  * DISCLAIMER
@@ -80,8 +81,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
      * save item action
      */
     public function saveAction() {
-        if ($data = $this->getRequest()->getPost()) {       
-			 if (isset($_FILES['cms_image_o']['name']) && $_FILES['cms_image_o']['name'] != '') {
+        if ($data = $this->getRequest()->getPost()) {
+            if (isset($_FILES['cms_image_o']['name']) && $_FILES['cms_image_o']['name'] != '') {
                 try {
                     /* Starting upload */
                     $uploader = new Varien_File_Uploader('cms_image_o');
@@ -97,10 +98,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                     $uploader->setFilesDispersion(false);
 
                     // We set media as the upload dir
-                    str_replace(" ", "_", $_FILES['cms_image_o']['name']);                    
-                    $website = $data['website_id'];
-                    
-                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'cms' . DS . $website;
+                    str_replace(" ", "_", $_FILES['cms_image_o']['name']);
+
+                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'cms' ;
                     if (!is_dir($path)) {
                         try {
                             mkdir($path, 0777, TRUE);
@@ -108,25 +108,28 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                             
                         }
                     }
-					$file_name = explode(".", $_FILES['cms_image_o']['name']);				
-					$fName = $file_name[0]."@2x.".$file_name[1];										
-                    $result = $uploader->save($path, $fName);					
-					rename($path.DS.$result['file'], $path.DS.$fName);
-                    $data['cms_image'] = $fName;					
+                    $file_name = explode(".", $_FILES['cms_image_o']['name']);
+                    $fName = $file_name[0] . "@2x." . $file_name[1];
+                    $result = $uploader->save($path, $fName);
+                    rename($path . DS . $result['file'], $path . DS . $fName);
+                    $data['cms_image'] = Mage::getBaseUrl('media') . 'simi/simicart/cms/' . $fName;
                 } catch (Exception $e) {
-                    $data['cms_image'] = $_FILES['cms_image_o']['name'];
+                    $data['cms_image'] = Mage::getBaseUrl('media') . 'simi/simicart/cms/' . $_FILES['cms_image_o']['name'];
                 }
-            }            
-			
-            if (isset($data['cms_image_o']['delete']) && $data['cms_image_o']['delete'] == 1) {                
-                Mage::helper('simiconnector')->deleteFile($data['cms_image_o']['value']);				
+            }
+
+            if (isset($data['cms_image_o']['delete']) && $data['cms_image_o']['delete'] == 1) {
+                Mage::helper('simiconnector')->deleteFile($data['cms_image_o']['value']);
                 $data['cms_image'] = '';
-            }   
+            }
+            if ($data['storeview_id']) {
+                $data['storeview_id'] = implode(",", $data['storeview_id']);
+            }
             $model = Mage::getModel('simiconnector/cms');
             $model->setData($data)
                     ->setId($this->getRequest()->getParam('id'));
 
-            try {                
+            try {
                 $model->save();
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Block was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
@@ -172,7 +175,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
      */
     public function massDeleteAction() {
         $bannerIds = $this->getRequest()->getParam('simiconnector');
-		
+
         if (!is_array($bannerIds)) {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please select item(s)'));
         } else {
@@ -187,7 +190,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
             }
         }
         $this->_redirect('*/*/index');
-    }   
+    }
 
     protected function _isAllowed() {
         return Mage::getSingleton('admin/session')->isAllowed('simiconnector');

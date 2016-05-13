@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 
  * DISCLAIMER
@@ -37,10 +38,10 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Grid extends Mage_Adminhtml_Bloc
     protected function _prepareCollection() {
         $webId = 0;
         $collection = Mage::getModel('simiconnector/banner')->getCollection();
-        if ($this->getRequest()->getParam('website')){            
+        if ($this->getRequest()->getParam('website')) {
             $webId = $this->getRequest()->getParam('website');
-            $collection->addFieldToFilter('website_id', array('eq'=>$webId));
-        }                
+            $collection->addFieldToFilter('website_id', array('eq' => $webId));
+        }
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -81,17 +82,16 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Grid extends Mage_Adminhtml_Bloc
                 3 => Mage::helper('simiconnector')->__('Website Page'),
             ),
         ));
-        
-        $this->addColumn('website_id', array(
-            'header' => Mage::helper('simiconnector')->__('Website'),
+
+        $this->addColumn('sort_order', array(
+            'header' => Mage::helper('simiconnector')->__('Sort Order'),
             'align' => 'left',
-            'width' => '200px',
-            'index' => 'website_id',
-            'type' => 'options',
-            'options' => Mage::getSingleton('simiconnector/status')->getWebGird(),
-             'filter' => false
+            'width' => '50px',
+            'index' => 'sort_order',
+            'filter' => false
         ));
-        
+
+
         $this->addColumn('status', array(
             'header' => Mage::helper('simiconnector')->__('Status'),
             'align' => 'left',
@@ -114,7 +114,7 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Grid extends Mage_Adminhtml_Bloc
                     'caption' => Mage::helper('simiconnector')->__('Edit'),
                     'url' => array('base' => '*/*/edit'),
                     'field' => 'id'
-            )),
+                )),
             'filter' => false,
             'sortable' => false,
             'index' => 'stores',
@@ -155,7 +155,7 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Grid extends Mage_Adminhtml_Bloc
                     'class' => 'required-entry',
                     'label' => Mage::helper('simiconnector')->__('Status'),
                     'values' => $statuses
-            ))
+                ))
         ));
         return $this;
     }

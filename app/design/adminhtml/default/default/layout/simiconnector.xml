@@ -7,21 +7,11 @@
     </adminhtml_simiconnector_simicategory_index>
     <adminhtml_simiconnector_banner_index>
         <reference name="content">
-            <block type="simiconnector/adminhtml_web_switcher" name="simiconnector_web_switcher" as="simiconnector_web_switcher">
-                <action method="setUseConfirm">
-                    <params>0</params>
-                </action>
-            </block>
             <block type="simiconnector/adminhtml_banner" name="simiconnector_banner"/>
         </reference>
     </adminhtml_simiconnector_banner_index> 
     <adminhtml_simiconnector_cms_index>
         <reference name="content">
-            <block type="simiconnector/adminhtml_web_switcher" name="simiconnector_web_switcher" as="simiconnector_web_switcher">
-                <action method="setUseConfirm">
-                    <params>0</params>
-                </action>
-            </block>
             <block type="simiconnector/adminhtml_cms" name="simiconnector_cms"/>
         </reference>
     </adminhtml_simiconnector_cms_index> 
@@ -71,4 +61,27 @@
             </action>
         </reference>
     </adminhtml_simiconnector_cms_edit>
+    <adminhtml_simiconnector_siminotification_index>
+        <reference name="content">
+            <block type="simiconnector/adminhtml_siminotification" name="siminotification" />
+        </reference>
+    </adminhtml_simiconnector_siminotification_index>
+
+    <adminhtml_simiconnector_device_index>
+        <reference name="content">
+            <block type="simiconnector/adminhtml_device" name="device" />
+        </reference>
+    </adminhtml_simiconnector_device_index>
+
+    <adminhtml_simiconnector_history_index>
+        <reference name="content">
+            <block type="simiconnector/adminhtml_history" name="history" />
+        </reference>
+    </adminhtml_simiconnector_history_index>
+
+    <adminhtml_simiconnector_siminotification_guide>
+        <reference name="content">
+            <block type="simiconnector/adminhtml_siminotification" name="siminotification_guide" as="siminotification_guide" template="simiconnector/siminotification/guide.phtml" />                            
+        </reference>
+    </adminhtml_simiconnector_siminotification_guide>
 </layout>

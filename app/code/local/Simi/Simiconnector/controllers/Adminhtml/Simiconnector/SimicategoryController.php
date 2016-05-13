@@ -77,9 +77,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                     }
 
                     $result = $uploader->save($path, $_FILES['simicategory_filename']['name']);
-                    $data['simicategory_filename'] = Mage::getBaseUrl('media') . 'simi/simicart/simicategory/' . $website . '/' . $result['file'];
+                    $data['simicategory_filename'] = Mage::getBaseUrl('media') . 'simi/simicart/simicategory/' . $result['file'];
                 } catch (Exception $e) {
-                    $data['simicategory_filename'] = Mage::getBaseUrl('media') . 'simi/simicart/simicategory/' . $website . '/' . $_FILES['simicategory_filename']['name'];
+                    $data['simicategory_filename'] = Mage::getBaseUrl('media') . 'simi/simicart/simicategory/' . $_FILES['simicategory_filename']['name'];
                 }
                 //this way the name is saved in DB
             }
@@ -90,6 +90,10 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                 } else {
                     $data['simicategory_filename'] = $data['simicategory_filename']['value'];
                 }
+            }
+
+            if ($data['storeview_id']) {
+                $data['storeview_id'] = implode(",", $data['storeview_id']);
             }
 
             if (isset($data['category_id']) && $data['category_id']) {

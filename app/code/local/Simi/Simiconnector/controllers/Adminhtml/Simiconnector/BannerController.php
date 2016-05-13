@@ -79,7 +79,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
      * save item action
      */
     public function saveAction() {
-        if ($data = $this->getRequest()->getPost()) {
+        if ($data = $this->getRequest()->getPost()) {            
             if (isset($_FILES['banner_name_co']['name']) && $_FILES['banner_name_co']['name'] != '') {
                 try {
                     /* Starting upload */
@@ -97,9 +97,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
 
                     // We set media as the upload dir
                     str_replace(" ", "_", $_FILES['banner_name_co']['name']);                    
-                    $website = $data['website_id'];
                     
-                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'banner' . DS . $website;
+                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'banner' ;
                     if (!is_dir($path)) {
                         try {
                             mkdir($path, 0777, TRUE);
@@ -113,11 +112,14 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                     } catch (Exception $e) {
 
                     }
-                    $data['banner_name'] = $result['file'];
+                    $data['banner_name'] = Mage::getBaseUrl('media') . 'simi/simicart/banner/' . $result['file'];
                 } catch (Exception $e) {
-                    $data['banner_name'] = $_FILES['banner_name_co']['name'];
+                    $data['banner_name'] = Mage::getBaseUrl('media') . 'simi/simicart/banner/' . $_FILES['banner_name_co']['name'];
                 }
-            }            
+            } 
+            if ($data['storeview_id']) {
+                $data['storeview_id'] = implode (",", $data['storeview_id']);
+            }
             if (isset($data['banner_name_co']['delete']) && $data['banner_name_co']['delete'] == 1) {                
                 Mage::helper('simiconnector')->deleteBanner($data['banner_name_co']['value']);
                 $data['banner_name'] = '';
@@ -130,7 +132,6 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                     ->setId($this->getRequest()->getParam('id'));
 
             try {
-
                 $model->save();
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Banner was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
