@@ -104,6 +104,7 @@ class Simi_Simiconnector_Model_Server
             'contents' => $contents,
             'is_method' => $is_method,
             'module' => $module,
+            'controller' => $controller,
         );
     }
 
