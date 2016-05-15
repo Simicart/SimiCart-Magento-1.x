@@ -49,7 +49,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
         $this->_helper = Mage::helper('simiconnector');
     }
 
-    abstract public function setBuilderQuery($query);
+    abstract public function setBuilderQuery();
 
     public function setData($data)
     {
