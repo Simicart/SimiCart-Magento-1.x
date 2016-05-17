@@ -10,7 +10,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
 
     protected $_DEFAULT_ORDER = 'store_id';
 
-    public function setBuilderQuery($query) {
+    public function setBuilderQuery() {
         $data = $this->getData();
         if ($data['resourceid']) {
             Mage::app()->getCookie()->set(Mage_Core_Model_Store::COOKIE_NAME, Mage::app()->getStore($data['resourceid'])->getCode(), TRUE);
@@ -50,6 +50,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         }
 
         $additionInfo = array(
+            'base'=> array(),
             'store_config' => array(
                 'country_code' => $country->getId(),
                 'country_name' => $country->getName(),

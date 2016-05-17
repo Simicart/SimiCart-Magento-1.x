@@ -117,9 +117,6 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                     $data['banner_name'] = Mage::getBaseUrl('media') . 'simi/simicart/banner/' . $_FILES['banner_name_co']['name'];
                 }
             } 
-            if ($data['storeview_id']) {
-                $data['storeview_id'] = implode (",", $data['storeview_id']);
-            }
             if (isset($data['banner_name_co']['delete']) && $data['banner_name_co']['delete'] == 1) {                
                 Mage::helper('simiconnector')->deleteBanner($data['banner_name_co']['value']);
                 $data['banner_name'] = '';
@@ -135,7 +132,22 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                 $model->save();
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Banner was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
-
+                if ($data['storeview_id'] && is_array($data['storeview_id'])) {
+                    $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('banner');
+                    $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
+                            ->addFieldToFilter('content_type', $typeID)
+                            ->addFieldToFilter('item_id', $model->getId());
+                    foreach ($visibleStoreViews as $visibilityItem)
+                        $visibilityItem->delete();
+                    foreach ($data['storeview_id'] as $storeViewId){
+                        $visibilityItem = Mage::getModel('simiconnector/visibility');
+                        $visibilityItem->setData('content_type',$typeID);                        
+                        $visibilityItem->setData('item_id',$model->getId());
+                        $visibilityItem->setData('store_view_id',$storeViewId);
+                        $visibilityItem->save();
+                    }                        
+                }
+                
                 if ($this->getRequest()->getParam('back')) {
                     $this->_redirect('*/*/edit', array('id' => $model->getId()));
                     return;

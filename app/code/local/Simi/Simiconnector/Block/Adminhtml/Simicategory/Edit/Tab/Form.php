@@ -11,6 +11,17 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
             Mage::getSingleton('adminhtml/session')->setSimicategoryData(null);
         } elseif (Mage::registry('simicategory_data'))
             $data = Mage::registry('simicategory_data')->getData();
+        if ($data['simicategory_id']) {
+            $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('homecategory');
+            $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
+                    ->addFieldToFilter('content_type', $typeID)
+                    ->addFieldToFilter('item_id', $data['simicategory_id']);
+            $storeIdArray = array();
+            foreach ($visibleStoreViews as $visibilityItem) {
+                $storeIdArray[] = $visibilityItem->getData('store_view_id');
+            }
+            $data['storeview_id'] = implode(',', $storeIdArray);
+        }
 
         $fieldset = $form->addFieldset('simicategory_form', array('legend' => Mage::helper('simiconnector')->__('Item information')));
 

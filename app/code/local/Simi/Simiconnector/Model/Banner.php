@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 
  * DISCLAIMER
@@ -33,17 +34,17 @@ class Simi_Simiconnector_Model_Banner extends Mage_Core_Model_Abstract {
         $list = array();
         $collection = $this->getCollection()
                 ->addFieldToFilter('status', 1)
-                ->addFieldToFilter('website_id',array('in' => array($website_id, 0)));
-        
+                ->addFieldToFilter('website_id', array('in' => array($website_id, 0)));
+
         foreach ($collection as $item) {
-            $path = Mage::getBaseUrl('media') . 'simi/simicart/banner' . '/' . $item->getWebsiteId() .'/'. $item->getBannerName();
+            $path = Mage::getBaseUrl('media') . 'simi/simicart/banner' . '/' . $item->getWebsiteId() . '/' . $item->getBannerName();
             $categoryName = '';
             $categoryChildrenCount = '';
-            if($item->getCategoryId()){
+            if ($item->getCategoryId()) {
                 $category = Mage::getModel('catalog/category')->load($item->getCategoryId());
                 $categoryName = $category->getName();
                 $categoryChildrenCount = $category->getChildrenCount();
-                if($categoryChildrenCount > 0)
+                if ($categoryChildrenCount > 0)
                     $categoryChildrenCount = 1;
                 else
                     $categoryChildrenCount = 0;
@@ -61,13 +62,23 @@ class Simi_Simiconnector_Model_Banner extends Mage_Core_Model_Abstract {
         return $list;
     }
 
-    public function toOptionArray(){
+    public function toOptionArray() {
         $platform = array(
-                        '1' => Mage::helper('simiconnector')->__('Product In-app'), 
-                        '2' => Mage::helper('simiconnector')->__('Category In-app'), 
-                        '3' => Mage::helper('simiconnector')->__('Website Page'), 
-                    );
+            '1' => Mage::helper('simiconnector')->__('Product In-app'),
+            '2' => Mage::helper('simiconnector')->__('Category In-app'),
+            '3' => Mage::helper('simiconnector')->__('Website Page'),
+        );
         return $platform;
+    }
+
+    public function delete() {
+        $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('banner');
+        $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
+                ->addFieldToFilter('content_type', $typeID)
+                ->addFieldToFilter('item_id', $this->getId());
+        foreach ($visibleStoreViews as $visibilityItem)
+            $visibilityItem->delete();
+        return parent::delete();
     }
 
 }

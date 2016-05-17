@@ -36,7 +36,18 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
             Mage::getSingleton('adminhtml/session')->setConnectorData(null);
         } elseif (Mage::registry('banner_data'))
             $data = Mage::registry('banner_data')->getData();
-
+        if ($data['banner_id']) {
+            $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('banner');
+            $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
+                    ->addFieldToFilter('content_type', $typeID)
+                    ->addFieldToFilter('item_id', $data['banner_id']);
+            $storeIdArray = array();
+            foreach ($visibleStoreViews as $visibilityItem) {
+                $storeIdArray[] = $visibilityItem->getData('store_view_id');
+            }
+            $data['storeview_id'] = implode(',', $storeIdArray);
+        }
+        
         $fieldset = $form->addFieldset('simiconnector_form', array('legend' => Mage::helper('simiconnector')->__('Banner information')));
         /*
           $fieldset->addField('website_id', 'select', array(
@@ -48,8 +59,8 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
 
         $field = $fieldset->addField('storeview_id', 'multiselect', array(
             'name' => 'storeview_id[]',
-            'label' => Mage::helper('cms')->__('Store View'),
-            'title' => Mage::helper('cms')->__('Store View'),
+            'label' => Mage::helper('simiconnector')->__('Store View'),
+            'title' => Mage::helper('simiconnector')->__('Store View'),
             'required' => true,
             'values' => Mage::getSingleton('adminhtml/system_store')->getStoreValuesForForm(false, true),
         ));

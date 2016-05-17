@@ -92,10 +92,6 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                 }
             }
 
-            if ($data['storeview_id']) {
-                $data['storeview_id'] = implode(",", $data['storeview_id']);
-            }
-
             if (isset($data['category_id']) && $data['category_id']) {
                 $category_name = Mage::getModel('catalog/category')->load($data['category_id'])->getName();
                 $data['simicategory_name'] = $category_name;
@@ -110,7 +106,21 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                 $model->save();
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Category was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
-
+                if ($data['storeview_id'] && is_array($data['storeview_id'])) {
+                    $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('homecategory');
+                    $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
+                            ->addFieldToFilter('content_type', $typeID)
+                            ->addFieldToFilter('item_id', $model->getId());
+                    foreach ($visibleStoreViews as $visibilityItem)
+                        $visibilityItem->delete();
+                    foreach ($data['storeview_id'] as $storeViewId) {
+                        $visibilityItem = Mage::getModel('simiconnector/visibility');
+                        $visibilityItem->setData('content_type', $typeID);
+                        $visibilityItem->setData('item_id', $model->getId());
+                        $visibilityItem->setData('store_view_id', $storeViewId);
+                        $visibilityItem->save();
+                    }
+                }
                 if ($this->getRequest()->getParam('back')) {
                     $this->_redirect('*/*/edit', array('id' => $model->getId()));
                     return;

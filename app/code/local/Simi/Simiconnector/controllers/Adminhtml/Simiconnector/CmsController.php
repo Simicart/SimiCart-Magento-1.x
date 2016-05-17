@@ -100,7 +100,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                     // We set media as the upload dir
                     str_replace(" ", "_", $_FILES['cms_image_o']['name']);
 
-                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'cms' ;
+                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'cms';
                     if (!is_dir($path)) {
                         try {
                             mkdir($path, 0777, TRUE);
@@ -122,9 +122,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                 Mage::helper('simiconnector')->deleteFile($data['cms_image_o']['value']);
                 $data['cms_image'] = '';
             }
-            if ($data['storeview_id']) {
-                $data['storeview_id'] = implode(",", $data['storeview_id']);
-            }
+
             $model = Mage::getModel('simiconnector/cms');
             $model->setData($data)
                     ->setId($this->getRequest()->getParam('id'));
@@ -133,6 +131,22 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                 $model->save();
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Block was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
+
+                if ($data['storeview_id'] && is_array($data['storeview_id'])) {
+                    $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('cms');
+                    $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
+                            ->addFieldToFilter('content_type', $typeID)
+                            ->addFieldToFilter('item_id', $model->getId());
+                    foreach ($visibleStoreViews as $visibilityItem)
+                        $visibilityItem->delete();
+                    foreach ($data['storeview_id'] as $storeViewId){
+                        $visibilityItem = Mage::getModel('simiconnector/visibility');
+                        $visibilityItem->setData('content_type',$typeID);                        
+                        $visibilityItem->setData('item_id',$model->getId());
+                        $visibilityItem->setData('store_view_id',$storeViewId);
+                        $visibilityItem->save();
+                    }                        
+                }
 
                 if ($this->getRequest()->getParam('back')) {
                     $this->_redirect('*/*/edit', array('id' => $model->getId()));

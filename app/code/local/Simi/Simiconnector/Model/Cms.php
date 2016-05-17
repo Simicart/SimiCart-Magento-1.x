@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 
  * DISCLAIMER
@@ -25,6 +26,15 @@ class Simi_Simiconnector_Model_Cms extends Mage_Core_Model_Abstract {
         parent::_construct();
         $this->_init('simiconnector/cms');
     }
-	
-		
+
+    public function delete() {
+        $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('cms');
+        $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
+                ->addFieldToFilter('content_type', $typeID)
+                ->addFieldToFilter('item_id', $this->getId());
+        foreach ($visibleStoreViews as $visibilityItem)
+            $visibilityItem->delete();
+        return parent::delete();
+    }
+
 }
