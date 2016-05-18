@@ -10,6 +10,7 @@ $installer->run("
     DROP TABLE IF EXISTS {$installer->getTable('connector_device')};          
     DROP TABLE IF EXISTS {$installer->getTable('connector_notice')};
     DROP TABLE IF EXISTS {$installer->getTable('connector_notice_history')};
+    DROP TABLE IF EXISTS {$installer->getTable('connector_visibility')};
 
     CREATE TABLE {$installer->getTable('simicategory')} (
         `simicategory_id` int(11) unsigned NOT NULL auto_increment,
