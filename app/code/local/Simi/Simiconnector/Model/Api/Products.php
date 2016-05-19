@@ -55,6 +55,117 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         );
     }
 
+    /**
+     * @return collection
+     * override
+     */
+    protected function filter()
+    {
+        $data = $this->_data;
+        $parameters = $data['params'];
+        $this->_order($parameters);
+        return null;
+    }
+
+    /**
+     * @return array
+     * @throws Exception
+     * override
+     */
+    public function index()
+    {
+        $collection = $this->builderQuery;
+        $this->filter();
+        $data = $this->getData();
+        $parameters = $data['params'];
+        $page = 1;
+        if (isset($parameters[self::PAGE]) && $parameters[self::PAGE]) {
+            $page = $parameters[self::PAGE];
+        }
+
+        $limit = self::DEFAULT_LIMIT;
+        if (isset($parameters[self::LIMIT]) && $parameters[self::LIMIT]) {
+            $limit = $parameters[self::LIMIT];
+        }
+
+        $offset = $limit * ($page - 1);
+        if (isset($parameters[self::OFFSET]) && $parameters[self::OFFSET]) {
+            $offset = $parameters[self::OFFSET];
+        }
+        $collection->setPageSize($offset + $limit);
+
+        $all_ids = array();
+        $info = array();
+        $total = $collection->getSize();
+
+        if ($offset > $total)
+            throw new Exception($this->_helper->__('Invalid method.'), 4);
+
+        $fields = array();
+        if(isset($parameters['fields']) && $parameters['fields']){
+            $fields = explode(',', $parameters['fields']);
+        }
+
+        $check_limit = 0;
+        $check_offset = 0;
+
+        foreach ($collection as $entity) {
+            if (++$check_offset <= $offset) {
+                continue;
+            }
+            if (++$check_limit > $limit)
+                break;
+            $info_detail = $entity->toArray($fields);
+
+            $images = array();
+            $images[] = array(
+                'url' => $this->getImageProduct($entity, null, $parameters['image_width'], $parameters['image_height']),
+                'position' => 1,
+            );
+            $info_detail['images'] = $images;
+            $info[] = $info_detail;
+
+            $all_ids[] = $entity->getId();
+        }
+        return $this->getList($info, $all_ids, $total, $limit, $offset);
+    }
+
+    /**
+     * @return array
+     * override
+     */
+    public function show()
+    {
+        $entity = $this->builderQuery;
+        $data = $this->getData();
+        $parameters = $data['params'];
+        $fields = array();
+        if(isset($parameters['fields']) && $parameters['fields']){
+            $fields = explode(',', $parameters['fields']);
+        }
+        $info = $entity->toArray($fields);
+        $media_gallery = $entity->getMediaGallery();
+        $images = array();
+
+        foreach ($media_gallery['images'] as $image) {
+            // Zend_debug::dump($image['disabled']);
+            if ($image['disabled'] == 0){
+                $images[] = array(
+                    'url' =>  $this->getImageProduct($entity, $image['file'], $parameters['image_width'], $parameters['image_height']),
+                    'position' => $image['position'],
+                );
+            }
+        }
+        if (count($images) == 0) {
+            $images[] = array(
+                'url' => $this->getImageProduct($entity, null, $parameters['image_width'], $parameters['image_height']),
+                'position' => 1,
+            );
+        }
+        $info['images'] = $images;
+        return $this->getDetail($info);
+    }
+
     public function setFilterByCategoryId($cat_id){
         $category = Mage::getModel('catalog/category')->load($cat_id);
         if($category->getData('include_in_menu') == 0){
@@ -171,55 +282,16 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         return $refineArray;
     }
 
-
-    public function index()
-    {
-        $collection = $this->builderQuery;
-        $this->_order();
-        $data = $this->getData();
-        $parameters = $data['params'];
-        $page = 1;
-        if (isset($parameters[self::PAGE]) && $parameters[self::PAGE]) {
-            $page = $parameters[self::PAGE];
-        }
-
-        $limit = self::DEFAULT_LIMIT;
-        if (isset($parameters[self::LIMIT]) && $parameters[self::LIMIT]) {
-            $limit = $parameters[self::LIMIT];
-        }
-
-        $offset = $limit * ($page - 1);
-        if (isset($parameters[self::OFFSET]) && $parameters[self::OFFSET]) {
-            $offset = $parameters[self::OFFSET];
-        }
-        $collection->setPageSize($offset + $limit);
-
-        $all_ids = array();
-        $info = array();
-        $total = $collection->getSize();
-
-        if ($offset > $total)
-            throw new Exception($this->_helper->__('Invalid method.'), 4);
-
-        $fields = array();
-        if(isset($parameters['fields']) && $parameters['fields']){
-            $fields = explode(',', $parameters['fields']);
-        }
-
-        $check_limit = 0;
-        $check_offset = 0;
-
-        foreach ($collection as $entity) {
-            if (++$check_offset <= $offset) {
-                continue;
+    public function getImageProduct($product, $file = null, $width, $height) {
+        if (!is_null($width) && !is_null($height)) {
+            if ($file) {
+                return Mage::helper('catalog/image')->init($product, 'thumbnail', $file)->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($width, $height)->__toString();
             }
-            if (++$check_limit > $limit)
-                break;
-
-            $info[] = $entity->toArray($fields);
-            $all_ids[] = $entity->getId();
+            return Mage::helper('catalog/image')->init($product, 'small_image')->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($width, $height)->__toString();
         }
-        return $this->getList($info, $all_ids, $total, $limit, $offset);
+        if ($file) {
+            return Mage::helper('catalog/image')->init($product, 'thumbnail', $file)->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize(600, 600)->__toString();
+        }
+        return Mage::helper('catalog/image')->init($product, 'small_image')->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize(600, 600)->__toString();
     }
-
 }
