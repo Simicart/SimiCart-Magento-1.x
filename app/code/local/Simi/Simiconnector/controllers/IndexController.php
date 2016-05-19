@@ -12,7 +12,7 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         $installer = $setup;
         $installer->startSetup();
         $installer->run(" 
-       
+			//Sql code
           ");
         $installer->endSetup();
         echo 'success';
