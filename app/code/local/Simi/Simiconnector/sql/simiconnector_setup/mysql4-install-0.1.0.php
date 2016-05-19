@@ -10,6 +10,7 @@ $installer->run("
     DROP TABLE IF EXISTS {$installer->getTable('connector_device')};          
     DROP TABLE IF EXISTS {$installer->getTable('connector_notice')};
     DROP TABLE IF EXISTS {$installer->getTable('connector_notice_history')};
+    DROP TABLE IF EXISTS {$installer->getTable('connector_product_list')};
     DROP TABLE IF EXISTS {$installer->getTable('connector_visibility')};
 
     CREATE TABLE {$installer->getTable('simicategory')} (
@@ -47,6 +48,17 @@ $installer->run("
         `website_id` smallint(5) NULL default 0,
         `sort_order` int(6) NULL default '0',
         PRIMARY KEY (`cms_id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        
+    CREATE TABLE {$installer->getTable('connector_product_list')} (
+        `productlist_id` int(11) unsigned NOT NULL auto_increment,
+        `list_title` varchar(255) NULL, 
+        `list_image` varchar(255) NULL default '', 
+        `list_type` tinyint(4) NOT NULL default '1',        
+        `list_products` text NULL default '',
+        `list_status` tinyint(4) NOT NULL default '1',        
+        `sort_order` int(6) NULL default '0',
+        PRIMARY KEY (`productlist_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         
     CREATE TABLE {$installer->getTable('connector_visibility')} (

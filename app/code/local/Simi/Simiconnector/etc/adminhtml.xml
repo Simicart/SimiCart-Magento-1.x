@@ -66,9 +66,9 @@
                                     <action>adminhtml/simiconnector_simicategory</action>
                                 </simicategory>
                                 <spotproduct module="simiconnector" translate="title">				
-                                    <title>Custom Product Lists (Pending)</title>
+                                    <title>Product Lists</title>
                                     <sort_order>160</sort_order>
-                                    <action>adminhtml/system_config/edit/section/spotproduct</action>
+                                    <action>adminhtml/simiconnector_productlist</action>
                                 </spotproduct>
                             </children>
                         </default_theme>
@@ -166,7 +166,7 @@
                                                 <sort_order>50</sort_order>
                                             </simicategory>
                                             <spotproduct module="simiconnector" translate="title">				
-                                                <title>Custom Product List (Pending)</title>
+                                                <title>Product List</title>
                                                 <sort_order>160</sort_order>
                                             </spotproduct>
                                         </children>

@@ -79,6 +79,9 @@
                     <cms>
                         <table>connector_cms</table>
                     </cms>
+                    <productlist>
+                        <table>connector_product_list</table>
+                    </productlist>
                     <visibility>
                         <table>connector_visibility</table>
                     </visibility> 

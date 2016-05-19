@@ -15,6 +15,11 @@
             <block type="simiconnector/adminhtml_cms" name="simiconnector_cms"/>
         </reference>
     </adminhtml_simiconnector_cms_index> 
+    <adminhtml_simiconnector_productlist_index>
+        <reference name="content">
+            <block type="simiconnector/adminhtml_productlist" name="simiconnector_productlist"/>
+        </reference>
+    </adminhtml_simiconnector_productlist_index> 
     <adminhtml_simiconnector_cms_edit>
         <reference name="head">
             <action method="setCanLoadTinyMce">
