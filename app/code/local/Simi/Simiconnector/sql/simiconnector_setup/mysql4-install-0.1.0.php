@@ -10,6 +10,8 @@ $installer->run("
     DROP TABLE IF EXISTS {$installer->getTable('connector_device')};          
     DROP TABLE IF EXISTS {$installer->getTable('connector_notice')};
     DROP TABLE IF EXISTS {$installer->getTable('connector_notice_history')};
+    DROP TABLE IF EXISTS {$installer->getTable('connector_product_list')};
+    DROP TABLE IF EXISTS {$installer->getTable('connector_visibility')};
 
     CREATE TABLE {$installer->getTable('simicategory')} (
         `simicategory_id` int(11) unsigned NOT NULL auto_increment,
@@ -33,7 +35,6 @@ $installer->run("
         `type` smallint(5) unsigned default 3,
         `category_id` int(10) unsigned  NOT NULL,
         `product_id` int(10) unsigned  NOT NULL, 
-        `storeview_id` varchar(255) NULL default '',
         `sort_order` int(6) NULL default '0',
         PRIMARY KEY (`banner_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;    
@@ -45,10 +46,28 @@ $installer->run("
         `cms_content` text NULL default '',  
         `cms_status` tinyint(4) NOT NULL default '1',
         `website_id` smallint(5) NULL default 0,
-        `storeview_id` varchar(255) NULL default '',
         `sort_order` int(6) NULL default '0',
         PRIMARY KEY (`cms_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        
+    CREATE TABLE {$installer->getTable('connector_product_list')} (
+        `productlist_id` int(11) unsigned NOT NULL auto_increment,
+        `list_title` varchar(255) NULL, 
+        `list_image` varchar(255) NULL default '', 
+        `list_type` tinyint(4) NOT NULL default '1',        
+        `list_products` text NULL default '',
+        `list_status` tinyint(4) NOT NULL default '1',        
+        `sort_order` int(6) NULL default '0',
+        PRIMARY KEY (`productlist_id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        
+    CREATE TABLE {$installer->getTable('connector_visibility')} (
+        `entity_id` int(11) unsigned NOT NULL auto_increment,
+        `content_type` tinyint(4) NOT NULL default '0',
+        `item_id` tinyint(4) NOT NULL default '0',
+        `store_view_id` varchar(255) NULL default '0', 
+        PRIMARY KEY (`entity_id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;        
     
     CREATE TABLE {$installer->getTable('connector_device')} (
         `device_id` int(11) unsigned NOT NULL auto_increment,

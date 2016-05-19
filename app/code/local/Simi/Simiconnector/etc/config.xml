@@ -78,7 +78,13 @@
                     </banner>
                     <cms>
                         <table>connector_cms</table>
-                    </cms> 
+                    </cms>
+                    <productlist>
+                        <table>connector_product_list</table>
+                    </productlist>
+                    <visibility>
+                        <table>connector_visibility</table>
+                    </visibility> 
                     <device>
                         <table>connector_device</table>
                     </device>                    

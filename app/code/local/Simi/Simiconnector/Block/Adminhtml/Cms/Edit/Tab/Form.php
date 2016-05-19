@@ -37,6 +37,17 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tab_Form extends Mage_Adminhtm
         } elseif (Mage::registry('cms_data'))
             $data = Mage::registry('cms_data')->getData();
 
+        if ($data['cms_id']) {
+            $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('cms');
+            $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
+                    ->addFieldToFilter('content_type', $typeID)
+                    ->addFieldToFilter('item_id', $data['cms_id']);
+            $storeIdArray = array();
+            foreach ($visibleStoreViews as $visibilityItem) {
+                $storeIdArray[] = $visibilityItem->getData('store_view_id');
+            }
+            $data['storeview_id'] = implode(',', $storeIdArray);
+        }
         $fieldset = $form->addFieldset('simiconnector_form', array('legend' => Mage::helper('simiconnector')->__('Block information')));
         $wysiwygConfig = Mage::getSingleton('cms/wysiwyg_config')->getConfig();
         $wysiwygConfig->addData(array(
@@ -51,8 +62,8 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tab_Form extends Mage_Adminhtm
 
         $field = $fieldset->addField('storeview_id', 'multiselect', array(
             'name' => 'storeview_id[]',
-            'label' => Mage::helper('cms')->__('Store View'),
-            'title' => Mage::helper('cms')->__('Store View'),
+            'label' => Mage::helper('simiconnector')->__('Store View'),
+            'title' => Mage::helper('simiconnector')->__('Store View'),
             'required' => true,
             'values' => Mage::getSingleton('adminhtml/system_store')->getStoreValuesForForm(false, true),
         ));

@@ -10,18 +10,17 @@ class Simi_Simiconnector_Model_Api_Banners extends Simi_Simiconnector_Model_Api_
 
     protected $_DEFAULT_ORDER = 'sort_order';
 
-    public function setBuilderQuery($query) {
+    public function setBuilderQuery() {
         $data = $this->getData();
         if ($data['resourceid']) {
             $this->builderQuery = Mage::getModel('simiconnector/banner')->load($data['resourceid']);
         } else {
-            $bannerArray = array(0);
-            foreach (Mage::getModel('simiconnector/banner')->getCollection() as $banner) {
-                if (in_array(Mage::app()->getStore()->getId(), explode(',', $banner->getStoreviewId()))) {
-                    $bannerArray[] = $banner->getId();
-                }
-            }
-            $this->builderQuery = Mage::getModel('simiconnector/banner')->getCollection()->addFieldToFilter('banner_id',array('in',$bannerArray));
+            $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('banner');
+            $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
+            $bannerCollection = Mage::getModel('simiconnector/banner')->getCollection();
+            $bannerCollection->getSelect()
+                    ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.banner_id AND visibility.content_type = '.$typeID.' AND visibility.store_view_id =' . Mage::app()->getStore()->getId());
+            $this->builderQuery = $bannerCollection;
         }
     }
 }

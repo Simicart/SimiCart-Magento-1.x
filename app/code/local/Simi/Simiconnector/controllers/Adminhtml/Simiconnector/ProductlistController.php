@@ -14,13 +14,12 @@
  */
 
 /**
- * Cms Adminhtml Controller
  * 
  * @category    
  * @package     Connector
  * @author      Developer
  */
-class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Adminhtml_Controller_Action {
+class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends Mage_Adminhtml_Controller_Action {
 
     /**
      * init layout and set active for current menu
@@ -29,8 +28,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
      */
     protected function _initAction() {
         $this->loadLayout()
-                ->_setActiveMenu('simiconnector/cms')
-                ->_addBreadcrumb(Mage::helper('adminhtml')->__('CMS Manager'), Mage::helper('adminhtml')->__('CMS Manager'));
+                ->_setActiveMenu('simiconnector/productlist')
+                ->_addBreadcrumb(Mage::helper('adminhtml')->__('Custom Product List Manager'), Mage::helper('adminhtml')->__('Product List Manager'));
         return $this;
     }
 
@@ -47,24 +46,24 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
      */
     public function editAction() {
         $id = $this->getRequest()->getParam('id');
-        $model = Mage::getModel('simiconnector/cms')->load($id);
+        $model = Mage::getModel('simiconnector/productlist')->load($id);
 
         if ($model->getId() || $id == 0) {
             $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
             if (!empty($data))
                 $model->setData($data);
 
-            Mage::register('cms_data', $model);
+            Mage::register('productlist_data', $model);
 
             $this->loadLayout();
-            $this->_setActiveMenu('simiconnector/cms');
+            $this->_setActiveMenu('simiconnector/productlist');
 
             $this->_addBreadcrumb(Mage::helper('adminhtml')->__('Item Notice'), Mage::helper('adminhtml')->__('Item Notice'));
             $this->_addBreadcrumb(Mage::helper('adminhtml')->__('Item News'), Mage::helper('adminhtml')->__('Item News'));
 
             $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
-            $this->_addContent($this->getLayout()->createBlock('simiconnector/adminhtml_cms_edit'))
-                    ->_addLeft($this->getLayout()->createBlock('simiconnector/adminhtml_cms_edit_tabs'));
+            $this->_addContent($this->getLayout()->createBlock('simiconnector/adminhtml_productlist_edit'))
+                    ->_addLeft($this->getLayout()->createBlock('simiconnector/adminhtml_productlist_edit_tabs'));
 
             $this->renderLayout();
         } else {
@@ -82,10 +81,10 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
      */
     public function saveAction() {
         if ($data = $this->getRequest()->getPost()) {
-            if (isset($_FILES['cms_image_o']['name']) && $_FILES['cms_image_o']['name'] != '') {
+            if (isset($_FILES['productlist_image_o']['name']) && $_FILES['productlist_image_o']['name'] != '') {
                 try {
                     /* Starting upload */
-                    $uploader = new Varien_File_Uploader('cms_image_o');
+                    $uploader = new Varien_File_Uploader('productlist_image_o');
 
                     // Any extention would work
                     $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'gif', 'png'));
@@ -98,9 +97,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                     $uploader->setFilesDispersion(false);
 
                     // We set media as the upload dir
-                    str_replace(" ", "_", $_FILES['cms_image_o']['name']);
+                    str_replace(" ", "_", $_FILES['productlist_image_o']['name']);
 
-                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'cms';
+                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'productlist';
                     if (!is_dir($path)) {
                         try {
                             mkdir($path, 0777, TRUE);
@@ -108,22 +107,22 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                             
                         }
                     }
-                    $file_name = explode(".", $_FILES['cms_image_o']['name']);
+                    $file_name = explode(".", $_FILES['productlist_image_o']['name']);
                     $fName = $file_name[0] . "@2x." . $file_name[1];
                     $result = $uploader->save($path, $fName);
                     rename($path . DS . $result['file'], $path . DS . $fName);
-                    $data['cms_image'] = Mage::getBaseUrl('media') . 'simi/simicart/cms/' . $fName;
+                    $data['list_image'] = Mage::getBaseUrl('media') . 'simi/simicart/productlist/' . $fName;
                 } catch (Exception $e) {
-                    $data['cms_image'] = Mage::getBaseUrl('media') . 'simi/simicart/cms/' . $_FILES['cms_image_o']['name'];
+                    $data['list_image'] = Mage::getBaseUrl('media') . 'simi/simicart/productlist/' . $_FILES['productlist_image_o']['name'];
                 }
             }
 
-            if (isset($data['cms_image_o']['delete']) && $data['cms_image_o']['delete'] == 1) {
-                Mage::helper('simiconnector')->deleteFile($data['cms_image_o']['value']);
-                $data['cms_image'] = '';
+            if (isset($data['productlist_image_o']['delete']) && $data['productlist_image_o']['delete'] == 1) {
+                Mage::helper('simiconnector')->deleteFile($data['productlist_image_o']['value']);
+                $data['list_image'] = '';
             }
 
-            $model = Mage::getModel('simiconnector/cms');
+            $model = Mage::getModel('simiconnector/productlist');
             $model->setData($data)
                     ->setId($this->getRequest()->getParam('id'));
 
@@ -133,19 +132,19 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
 
                 if ($data['storeview_id'] && is_array($data['storeview_id'])) {
-                    $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('cms');
+                    $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('productlist');
                     $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
                             ->addFieldToFilter('content_type', $typeID)
                             ->addFieldToFilter('item_id', $model->getId());
                     foreach ($visibleStoreViews as $visibilityItem)
                         $visibilityItem->delete();
-                    foreach ($data['storeview_id'] as $storeViewId){
+                    foreach ($data['storeview_id'] as $storeViewId) {
                         $visibilityItem = Mage::getModel('simiconnector/visibility');
-                        $visibilityItem->setData('content_type',$typeID);                        
-                        $visibilityItem->setData('item_id',$model->getId());
-                        $visibilityItem->setData('store_view_id',$storeViewId);
+                        $visibilityItem->setData('content_type', $typeID);
+                        $visibilityItem->setData('item_id', $model->getId());
+                        $visibilityItem->setData('store_view_id', $storeViewId);
                         $visibilityItem->save();
-                    }                        
+                    }
                 }
 
                 if ($this->getRequest()->getParam('back')) {
@@ -171,10 +170,10 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
     public function deleteAction() {
         if ($this->getRequest()->getParam('id') > 0) {
             try {
-                $model = Mage::getModel('simiconnector/cms');
+                $model = Mage::getModel('simiconnector/productlist');
                 $model->setId($this->getRequest()->getParam('id'))
                         ->delete();
-                Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('CMS was successfully deleted'));
+                Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Item was successfully deleted'));
                 $this->_redirect('*/*/');
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
@@ -195,7 +194,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
         } else {
             try {
                 foreach ($bannerIds as $bannerId) {
-                    $notice = Mage::getModel('simiconnector/cms')->load($bannerId);
+                    $notice = Mage::getModel('simiconnector/productlist')->load($bannerId);
                     $notice->delete();
                 }
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Total of %d record(s) were successfully deleted', count($bannerIds)));
@@ -208,6 +207,16 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
 
     protected function _isAllowed() {
         return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
+    }
+
+    public function chooserMainProductsAction() {
+        $request = $this->getRequest();
+        $block = $this->getLayout()->createBlock(
+                'simiconnector/adminhtml_productlist_edit_tab_products', 'promo_widget_chooser_sku', array('js_form_object' => $request->getParam('form'),
+        ));
+        if ($block) {
+            $this->getResponse()->setBody($block->toHtml());
+        }
     }
 
 }
