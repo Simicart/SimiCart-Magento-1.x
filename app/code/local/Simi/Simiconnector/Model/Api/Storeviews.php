@@ -84,34 +84,34 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'enable_guest_checkout' => Mage::getStoreConfig('checkout/options/guest_checkout'),
                 'is_reload_payment_method' => Mage::getStoreConfig('simiconnector/general/is_reload_payment_method'),
                 'enable_agreements' => is_null(Mage::getStoreConfig('checkout/options/enable_agreements')) ? 0 : Mage::getStoreConfig('checkout/options/enable_agreements'),
-                'tax' => array(
-                    'tax_display_type' => Mage::getStoreConfig('tax/display/type'),
-                    'tax_display_shipping' => Mage::getStoreConfig('tax/display/shipping'),
-                    'tax_cart_display_price' => Mage::getStoreConfig('tax/cart_display/price'),
-                    'tax_cart_display_subtotal' => Mage::getStoreConfig('tax/cart_display/subtotal'),
-                    'tax_cart_display_shipping' => Mage::getStoreConfig('tax/cart_display/shipping'),
-                    'tax_cart_display_grandtotal' => Mage::getStoreConfig('tax/cart_display/grandtotal'),
-                    'tax_cart_display_full_summary' => Mage::getStoreConfig('tax/cart_display/full_summary'),
-                    'tax_cart_display_zero_tax' => Mage::getStoreConfig('tax/cart_display/zero_tax'),
+            ),
+            'tax' => array(
+                'tax_display_type' => Mage::getStoreConfig('tax/display/type'),
+                'tax_display_shipping' => Mage::getStoreConfig('tax/display/shipping'),
+                'tax_cart_display_price' => Mage::getStoreConfig('tax/cart_display/price'),
+                'tax_cart_display_subtotal' => Mage::getStoreConfig('tax/cart_display/subtotal'),
+                'tax_cart_display_shipping' => Mage::getStoreConfig('tax/cart_display/shipping'),
+                'tax_cart_display_grandtotal' => Mage::getStoreConfig('tax/cart_display/grandtotal'),
+                'tax_cart_display_full_summary' => Mage::getStoreConfig('tax/cart_display/full_summary'),
+                'tax_cart_display_zero_tax' => Mage::getStoreConfig('tax/cart_display/zero_tax'),
+            ),
+            'google_analytics' => array(
+                'google_analytics_active' => Mage::getStoreConfig('google/analytics/active'),
+                'google_analytics_type' => Mage::getStoreConfig('google/analytics/type'),
+                'google_analytics_account' => Mage::getStoreConfig('google/analytics/account'),
+                'google_analytics_anonymization' => Mage::getStoreConfig('google/analytics/anonymization'),
+            ),
+            'customer' => array(
+                'address_option' => array(
+                    'prefix_show' => Mage::getStoreConfig('customer/address/prefix_show'),
+                    'suffix_show' => Mage::getStoreConfig('customer/address/suffix_show'),
+                    'dob_show' => Mage::getStoreConfig('customer/address/dob_show'),
+                    'taxvat_show' => Mage::getStoreConfig('customer/address/taxvat_show'),
+                    'gender_show' => Mage::getStoreConfig('customer/address/gender_show'),
+                    'gender_value' => $values,
                 ),
-                'google_analytics' => array(
-                    'google_analytics_active' => Mage::getStoreConfig('google/analytics/active'),
-                    'google_analytics_type' => Mage::getStoreConfig('google/analytics/type'),
-                    'google_analytics_account' => Mage::getStoreConfig('google/analytics/account'),
-                    'google_analytics_anonymization' => Mage::getStoreConfig('google/analytics/anonymization'),
-                ),
-                'customer' => array(
-                    'address_option' => array(
-                        'prefix_show' => Mage::getStoreConfig('customer/address/prefix_show'),
-                        'suffix_show' => Mage::getStoreConfig('customer/address/suffix_show'),
-                        'dob_show' => Mage::getStoreConfig('customer/address/dob_show'),
-                        'taxvat_show' => Mage::getStoreConfig('customer/address/taxvat_show'),
-                        'gender_show' => Mage::getStoreConfig('customer/address/gender_show'),
-                        'gender_value' => $values,
-                    ),
-                    'account_option' => array(
-                        'taxvat_show' => Mage::getStoreConfig('customer/create_account/vat_frontend_visibility'),
-                    ),
+                'account_option' => array(
+                    'taxvat_show' => Mage::getStoreConfig('customer/create_account/vat_frontend_visibility'),
                 ),
             ),
             'wishlist' => array(

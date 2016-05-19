@@ -81,7 +81,7 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
 
         if (!$data['list_type'])
             $data['list_type'] = 1;
-        $fieldset->addField('list_type', 'select', array(
+            $fieldset->addField('list_type', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Product List Type'),
             'name' => 'list_type',
             'values' => Mage::helper('simiconnector/productlist')->getTypeOption(),
