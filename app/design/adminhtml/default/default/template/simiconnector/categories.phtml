@@ -14,12 +14,13 @@
 ?>
 <div class="entry-edit">
     <div class="entry-edit-head">
-        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('connector')->__('Categories displayed on App') ?></h4>
+        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('simiconnector')->__('Categories displayed on App') ?></h4>
     </div>
     <fieldset id="grop_fields">
         <input type="hidden" name="category_ids" id="product_categories" value="<?php echo $this->getIdsString() ?>">
         <div id="product-categories" class="tree"></div>
     </fieldset>
+    <input type="hidden" name="groups[general][fields][categories_in_app][value]" value="<?php echo $this->getIdsString() ?>" id="all_id">
 </div>
 <?php if($this->getRootNode() && $this->getRootNode()->hasChildren()): ?>
 <script type="text/javascript">
@@ -145,6 +146,13 @@ function categoryAdd(id) {
     var ids = $('product_categories').value.split(',');
     ids.push(id);
     $('product_categories').value = ids.join(',');
+
+    var all_ids=$('product_categories').value.split(',');
+    var uniqueArray = all_ids.filter(function(item, pos) {
+        return  all_ids.indexOf(item) == pos;
+    });
+
+    $('all_id').value = uniqueArray.join(',');
 }
 function categoryRemove(id) {
     var ids = $('product_categories').value.split(',');
@@ -153,6 +161,14 @@ function categoryRemove(id) {
         ids.splice(ids.indexOf(id), 1);
     }
     $('product_categories').value = ids.join(',');
+
+    //remove duplicate value
+    var all_ids=$('product_categories').value.split(',');
+    var uniqueArray = all_ids.filter(function(item, pos) {
+        return  all_ids.indexOf(item) == pos;
+    });
+
+    $('all_id').value = uniqueArray.join(',');
 }
 </script>
 <?php endif; ?>
