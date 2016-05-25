@@ -10,7 +10,7 @@ class Simi_Simiconnector_Model_Api_Devices extends Simi_Simiconnector_Model_Api_
 {
     protected $_DEFAULT_ORDER = 'device_id';
     
-    public function setBuilderQuery($query)
+    public function setBuilderQuery()
     {
         $data = $this->getData();
         if ($data['resourceid']) {
