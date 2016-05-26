@@ -9,7 +9,7 @@
 class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api_Abstract
 {
     protected $_layer = array();
-
+    protected $_allow_filter_core = false;
     /**
      * override
      */
@@ -26,6 +26,9 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
                     $this->setFilterByCategoryId($filter['cat_id']);
                 }elseif(isset($filter['q'])){
                     $this->setFilterByQuery();
+                }else{
+                    $this->setFilterByCategoryId(Mage::app()->getStore()->getRootCategoryId());
+                    $this->_allow_filter_core = true;
                 }
             }else{
                 //all products
@@ -63,7 +66,12 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
     {
         $data = $this->_data;
         $parameters = $data['params'];
+        if($this->_allow_filter_core){
+            $query = $this->builderQuery;
+            $this->_whereFilter($query, $parameters);
+        }
         $this->_order($parameters);
+
         return null;
     }
 
@@ -123,6 +131,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
                 'position' => 1,
             );
             $info_detail['images'] = $images;
+            $info_detail['app_price'] = Mage::helper('simiconnector/price')->formatPriceFromProduct($entity);
             $info[] = $info_detail;
 
             $all_ids[] = $entity->getId();
@@ -163,6 +172,8 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
             );
         }
         $info['images'] = $images;
+        $info['app_prices'] = Mage::helper('simiconnector/price')->formatPriceFromProduct($entity, true);
+        $info['app_options'] = Mage::helper('simiconnector/options')->getOptions($entity);
         return $this->getDetail($info);
     }
 
