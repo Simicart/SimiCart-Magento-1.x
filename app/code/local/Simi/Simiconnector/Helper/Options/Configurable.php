@@ -16,7 +16,7 @@ class Simi_Simiconnector_Helper_Options_Configurable extends Mage_Core_Helper_Ab
         $options['configurable_options'] = $configurable_options;
         if(!is_null($product->getOptions()) && count($product->getOptions())){
            $custom_options = Mage::helper('simiconnector/options_simple')->getOptions($product);
-            $options['custom_options'] = $custom_options;
+            $options['custom_options'] = $custom_options['custom_options'];
         }
         return $options;
     }
