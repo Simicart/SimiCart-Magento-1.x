@@ -8,11 +8,13 @@
  */
 class Simi_Simiconnector_Helper_Options extends Mage_Core_Helper_Abstract
 {
-    public function helper($helper){
-        return Mage::helper('simiconnector/options_'.$helper);
+    public function helper($helper)
+    {
+        return Mage::helper('simiconnector/options_' . $helper);
     }
 
-    public function getOptions($product) {
+    public function getOptions($product)
+    {
         $type = $product->getTypeId();
         switch ($type) {
             case Mage_Catalog_Model_Product_Type::TYPE_SIMPLE:
@@ -30,9 +32,9 @@ class Simi_Simiconnector_Helper_Options extends Mage_Core_Helper_Abstract
             case Mage_Catalog_Model_Product_Type::TYPE_VIRTUAL :
                 return $this->helper('simple')->getOptions($product);
                 break;
-            // case "downloadable" :
-            // return Mage::getModel('connector/catalog_product_options_downloadable')->getOptions($product);
-            // break;
+            case "downloadable" :
+                return $this->helper('download')->getOptions($product);
+                break;
         }
     }
 }

@@ -70,6 +70,7 @@ class Simi_Simiconnector_Helper_Options_Simple extends Mage_Core_Helper_Abstract
         $options['custom_options'] = $info;
         return $options;
     }
+
     public function getPrice($product, $price, $includingTax = null)
     {
         if (!is_null($includingTax)) {
