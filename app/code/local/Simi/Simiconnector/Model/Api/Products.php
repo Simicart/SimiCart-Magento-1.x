@@ -10,6 +10,8 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
 {
     protected $_layer = array();
     protected $_allow_filter_core = false;
+    protected $_helperProduct;
+
     /**
      * override
      */
@@ -17,20 +19,23 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
     {
         $data = $this->getData();
         $parameters = $data['params'];
+        $this->_helperProduct = Mage::helper('simiconnector/products');
+        $this->_helperProduct->setData($data);
+
         if ($data['resourceid']) {
-            $this->builderQuery = Mage::getModel('catalog/product')->load($data['resourceid']);
+            $this->builderQuery = $this->_helperProduct->getProduct($data['resourceid']);
         } else {
-            if(isset($parameters[self::FILTER])) {
+            if (isset($parameters[self::FILTER])) {
                 $filter = $parameters[self::FILTER];
-                if(isset($filter['cat_id'])){
+                if (isset($filter['cat_id'])) {
                     $this->setFilterByCategoryId($filter['cat_id']);
-                }elseif(isset($filter['q'])){
+                } elseif (isset($filter['q'])) {
                     $this->setFilterByQuery();
-                }else{
+                } else {
                     $this->setFilterByCategoryId(Mage::app()->getStore()->getRootCategoryId());
                     $this->_allow_filter_core = true;
                 }
-            }else{
+            } else {
                 //all products
                 $this->setFilterByCategoryId(Mage::app()->getStore()->getRootCategoryId());
             }
@@ -66,7 +71,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
     {
         $data = $this->_data;
         $parameters = $data['params'];
-        if($this->_allow_filter_core){
+        if ($this->_allow_filter_core) {
             $query = $this->builderQuery;
             $this->_whereFilter($query, $parameters);
         }
@@ -110,7 +115,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
             throw new Exception($this->_helper->__('Invalid method.'), 4);
 
         $fields = array();
-        if(isset($parameters['fields']) && $parameters['fields']){
+        if (isset($parameters['fields']) && $parameters['fields']) {
             $fields = explode(',', $parameters['fields']);
         }
 
@@ -127,7 +132,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
 
             $images = array();
             $images[] = array(
-                'url' => $this->getImageProduct($entity, null, $parameters['image_width'], $parameters['image_height']),
+                'url' => $this->_helperProduct->getImageProduct($entity, null, $parameters['image_width'], $parameters['image_height']),
                 'position' => 1,
             );
             $info_detail['images'] = $images;
@@ -149,7 +154,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         $data = $this->getData();
         $parameters = $data['params'];
         $fields = array();
-        if(isset($parameters['fields']) && $parameters['fields']){
+        if (isset($parameters['fields']) && $parameters['fields']) {
             $fields = explode(',', $parameters['fields']);
         }
         $info = $entity->toArray($fields);
@@ -158,16 +163,16 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
 
         foreach ($media_gallery['images'] as $image) {
             // Zend_debug::dump($image['disabled']);
-            if ($image['disabled'] == 0){
+            if ($image['disabled'] == 0) {
                 $images[] = array(
-                    'url' =>  $this->getImageProduct($entity, $image['file'], $parameters['image_width'], $parameters['image_height']),
+                    'url' => $this->_helperProduct->getImageProduct($entity, $image['file'], $parameters['image_width'], $parameters['image_height']),
                     'position' => $image['position'],
                 );
             }
         }
         if (count($images) == 0) {
             $images[] = array(
-                'url' => $this->getImageProduct($entity, null, $parameters['image_width'], $parameters['image_height']),
+                'url' => $this->_helperProduct->getImageProduct($entity, null, $parameters['image_width'], $parameters['image_height']),
                 'position' => 1,
             );
         }
@@ -177,132 +182,17 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         return $this->getDetail($info);
     }
 
-    public function setFilterByCategoryId($cat_id){
-        $category = Mage::getModel('catalog/category')->load($cat_id);
-        if($category->getData('include_in_menu') == 0){
-            $this->builderQuery = $category->getProductCollection();
-            $this->setAttributeProducts();
-        }else{
-            $this->setLayers(0, $category);
-        }
+    public function setFilterByCategoryId($cat_id)
+    {
+        $this->_helperProduct->setCategoryProducts($cat_id);
+        $this->_layer = $this->_helperProduct->getLayers();
+        $this->builderQuery = $this->_helperProduct->getBuilderQuery();
     }
 
-    public function setFilterByQuery(){
-        $this->setLayers(1);
-    }
-
-    public function setAttributeProducts($is_search=0){
-        $storeId = Mage::app()->getStore()->getId();
-        $this->builderQuery->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes());
-        $this->builderQuery->setStoreId($storeId);
-        $this->builderQuery->addFinalPrice();
-        Mage::getSingleton('catalog/product_status')->addVisibleFilterToCollection($this->builderQuery);
-        if($is_search == 0){
-            Mage::getSingleton('catalog/product_visibility')->addVisibleInCatalogFilterToCollection($this->builderQuery);
-        }else{
-            Mage::getSingleton('catalog/product_visibility')->addVisibleInSearchFilterToCollection($this->builderQuery);
-        }
-        $this->builderQuery->addUrlRewrite(0);
-    }
-
-    public function setLayers($is_search=0, $category=0){
-        $data = $this->getData();
-        $controller = $data['controller'];
-        $parameters = $data['params'];
-        if(isset($parameters[self::FILTER])) {
-            $filter = $parameters[self::FILTER];
-            if($is_search == 1){
-                $controller->getRequest()->setParam('q', (string)$filter['q']);
-            }
-            if(isset($filter['layer'])){
-                $filter_layer = $filter['layer'];
-                $params = array();
-                foreach($filter_layer as $key=>$value){
-                    $params[(string) $key] = (string) $value;
-                }
-                $controller->getRequest()->setParams($params);
-            }
-        }
-        $layout = $controller->getLayout();
-        if($is_search == 0){
-            $block = $layout->createBlock('catalog/layer_view');
-            //setCurrentCate
-            $block->getLayer()->setCurrentCategory($category);
-            $layers = $this->getItemsShopBy($block);
-            $this->_layer = $layers;
-            //update collection
-            $this->builderQuery = $block->getLayer()->getProductCollection();
-            $this->setAttributeProducts();
-        }else{
-            $block = $layout->createBlock('catalogsearch/layer');
-            $layers = $this->getItemsShopBy($block);
-            $this->_layer = $layers;
-            //update collection
-            $this->builderQuery = $block->getLayer()->getProductCollection();
-            $this->setAttributeProducts(1);
-        }
-    }
-
-    public function getItemsShopBy($block){
-        $_children = $block->getChild();
-        $refineArray = array();
-        foreach ($_children as $index => $_child) {
-            if ($index == 'layer_state') {
-                // $itemArray = array();
-                foreach ($_child->getActiveFilters() as $item) {
-                    $itemValues = array();
-                    $itemValues = $item->getValue();
-                    if(is_array($itemValues)){
-                        $itemValues = implode('-', $itemValues);
-                    }
-
-                    if($item->getFilter()->getRequestVar() != null){
-                        $refineArray['layer_state'][] = array(
-                            'attribute' => $item->getFilter()->getRequestVar(),
-                            'title' => $item->getName(),
-                            'label' => (string) strip_tags($item->getLabel()), //filter request var and correlative name
-                            'value' => $itemValues,
-                        ); //value of each option
-                    }
-                }
-                // $refineArray[] = $itemArray;
-            }else{
-                $items = $_child->getItems();
-                $itemArray = array();
-                foreach ($items as $index => $item) {
-                    $filter = array();
-                    if ($index == 0) {
-                        foreach ($items as $index => $item){
-                            $filter[] = array(
-                                'value' => $item->getValue(), //value of each option
-                                'label' => strip_tags($item->getLabel()),
-                            );
-                        }
-
-                        if($item->getFilter()->getRequestVar() != null) {
-                            $refineArray['layer_filter'][] = array(
-                                'attribute' => $item->getFilter()->getRequestVar(),
-                                'title' => $item->getName(), //filter request var and correlative name
-                                'filter' => $filter,
-                            );
-                        }
-                    }
-                }
-            }
-        }
-        return $refineArray;
-    }
-
-    public function getImageProduct($product, $file = null, $width, $height) {
-        if (!is_null($width) && !is_null($height)) {
-            if ($file) {
-                return Mage::helper('catalog/image')->init($product, 'thumbnail', $file)->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($width, $height)->__toString();
-            }
-            return Mage::helper('catalog/image')->init($product, 'small_image')->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($width, $height)->__toString();
-        }
-        if ($file) {
-            return Mage::helper('catalog/image')->init($product, 'thumbnail', $file)->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize(600, 600)->__toString();
-        }
-        return Mage::helper('catalog/image')->init($product, 'small_image')->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize(600, 600)->__toString();
+    public function setFilterByQuery()
+    {
+        $this->_helperProduct->setLayers(1);
+        $this->_layer = $this->_helperProduct->getLayers();
+        $this->builderQuery = $this->_helperProduct->getBuilderQuery();
     }
 }
