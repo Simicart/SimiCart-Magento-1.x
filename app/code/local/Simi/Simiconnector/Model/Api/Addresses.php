@@ -61,20 +61,10 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
         return $this->show();
     }
 
-    /*
-     * Add Message
-     */
-    /*
-      public function getDetail($info) {
-      if ($this->_RETURN_MESSAGE) {
-      $resultArray = parent::getDetail($info);
-      $resultArray['message'] = array($this->_RETURN_MESSAGE);
-      return $resultArray;
-      }
-      return parent::getDetail($info);
-      }
-     */
 
+    /*
+     * Add Address Detail
+     */
     public function index() {
         $result = parent::index();
         $customer = Mage::getSingleton('customer/session')->getCustomer();
