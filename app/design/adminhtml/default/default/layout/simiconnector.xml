@@ -89,4 +89,13 @@
             <block type="simiconnector/adminhtml_siminotification" name="siminotification_guide" as="siminotification_guide" template="simiconnector/siminotification/guide.phtml" />                            
         </reference>
     </adminhtml_simiconnector_siminotification_guide>
+    <!-- Scott add to set Load Ext Js = true -->
+    <adminhtml_system_config_edit>
+        <reference name="head">
+            <action method="setCanLoadExtJs">
+                <flag>1</flag>
+            </action>
+        </reference>
+    </adminhtml_system_config_edit>
+    <!-- End-->
 </layout>
