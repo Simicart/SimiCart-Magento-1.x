@@ -14,11 +14,8 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
     public function setBuilderQuery() {
         $data = $this->getData();
         if ($data['resourceid']) {
-            Mage::app()->getCookie()->set(Mage_Core_Model_Store::COOKIE_NAME, Mage::app()->getStore($data['resourceid'])->getCode(), TRUE);
-            Mage::app()->setCurrentStore(
-                    Mage::app()->getStore($data['resourceid'])->getCode()
-            );
-            Mage::getSingleton('core/locale')->emulate($data['resourceid']);
+            $this->setStoreView($data);
+            $this->setCurrency($data);
             $this->builderQuery = Mage::getModel('core/store')->load($data['resourceid']);
         } else {
             $this->builderQuery = $collection = Mage::getModel('core/store')->getCollection();
@@ -49,6 +46,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         if (in_array($country_code, $rtlCountry)) {
             $isRtl = '1';
         }
+        $currencies = $this->getCurrencies();
 
         $cmsData = $this->getData();
         $cmsData['resourceid'] = NULL;
@@ -61,15 +59,20 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'country_code' => $country->getId(),
                 'country_name' => $country->getName(),
                 'locale_identifier' => $locale,
-                'currency_symbol' => $currencySymbol,
-                'currency_code' => $currencyCode,
-                'currency_position' => $this->getCurrencyPosition(),
                 'store_id' => $this->getCurrentStoreId(),
                 'store_name' => Mage::app()->getStore()->getName(),
                 'store_code' => Mage::app()->getStore()->getCode(),
                 'use_store' => Mage::getStoreConfig('web/url/use_store'),
                 'is_rtl' => $isRtl,
                 'android_sender' => Mage::getStoreConfig('simiconnector/android_sendid'),
+                'currency_symbol' => $currencySymbol,
+                'currency_code' => $currencyCode,
+                'currency_position' => $this->getCurrencyPosition(),
+                'thousand_separator' => Mage::getStoreConfig('simiconnector/currency/thousand_separator'),
+                'decimal_separator' => Mage::getStoreConfig('simiconnector/currency/decimal_separator'),
+                'min_number_of_decimals' => Mage::getStoreConfig('simiconnector/currency/min_number_of_decimals'),
+                'max_number_of_decimals' => Mage::getStoreConfig('simiconnector/currency/max_number_of_decimals'),
+                'currencies' => $currencies,
             ),
             'sales' => array(
                 'sales_reorder_allow' => Mage::getStoreConfig('sales/reorder/allow'),
@@ -151,6 +154,51 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
             return 'before';
         }
         return 'after';
+    }
+
+    public function getCurrencies() {
+        $currencies = array();
+        $codes = Mage::app()->getStore()->getAvailableCurrencyCodes(true);
+        if (is_array($codes) && count($codes) > 1) {
+
+            $rates = Mage::getModel('directory/currency')->getCurrencyRates(
+                    Mage::app()->getStore()->getBaseCurrency(), $codes
+            );
+            foreach ($codes as $code) {
+                if (isset($rates[$code])) {
+                    $currencies[] = array(
+                        'value' => $code,
+                        'title' => Mage::app()->getLocale()->getTranslation($code, 'nametocurrency'),
+                    );
+                }
+            }
+        } elseif (count($codes) == 1) {
+            $currencies[] = array(
+                'value' => $codes[0],
+                'title' => Mage::app()->getLocale()->getTranslation($codes[0], 'nametocurrency'),
+            );
+        }
+        return $currencies;
+    }
+
+    public function setCurrency($data) {
+        if (isset($data['params']['currency'])) {
+            $currency = $data['params']['currency'];
+            if ($currency) {
+                Mage::app()->getStore()->setCurrentCurrencyCode($currency);
+                Mage::app()->getCookie()->set('currency_code', $currency, TRUE);
+            }
+        }
+    }
+
+    public function setStoreView($data) {
+        if ($data['resourceid'] == 'default')
+            return;
+        Mage::app()->getCookie()->set(Mage_Core_Model_Store::COOKIE_NAME, Mage::app()->getStore($data['resourceid'])->getCode(), TRUE);
+        Mage::app()->setCurrentStore(
+                Mage::app()->getStore($data['resourceid'])->getCode()
+        );
+        Mage::getSingleton('core/locale')->emulate($data['resourceid']);
     }
 
     public function getCurrentStoreId() {

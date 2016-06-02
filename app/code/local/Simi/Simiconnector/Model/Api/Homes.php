@@ -9,14 +9,14 @@
 class Simi_Simiconnector_Model_Api_Homes extends Simi_Simiconnector_Model_Api_Abstract {
 
     protected $_DEFAULT_ORDER = 'sort_order';
-    protected $_SHOW_PRODUCT_LIST = false;
+    protected $showProductList = false;
 
     public function setBuilderQuery() {
         $data = $this->getData();
         if ($data['resourceid']) {
             $this->builderQuery = Mage::getModel('simiconnector/banner')->load('-1');
             if ($data['resourceid'] == 'full') {
-                $this->_SHOW_PRODUCT_LIST = true;
+                $this->showProductList = true;
             }
         } else {
             $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('banner');
@@ -30,23 +30,34 @@ class Simi_Simiconnector_Model_Api_Homes extends Simi_Simiconnector_Model_Api_Ab
 
     public function show() {
         $information = parent::show();
-        $this->builderQuery = Mage::getModel('simiconnector/api_homebanners')->getCollection();
-        $this->setPluralKey('homebanners');
-        $banners = parent::index();
-        $this->builderQuery = Mage::getModel('simiconnector/api_homecategories')->getCollection();
-        $this->setPluralKey('homecategories');
-        $categories = parent::index();
-        $this->builderQuery = Mage::getModel('simiconnector/api_homeproductlists')->getCollection();
-        $this->setPluralKey('homeproductlists');
-        $productlists = parent::index();
-        if ($this->_SHOW_PRODUCT_LIST) {
-            foreach ($productlists['homeproductlists'] as $key => $listItem) {
-                $productlist = Mage::getModel('simiconnector/api_homeproductlists');
-                $productlist->setData($this->getData());
-                $productlist->builderQuery = Mage::getModel('simiconnector/productlist')->load($listItem['productlist_id']);
-                $productlists['homeproductlists'][$key]['list'] = $productlist->show();
-            }
-        }
+        /*
+         * Get Banners
+         */
+        $banners = Mage::getModel('simiconnector/api_homebanners');
+        $banners->builderQuery = $banners->getCollection();
+        $banners->setPluralKey('homebanners');
+        $banners = $banners->index();
+
+        /*
+         * Get Categories
+         */
+        $categories = Mage::getModel('simiconnector/api_homecategories');
+        $categories->builderQuery = $categories->getCollection();
+        $categories->setPluralKey('homecategories');
+        $categories = $categories->index();
+
+        /*
+         * Get Product List
+         */
+        $productlists = Mage::getModel('simiconnector/api_homeproductlists');
+        $productlists->builderQuery = $productlists->getCollection();
+        $productlists->setPluralKey('homeproductlists');
+        $productlists->setData($this->getData());
+        if ($this->showProductList)
+            $productlists->setShowProductList(true);
+        $productlists = $productlists->index();
+
+
         $information['home'] = array(
             'homebanners' => $banners,
             'homecategories' => $categories,

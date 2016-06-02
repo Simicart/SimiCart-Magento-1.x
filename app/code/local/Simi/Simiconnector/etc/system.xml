@@ -112,6 +112,48 @@
                         </categories_in_app>
                     </fields>				
                 </general>
+                <currency translate="label">
+                    <label>Currency Display Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>99</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>		                       
+                        <thousand_separator translate="label">
+                            <label>Thousand Separator</label>
+                            <frontend_type>text</frontend_type>                            
+                            <sort_order>1</sort_order>                            
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>  												
+                        </thousand_separator>
+                        <decimal_separator translate="label">
+                            <label>Decimal Separator</label>
+                            <frontend_type>text</frontend_type>                            
+                            <sort_order>99</sort_order>                            
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>  												
+                        </decimal_separator>
+                        <min_number_of_decimals translate="label">
+                            <label>Minimum Number of Decimals</label>
+                            <frontend_type>text</frontend_type>                            
+                            <sort_order>199</sort_order>                            
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>  												
+                        </min_number_of_decimals>
+                        <max_number_of_decimals translate="label">
+                            <label>Maximum Number of Decimals</label>
+                            <frontend_type>text</frontend_type>                            
+                            <sort_order>299</sort_order>                            
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>  												
+                        </max_number_of_decimals>
+                    </fields>				
+                </currency>
             </groups>
         </simiconnector>
         <spotproduct translate="label" module="simiconnector">

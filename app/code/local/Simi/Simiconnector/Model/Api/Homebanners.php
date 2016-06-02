@@ -28,5 +28,16 @@ class Simi_Simiconnector_Model_Api_Homebanners extends Simi_Simiconnector_Model_
 
         return $bannerCollection;
     }
+    
+    public function index() {        
+        $result = parent::index();
+        foreach ($result['homebanners'] as $index=>$item) {
+            $imagesize = getimagesize($item['banner_name']);
+            $item['width'] = $imagesize[0];
+            $item['height'] = $imagesize[1];
+            $result['homebanners'][$index] = $item;
+        }
+        return $result;
+    }
 
 }

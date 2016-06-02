@@ -145,16 +145,13 @@
                 <cms_shipping_condition></cms_shipping_condition>
                 <is_reload_payment_method>0</is_reload_payment_method>
                 <show_product_type>0</show_product_type>
-            </general>           
+            </general>  
+            <currency>                                           
+                <thousand_separator>,</thousand_separator>
+                <decimal_separator>.</decimal_separator>
+                <min_number_of_decimals translate="label">0</min_number_of_decimals>
+                <max_number_of_decimals translate="label">2</max_number_of_decimals>			
+            </currency>         
         </simiconnector>  
-        <spotproduct>
-            <general>
-                <enable>1</enable>
-                <best_seller>1</best_seller>  
-                <most_view>0</most_view>
-                <new_update>0</new_update>  
-                <recent_add>1</recent_add>  
-            </general>
-        </spotproduct>                             
     </default>
 </config>
