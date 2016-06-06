@@ -16,9 +16,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
     public function setBuilderQuery() {
         $data = $this->getData();
         if ($data['resourceid']) {
-            if ($data['resourceid'] == 'update') {
-                $this->updateQuote($data);
-            } elseif ($data['resourceid'] == 'setcoupon') {
+            if ($data['resourceid'] == 'setcoupon') {
                 $this->setCoupon($data);
             }
         }
@@ -30,9 +28,17 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
         $this->builderQuery = $quote->getItemsCollection()->addFieldToFilter('parent_item_id', array('null' => true));
     }
 
-    public function updateQuote($data) {
-        $parameters = $data['params'];
+    public function update() {
+        $data = $this->getData();
+        $quote = $this->_getQuote();
+        $parameters = (array) $data['contents'];
+        $this->updateQuote($parameters);
+        return $this->index();
+    }
+
+    public function updateQuote($parameters) {
         $cartData = array();
+        $quote = $this->_getQuote();
         foreach ($parameters as $index => $qty) {
             $cartData[$index] = array('qty' => $qty);
         }
@@ -40,11 +46,16 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
             $filter = new Zend_Filter_LocalizedToNormalized(
                     array('locale' => Mage::app()->getLocale()->getLocaleCode())
             );
+            $removedItems = array();
             foreach ($cartData as $index => $data) {
                 if (isset($data['qty'])) {
                     $cartData[$index]['qty'] = $filter->filter(trim($data['qty']));
+                    if ($data['qty'] == 0) {
+                        $removedItems[] = $index;
+                    }
                 }
             }
+            $this->builderQuery->addFieldToFilter('item_id', array('neq' => $removedItems));
             $cart = $this->_getCart();
             if (!$cart->getCustomerSession()->getCustomer()->getId() && $cart->getQuote()->getCustomerId()) {
                 $cart->getQuote()->setCustomerId(null);
@@ -55,6 +66,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
             }
             $cart->updateItems($cartData)
                     ->save();
+            Mage::getSingleton('checkout/session')->setCartWasUpdated(true);
         }
     }
 
