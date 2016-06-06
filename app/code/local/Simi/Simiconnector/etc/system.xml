@@ -35,14 +35,23 @@
                             <show_in_store>1</show_in_store>
                             <comment></comment>
                         </enable>
+                        <base_url translate="label">
+                            <label>Base URL</label>
+                            <frontend_type>text</frontend_type>                            
+                            <sort_order>99</sort_order>                            
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>  
+                            <comment>eg. http://simicart.com/, leave it blank if you want to use default value from Building Dashboard</comment>												
+                        </base_url>	                        
                         <upload_pem_file translate="label tooltip comment">
                             <label>Upload PEM file</label>
                             <comment>It use to send notification to IOS</comment>
                             <frontend_type>file</frontend_type>
+                            <sort_order>199</sort_order>
                             <backend_model>adminhtml/system_config_backend_file</backend_model>
                             <upload_dir config="system/filesystem/media" scope_info="1">simi/simicart/pem/ios</upload_dir>
                             <base_url type="media" scope_info="1">admin-config-uploads</base_url>
-                            <sort_order>1</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -50,8 +59,8 @@
                         <is_show_price_zero translate="label">
                             <label>Show option price if it's $0.00?</label>
                             <frontend_type>select</frontend_type>
+                            <sort_order>299</sort_order>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>2</sort_order>                            
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>                            
@@ -59,16 +68,16 @@
                         <is_show_all_product translate="label">
                             <label>Show "All Products" link in Category?</label>
                             <frontend_type>select</frontend_type>
+                            <sort_order>399</sort_order>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>3</sort_order>                            
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>                            
                         </is_show_all_product>	
                         <cms_shipping_condition translate="label">
                             <label>Show CMS content in product detail</label>
-                            <frontend_type>text</frontend_type>                            
-                            <sort_order>4</sort_order>                            
+                            <frontend_type>text</frontend_type>  
+                            <sort_order>499</sort_order>                         
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>  
@@ -77,17 +86,26 @@
                         <is_reload_payment_method translate="label">
                             <label>Update order review when select payment method</label>
                             <frontend_type>select</frontend_type>
+                            <sort_order>599</sort_order>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>5</sort_order>                            
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>                            
-                        </is_reload_payment_method>	
+                        </is_reload_payment_method>
+                        <is_show_sample_data translate="label">
+                            <label>Show Sample Data on Home Screen</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>699</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>                            
+                        </is_show_sample_data>		
                         <show_product_type translate="label">
                             <label>View products default</label>
                             <frontend_type>select</frontend_type>
+                            <sort_order>799</sort_order>
                             <source_model>simiconnector/config_source_productsviewtype</source_model>
-                            <sort_order>6</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -95,8 +113,8 @@
                         <rtl_country translate="label">
                             <label>Use RTL language</label>
                             <frontend_type>multiselect</frontend_type>
-                            <source_model>adminhtml/system_config_source_country</source_model>
-                            <sort_order>7</sort_order>                            
+                            <sort_order>899</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>                        
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>                            
@@ -104,8 +122,8 @@
                         <categories_in_app translate="label">
                             <label>Display categories on app</label>
                             <frontend_type>label</frontend_type>
+                            <sort_order>999</sort_order>
                             <frontend_model>simiconnector/adminhtml_system_config_category_categorytree</frontend_model>
-                            <sort_order>8</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>

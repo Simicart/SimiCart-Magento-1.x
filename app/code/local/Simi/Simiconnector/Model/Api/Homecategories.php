@@ -39,6 +39,9 @@ class Simi_Simiconnector_Model_Api_Homecategories extends Simi_Simiconnector_Mod
             $imagesize = getimagesize($item['simicategory_filename']);
             $item['width'] = $imagesize[0];
             $item['height'] = $imagesize[1];
+            $categoryModel = Mage::getModel('catalog/category')->load($item['category_id']);
+            $item['has_children'] = $categoryModel->hasChildren();
+            $item['cat_name'] = $categoryModel->getName();
             $result['homecategories'][$index] = $item;
         }
         return $result;

@@ -145,6 +145,8 @@
                 <cms_shipping_condition></cms_shipping_condition>
                 <is_reload_payment_method>0</is_reload_payment_method>
                 <show_product_type>0</show_product_type>
+                <is_show_sample_data>1</is_show_sample_data>
+                <base_url></base_url>
             </general>  
             <currency>                                           
                 <thousand_separator>,</thousand_separator>

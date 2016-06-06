@@ -10,6 +10,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
 
     protected $_DEFAULT_ORDER = 'store_id';
     protected $_method = 'callApi';
+    protected $group_id;
 
     public function setBuilderQuery() {
         $data = $this->getData();
@@ -18,8 +19,16 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
             $this->setCurrency($data);
             $this->builderQuery = Mage::getModel('core/store')->load($data['resourceid']);
         } else {
-            $this->builderQuery = $collection = Mage::getModel('core/store')->getCollection();
+            $this->builderQuery = Mage::getModel('core/store')->getCollection()->addFieldToFilter('group_id', Mage::app()->getStore()->getGroupId());
         }
+    }
+
+    public function index() {
+        $result = parent::index();
+        foreach ($result['storeviews'] as $index => $storeView) {
+            $result['storeviews'][$index]['base_url'] = Mage::getStoreConfig('simiconnector/general/base_url', $storeView['store_id']);
+        }
+        return $result;
     }
 
     public function show() {
@@ -64,6 +73,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'store_code' => Mage::app()->getStore()->getCode(),
                 'use_store' => Mage::getStoreConfig('web/url/use_store'),
                 'is_rtl' => $isRtl,
+                'is_show_sample_data' => Mage::getStoreConfig('simiconnector/general/is_show_sample_data'),
                 'android_sender' => Mage::getStoreConfig('simiconnector/android_sendid'),
                 'currency_symbol' => $currencySymbol,
                 'currency_code' => $currencyCode,
@@ -72,7 +82,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'decimal_separator' => Mage::getStoreConfig('simiconnector/currency/decimal_separator'),
                 'min_number_of_decimals' => Mage::getStoreConfig('simiconnector/currency/min_number_of_decimals'),
                 'max_number_of_decimals' => Mage::getStoreConfig('simiconnector/currency/max_number_of_decimals'),
-                'currencies' => $currencies,
+                'currencies' => $currencies
             ),
             'sales' => array(
                 'sales_reorder_allow' => Mage::getStoreConfig('sales/reorder/allow'),
@@ -140,10 +150,37 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 ),
             ),
             'cms' => $cmsPageList,
+            'allowed_countries' => $this->getAllowedCountries(),
+            'stores' => $this->getStores(),
         );
-
-        $information['storeview'] = $additionInfo; //array_merge($information['storeview'], $additionInfo);
+        $information['storeview'] = $additionInfo;
         return $information;
+    }
+
+    public function getAllowedCountries() {
+        $list = array();
+        $country_default = Mage::getStoreConfig('general/country/default');
+        $countries = Mage::getResourceModel('directory/country_collection')->loadByStore();
+        $cache = null;
+        foreach ($countries as $country) {
+            if ($country_default == $country->getId()) {
+                $cache = array(
+                    'country_code' => $country->getId(),
+                    'country_name' => $country->getName(),
+                    'states' => Mage::helper('simiconnector/address')->getStates($country->getId()),
+                );
+            } else {
+                $list[] = array(
+                    'country_code' => $country->getId(),
+                    'country_name' => $country->getName(),
+                    'states' => Mage::helper('simiconnector/address')->getStates($country->getId()),
+                );
+            }
+        }
+        if ($cache) {
+            array_unshift($list, $cache);
+        }
+        return $list;
     }
 
     public function getCurrencyPosition() {
@@ -203,6 +240,14 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
 
     public function getCurrentStoreId() {
         return Mage::app()->getStore()->getId();
+    }
+
+    public function getStores() {
+        $storeAPIModel = Mage::getModel('simiconnector/api_stores');
+        $storeAPIModel->setData($this->getData());
+        $storeAPIModel->builderQuery = Mage::getModel('core/store_group')->getCollection()->addFieldToFilter('website_id', Mage::app()->getStore()->getWebsiteId());
+        $storeAPIModel->pluralKey = 'stores';
+        return $storeAPIModel->index();
     }
 
 }

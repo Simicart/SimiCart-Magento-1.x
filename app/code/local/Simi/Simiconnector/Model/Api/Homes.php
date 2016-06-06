@@ -15,9 +15,6 @@ class Simi_Simiconnector_Model_Api_Homes extends Simi_Simiconnector_Model_Api_Ab
         $data = $this->getData();
         if ($data['resourceid']) {
             $this->builderQuery = Mage::getModel('simiconnector/banner')->load('-1');
-            if ($data['resourceid'] == 'full') {
-                $this->showProductList = true;
-            }
         } else {
             $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('banner');
             $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
@@ -53,8 +50,6 @@ class Simi_Simiconnector_Model_Api_Homes extends Simi_Simiconnector_Model_Api_Ab
         $productlists->builderQuery = $productlists->getCollection();
         $productlists->setPluralKey('homeproductlists');
         $productlists->setData($this->getData());
-        if ($this->showProductList)
-            $productlists->setShowProductList(true);
         $productlists = $productlists->index();
 
 
