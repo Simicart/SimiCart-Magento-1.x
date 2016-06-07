@@ -4,6 +4,11 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
 
     protected $_DEFAULT_ORDER = 'item_id';
     protected $_RETURN_MESSAGE;
+    protected $_removed_items;
+
+    protected function _getSession() {
+        return Mage::getSingleton('checkout/session');
+    }
 
     protected function _getCart() {
         return Mage::getSingleton('checkout/cart');
@@ -20,17 +25,12 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
                 $this->setCoupon($data);
             }
         }
-        $this->updateBuilderQuery();
-    }
-
-    public function updateBuilderQuery() {
         $quote = $this->_getQuote();
-        $this->builderQuery = $quote->getItemsCollection()->addFieldToFilter('parent_item_id', array('null' => true));
+        $this->builderQuery = $quote->getItemsCollection();
     }
 
     public function update() {
         $data = $this->getData();
-        $quote = $this->_getQuote();
         $parameters = (array) $data['contents'];
         $this->updateQuote($parameters);
         return $this->index();
@@ -55,7 +55,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
                     }
                 }
             }
-            $this->builderQuery->addFieldToFilter('item_id', array('neq' => $removedItems));
+            $this->_removed_items = $removedItems;
             $cart = $this->_getCart();
             if (!$cart->getCustomerSession()->getCustomer()->getId() && $cart->getQuote()->getCustomerId()) {
                 $cart->getQuote()->setCustomerId(null);
@@ -68,6 +68,60 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
                     ->save();
             Mage::getSingleton('checkout/session')->setCartWasUpdated(true);
         }
+    }
+
+    public function store() {
+        $this->addToCart();
+        return $this->index();
+    }
+
+    public function addToCart() {
+        $data = $this->getData();
+        $cart = $this->_getCart();
+        $params = (array) $data['contents'];
+        $params = $this->_convertParams($params);
+        if (isset($params['qty'])) {
+            $filter = new Zend_Filter_LocalizedToNormalized(
+                    array('locale' => Mage::app()->getLocale()->getLocaleCode())
+            );
+            $params['qty'] = $filter->filter($params['qty']);
+        }
+        $product = $this->_initProduct($params['product']);
+        $cart->addProduct($product, $params);
+        $cart->save();
+        $this->_getSession()->setCartWasUpdated(true);
+        Mage::dispatchEvent('checkout_cart_add_product_complete', array('product' => $product, 'request' => Mage::app()->getRequest(), 'response' => Mage::app()->getResponse()));
+        $this->_RETURN_MESSAGE = Mage::helper('simiconnector')->__('%s was added to your shopping cart.', Mage::helper('core')->escapeHtml($product->getName()));
+    }
+
+    private function _convertParams($params) {
+        $convertList = array(//'options', //Custom Option (Simple/Virtual/Downloadable)
+            'super_attribute', //Configurable Product
+            'super_group', //Group Product
+            'bundle_option', //Bundle Product
+            'bundle_option_qty', //Bundle Product Qty
+        );
+        foreach ($convertList as $type) {
+            $params[$type] = (array) $params[$type];
+            $convertedParam = array();
+            foreach ($params[$type] as $index => $item) {
+                $convertedParam[(int) $index] = $item;
+            }
+            $params[$type] = $convertedParam;
+        }
+        return $params;
+    }
+
+    protected function _initProduct($productId) {
+        if ($productId) {
+            $product = Mage::getModel('catalog/product')
+                    ->setStoreId(Mage::app()->getStore()->getId())
+                    ->load($productId);
+            if ($product->getId()) {
+                return $product;
+            }
+        }
+        return false;
     }
 
     public function setCoupon($data) {
@@ -101,6 +155,10 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
 
     public function index() {
         $collection = $this->builderQuery;
+        $collection->addFieldToFilter('item_id', array('nin' => $this->_removed_items))
+                ->addFieldToFilter('parent_item_id', array('null' => true));
+        ;
+
         $this->filter();
         $data = $this->getData();
         $parameters = $data['params'];
@@ -144,6 +202,15 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
             }
             if (++$check_limit > $limit)
                 break;
+
+            if ($entity->getData('parent_item_id') != NULL)
+                continue;
+
+            if ($this->_removed_items) {
+                 if (in_array($entity->getData('item_id'), $this->_removed_items)) {
+                    continue;
+                }
+            }
 
             $options = array();
             if (version_compare(Mage::getVersion(), '1.5.0.0', '>=') === true) {
