@@ -68,6 +68,25 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
         }
     }
 
+    public function showTotalOrder($order) {
+        $data = array();
+        $data['subtotal_excl_tax'] = $order->getSubtotal();
+        $data['subtotal_incl_tax'] = $order->getSubtotalInclTax();
+        $data['shipping_hand_excl_tax'] = $order->getShippingAmount();
+        $data['shipping_hand_incl_tax'] = $order->getShippingInclTax();
+        $data['tax'] = $order->getTaxAmount();
+        $data['discount'] = abs($order->getDiscountAmount());
+        $data['grand_total_excl_tax'] = $order->getGrandTotal() - $data['tax'];
+        $data['grand_total_incl_tax'] = $order->getGrandTotal();
+
+        if (Mage::app()->getLocale()->currency($order->getOrderCurrency()->getCurrencyCode())->getSymbol() != null) {
+            $data['currency_symbol'] = Mage::app()->getLocale()->currency($order->getOrderCurrency()->getCurrencyCode())->getSymbol();
+        } else {
+            $data['currency_symbol'] = $order->getOrderCurrency()->getCurrencyCode();
+        }
+        return $data;
+    }
+
     public function displayBothTaxSub() {
         return Mage::getSingleton('tax/config')->displayCartSubtotalBoth(Mage::app()->getStore());
     }

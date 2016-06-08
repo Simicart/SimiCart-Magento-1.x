@@ -13,7 +13,7 @@ class Simi_Simiconnector_Model_Address extends Mage_Core_Model_Abstract {
         return Mage::helper('simiconnector/address');
     }
 
-    public function getAddressDetail($data, $customer, $id = '') {
+    public function getAddressDetail($data, $customer) {
         $street = $data->getStreet();
         return array(
             'firstname' => $data->getFirstname(),

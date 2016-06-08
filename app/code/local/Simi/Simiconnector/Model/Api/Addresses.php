@@ -71,7 +71,7 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
         $addresses = $result['addresses'];
         foreach ($addresses as $index => $address) {
             $addressModel = Mage::getModel('customer/address')->load($address['entity_id']);
-            $addresses[$index] = array_merge($address, Mage::getModel('simiconnector/address')->getAddressDetail($addressModel, $customer, $address['entity_id']));
+            $addresses[$index] = array_merge($address, Mage::getModel('simiconnector/address')->getAddressDetail($addressModel, $customer));
         }
         $result['addresses'] = $addresses;
         return $result;

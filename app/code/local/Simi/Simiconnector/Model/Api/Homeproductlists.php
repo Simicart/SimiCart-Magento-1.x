@@ -9,6 +9,7 @@
 class Simi_Simiconnector_Model_Api_Homeproductlists extends Simi_Simiconnector_Model_Api_Abstract {
 
     protected $_DEFAULT_ORDER = 'sort_order';
+    public $SHOW_PRODUCT_ARRAY = TRUE;
 
     public function setBuilderQuery() {
         $data = $this->getData();
@@ -42,21 +43,23 @@ class Simi_Simiconnector_Model_Api_Homeproductlists extends Simi_Simiconnector_M
         return $result;
     }
 
-    private function _addInfo($dataArray) {        
+    private function _addInfo($dataArray) {
         $listModel = Mage::getModel('simiconnector/productlist')->load($dataArray['productlist_id']);
         $imagesize = getimagesize($listModel->getData('list_image'));
         $dataArray['width'] = $imagesize[0];
         $dataArray['height'] = $imagesize[1];
         $typeArray = Mage::helper('simiconnector/productlist')->getListTypeId();
         $dataArray['type_name'] = $typeArray[$listModel->getData('list_type')];
-        $productCollection = Mage::helper('simiconnector/productlist')->getProductCollection($listModel);
-        $productListAPIModel = Mage::getModel('simiconnector/api_products');
-        $productListAPIModel->setData($this->getData());
-        $productListAPIModel->setBuilderQuery();
-        $productListAPIModel->builderQuery = $productCollection;
-        $productListAPIModel->pluralKey = 'products';
-        $listAPI = $productListAPIModel->index();
-        $dataArray['product_array'] = $listAPI;
+        if ($this->SHOW_PRODUCT_ARRAY) {
+            $productCollection = Mage::helper('simiconnector/productlist')->getProductCollection($listModel);
+            $productListAPIModel = Mage::getModel('simiconnector/api_products');
+            $productListAPIModel->setData($this->getData());
+            $productListAPIModel->setBuilderQuery();
+            $productListAPIModel->builderQuery = $productCollection;
+            $productListAPIModel->pluralKey = 'products';
+            $listAPI = $productListAPIModel->index();
+            $dataArray['product_array'] = $listAPI;
+        }
         return $dataArray;
     }
 

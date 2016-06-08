@@ -9,24 +9,17 @@
 class Simi_Simiconnector_Model_Api_Homes extends Simi_Simiconnector_Model_Api_Abstract {
 
     protected $_DEFAULT_ORDER = 'sort_order';
-    protected $showProductList = false;
 
     public function setBuilderQuery() {
-        $data = $this->getData();
-        if ($data['resourceid']) {
-            $this->builderQuery = Mage::getModel('simiconnector/banner')->load('-1');
-        } else {
-            $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('banner');
-            $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
-            $bannerCollection = Mage::getModel('simiconnector/banner')->getCollection();
-            $bannerCollection->getSelect()
-                    ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.banner_id AND visibility.content_type = ' . $typeID . ' AND visibility.store_view_id =' . Mage::app()->getStore()->getId());
-            $this->builderQuery = $bannerCollection;
-        }
+        
+    }
+
+    public function index() {
+        return $this->show();
     }
 
     public function show() {
-        $information = parent::show();
+        $data = $this->getData();
         /*
          * Get Banners
          */
@@ -48,16 +41,19 @@ class Simi_Simiconnector_Model_Api_Homes extends Simi_Simiconnector_Model_Api_Ab
          */
         $productlists = Mage::getModel('simiconnector/api_homeproductlists');
         $productlists->builderQuery = $productlists->getCollection();
+        if ($data['resourceid'] == 'lite') {
+            $productlists->SHOW_PRODUCT_ARRAY = FALSE;
+        }
         $productlists->setPluralKey('homeproductlists');
         $productlists->setData($this->getData());
         $productlists = $productlists->index();
 
 
-        $information['home'] = array(
-            'homebanners' => $banners,
-            'homecategories' => $categories,
-            'homeproductlists' => $productlists,
-        );
+        $information = array('home' => array(
+                'homebanners' => $banners,
+                'homecategories' => $categories,
+                'homeproductlists' => $productlists,
+        ));
         return $information;
     }
 
