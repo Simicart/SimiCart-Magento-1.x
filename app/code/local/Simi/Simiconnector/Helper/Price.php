@@ -129,7 +129,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                     if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, array(0, 1))){
                         $priveV2['price_label'] = Mage::helper('catalog')->__('Regular Price');
                         $weeeAmountToDisplay = $_taxHelper->displayPriceIncludingTax() ? $_weeeTaxAmountInclTaxes : $_weeeTaxAmount;
-                        $this->setTaxPrice($priveV2, $_price + $weeeAmountToDisplay);
+                        $this->setTaxReguarlPrice($priveV2, $_price + $weeeAmountToDisplay);
                         if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 1)){
                             $wee ='';
                             foreach ($_weeeTaxAttributes as $_weeeTaxAttribute) {
@@ -144,7 +144,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                         }
                     }elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 4)){
                         $priveV2['price_label'] = Mage::helper('catalog')->__('Regular Price');
-                        $this->setTaxPrice($priveV2, $_price + $_weeeTaxAmount);
+                        $this->setTaxReguarlPrice($priveV2, $_price + $_weeeTaxAmount);
                         if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 1)){
                             $wee ='';
                             foreach ($_weeeTaxAttributes as $_weeeTaxAttribute) {
@@ -160,7 +160,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                     }elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 2)){
                         $priveV2['price_label'] = Mage::helper('catalog')->__('Regular Price');
                         $weeeAmountToDisplay = $_taxHelper->displayPriceIncludingTax() ? $_weeeTaxAmountInclTaxes : $_weeeTaxAmount;
-                        $this->setTaxPrice($priveV2, $_price + $weeeAmountToDisplay);
+                        $this->setTaxReguarlPrice($priveV2, $_price + $weeeAmountToDisplay);
                         if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 1)){
                             $wee ='';
                             foreach ($_weeeTaxAttributes as $_weeeTaxAttribute) {
@@ -186,7 +186,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                 $_originalWeeeTaxAmount = $_store->roundPrice($_store->convertPrice($_originalWeeeTaxAmount));
                 if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 0)){
                     $priveV2['price_label'] = Mage::helper('catalog')->__('Regular Price');
-                    $this->setTaxPrice($priveV2, $_regularPrice + $_originalWeeeTaxAmount);
+                    $this->setTaxReguarlPrice($priveV2, $_regularPrice + $_originalWeeeTaxAmount);
                     if ($_taxHelper->displayBothPrices()){
                         $priveV2['show_ex_in_price'] = 1;
                         $priveV2['special_price_label'] = $_specialPriceStoreLabel;
@@ -200,7 +200,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                     }
                 }elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 1)){
                     $priveV2['price_label'] = Mage::helper('catalog')->__('Regular Price');
-                    $this->setTaxPrice($priveV2, $_regularPrice + $_originalWeeeTaxAmount);
+                    $this->setTaxReguarlPrice($priveV2, $_regularPrice + $_originalWeeeTaxAmount);
                     if ($_taxHelper->displayBothPrices()){
                         $priveV2['show_ex_in_price'] = 1;
                         $priveV2['special_price_label'] = $_specialPriceStoreLabel;
@@ -235,7 +235,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                 }elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 4)){
                     $priveV2['show_ex_in_price'] = 1;
                     $priveV2['price_label'] = Mage::helper('catalog')->__('Regular Price');
-                    $this->setTaxPrice($priveV2, $_regularPrice + $_originalWeeeTaxAmount);
+                    $this->setTaxReguarlPrice($priveV2, $_regularPrice + $_originalWeeeTaxAmount);
                     $priveV2['special_price_label'] = $_specialPriceStoreLabel;
                     $_exclTax = $_finalPrice + $_weeeTaxAmount;
                     $_inclTax = $_finalPriceInclTax + $_weeeTaxAmountInclTaxes;
@@ -253,7 +253,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                 }elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 2)){
                     $priveV2['show_ex_in_price'] = 1;
                     $priveV2['price_label'] = Mage::helper('catalog')->__('Regular Price');
-                    $this->setTaxPrice($priveV2, $_regularPrice);
+                    $this->setTaxReguarlPrice($priveV2, $_regularPrice);
                     $priveV2['special_price_label'] = $_specialPriceStoreLabel;
                     $_exclTax = $_finalPrice;
                     $_inclTax = $_finalPriceInclTax + $_weeeTaxAmountInclTaxes;
@@ -270,7 +270,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                     $priveV2['show_weee_price'] = 1;
                 }else{
                     $priveV2['price_label'] = Mage::helper('catalog')->__('Regular Price');
-                    $this->setTaxPrice($priveV2, $_regularPrice);
+                    $this->setTaxReguarlPrice($priveV2, $_regularPrice);
                     if ($_taxHelper->displayBothPrices()){
                         $priveV2['show_ex_in_price'] = 1;
                         $priveV2['special_price_label'] = $_specialPriceStoreLabel;
@@ -340,18 +340,33 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
      * 4 show price - wee.
      * 5 show wee - price.
      */
+    public function setTaxReguarlPrice(&$price, $_price)
+    {
+        $_coreHelper = $this->helper('core');
+        // $price['show_type'] = 3;
+        $price['regular_price'] = $_price;
+    }
+
+    /**
+     * @param $price
+     * @param $_price
+     * show type
+     * 3 show price only.
+     * 4 show price - wee.
+     * 5 show wee - price.
+     */
     public function setTaxPrice(&$price, $_price)
     {
         $_coreHelper = $this->helper('core');
        // $price['show_type'] = 3;
-        $price['price'] = $_coreHelper->currency($_price, false, false);
+        $price['price'] = $_price;
     }
 
     public function setTaxLowPrice(&$price, $_price)
     {
         $_coreHelper = $this->helper('core');
         // $price['show_type'] = 3;
-        $price['low_price'] = $_coreHelper->currency($_price, false, false);
+        $price['low_price'] = $_price;
     }
     /**
      * @param $price
@@ -364,14 +379,13 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
      */
     public function setBothTaxPrice(&$price, $_exclTax, $_inclTax)
     {
-        $_coreHelper = $this->helper('core');
         $price['price_excluding_tax'] = array(
             'label' => $this->helper('tax')->__('Excl. Tax:'),
-            'price' => $_coreHelper->currency($_exclTax, false, false),
+            'price' => $_exclTax,
         );
         $price['price_including_tax'] = array(
             'label' => $this->helper('tax')->__('Incl. Tax:'),
-            'price' => $_coreHelper->currency($_inclTax, false, false),
+            'price' => $_inclTax,
         );
     }
 

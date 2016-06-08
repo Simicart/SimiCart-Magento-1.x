@@ -9,6 +9,8 @@
 class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
 {
     protected $_product = null;
+    protected $_minimalPriceTax = null;
+    protected $_minimalPriceInclTax = null;
 
     public function helper($helper)
     {
@@ -247,6 +249,8 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
             }
         }
         if($is_detail){
+            $this->_minimalPriceInclTax = $_minimalPriceInclTax;
+            $this->_minimalPriceTax = $_minimalPriceTax;
             $priceV2['configure'] = $this->formatPriceFromProductDetail($_product);
         }
         return $priceV2;
@@ -351,8 +355,8 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
     public function formatPriceFromProductDetail($_product){
         $priceV2 = array();
         $_weeeHelper = $this->helper('weee');
-        $_finalPrice = $_product->getFinalPrice();
-        $_finalPriceInclTax = $_product->getFinalPrice();
+        $_finalPrice = $_product->getFinalPrice() > $this->_minimalPriceTax ? $this->_minimalPriceTax : $_product->getFinalPrice();
+        $_finalPriceInclTax = $_product->getFinalPrice()> $this->_minimalPriceInclTax ? $this->_minimalPriceInclTax : $_product->getFinalPrice();
         $_weeeTaxAmount = 0;
 
         if ($_product->getPriceType() == 1) {
