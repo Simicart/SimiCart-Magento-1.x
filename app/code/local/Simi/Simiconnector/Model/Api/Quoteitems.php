@@ -95,14 +95,21 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
     }
 
     private function _convertParams($params) {
-        $convertList = array(//'options', //Custom Option (Simple/Virtual/Downloadable)
-            'super_attribute', //Configurable Product
-            'super_group', //Group Product
-            'bundle_option', //Bundle Product
-            'bundle_option_qty', //Bundle Product Qty
+        $convertList = array(
+            //Custom Option (Simple/Virtual/Downloadable)
+            'options',
+            //Configurable Product
+            'super_attribute', 
+            //Group Product
+            'super_group', 
+            //Bundle Product
+            'bundle_option', 
+            //Bundle Product Qty
+            'bundle_option_qty', 
         );
         foreach ($convertList as $type) {
-            $params[$type] = (array) $params[$type];
+            if (!$params[$type]) continue;
+            $params[$type] = (array) $params[$type];            
             $convertedParam = array();
             foreach ($params[$type] as $index => $item) {
                 $convertedParam[(int) $index] = $item;
