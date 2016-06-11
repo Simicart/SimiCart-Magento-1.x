@@ -19,26 +19,25 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
     }
 
     public function setBuilderQuery() {
-        $data = $this->getData();
-        if ($data['resourceid']) {
-            if ($data['resourceid'] == 'setcoupon') {
-                $this->setCoupon($data);
-            }
-        }
         $quote = $this->_getQuote();
         $this->builderQuery = $quote->getItemsCollection();
     }
 
+    /*
+     * Change Qty, Add/remove Coupon Code
+     */
     public function update() {
         $data = $this->getData();
         $parameters = (array) $data['contents'];
-        $this->updateQuote($parameters);
+        if (isset($parameters['coupon_code'])) {
+            $this->_RETURN_MESSAGE = Mage::helper('simiconnector/coupon')->setCoupon($parameters['coupon_code']);
+        }
+        $this->_updateItems($parameters);
         return $this->index();
     }
 
-    public function updateQuote($parameters) {
+    private function _updateItems($parameters) {
         $cartData = array();
-        $quote = $this->_getQuote();
         foreach ($parameters as $index => $qty) {
             $cartData[$index] = array('qty' => $qty);
         }
@@ -70,6 +69,9 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
         }
     }
 
+    /*
+     * Add To Cart
+     */
     public function store() {
         $this->addToCart();
         return $this->index();
@@ -78,8 +80,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
     public function addToCart() {
         $data = $this->getData();
         $cart = $this->_getCart();
-        $params = (array) $data['contents'];
-        $params = $this->_convertParams($params);
+        $params = $this->_convertParams((array) $data['contents']);
         if (isset($params['qty'])) {
             $filter = new Zend_Filter_LocalizedToNormalized(
                     array('locale' => Mage::app()->getLocale()->getLocaleCode())
@@ -99,17 +100,19 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
             //Custom Option (Simple/Virtual/Downloadable)
             'options',
             //Configurable Product
-            'super_attribute', 
+            'super_attribute',
             //Group Product
-            'super_group', 
+            'super_group',
             //Bundle Product
-            'bundle_option', 
+            'bundle_option',
             //Bundle Product Qty
-            'bundle_option_qty', 
+            'bundle_option_qty',
         );
         foreach ($convertList as $type) {
-            if (!$params[$type]) continue;
-            $params[$type] = (array) $params[$type];            
+            if (!$params[$type]) {
+                continue;
+            }
+            $params[$type] = (array) $params[$type];
             $convertedParam = array();
             foreach ($params[$type] as $index => $item) {
                 $convertedParam[(int) $index] = $item;
@@ -131,31 +134,9 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
         return false;
     }
 
-    public function setCoupon($data) {
-        if (!isset($data['params']['coupon_code']))
-            return;
-        $couponCode = $data['params']['coupon_code'];
-
-        $this->_getCart()->getQuote()->getShippingAddress()->setCollectShippingRates(true);
-        $this->_getCart()->getQuote()->setCouponCode(strlen($couponCode) ? $couponCode : '')
-                ->collectTotals()
-                ->save();
-        $total = $this->_getCart()->getQuote()->getTotals();
-        $return['discount'] = 0;
-        if ($total['discount'] && $total['discount']->getValue()) {
-            $return['discount'] = abs($total['discount']->getValue());
-        }
-        if (strlen($couponCode)) {
-            if ($couponCode == $this->_getCart()->getQuote()->getCouponCode() && $return['discount'] != 0) {
-                $this->_RETURN_MESSAGE = Mage::helper('simiconnector')->__('Coupon code "%s" was applied.', Mage::helper('core')->htmlEscape($couponCode));
-            } else {
-                $this->_RETURN_MESSAGE = Mage::helper('simiconnector')->__('Coupon code "%s" is not valid.', Mage::helper('core')->htmlEscape($couponCode));
-            }
-        } else {
-            $this->_RETURN_MESSAGE = Mage::helper('simiconnector')->__('Coupon code was canceled.', Mage::helper('core')->htmlEscape($couponCode));
-        }
-    }
-
+    /*
+     * Return Cart Detail
+     */
     public function show() {
         return $this->index();
     }
@@ -164,7 +145,6 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
         $collection = $this->builderQuery;
         $collection->addFieldToFilter('item_id', array('nin' => $this->_removed_items))
                 ->addFieldToFilter('parent_item_id', array('null' => true));
-        ;
 
         $this->filter();
         $data = $this->getData();
@@ -189,8 +169,9 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
         $info = array();
         $total = $collection->getSize();
 
-        if ($offset > $total)
+        if ($offset > $total) {
             throw new Exception($this->_helper->__('Invalid method.'), 4);
+        }
 
         $fields = array();
         if (isset($parameters['fields']) && $parameters['fields']) {
@@ -214,7 +195,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
                 continue;
 
             if ($this->_removed_items) {
-                 if (in_array($entity->getData('item_id'), $this->_removed_items)) {
+                if (in_array($entity->getData('item_id'), $this->_removed_items)) {
                     continue;
                 }
             }
@@ -251,6 +232,9 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
         return $this->getList($info, $all_ids, $total, $limit, $offset);
     }
 
+    /*
+     * Add Message
+     */
     public function getList($info, $all_ids, $total, $page_size, $from) {
         $result = parent::getList($info, $all_ids, $total, $page_size, $from);
         $result['total'] = Mage::helper('simiconnector/total')->getTotal();

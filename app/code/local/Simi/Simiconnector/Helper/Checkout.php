@@ -4,10 +4,10 @@
 
  */
 class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract {
+    
     /*
      * Product Options
      */
-
     public function convertOptionsCart($options) {
         $data = array();
         foreach ($options as $option) {

@@ -13,29 +13,9 @@ class Simi_Simiconnector_Model_Address extends Mage_Core_Model_Abstract {
         return Mage::helper('simiconnector/address');
     }
 
-    public function getAddressDetail($data, $customer) {
-        $street = $data->getStreet();
-        return array(
-            'firstname' => $data->getFirstname(),
-            'lastname' => $data->getLastname(),
-            'prefix' => $data->getPrefix(),
-            'suffix' => $data->getSuffix(),
-            'vat_id' => $data->getVatId(),
-            'street' => $street[0],
-            'city' => $data->getCity(),
-            'region' => $data->getRegion(),
-            'region_id' => $data->getRegionId(),
-            'region_code' => $data->getRegionCode(),
-            'postcode' => $data->getPostcode(),
-            'country_name' => $data->getCountryModel()->loadByCode($data->getCountry())->getName(),
-            'country_id' => $data->getCountry(),
-            'telephone' => $data->getTelephone(),
-            'email' => $customer->getEmail(),
-            'company' => $data->getCompany(),
-            'latlng' => $street[2] != NULL ? $street[2] : "",
-        );
-    }
-
+    /*
+     * Save Customer Address
+     */
     public function saveAddress($data) {
         $data = $data['contents'];
         $country = $data->country_code;

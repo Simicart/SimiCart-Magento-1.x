@@ -229,7 +229,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
     }
 
     public function setStoreView($data) {
-        if ($data['resourceid'] == 'default')
+        if (($data['resourceid'] == 'default')||($data['resourceid'] == Mage::app()->getStore()))
             return;
         Mage::app()->getCookie()->set(Mage_Core_Model_Store::COOKIE_NAME, Mage::app()->getStore($data['resourceid'])->getCode(), TRUE);
         Mage::app()->setCurrentStore(
