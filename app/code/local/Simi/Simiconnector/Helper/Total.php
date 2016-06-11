@@ -67,10 +67,12 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
         /*
          * For Phoenix COD fee adding (as Example as well)
          */
+        /*
         if (Mage::getSingleton('checkout/type_onepage')->getQuote()->getPayment()->getMethodInstance()->getCode() == 'phoenix_cashondelivery') {
             $codFee = Mage::getSingleton('checkout/type_onepage')->getQuote()->getCodTaxAmount() + Mage::getSingleton('checkout/type_onepage')->getQuote()->getCodFee();
             $this->_addCustomRow($data, Mage::helper('phoenix_cashondelivery')->__('Cash on Delivery fee'), 4, $codFee);
         }
+        */
     }
 
     public function showTotalOrder($order) {

@@ -45,7 +45,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
             'region_id' => $data->getRegionId(),
             'region_code' => $data->getRegionCode(),
             'postcode' => $data->getPostcode(),
-            'country_name' => $data->getCountryModel()->loadByCode($data->getCountry())->getName(),
+            'country_name' => $data->getCountry()? $data->getCountryModel()->loadByCode($data->getCountry())->getName(): NULL,
             'country_id' => $data->getCountry(),
             'telephone' => $data->getTelephone(),
             'email' => $customer->getEmail(),
