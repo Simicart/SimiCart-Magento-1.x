@@ -17,26 +17,8 @@ class Simi_Simiconnector_Model_Address extends Mage_Core_Model_Abstract {
      * Save Customer Address
      */
     public function saveAddress($data) {
-        $data = $data['contents'];
-        $country = $data->country_code;
-        $listState = Mage::helper('simiconnector/address')->getStates($country);
-        $state_id = null;
-
-        if (count($listState) == 0) {
-            $check_state = true;
-        }
-
-        foreach ($listState as $state) {
-            if (in_array($data->region_code, $state) || in_array($data->region, $state) || in_array($data->region_id, $state)) {
-                $state_id = $state['state_id'];
-                $check_state = true;
-                break;
-            }
-        }
-        if (!$check_state) {
-            throw new Exception($this->_helperAddress()->__('State invalid'), 4);
-        }
-        $address = Mage::helper('simiconnector/address')->convertDataAddress($data, $state_id);
+        $data = $data['contents'];        
+        $address = Mage::helper('simiconnector/address')->convertDataAddress($data);
         $address['id'] = isset($data->entity_id) == true ? $data->entity_id : null;
         return $this->saveAddressCustomer($address);
         

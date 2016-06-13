@@ -13,6 +13,14 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         return $this->_getCart()->getQuote();
     }
 
+    protected function _getCheckoutSession() {
+        return Mage::getSingleton('checkout/session');
+    }
+
+    public function _getOnepage() {
+        return Mage::getSingleton('checkout/type_onepage');
+    }
+
     public function setBuilderQuery() {
         $data = $this->getData();
         if ($data['resourceid']) {
@@ -33,18 +41,33 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
      */
 
     public function update() {
+        $this->_updateOrder();
+        return $this->show();
+    }
+
+    private function _updateOrder() {
         $data = $this->getData();
         $parameters = (array) $data['contents'];
+
+        if (isset($parameters['b_address'])) {
+            Mage::helper('simiconnector/address')->saveBillingAddress($parameters['b_address']);
+            if (!isset($parameters['s_address']))
+                $parameters['s_address'] = $parameters['b_address'];
+        }
+        if (isset($parameters['s_address'])) {
+            Mage::helper('simiconnector/address')->saveShippingAddress($parameters['s_address']);
+        }
+
         if (isset($parameters['coupon_code'])) {
             $this->_RETURN_MESSAGE = Mage::helper('simiconnector/coupon')->setCoupon($parameters['coupon_code']);
         }
-        if (isset($parameters['s_method_code'])) {
-            Mage::helper('simiconnector/checkout_shipping')->saveShippingMethod($parameters['s_method_code']);
+        if (isset($parameters['s_method'])) {
+            Mage::helper('simiconnector/checkout_shipping')->saveShippingMethod($parameters['s_method']);
         }
         if (isset($parameters['p_method'])) {
             Mage::helper('simiconnector/checkout_payment')->savePaymentMethod($parameters['p_method']);
         }
-        return $this->show();
+        $this->_getOnepage()->getQuote()->collectTotals()->save();
     }
 
     /*
@@ -52,7 +75,20 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
      */
 
     public function store() {
-        
+        $this->_updateOrder();
+        $quote = $this->_getQuote();
+        if (!$quote->validateMinimumAmount()) {
+            throw new Exception(Mage::getStoreConfig('sales/minimum_order/error_message'), 4);
+        }
+        $this->_getCheckoutSession()->setCartWasUpdated(false);
+        $this->_getOnepage()->initCheckout();
+        $this->_getOnepage()->saveOrder();
+        $this->_getOnepage()->getQuote()->save();
+        $order = array('invoice_number' => $this->_getCheckoutSession()->getLastRealOrderId(),
+            'payment_method' => $this->_getOnepage()->getQuote()->getPayment()->getMethodInstance()->getCode()
+        );
+        $result = array('order' => $order);
+        return $result;
     }
 
     /*
@@ -62,12 +98,6 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
     public function show() {
         $data = $this->getData();
         if ($data['resourceid'] == 'onepage') {
-            $result = array();
-
-
-
-            $list_shipping = Mage::helper('simiconnector/checkout_shipping')->getMethods();
-
             $list_payment = array();
             $paymentHelper = Mage::helper('simiconnector/checkout_payment');
             foreach (Mage::helper('simiconnector/checkout_payment')->getMethods() as $method) {
@@ -78,9 +108,10 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             $customer = Mage::getSingleton('customer/session')->getCustomer();
             $order['billing_address'] = Mage::helper('simiconnector/address')->getAddressDetail($quote->getBillingAddress(), $customer);
             $order['shipping_address'] = Mage::helper('simiconnector/address')->getAddressDetail($quote->getShippingAddress(), $customer);
-            $order['shipping'] = $list_shipping;
+            $order['shipping'] = Mage::helper('simiconnector/checkout_shipping')->getMethods();
             $order['payment'] = $list_payment;
             $order['total'] = Mage::helper('simiconnector/total')->getTotal();
+
             $result = array('order' => $order);
             return $result;
         } else {

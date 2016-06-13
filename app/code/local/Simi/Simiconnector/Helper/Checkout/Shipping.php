@@ -11,7 +11,7 @@ class Simi_Simiconnector_Helper_Checkout_Shipping extends Mage_Core_Helper_Abstr
     }
 
     public function saveShippingMethod($method_code) {
-        $this->_getOnepage()->saveShippingMethod($method_code);
+        $this->_getOnepage()->saveShippingMethod($method_code->method);
     }
 
     public function getAddress() {

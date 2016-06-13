@@ -154,6 +154,10 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
             $detail['title'] = $method->getConfigData('title');
             $detail['show_type'] = 3;
         }
+        $detail['p_method_selected'] = false;
+        if ((Mage::getSingleton('checkout/type_onepage')->getQuote()->getPayment()->getMethod()) && (Mage::getSingleton('checkout/type_onepage')->getQuote()->getPayment()->getMethodInstance()->getCode() == $method->getCode())) {
+            $detail['p_method_selected'] = true;
+        }
         return $detail;
     }
 
