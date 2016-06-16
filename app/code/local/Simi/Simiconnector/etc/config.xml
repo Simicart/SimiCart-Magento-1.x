@@ -153,7 +153,34 @@
                 <decimal_separator>.</decimal_separator>
                 <min_number_of_decimals translate="label">0</min_number_of_decimals>
                 <max_number_of_decimals translate="label">2</max_number_of_decimals>			
-            </currency>         
+            </currency> 
+            <notification>
+                <noti_price_enable>0</noti_price_enable>
+                <new_product_enable>0</new_product_enable>
+                <noti_purchase_enable>0</noti_purchase_enable>
+            </notification> 
+            <hideaddress>
+                <hideaddress_enable>0</hideaddress_enable>
+                <firstname>2</firstname>
+                <lastname>2</lastname>
+                <email>2</email>
+                <company>2</company>
+                <street>2</street>
+                <country>2</country>
+                <state>2</state>
+                <city>2</city>
+                <zipcode>2</zipcode>
+                <telephone>2</telephone>
+                <fax>2</fax>
+                <prefix>2</prefix>
+                <suffix>2</suffix>
+                <birthday>2</birthday>
+                <gender>2</gender>
+                <taxvat>2</taxvat>
+            </hideaddress>  
+            <terms_conditions>
+                <enable_terms>0</enable_terms>
+            </terms_conditions>      
         </simiconnector>  
     </default>
 </config>

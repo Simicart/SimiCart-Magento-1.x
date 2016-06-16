@@ -87,6 +87,30 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         $order = array('invoice_number' => $this->_getCheckoutSession()->getLastRealOrderId(),
             'payment_method' => $this->_getOnepage()->getQuote()->getPayment()->getMethodInstance()->getCode()
         );
+        if (Mage::getStoreConfig('simiconnector/notification/noti_purchase_enable')) {
+            $categoryId = Mage::getStoreConfig('simiconnector/notification/noti_purchase_category_id');
+            $category = Mage::getModel('catalog/category')->load($categoryId);
+            $categoryName = $category->getName();
+            $categoryChildrenCount = $category->getChildrenCount();
+            if ($categoryChildrenCount > 0)
+                $categoryChildrenCount = 1;
+            else
+                $categoryChildrenCount = 0;
+
+            $notification['show_popup'] = '1';
+            $notification['title'] = Mage::getStoreConfig('simiconnector/notification/noti_purchase_title');
+            $notification['url'] = Mage::getStoreConfig('simiconnector/notification/noti_purchase_url');
+            $notification['message'] = Mage::getStoreConfig('simiconnector/notification/noti_purchase_message');
+            $notification['notice_sanbox'] = 0;
+            $notification['type'] = Mage::getStoreConfig('simiconnector/notification/noti_purchase_type');
+            $notification['productID'] = Mage::getStoreConfig('simiconnector/notification/noti_purchase_product_id');
+            $notification['categoryID'] = Mage::getStoreConfig('simiconnector/notification/noti_purchase_category_id');
+            $notification['categoryName'] = $categoryName;
+            $notification['has_children'] = $categoryChildrenCount;
+            $notification['created_time'] = now();
+            $notification['notice_type'] = 3;
+            $order['notification'] = $notification;
+        }
         $result = array('order' => $order);
         return $result;
     }

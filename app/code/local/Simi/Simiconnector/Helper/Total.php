@@ -24,20 +24,21 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
         return $orderTotal;
     }
 
+    /*
+     * For Cart and OnePage Order
+     */
     public function setTotal($total, &$data) {
-        //tax_cart_display_subtotal
-        //1 || 3
+        /*
+         * tax_cart_display_subtotal
+         */
         $data['subtotal_excl_tax'] = $total['subtotal']->getValueExclTax();
-        //2 || 3
         $data['subtotal_incl_tax'] = $total['subtotal']->getValueInclTax();
 
         if (isset($total['shipping'])) {
             /*
              * tax_cart_display_shipping
              */
-            //1 || 3
             $data['shipping_hand_incl_tax'] = $this->getShippingIncludeTax($total['shipping']);
-            //2 || 3
             $data['shipping_hand_excl_tax'] = $this->getShippingExcludeTax($total['shipping']);
         }
         /*
@@ -53,9 +54,7 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
         /*
          * tax_cart_display_grandtotal
          */
-        //0
         $data['grand_total_excl_tax'] = $this->getTotalExclTaxGrand($total['grand_total']);
-        //1
         $data['grand_total_incl_tax'] = $total['grand_total']->getValue();
 
         $coupon = '';
@@ -63,18 +62,19 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
             $coupon = Mage::getSingleton('checkout/session')->getQuote()->getCouponCode();
             $data['coupon_code'] = $coupon;
         }
-        
+
         /*
          * For Phoenix COD fee adding (as Example as well)
          */
-        /*
-        if (Mage::getSingleton('checkout/type_onepage')->getQuote()->getPayment()->getMethodInstance()->getCode() == 'phoenix_cashondelivery') {
+        if ((Mage::getSingleton('checkout/type_onepage')->getQuote()->getPayment()->getMethod()) && (Mage::getSingleton('checkout/type_onepage')->getQuote()->getPayment()->getMethodInstance()->getCode() == 'phoenix_cashondelivery')) {
             $codFee = Mage::getSingleton('checkout/type_onepage')->getQuote()->getCodTaxAmount() + Mage::getSingleton('checkout/type_onepage')->getQuote()->getCodFee();
             $this->_addCustomRow($data, Mage::helper('phoenix_cashondelivery')->__('Cash on Delivery fee'), 4, $codFee);
         }
-        */
     }
 
+    /*
+     * For Order History
+     */
     public function showTotalOrder($order) {
         $data = array();
         $data['subtotal_excl_tax'] = $order->getSubtotal();

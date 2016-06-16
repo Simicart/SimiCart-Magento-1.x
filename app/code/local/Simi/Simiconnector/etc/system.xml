@@ -43,19 +43,7 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>  
                             <comment>eg. http://simicart.com/, leave it blank if you want to use default value from Building Dashboard</comment>												
-                        </base_url>	                        
-                        <upload_pem_file translate="label tooltip comment">
-                            <label>Upload PEM file</label>
-                            <comment>It use to send notification to IOS</comment>
-                            <frontend_type>file</frontend_type>
-                            <sort_order>199</sort_order>
-                            <backend_model>adminhtml/system_config_backend_file</backend_model>
-                            <upload_dir config="system/filesystem/media" scope_info="1">simi/simicart/pem/ios</upload_dir>
-                            <base_url type="media" scope_info="1">admin-config-uploads</base_url>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </upload_pem_file>		
+                        </base_url> 
                         <is_show_price_zero translate="label">
                             <label>Show option price if it's $0.00?</label>
                             <frontend_type>select</frontend_type>
@@ -172,27 +160,361 @@
                         </max_number_of_decimals>
                     </fields>				
                 </currency>
-            </groups>
-        </simiconnector>
-        <spotproduct translate="label" module="simiconnector">
-            <class>separator-top</class>
-            <label>Spot Products</label>
-            <tab>simiconnector</tab>
-            <frontend_type>text</frontend_type>
-            <sort_order>99</sort_order>
-            <show_in_default>1</show_in_default>
-            <show_in_website>1</show_in_website>
-            <show_in_store>1</show_in_store>
-            <groups>
-                <general translate="label">
-                    <label>Choose Products To Show On App</label>
+                <notification translate="label">
+                    <label>Notification Settings</label>
                     <frontend_type>text</frontend_type>
-                    <sort_order>1</sort_order>
+                    <sort_order>199</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <fields>		
-                        <enable translate="label">
+                    <fields>
+                        <upload_pem_file translate="label tooltip comment">
+                            <label>Upload PEM file</label>
+                            <comment>It use to send notification to IOS</comment>
+                            <frontend_type>file</frontend_type>
+                            <sort_order>1</sort_order>
+                            <backend_model>adminhtml/system_config_backend_file</backend_model>
+                            <upload_dir config="system/filesystem/media" scope_info="1">simi/simicart/pem/ios</upload_dir>
+                            <base_url type="media" scope_info="1">admin-config-uploads</base_url>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </upload_pem_file>
+                        <noti_price_separator translate="label">
+                            <label>Send Notification when Price Updated</label>
+                            <sort_order>99</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_model>simiconnector/adminhtml_system_config_form_field_separator</frontend_model>
+                            <comment></comment>
+                        </noti_price_separator>		
+                        <noti_price_enable translate="label">
+                            <label>Send notification to all users when price of product is changed</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>100</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </noti_price_enable>                        
+                        <noti_price_showpopup translate="label">
+                            <label>Show Popup</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>101</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <noti_price_enable>1</noti_price_enable>
+                            </depends>
+                            <comment></comment>
+                        </noti_price_showpopup>
+                        <noti_price_title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>102</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <noti_price_enable>1</noti_price_enable>
+                            </depends>
+                            <comment></comment>
+                        </noti_price_title>
+                        <noti_price_message translate="label">
+                            <label>Message</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>103</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <noti_price_enable>1</noti_price_enable>
+                            </depends>
+                            <comment><![CDATA[Characters recommended: < 250]]></comment>
+                        </noti_price_message>
+                        <noti_price_type translate="label">
+                            <label>Direct Viewers to</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>104</sort_order>
+                            <source_model>simiconnector/siminotification</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <noti_price_enable>1</noti_price_enable>
+                            </depends>
+                            <comment></comment>
+                        </noti_price_type>                        
+                        <noti_price_category_id translate="label">
+                            <label>Category ID</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>105</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <noti_price_enable>1</noti_price_enable>
+                                <noti_price_type>2</noti_price_type>
+                            </depends>
+                            <comment></comment>
+                        </noti_price_category_id>
+                        <noti_price_url translate="label">
+                            <label>URL</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>106</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <noti_price_enable>1</noti_price_enable>
+                                <noti_price_type>3</noti_price_type>
+                            </depends>
+                            <comment>Ex: https://simicart.com</comment>
+                        </noti_price_url>
+                        <noti_price_platform translate="label">
+                            <label>Device</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>107</sort_order>
+                            <source_model>simiconnector/platform</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <noti_price_enable>1</noti_price_enable>
+                            </depends>
+                            <comment></comment> 
+                        </noti_price_platform> 
+                        <noti_new_product_separator translate="label">
+                            <label>Send Notification when there's a new product</label>
+                            <sort_order>199</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_model>simiconnector/adminhtml_system_config_form_field_separator</frontend_model>
+                            <comment></comment>
+                        </noti_new_product_separator>	                      	
+                        <new_product_enable translate="label">
+                            <label>Send notification to all users when there's a new product</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>200</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </new_product_enable>                       
+                        <new_product_showpopup translate="label">
+                            <label>Show Popup</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>201</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <new_product_enable>1</new_product_enable>
+                            </depends>
+                            <comment></comment>
+                        </new_product_showpopup>
+                        <new_product_title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>202</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <new_product_enable>1</new_product_enable>
+                            </depends>
+                            <comment></comment>
+                        </new_product_title>
+                        <new_product_message translate="label">
+                            <label>Message</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>203</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <new_product_enable>1</new_product_enable>
+                            </depends>
+                            <comment><![CDATA[Characters recommended: < 250]]></comment>
+                        </new_product_message>
+                        <new_product_type translate="label">
+                            <label>Direct Viewers to</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>204</sort_order>
+                            <source_model>simiconnector/siminotification</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <new_product_enable>1</new_product_enable>
+                            </depends>
+                            <comment></comment>
+                        </new_product_type>                       
+                        <new_product_category_id translate="label">
+                            <label>Category ID</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>205</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <new_product_enable>1</new_product_enable>
+                                <new_product_type>2</new_product_type>
+                            </depends>
+                            <comment></comment>
+                        </new_product_category_id>
+                        <new_product_url translate="label">
+                            <label>URL</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>206</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <new_product_enable>1</new_product_enable>
+                                <new_product_type>3</new_product_type>
+                            </depends>
+                            <comment>Ex: https://simicart.com</comment>
+                        </new_product_url>
+                        <new_product_platform translate="label">
+                            <label>Device</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>207</sort_order>
+                            <source_model>simiconnector/platform</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <new_product_enable>1</new_product_enable>
+                            </depends>
+                            <comment></comment>
+                        </new_product_platform>
+                        <noti_new_order_separator translate="label">
+                            <label>Send Notification after customer purchase</label>
+                            <sort_order>299</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <frontend_model>simiconnector/adminhtml_system_config_form_field_separator</frontend_model>
+                            <comment></comment>
+                        </noti_new_order_separator>
+                        <noti_purchase_enable translate="label">
+                            <label>Send notification to a customer when he/she finish purchasing</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>300</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </noti_purchase_enable>
+                        <noti_purchase_title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>301</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <noti_purchase_enable>1</noti_purchase_enable>
+                            </depends>
+                            <comment></comment>
+                        </noti_purchase_title>
+                        <noti_purchase_message translate="label">
+                            <label>Message</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>302</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <noti_purchase_enable>1</noti_purchase_enable>
+                            </depends>
+                            <comment><![CDATA[Characters recommended: < 250]]></comment>
+                        </noti_purchase_message> 
+                        <noti_purchase_type translate="label">
+                            <label>Direct Viewers to</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>303</sort_order>
+                            <source_model>simiconnector/siminotification</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <noti_purchase_enable>1</noti_purchase_enable>
+                            </depends>
+                            <comment></comment>
+                        </noti_purchase_type>
+                        <noti_purchase_product_id translate="label">
+                            <label>Product ID</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>304</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <noti_purchase_enable>1</noti_purchase_enable>
+                                <noti_purchase_type>1</noti_purchase_type>
+                            </depends>
+                            <comment></comment>
+                        </noti_purchase_product_id>
+                        <noti_purchase_category_id translate="label">
+                            <label>Category ID</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>305</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <noti_purchase_enable>1</noti_purchase_enable>
+                                <noti_purchase_type>2</noti_purchase_type>
+                            </depends>
+                            <comment></comment>
+                        </noti_purchase_category_id>
+                        <noti_purchase_url translate="label">
+                            <label>URL</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>306</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <noti_purchase_enable>1</noti_purchase_enable>
+                                <noti_purchase_type>3</noti_purchase_type>
+                            </depends>
+                            <comment>Ex: https://simicart.com</comment>
+                        </noti_purchase_url>
+                    </fields>
+                </notification>
+                <hideaddress translate="label">
+                    <label>Checkout Information Management</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>299</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>        
+                        <hideaddress_enable translate="label">
                             <label>Enable</label>
                             <frontend_type>select</frontend_type>
                             <sort_order>1</sort_order>
@@ -201,50 +523,207 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment></comment>
-                        </enable>
-                        <best_seller translate="label">
-                            <label>Best Seller</label>
+                        </hideaddress_enable>
+                        <company translate="label">
+                            <label>Company</label>
                             <frontend_type>select</frontend_type>
-                            <sort_order>2</sort_order>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <comment></comment>
-                        </best_seller>
-                        <most_view translate="label">
-                            <label>Most View</label>
-                            <frontend_type>select</frontend_type>
-                            <sort_order>3</sort_order>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <comment></comment>
-                        </most_view>							
-                        <new_update translate="label">
-                            <label>Newly Updated</label>
-                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
                             <sort_order>4</sort_order>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment></comment>
-                        </new_update>	
-                        <recent_add translate="label">
-                            <label>Recently Added</label>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                            </depends>
+                        </company>
+                        <street translate="label">
+                            <label>Address</label>
                             <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
                             <sort_order>5</sort_order>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment></comment>
-                        </recent_add>	
-                    </fields>				
-                </general>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                            </depends>
+                        </street>
+                        <country translate="label">
+                            <label>Country</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                            </depends>
+                        </country>
+                        <state translate="label">
+                            <label>State/Province</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                            </depends>
+                        </state>
+                        <city translate="label">
+                            <label>City</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                            </depends>
+                        </city>
+                        <zipcode translate="label">
+                            <label>Zip/Postal Code</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
+                            <sort_order>9</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                            </depends>
+                        </zipcode>
+                        <telephone translate="label">
+                            <label>Telephone</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                            </depends>
+                        </telephone>
+                        <fax translate="label">
+                            <label>Fax</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
+                            <sort_order>11</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                            </depends>
+                        </fax>
+                        <prefix translate="label">
+                            <label>Prefix Name</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
+                            <sort_order>12</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                            </depends>
+                        </prefix>
+                        <suffix translate="label">
+                            <label>Suffix Name</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
+                            <sort_order>14</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                            </depends>
+                        </suffix>
+                        <birthday translate="label">
+                            <label>Date of Birth</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                            </depends>
+                        </birthday>
+                        <gender translate="label">
+                            <label>Gender</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
+                            <sort_order>16</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                            </depends>
+                        </gender>
+                        <taxvat translate="label">
+                            <label>Tax/VAT number</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
+                            <sort_order>17</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                            </depends>
+                        </taxvat>
+                    </fields>
+                </hideaddress>                
+                <terms_conditions translate="label">	
+                    <label>Terms and Conditions</label>					
+                    <frontend_type>text</frontend_type>
+                    <sort_order>399</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable_terms translate="label">
+                            <label>Show Terms and Conditions</label>					
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enable_terms>
+                        <term_title translate="label">
+                            <label>Terms and Conditions Title</label>					
+                            <frontend_type>text</frontend_type>							
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <enable_terms>1</enable_terms>
+                            </depends>
+                        </term_title>
+                        <term_html translate="label">
+                            <label>Terms and Conditions Content (HTML)</label>					
+                            <frontend_type>textarea</frontend_type>							
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <enable_terms>1</enable_terms>
+                            </depends>
+                        </term_html>
+                    </fields>
+                </terms_conditions>
             </groups>
-        </spotproduct>        
+        </simiconnector>            
     </sections>
 </config>
