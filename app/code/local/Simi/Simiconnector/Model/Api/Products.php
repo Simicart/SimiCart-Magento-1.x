@@ -31,6 +31,8 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
                     $this->setFilterByCategoryId($filter['cat_id']);
                 } elseif (isset($filter['q'])) {
                     $this->setFilterByQuery();
+                } elseif (isset($filter['related_to_id'])) {
+                    $this->setFilterByRelated($filter['related_to_id']);
                 } else {
                     $this->setFilterByCategoryId(Mage::app()->getStore()->getRootCategoryId());
                     $this->_allow_filter_core = true;
@@ -192,6 +194,13 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
     public function setFilterByQuery()
     {
         $this->_helperProduct->setLayers(1);
+        $this->_layer = $this->_helperProduct->getLayers();
+        $this->builderQuery = $this->_helperProduct->getBuilderQuery();
+    }
+    
+    public function setFilterByRelated($product_id)
+    {
+        $this->_helperProduct->setRelatedProduct($product_id);
         $this->_layer = $this->_helperProduct->getLayers();
         $this->builderQuery = $this->_helperProduct->getBuilderQuery();
     }

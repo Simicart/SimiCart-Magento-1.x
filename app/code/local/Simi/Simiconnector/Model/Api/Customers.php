@@ -27,6 +27,12 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
                     else
                         throw new Exception($this->_helper->__('Login Failed'), 4);
                     break;
+                case 'sociallogin':
+                    if (Mage::helper('simiconnector/customer')->socialLoginSesssion($data))  
+                        $this->builderQuery = Mage::getSingleton('customer/session')->getCustomer();
+                    else
+                        throw new Exception($this->_helper->__('Login Failed'), 4);
+                    break;
                 case 'logout':
                     if (Mage::getModel('simiconnector/customer')->logout($data))
                         $this->builderQuery = Mage::getSingleton('customer/session')->getCustomer();

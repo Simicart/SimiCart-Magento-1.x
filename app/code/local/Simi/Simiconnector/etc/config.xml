@@ -155,6 +155,8 @@
                 <max_number_of_decimals translate="label">2</max_number_of_decimals>			
             </currency> 
             <notification>
+                <android_app_key></android_app_key>
+                <android_secret_key></android_secret_key>
                 <noti_price_enable>0</noti_price_enable>
                 <new_product_enable>0</new_product_enable>
                 <noti_purchase_enable>0</noti_purchase_enable>
@@ -166,8 +168,8 @@
                 <email>2</email>
                 <company>2</company>
                 <street>2</street>
-                <country>2</country>
-                <state>2</state>
+                <country_id>2</country_id>
+                <region_id>2</region_id>
                 <city>2</city>
                 <zipcode>2</zipcode>
                 <telephone>2</telephone>

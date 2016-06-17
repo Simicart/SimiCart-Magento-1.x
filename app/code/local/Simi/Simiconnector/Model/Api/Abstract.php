@@ -185,6 +185,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
 
     public function callApi($data)
     {
+        Mage::helper('simiconnector/customer')->renewCustomerSesssion($data);
         $this->setData($data);
         $this->setBuilderQuery(null);
         $this->setPluralKey($data['resource']);

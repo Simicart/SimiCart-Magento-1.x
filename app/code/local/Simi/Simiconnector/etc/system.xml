@@ -35,10 +35,19 @@
                             <show_in_store>1</show_in_store>
                             <comment></comment>
                         </enable>
+                        <secret_key translate="label">
+                            <label>Secret Key</label>
+                            <frontend_type>password</frontend_type>      
+                            <sort_order>99</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Your secret key (get from your Building Dashboard)</comment>
+                        </secret_key>
                         <base_url translate="label">
                             <label>Base URL</label>
                             <frontend_type>text</frontend_type>                            
-                            <sort_order>99</sort_order>                            
+                            <sort_order>199</sort_order>                            
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>  
@@ -169,8 +178,8 @@
                     <show_in_store>1</show_in_store>
                     <fields>
                         <upload_pem_file translate="label tooltip comment">
-                            <label>Upload PEM file</label>
-                            <comment>It use to send notification to IOS</comment>
+                            <label>Upload Apple PEM file</label>
+                            <comment>Android for Apple Device Notification Sending</comment>
                             <frontend_type>file</frontend_type>
                             <sort_order>1</sort_order>
                             <backend_model>adminhtml/system_config_backend_file</backend_model>
@@ -180,6 +189,25 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </upload_pem_file>
+                        <android_app_key translate="label tooltip comment">
+                            <label>Android App Key</label>
+                            <comment>App Key for Android Notification Sending</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </android_app_key>
+                        <android_secret_key translate="label tooltip comment">
+                            <label>Android Secret Key</label>
+                            <comment>Secret Key for Android Notification Sending</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </android_secret_key>
+                        
                         <noti_price_separator translate="label">
                             <label>Send Notification when Price Updated</label>
                             <sort_order>99</sort_order>
@@ -548,7 +576,7 @@
                                 <hideaddress_enable>1</hideaddress_enable>
                             </depends>
                         </street>
-                        <country translate="label">
+                        <country_id translate="label">
                             <label>Country</label>
                             <frontend_type>select</frontend_type>
                             <source_model>simiconnector/config_source_addressrequiretype</source_model>
@@ -559,8 +587,8 @@
                             <depends>
                                 <hideaddress_enable>1</hideaddress_enable>
                             </depends>
-                        </country>
-                        <state translate="label">
+                        </country_id>
+                        <region_id translate="label">
                             <label>State/Province</label>
                             <frontend_type>select</frontend_type>
                             <source_model>simiconnector/config_source_addressrequiretype</source_model>
@@ -571,7 +599,7 @@
                             <depends>
                                 <hideaddress_enable>1</hideaddress_enable>
                             </depends>
-                        </state>
+                        </region_id>
                         <city translate="label">
                             <label>City</label>
                             <frontend_type>select</frontend_type>

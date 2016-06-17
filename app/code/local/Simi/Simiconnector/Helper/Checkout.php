@@ -4,10 +4,10 @@
 
  */
 class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract {
-    
     /*
      * Product Options
      */
+
     public function convertOptionsCart($options) {
         $data = array();
         foreach ($options as $option) {
@@ -145,6 +145,15 @@ class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract {
             $options = array_merge($options, unserialize($addOptions->getValue()));
         }
         return $this->convertOptionsCart($options);
+    }
+
+    public function getCheckoutTermsAndConditions() {
+        if (!Mage::getStoreConfig('simiconnector/terms_conditions/enable_terms'))
+            return NULL;
+        $data = array();
+        $data['title'] = Mage::getStoreConfig('simiconnector/terms_conditions/term_title');
+        $data['content'] = Mage::getStoreConfig('simiconnector/terms_conditions/term_html');
+        return $data;
     }
 
 }

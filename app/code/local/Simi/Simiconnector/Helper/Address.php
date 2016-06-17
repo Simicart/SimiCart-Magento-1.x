@@ -106,4 +106,49 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         $this->_getOnepage()->saveShipping($address, $shippingAddress->entity_id);
     }
 
+    public function getCheckoutAddressSetting() {
+        if (!Mage::getStoreConfig('simiconnector/hideaddress/hideaddress_enable'))
+            return NULL;
+        $addresss = array('company', 'street', 'country_id', 'region_id', 'city', 'zipcode',
+            'telephone', 'fax', 'prefix', 'suffix', 'birthday', 'gender', 'taxvat');
+        foreach ($addresss as $address) {
+            $path = "simiconnector/hideaddress/" . $address;
+            $value = Mage::getStoreConfig($path);
+            if (!$value || $value == null || !isset($value))
+                $value = 3;
+            if ($value == 1)
+                $data[$address] = "req";
+            else if ($value == 2)
+                $data[$address] = "opt";
+            else if ($value == 3)
+                $data[$address] = "";
+        }
+        //sample add custom address fields
+        $data['custom_fields'] = array();
+        //text field 
+        $data['custom_fields'][] = array('code'=>'text_field_sample',
+            'title'=>'Text Field',
+            'type'=>'text'
+            );
+        //number field 
+        $data['custom_fields'][] = array('code'=>'number_field_sample',
+            'title'=>'Number Field',
+            'type'=>'number'
+            );
+        //single choice Option
+        $data['custom_fields'][] = array('code'=>'single_option_sample',
+            'title'=>'Sample Field Single Option',
+            'type'=>'single_option',
+            'option_array'=>array('Option Single 1', 'Option Single 2', 'Option Single 3'),
+            );
+        //multi choice Option
+        $data['custom_fields'][] = array('code'=>'multi_option_sample',
+            'title'=>'Sample Field Multi Option',
+            'type'=>'multi_option',
+            'option_array'=>array('Option Multi 1', 'Option Multi 2', 'Option Multi 3', 'Option Multi 4', 'Option Multi 5'),
+            'separated_by'=>'%',
+            );
+        return $data;
+    }
+
 }

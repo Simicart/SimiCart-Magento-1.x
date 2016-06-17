@@ -153,10 +153,10 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
             'allowed_countries' => $this->getAllowedCountries(),
             'stores' => $this->getStores(),
         );
-        if ($checkout_info_setting = $this->getCheckoutInformationSetting())
-                $additionInfo['customer']['advanced_address_config'] = $checkout_info_setting;
+        if ($checkout_info_setting = Mage::helper('simiconnector/address')->getCheckoutAddressSetting())
+                $additionInfo['customer']['address_fields_config'] = $checkout_info_setting;
         
-        if ($checkout_terms = $this->getTermsAndConditions())
+        if ($checkout_terms = Mage::helper('simiconnector/checkout')->getCheckoutTermsAndConditions())
                 $additionInfo['checkout']['checkout_terms_and_conditions'] = $checkout_terms;
         
         $information['storeview'] = $additionInfo;
@@ -189,34 +189,6 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         return $list;
     }
 
-    public function getCheckoutInformationSetting() {
-        if (!Mage::getStoreConfig('simiconnector/hideaddress/hideaddress_enable'))
-            return NULL;
-        $addresss = array('company', 'street', 'country', 'state', 'city', 'zipcode',
-            'telephone', 'fax', 'prefix', 'suffix', 'birthday', 'gender', 'taxvat');
-        foreach ($addresss as $address) {
-            $path = "simiconnector/hideaddress/" . $address;
-            $value = Mage::getStoreConfig($path);
-            if (!$value || $value == null || !isset($value))
-                $value = 3;
-            if ($value == 1)
-                $data[$address] = "req";
-            else if ($value == 2)
-                $data[$address] = "opt";
-            else if ($value == 3)
-                $data[$address] = "";
-        }
-        return $data;
-    }
-
-    public function getTermsAndConditions() {
-        if (!Mage::getStoreConfig('simiconnector/terms_conditions/enable_terms'))
-            return NULL;
-        $data = array();
-        $data['title'] = Mage::getStoreConfig('simiconnector/terms_conditions/term_title');
-        $data['content'] = Mage::getStoreConfig('simiconnector/terms_conditions/term_html');
-        return $data;
-    }
 
     public function getCurrencyPosition() {
         $formated = Mage::app()->getStore()->getCurrentCurrency()->formatTxt(0);
