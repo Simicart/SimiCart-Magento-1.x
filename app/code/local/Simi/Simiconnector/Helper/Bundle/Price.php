@@ -92,10 +92,10 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                         }else{
                             $amount = $_weeeTaxAttribute->getAmount();
                         }
-                        $wee += $_weeeTaxAttribute->getName();;
-                        $wee += ": ";
-                        $wee += $_coreHelper->currency($amount, true, false);
-                        $wee += " + ";
+                        $wee .= $_weeeTaxAttribute->getName();;
+                        $wee .= ": ";
+                        $wee .= $_coreHelper->currency($amount, true, false);
+                        $wee .= " + ";
                         $priceV2["weee"] = $wee;
                     }
                     $this->setWeePrice($priceV2, $wee);
@@ -116,10 +116,10 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                         }else{
                             $amount = $_weeeTaxAttribute->getAmount();
                         }
-                        $wee += $_weeeTaxAttribute->getName();;
-                        $wee += ": ";
-                        $wee += $_coreHelper->currency($amount, true, false);
-                        $wee += " + ";
+                        $wee .= $_weeeTaxAttribute->getName();;
+                        $wee .= ": ";
+                        $wee .= $_coreHelper->currency($amount, true, false);
+                        $wee .= " + ";
                         $priceV2["weee"] = $wee;
                     }
                     $this->setWeePrice($priceV2, $wee);
@@ -148,10 +148,10 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                             }else{
                                 $amount = $_weeeTaxAttribute->getAmount();
                             }
-                            $wee += $_weeeTaxAttribute->getName();;
-                            $wee += ": ";
-                            $wee += $_coreHelper->currency($amount, true, false);
-                            $wee += " + ";
+                            $wee .= $_weeeTaxAttribute->getName();;
+                            $wee .= ": ";
+                            $wee .= $_coreHelper->currency($amount, true, false);
+                            $wee .= " + ";
                             $priceV2["weee_from"] = $wee;
                             $priceV2["weee_to"] = $wee;
                         }
@@ -176,10 +176,10 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                             }else{
                                 $amount = $_weeeTaxAttribute->getAmount();
                             }
-                            $wee += $_weeeTaxAttribute->getName();;
-                            $wee += ": ";
-                            $wee += $_coreHelper->currency($amount, true, false);
-                            $wee += " + ";
+                            $wee .= $_weeeTaxAttribute->getName();;
+                            $wee .= ": ";
+                            $wee .= $_coreHelper->currency($amount, true, false);
+                            $wee .= " + ";
                             $priceV2["weee"] = $wee;
                         }
                         $this->setWeePrice($priceV2, $wee);
@@ -210,10 +210,10 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                             }else{
                                 $amount = $_weeeTaxAttribute->getAmount();
                             }
-                            $wee += $_weeeTaxAttribute->getName();;
-                            $wee += ": ";
-                            $wee += $_coreHelper->currency($amount, true, false);
-                            $wee += " + ";
+                            $wee .= $_weeeTaxAttribute->getName();;
+                            $wee .= ": ";
+                            $wee .= $_coreHelper->currency($amount, true, false);
+                            $wee .= " + ";
                             $priceV2["weee"] = $wee;
                         }
                         $this->setWeePrice($priceV2, $wee);
@@ -229,10 +229,10 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                             }else{
                                 $amount = $_weeeTaxAttribute->getAmount();
                             }
-                            $wee += $_weeeTaxAttribute->getName();;
-                            $wee += ": ";
-                            $wee += $_coreHelper->currency($amount, true, false);
-                            $wee += " + ";
+                            $wee .= $_weeeTaxAttribute->getName();;
+                            $wee .= ": ";
+                            $wee .= $_coreHelper->currency($amount, true, false);
+                            $wee .= " + ";
                             $priceV2["weee"] = $wee;
                         }
                         $this->setWeePrice($priceV2, $wee);
@@ -384,10 +384,10 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                             }else{
                                 $amount = $_weeeTaxAttribute->getAmount();
                             }
-                            $wee += $_weeeTaxAttribute->getName();;
-                            $wee += ": ";
-                            $wee += $this->helper('core')->currency($amount, true, false);
-                            $wee += " + ";
+                            $wee .= $_weeeTaxAttribute->getName();;
+                            $wee .= ": ";
+                            $wee .= $this->helper('core')->currency($amount, true, false);
+                            $wee .= " + ";
                             $priceV2["weee"] = $wee;
                         }
                         $this->setWeePrice($priceV2, $wee);
@@ -406,10 +406,10 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                             }else{
                                 $amount = $_weeeTaxAttribute->getAmount();
                             }
-                            $wee += $_weeeTaxAttribute->getName();;
-                            $wee += ": ";
-                            $wee += $this->helper('core')->currency($amount, true, false);
-                            $wee += " + ";
+                            $wee .= $_weeeTaxAttribute->getName();;
+                            $wee .= ": ";
+                            $wee .= $this->helper('core')->currency($amount, true, false);
+                            $wee .= " + ";
                             $priceV2["weee"] = $wee;
                         }
                         $this->setWeePrice($priceV2, $wee);

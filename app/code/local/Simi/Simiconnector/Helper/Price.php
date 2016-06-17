@@ -74,10 +74,10 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                     }elseif($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 1)){
                         $wee ='';
                         foreach ($_weeeTaxAttributes as $_weeeTaxAttribute) {
-                            $wee += $_weeeTaxAttribute->getName();
-                            $wee += ": ";
-                            $wee += $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
-                            $wee += " + ";
+                            $wee .= $_weeeTaxAttribute->getName();
+                            $wee .= ": ";
+                            $wee .= $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
+                            $wee .= " + ";
                             $priveV2["weee"] = $wee;
                         }
                         $this->setWeePrice($priveV2, $wee);
@@ -89,10 +89,10 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                     }elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 4)){
                         $wee ='';
                         foreach ($_weeeTaxAttributes as $_weeeTaxAttribute) {
-                            $wee += $_weeeTaxAttribute->getName();
-                            $wee += ": ";
-                            $wee += $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
-                            $wee += " + ";
+                            $wee .= $_weeeTaxAttribute->getName();
+                            $wee .= ": ";
+                            $wee .= $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
+                            $wee .= " + ";
                             $priveV2["weee"] = $wee;
                         }
                         $this->setWeePrice($priveV2, $wee);
@@ -104,10 +104,10 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                     }elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 2)){
                         $wee ='';
                         foreach ($_weeeTaxAttributes as $_weeeTaxAttribute) {
-                            $wee += $_weeeTaxAttribute->getName();
-                            $wee += ": ";
-                            $wee += $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
-                            $wee += " + ";
+                            $wee .= $_weeeTaxAttribute->getName();
+                            $wee .= ": ";
+                            $wee .= $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
+                            $wee .= " <br/> ";
                             $priveV2["weee"] = $wee;
                         }
                         $this->setWeePrice($priveV2, $wee);
@@ -133,10 +133,10 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                         if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 1)){
                             $wee ='';
                             foreach ($_weeeTaxAttributes as $_weeeTaxAttribute) {
-                                $wee += $_weeeTaxAttribute->getName();
-                                $wee += ": ";
-                                $wee += $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
-                                $wee += " + ";
+                                $wee .= $_weeeTaxAttribute->getName();
+                                $wee .= ": ";
+                                $wee .= $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
+                                $wee .= " + ";
                                 $priveV2["weee"] = $wee;
                             }
                             //$priveV2['show_type'] = 4;
@@ -148,10 +148,10 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                         if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 1)){
                             $wee ='';
                             foreach ($_weeeTaxAttributes as $_weeeTaxAttribute) {
-                                $wee += $_weeeTaxAttribute->getName();
-                                $wee += ": ";
-                                $wee += $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
-                                $wee += " + ";
+                                $wee .= $_weeeTaxAttribute->getName();
+                                $wee .= ": ";
+                                $wee .= $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
+                                $wee .= " + ";
                                 $priveV2["weee"] = $wee;
                             }
                             //$priveV2['show_type'] = 4;
@@ -164,10 +164,10 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                         if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 1)){
                             $wee ='';
                             foreach ($_weeeTaxAttributes as $_weeeTaxAttribute) {
-                                $wee += $_weeeTaxAttribute->getName();
-                                $wee += ": ";
-                                $wee += $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
-                                $wee += " + ";
+                                $wee .= $_weeeTaxAttribute->getName();
+                                $wee .= ": ";
+                                $wee .= $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
+                                $wee .= " <br/> ";
                                 $priveV2["weee"] = $wee;
                             }
                             $priveV2['show_weee_price'] = 2;
@@ -209,10 +209,10 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                         $this->setBothTaxPrice($priveV2, $_exclTax, $_inclTax);
                         $wee ='';
                         foreach ($_weeeTaxAttributes as $_weeeTaxAttribute) {
-                            $wee += $_weeeTaxAttribute->getName();
-                            $wee += ": ";
-                            $wee += $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
-                            $wee += " + ";
+                            $wee .= $_weeeTaxAttribute->getName();
+                            $wee .= ": ";
+                            $wee .= $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
+                            $wee .= " + ";
                             $priveV2["weee"] = $wee;
                         }
                         $this->setWeePrice($priveV2, $wee);
@@ -223,10 +223,10 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                         $this->setTaxPrice($priveV2, $_finalPrice + $_weeeTaxAmountInclTaxes);
                         $wee ='';
                         foreach ($_weeeTaxAttributes as $_weeeTaxAttribute) {
-                            $wee += $_weeeTaxAttribute->getName();
-                            $wee += ": ";
-                            $wee += $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
-                            $wee += " + ";
+                            $wee .= $_weeeTaxAttribute->getName();
+                            $wee .= ": ";
+                            $wee .= $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
+                            $wee .= " + ";
                             $priveV2["weee"] = $wee;
                         }
                         $this->setWeePrice($priveV2, $wee);
@@ -242,10 +242,10 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                     $this->setBothTaxPrice($priveV2, $_exclTax, $_inclTax);
                     $wee ='';
                     foreach ($_weeeTaxAttributes as $_weeeTaxAttribute) {
-                        $wee += $_weeeTaxAttribute->getName();
-                        $wee += ": ";
-                        $wee += $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
-                        $wee += " + ";
+                        $wee .= $_weeeTaxAttribute->getName();
+                        $wee .= ": ";
+                        $wee .= $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
+                        $wee .= " + ";
                         $priveV2["weee"] = $wee;
                     }
                     $this->setWeePrice($priveV2, $wee);
@@ -260,10 +260,10 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                     $this->setBothTaxPrice($priveV2, $_exclTax, $_inclTax);
                     $wee ='';
                     foreach ($_weeeTaxAttributes as $_weeeTaxAttribute) {
-                        $wee += $_weeeTaxAttribute->getName();
-                        $wee += ": ";
-                        $wee += $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
-                        $wee += " + ";
+                        $wee .= $_weeeTaxAttribute->getName();
+                        $wee .= ": ";
+                        $wee .= $_coreHelper->currency($_weeeTaxAttribute->getAmount(), true, false);
+                        $wee .= " <br/> ";
                         $priveV2["weee"] = $wee;
                     }
                     $this->setWeePrice($priveV2, $wee);
