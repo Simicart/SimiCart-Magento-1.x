@@ -28,9 +28,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             if (!Zend_Validate::is($email, 'EmailAddress')) {
                 throw new Exception($this->_helperCustomer()->__('Invalid email address.'), 4);
             }
-            $customer = Mage::getModel('customer/customer')
-                    ->setWebsiteId(Mage::app()->getStore()->getWebsiteId())
-                    ->loadByEmail($email);
+            $customer = Mage::helper('simiconnector/customer')->getCustomerByEmail($email);
             if ($customer->getId()) {
                 $newResetPasswordLinkToken = Mage::helper('customer')->generateResetPasswordLinkToken();
                 $customer->changeResetPasswordLinkToken($newResetPasswordLinkToken);
@@ -43,7 +41,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
     }
 
     public function login($data) {
-        return Mage::helper('simiconnector/customer')->loginByCustomerEmail($data['params']['email'], $data['params']['password']);
+        return Mage::helper('simiconnector/customer')->loginByEmailAndPass($data['params']['email'], $data['params']['password']);
     }
 
     public function logout() {
@@ -59,33 +57,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
         if ($checkCustomer->getId()) {
             throw new Exception($this->_helperCustomer()->__('Account is already exist'), 4);
         }
-
-        $customer = Mage::getModel('customer/customer')
-                ->setFirstname($data->firstname)
-                ->setLastname($data->lastname)
-                ->setEmail($data->email);
-        if (isset($data->day) && $data->day != "") {
-            $birthday = $data->year . "-" . $data->month . "-" . $data->day;
-            $customer->setDob($birthday);
-        }
-
-        if (isset($data->taxvat)) {
-            $customer->setTaxvat($data->taxvat);
-        }
-
-        if (isset($data->gender) && $data->gender) {
-            $customer->setGender($data->gender);
-        }
-        if (isset($data->prefix) && $data->prefix) {
-            $customer->setPrefix($data->prefix);
-        }
-
-        if (isset($data->suffix) && $data->suffix) {
-            $customer->setSuffix($data->suffix);
-        }
-
-        $customer->setPassword($data->password);
-        $customer->save();
+        $customer = $this->_createCustomer($data);
         $result = array();
         $result['user_id'] = $customer->getId();
         $session = $this->_getSession();
@@ -183,6 +155,74 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
         $customer->setConfirmation(null);
         $customer->save();
         $this->_getSession()->setCustomer($customer);
+        return $customer;
+    }
+
+    /*
+     * Social Login
+     * @param 
+     * $data - Object with at least:
+     * $data->firstname
+     * $data->lastname
+     * $data->email
+     */
+
+    public function socialLogin($data) {
+        $data = (object) $data['params'];
+        if (!$data->email)
+            throw new Exception($this->_helperCustomer()->__('Cannot Get Your Email'), 4);
+        $customer = Mage::helper('simiconnector/customer')->getCustomerByEmail($data->email);
+        if (!$customer->getId()) {
+            if (!$data->firstname)
+                $data->firstname = $this->_helperCustomer()->__('Firstname');
+            if (!$data->lastname)
+                $data->lastname = $this->_helperCustomer()->__('Lastname');
+            $customer = $this->_createCustomer($data);
+            $customer->sendPasswordReminderEmail();
+        }
+        Mage::helper('simiconnector/customer')->loginByCustomer($customer);
+        return $customer;
+    }
+
+    /*
+     * Create Customer
+     * @param 
+     * $data - Object with at least:
+     * $data->firstname
+     * $data->lastname
+     * $data->email
+     * $data->password
+     */
+
+    private function _createCustomer($data) {
+        $customer = Mage::getModel('customer/customer')
+                ->setFirstname($data->firstname)
+                ->setLastname($data->lastname)
+                ->setEmail($data->email);
+        if (isset($data->day) && $data->day != "") {
+            $birthday = $data->year . "-" . $data->month . "-" . $data->day;
+            $customer->setDob($birthday);
+        }
+
+        if (isset($data->taxvat)) {
+            $customer->setTaxvat($data->taxvat);
+        }
+
+        if (isset($data->gender) && $data->gender) {
+            $customer->setGender($data->gender);
+        }
+        if (isset($data->prefix) && $data->prefix) {
+            $customer->setPrefix($data->prefix);
+        }
+
+        if (isset($data->suffix) && $data->suffix) {
+            $customer->setSuffix($data->suffix);
+        }
+
+        if (!$data->password)
+            $data->password = $customer->generatePassword();
+        $customer->setPassword($data->password);
+        $customer->save();
         return $customer;
     }
 
