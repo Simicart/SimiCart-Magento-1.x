@@ -12,6 +12,7 @@ $installer->run("
     DROP TABLE IF EXISTS {$installer->getTable('connector_notice_history')};
     DROP TABLE IF EXISTS {$installer->getTable('connector_product_list')};
     DROP TABLE IF EXISTS {$installer->getTable('connector_visibility')};
+    DROP TABLE IF EXISTS {$installer->getTable('simibarcode')}; 
 
     CREATE TABLE {$installer->getTable('simicategory')} (
         `simicategory_id` int(11) unsigned NOT NULL auto_increment,
@@ -140,6 +141,22 @@ $installer->run("
         `notice_id` int NULL,
     PRIMARY KEY (`history_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+    
+
+    CREATE TABLE {$installer->getTable('simibarcode')} (
+        `barcode_id` int(11) unsigned NOT NULL auto_increment,        
+        `barcode` varchar(255) default '',  
+        `qrcode` varchar(255) default '',  
+        `barcode_status` tinyint(3) NOT NULL default '1',
+        `product_entity_id` int(11),
+        `product_name` varchar(255) default '',
+        `product_sku` varchar(255) default '',
+        `created_date` datetime,
+        UNIQUE (`barcode`),
+        UNIQUE (`qrcode`),
+        PRIMARY KEY  (`barcode_id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8; 
+
 ");
 
 $installer->endSetup();

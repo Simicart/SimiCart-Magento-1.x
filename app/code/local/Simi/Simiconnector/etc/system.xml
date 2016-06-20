@@ -827,7 +827,35 @@
                         </icon_color>
                     </fields>
                 </instant_contact>
+                <barcode translate="label" module="simiconnector">
+                    <label>Barcode Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>599</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>	  
+                        <pattern translate="label" module="simiconnector">
+                            <label>Barcode pattern</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Enter the pattern you want to generate barcodes. For Example:<br/><strong>[A.8] : 8 alpha<br/>[N.4] : 4 numeric<br/>[AN.6] : 6 alphanumeric<br/>BAR[A.4][AN.6] : BARADFA12NF0O</strong>]]></comment>
+                        </pattern>
+                        <qrcode_pattern translate="label" module="simiconnector">
+                            <label>QR code pattern</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>99</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Enter the pattern you want to generate QR codes. For Example:<br/><strong>[A.8] : 8 alpha<br/>[N.4] : 4 numeric<br/>[AN.6] : 6 alphanumeric<br/>QR[A.4][AN.6] : QRADFA12NF0O</strong>]]></comment>
+                        </qrcode_pattern>
+                    </fields>
+                </barcode>
             </groups>
-        </simiconnector>            
+        </simiconnector>              
     </sections>
 </config>

@@ -12,8 +12,24 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         $installer = $setup;
         $installer->startSetup();
         $installer->run(" 
-            DROP TABLE IF EXISTS {$installer->getTable('connector_device')};      
-			CREATE TABLE {$installer->getTable('connector_device')} (
+            DROP TABLE IF EXISTS {$installer->getTable('simibarcode')}; 
+    CREATE TABLE {$installer->getTable('simibarcode')} (
+    `barcode_id` int(11) unsigned NOT NULL auto_increment,        
+    `barcode` varchar(255) default '',  
+    `qrcode` varchar(255) default '',  
+    `barcode_status` tinyint(3) NOT NULL default '1',
+    `product_entity_id` int(11),
+    `product_name` varchar(255) default '',
+    `product_sku` varchar(255) default '',
+    `created_date` datetime,
+    UNIQUE (`barcode`),
+    UNIQUE (`qrcode`),
+    PRIMARY KEY  (`barcode_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8; 
+    
+    DROP TABLE IF EXISTS {$installer->getTable('connector_device')};   
+    
+    CREATE TABLE {$installer->getTable('connector_device')} (
         `device_id` int(11) unsigned NOT NULL auto_increment,
         `device_token` varchar(255) NOT NULL UNIQUE,   
         `plaform_id` int (11),
