@@ -751,6 +751,82 @@
                         </term_html>
                     </fields>
                 </terms_conditions>
+                <instant_contact translate="label">
+                    <label>Instant Contact Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>499</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable translate="label">
+                            <label>Enable</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable>
+                        <email translate="label">
+                            <label>Email</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Used to send email. Seperate emails with comma.</comment>
+                        </email>
+                        <phone translate="label">
+                            <label>Phone Number</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Used to call. Seperate phone numbers with comma</comment>
+                        </phone>
+                        <message translate="label">
+                            <label>Message Number</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>15</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Used to send message. Seperate phone numbers with comma</comment>
+                        </message>
+                        <website translate="label">
+                            <label>Website Url</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Please enter the URL with http or https. For example: http://yourwebsite.com or https://yourwebsite.com</comment>
+                        </website>
+                        <style translate="label">
+                            <label>Style</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <source_model>simiconnector/config_source_productsviewtype</source_model>
+                            <comment></comment>
+                        </style>
+                        <icon_color>
+                            <label>Icon Color</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>color</validate> <!-- This is important -->
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Select the color of contact icons displayed in Contact page of your app.</comment>
+                        </icon_color>
+                    </fields>
+                </instant_contact>
             </groups>
         </simiconnector>            
     </sections>

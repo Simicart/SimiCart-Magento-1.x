@@ -158,7 +158,9 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         
         if ($checkout_terms = Mage::helper('simiconnector/checkout')->getCheckoutTermsAndConditions())
                 $additionInfo['checkout']['checkout_terms_and_conditions'] = $checkout_terms;
-        
+        //Scott add to get instant contacts
+        if(Mage::helper('simiconnector/plugins_instantcontact')->isEnabled())
+            $additionInfo['instant_contact']=Mage::helper('simiconnector/plugins_instantcontact')->getContacts();
         $information['storeview'] = $additionInfo;
         return $information;
     }
