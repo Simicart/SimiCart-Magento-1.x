@@ -36,7 +36,7 @@ class Simi_Simiconnector_Helper_Options_Grouped extends Mage_Core_Helper_Abstrac
                 $final_price = $_item->getFinalPrice();
                 $price = $_item->getPrice();
                 if($final_price < $price){
-                    $op['regular_price_label'] = Mage::helper('catalog')->__('Regular Price');
+                    $op['price_label'] = Mage::helper('catalog')->__('Regular Price');
                     $op['regular_price'] = $price;
                     $op['has_special_price'] = 1;
                     $op['special_price_label'] = Mage::helper('catalog')->__('Special Price');
@@ -49,11 +49,13 @@ class Simi_Simiconnector_Helper_Options_Grouped extends Mage_Core_Helper_Abstrac
 
                 }
 
+                $op['show_ex_in_price'] = 0;
                 if ($taxHelper->displayPriceIncludingTax()) {
                     Mage::helper('simiconnector/price')->setTaxPrice($op, $_priceInclTax);
                 } elseif ($taxHelper->displayPriceExcludingTax()) {
                     Mage::helper('simiconnector/price')->setTaxPrice($op, $_priceExclTax);
                 } elseif ($taxHelper->displayBothPrices()) {
+                    $op['show_ex_in_price'] = 1;
                     Mage::helper('simiconnector/price')->setBothTaxPrice($op, $_priceExclTax, $_priceInclTax);
                 } else {
                     Mage::helper('simiconnector/price')->setTaxPrice($op, $_priceInclTax);
