@@ -98,6 +98,20 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Grid extends Mage_Adminhtml_Bloc
             'index' => 'created_time',
             'type' => 'datetime'
         ));
+        
+        $this->addColumn('app_id', array(
+            'header' => Mage::helper('simiconnector')->__('App Id'),
+            'width' => '150px',
+            'align' => 'right',
+            'index' => 'app_id'
+        ));
+        
+        $this->addColumn('build_version', array(
+            'header' => Mage::helper('simiconnector')->__('Build Version'),
+            'width' => '150px',
+            'align' => 'right',
+            'index' => 'build_version'
+        ));
 
         $this->addColumn('action', array(
             'header' => Mage::helper('simiconnector')->__('Action'),

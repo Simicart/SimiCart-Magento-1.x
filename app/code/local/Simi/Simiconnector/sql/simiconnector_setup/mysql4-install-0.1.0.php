@@ -84,6 +84,8 @@ $installer->run("
         `created_time` datetime NOT NULL default '0000-00-00 00:00:00',
         `is_demo` tinyint(1) NULL default '3',
         `user_email` varchar(255) NOT NULL default '',
+        `app_id` varchar(255) NOT NULL default '',
+        `build_version` varchar(255) NOT NULL default '',
         PRIMARY KEY (`device_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         

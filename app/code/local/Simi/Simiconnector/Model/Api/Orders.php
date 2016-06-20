@@ -4,6 +4,7 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
 
     protected $_DEFAULT_ORDER = 'entity_id';
     protected $_RETURN_MESSAGE;
+    protected $_QUOTE_INITED = FALSE;
 
     protected function _getCart() {
         return Mage::getSingleton('checkout/cart');
@@ -50,11 +51,13 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         $parameters = (array) $data['contents'];
 
         if (isset($parameters['b_address'])) {
+            $this->_initCheckout();
             Mage::helper('simiconnector/address')->saveBillingAddress($parameters['b_address']);
             if (!isset($parameters['s_address']))
                 $parameters['s_address'] = $parameters['b_address'];
         }
         if (isset($parameters['s_address'])) {
+            $this->_initCheckout();
             Mage::helper('simiconnector/address')->saveShippingAddress($parameters['s_address']);
         }
 
@@ -70,6 +73,14 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         $this->_getOnepage()->getQuote()->collectTotals()->save();
     }
 
+    private function _initCheckout() {
+        if (!$this->_QUOTE_INITED) {
+            $this->_getCheckoutSession()->setCartWasUpdated(false);
+            $this->_getOnepage()->initCheckout();
+            $this->_QUOTE_INITED = TRUE;
+        }
+    }
+
     /*
      * Place Order
      */
@@ -80,8 +91,6 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         if (!$quote->validateMinimumAmount()) {
             throw new Exception(Mage::getStoreConfig('sales/minimum_order/error_message'), 4);
         }
-        $this->_getCheckoutSession()->setCartWasUpdated(false);
-        $this->_getOnepage()->initCheckout();
         $this->_getOnepage()->saveOrder();
         $this->_getOnepage()->getQuote()->save();
         $order = array('invoice_number' => $this->_getCheckoutSession()->getLastRealOrderId(),

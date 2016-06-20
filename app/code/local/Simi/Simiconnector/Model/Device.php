@@ -27,12 +27,15 @@ class Simi_Simiconnector_Model_Device extends Mage_Core_Model_Abstract {
     }
 
     public function saveDevice($data) {
+
         $deviceData = $data['contents'];
-        $device_id = $this->detectMobile();
+        if (!$deviceData->device_token)
+            throw new Exception(Mage::helper('simiconnector')->__('No Device Token Sent'), 4);
+        $device_id = $this->detectMobile();        
         $website = Mage::app()->getStore()->getWebsiteId();
         $latitude = $deviceData->latitude;
         $longitude = $deviceData->longitude;
-        $addresses = $this->getAddress($latitude, $longitude);
+        $addresses = $this->getLocationInfo($latitude, $longitude);
         $existed_device = $this->getCollection()->addFieldToFilter('device_token', $deviceData->device_token)->getFirstItem();
         if ($existed_device->getId())
             $this->setId($existed_device->getId());
@@ -50,6 +53,8 @@ class Simi_Simiconnector_Model_Device extends Mage_Core_Model_Abstract {
         $this->setData('longitude', $deviceData->longitude);
         $this->setData('created_time', now());
         $this->setData('user_email', $deviceData->user_email);
+        $this->setData('app_id', $deviceData->app_id);
+        $this->setData('build_version', $deviceData->build_version);
         if (is_null($deviceData->is_demo)) {
             $this->setData('is_demo', 3);
         } else
@@ -57,7 +62,7 @@ class Simi_Simiconnector_Model_Device extends Mage_Core_Model_Abstract {
         $this->save();
     }
 
-    public function getAddress($lat, $lng) {
+    public function getLocationInfo($lat, $lng) {
         $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' . trim($lat) . ',' . trim($lng) . '&sensor=false';
         $json = @file_get_contents($url);
         $data = json_decode($json);
@@ -100,7 +105,7 @@ class Simi_Simiconnector_Model_Device extends Mage_Core_Model_Abstract {
             return false;
         }
     }
-
+/*
     public function getNotificationList($data, $device_id) {
         $existedDevice = $this->getCollection()->addFieldToFilter('device_token', $data->device_token)->getFirstItem();
         $notificationList = array();
@@ -157,5 +162,5 @@ class Simi_Simiconnector_Model_Device extends Mage_Core_Model_Abstract {
             }
         }
     }
-
+*/
 }
