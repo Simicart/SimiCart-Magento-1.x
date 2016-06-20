@@ -2,7 +2,7 @@
 /**
 
  */
-class Simi_Simiconnector_Model_Config_Source_ProductsViewType
+class Simi_Simiconnector_Model_Config_Source_Productsviewtype
 {
     const LIST_TYPE = 0;
     const GRID_TYPE = 1;
