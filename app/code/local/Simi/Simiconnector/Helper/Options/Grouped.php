@@ -49,11 +49,13 @@ class Simi_Simiconnector_Helper_Options_Grouped extends Mage_Core_Helper_Abstrac
 
                 }
 
+                $op['show_ex_in_price'] = 0;
                 if ($taxHelper->displayPriceIncludingTax()) {
                     Mage::helper('simiconnector/price')->setTaxPrice($op, $_priceInclTax);
                 } elseif ($taxHelper->displayPriceExcludingTax()) {
                     Mage::helper('simiconnector/price')->setTaxPrice($op, $_priceExclTax);
                 } elseif ($taxHelper->displayBothPrices()) {
+                    $op['show_ex_in_price'] = 1;
                     Mage::helper('simiconnector/price')->setBothTaxPrice($op, $_priceExclTax, $_priceInclTax);
                 } else {
                     Mage::helper('simiconnector/price')->setTaxPrice($op, $_priceInclTax);
