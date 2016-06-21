@@ -14,7 +14,7 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
     public function setBuilderQuery() {
         $data = $this->getData();
         if (!$data['resourceid']) {
-            $data['resourceid'] = Mage::app()->getStore($storeId)->getRootCategoryId();
+            $data['resourceid'] = Mage::app()->getStore()->getRootCategoryId();
         }
         if (Mage::getStoreConfig('simiconnector/general/categories_in_app'))
             $this->_visible_array = explode(',', Mage::getStoreConfig('simiconnector/general/categories_in_app'));

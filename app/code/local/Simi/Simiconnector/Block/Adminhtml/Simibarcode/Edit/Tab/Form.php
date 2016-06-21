@@ -17,14 +17,19 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Form extends Mage_
         } elseif (Mage::registry('simibarcode_data'))
             $data = Mage::registry('simibarcode_data')->getData();
 
+        //zend_debug::dump($data);die;
+        $width = $height = 200;
+        $sampleQR = '<img src="http://chart.googleapis.com/chart?chs='.$width.'x'.$height.'&cht=qr&chl='.$data['qrcode'].'" />';
+        $sampleBar = '</br></br><img src="'.Mage::helper("adminhtml")->getUrl('*/*/barcode').'?code='.$data['barcode'].'" />';
         $fieldset = $form->addFieldset('simibarcode_form', array('legend' => Mage::helper('simiconnector')->__('Barcode Information')));
-        $fieldset->addType('datetime', 'Simi_Simibarcode_Block_Adminhtml_Simibarcode_Edit_Renderer_Datetime');
+        $fieldset->addType('datetime', 'Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Renderer_Datetime');
 
         $fieldset->addField('barcode', 'text', array(
             'label' => Mage::helper('simiconnector')->__('Barcode'),
             'required' => false,
             'bold' => true,
             'name' => 'barcode',
+            'after_element_html' => $sampleBar
         ));
 
         $fieldset->addField('qrcode', 'text', array(
@@ -32,6 +37,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Form extends Mage_
             'required' => false,
             'bold' => true,
             'name' => 'qrcode',
+            'after_element_html' => $sampleQR
         ));
 
         $fieldset->addField('barcode_status', 'select', array(

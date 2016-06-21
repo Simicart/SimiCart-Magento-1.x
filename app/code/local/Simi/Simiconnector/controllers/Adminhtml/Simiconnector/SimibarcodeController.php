@@ -40,6 +40,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
                 $model->setData($data);
             }
             Mage::register('simibarcode_data', $model);
+
             $this->loadLayout();
             $this->_setActiveMenu('simiconnector/simibarcode');
 
@@ -49,9 +50,14 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
             $this->_addBreadcrumb(
                     Mage::helper('adminhtml')->__('Add New Custom Barcode'), Mage::helper('adminhtml')->__('Add New Custom Barcode')
             );
+            if (!$simibarcodeId) {
+                $this->getLayout()->getBlock('head')
+                        ->addCss('css/simi/simibarcode/hiddenleftslide.css');
+            }
 
             $this->_addContent($this->getLayout()->createBlock('simiconnector/adminhtml_simibarcode_edit'))
                     ->_addLeft($this->getLayout()->createBlock('simiconnector/adminhtml_simibarcode_edit_tabs'));
+
             $this->renderLayout();
         } else {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('simiconnector')
@@ -93,7 +99,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
      * check barcode dupplicate
      */
     public function checkDupplicate($barcode) {
-        $code = $this->generateCode(Mage::getStoreConfig('simiconnector/barcode/pattern'));
+        $code = Mage::helper('simiconnector/simibarcode')->generateCode(Mage::getStoreConfig('simiconnector/barcode/pattern'));
         if (in_array($code, $barcode)) {
             $code = $this->checkDupplicate($barcode);
         }
@@ -104,7 +110,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
      * check QRcode dupplicate
      */
     public function checkDupplicateQrcode($qrcode) {
-        $code = $this->generateCode(Mage::getStoreConfig('simiconnector/barcode/qrcode_pattern'));
+        $code = Mage::helper('simiconnector/simibarcode')->generateCode(Mage::getStoreConfig('simiconnector/barcode/qrcode_pattern'));
         if (in_array($code, $qrcode)) {
             $code = $this->checkDupplicate($qrcode);
         }
@@ -143,7 +149,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
 
                 $tablename = 'simiconnector/simibarcode';
 
-                $results = $this->getAllColumOfTable($tablename);
+                $results = Mage::helper('simiconnector/simibarcode')->getAllColumOfTable($tablename);
 
                 $columns = array();
                 $string = '';
@@ -275,7 +281,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
 
                                 if ($_id != 'custom') {
 
-                                    $return = Mage::helper('simiconnector')->getValueForBarcode($_id, $key, $pId, $codeArr);
+                                    $return = Mage::helper('simiconnector/simibarcode')->getValueForBarcode($_id, $key, $pId, $codeArr);
                                     if (is_array($return)) {
                                         foreach ($return as $_columns) {
                                             foreach ($_columns as $_column => $value) {
@@ -403,28 +409,57 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
         return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
     }
 
-    public function getAllColumOfTable($model) {
-        $resource = Mage::getSingleton('core/resource');
-        $tablename = $resource->getTableName($model);
-        $readConnection = $resource->getConnection('core_read');
-        $results = $readConnection->fetchAll("SHOW COLUMNS FROM " . $tablename . ";");
-        $return = array();
-        foreach ($results as $result) {
-            $return[] = $result['Field'];
-        }
+    /**
+     * export grid item to XML type
+     */
+    public function getImportCsvAction() {
+        if (isset($_FILES['fileToUpload']['name']) && $_FILES['fileToUpload']['name'] != '') {
 
-        return $return;
+            try {
+                $fileName = $_FILES['fileToUpload']['tmp_name'];
+                $Object = new Varien_File_Csv();
+                $dataFile = $Object->getData($fileName);
+                $product = array();
+                $products = array();
+                $fields = array();
+                $count = 0;
+                $helper = Mage::helper('simiconnector/simibarcode');
+
+                if (count($dataFile))
+                    foreach ($dataFile as $col => $row) {
+                        if ($col == 0) {
+                            if (count($row))
+                                foreach ($row as $index => $cell)
+                                    $fields[$index] = (string) $cell;
+                        }elseif ($col > 0) {
+
+                            if (count($row))
+                                foreach ($row as $index => $cell) {
+
+                                    if (isset($fields[$index])) {
+                                        $product[$fields[$index]] = $cell;
+                                    }
+                                }
+
+                            $productId = Mage::getModel('catalog/product')->getIdBySku($product['SKU']);
+                            $product['PRODUCT_ID'] = $productId;
+
+                            if ($productId) {
+                                $products[] = $product;
+                            }
+                        }
+                    }
+
+                $helper->importProduct($products);
+            } catch (Exception $e) {
+                
+            }
+        }
     }
-
-    public function generateCode($string) {
-        $barcode = preg_replace_callback('#\[([AN]{1,2})\.([0-9]+)\]#', array($this, 'convertExpression'), $string);
-        $checkBarcodeExist = Mage::getModel('simibarcode/simibarcode')->load($barcode, 'barcode');
-
-        if ($checkBarcodeExist->getId()) {
-            $barcode = $this->generateCode($string);
-        }
-
-        return $barcode;
+    
+    public function barcodeAction(){
+        $code = $this->getRequest()->getParam('code');
+        Mage::helper('simiconnector/simibarcode')->createBarcode(null, $code, "100", "horizontal", "code128", false);
     }
 
 }

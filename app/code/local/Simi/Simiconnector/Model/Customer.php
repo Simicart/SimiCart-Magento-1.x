@@ -88,22 +88,6 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             'lastname' => $data->lastname,
             'email' => $data->email,
         );
-        if (isset($data->day) && $data->day != "") {
-            $birthday = $data->year . "-" . $data->month . "-" . $data->day;
-            $customer->setDob($birthday);
-        }
-        if (isset($data->taxvat) && $data->taxvat) {
-            $customerData['taxvat'] = $data->taxvat;
-        }
-        if (isset($data->gender) && $data->gender) {
-            $customerData['gender'] = $data->gender;
-        }
-        if (isset($data->prefix) && $data->prefix) {
-            $customerData['prefix'] = $data->prefix;
-        }
-        if (isset($data->suffix) && $data->suffix) {
-            $customerData['suffix'] = $data->suffix;
-        }
 
         if (version_compare(Mage::getVersion(), '1.4.2.0', '<') === true) {
             $customer = Mage::getModel('customer/customer')
@@ -150,6 +134,27 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             }
         }
         $customerErrors = $customer->validate();
+		
+		if (isset($data->taxvat)) {
+            $customer->setTaxvat($data->taxvat);
+        }
+
+        if (isset($data->day) && $data->day != "") {
+            $birthday = $data->year . "-" . $data->month . "-" . $data->day;
+            $customer->setDob($birthday);
+        }
+        
+        if (isset($data->gender) && $data->gender) {
+            $customer->setGender($data->gender);
+        }
+        if (isset($data->prefix) && $data->prefix) {
+            $customer->setPrefix($data->prefix);
+        }
+
+        if (isset($data->suffix) && $data->suffix) {
+            $customer->setSuffix($data->suffix);
+        }
+		
         if (is_array($customerErrors))
             throw new Exception($this->_helperCustomer()->__('Invalid profile information'), 4);
         $customer->setConfirmation(null);

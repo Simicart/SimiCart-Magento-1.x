@@ -84,20 +84,9 @@
                     <sort_order>40</sort_order>
                     <children>
                         <simibarcode module="simiconnector" translate="title">
-                            <title>QR Barcode Scanner</title>
-                            <sort_order>71</sort_order>
-                            <children>
-                                <simibarcode module="simiconnector" translate="title">
-                                    <title><![CDATA[Manage QR & Barcodes]]></title>
-                                    <sort_order>99</sort_order>
-                                    <action>adminhtml/simiconnector_simibarcode</action>
-                                </simibarcode>
-                                <settings module="simiconnector" translate="title">
-                                    <title>Settings</title>
-                                    <sort_order>199</sort_order>
-                                    <action>adminhtml/system_config/edit/section/simibarcode</action>
-                                </settings>
-                            </children>
+                            <title><![CDATA[Manage QR & Barcodes]]></title>
+                            <sort_order>99</sort_order>
+                            <action>adminhtml/simiconnector_simibarcode</action>
                         </simibarcode>
                     </children>
                 </simi_user_experience>
