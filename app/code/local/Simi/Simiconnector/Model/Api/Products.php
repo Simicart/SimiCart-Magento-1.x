@@ -138,7 +138,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
                 'position' => 1,
             );
             $info_detail['images'] = $images;
-            $info_detail['app_price'] = Mage::helper('simiconnector/price')->formatPriceFromProduct($entity);
+            $info_detail['app_prices'] = Mage::helper('simiconnector/price')->formatPriceFromProduct($entity);
             $info[] = $info_detail;
 
             $all_ids[] = $entity->getId();
