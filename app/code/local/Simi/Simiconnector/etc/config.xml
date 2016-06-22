@@ -97,6 +97,9 @@
                     <simibarcode>
                         <table>simibarcode</table>
                     </simibarcode>
+                    <simivideo>
+                        <table>simivideo_videos</table>
+                    </simivideo>
                 </entities>
             </simiconnector_mysql4>
         </models>

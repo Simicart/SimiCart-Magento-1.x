@@ -113,6 +113,12 @@
             <block type="simiconnector/adminhtml_simibarcode_edit_tab_products" name="barcode.edit.tab.products"/>
         </block>
     </adminhtml_simiconnector_simibarcode_productsgrid>
+    <adminhtml_simiconnector_simivideo_index>
+        <reference name="content">
+            <block type="simiconnector/adminhtml_simivideo" name="simivideo" />
+        </reference>
+    </adminhtml_simiconnector_simivideo_index>
+    
     
     <adminhtml_system_config_edit>
         <reference name="head">
