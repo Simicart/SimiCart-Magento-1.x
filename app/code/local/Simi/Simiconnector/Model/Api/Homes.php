@@ -32,6 +32,7 @@ class Simi_Simiconnector_Model_Api_Homes extends Simi_Simiconnector_Model_Api_Ab
          * Get Categories
          */
         $categories = Mage::getModel('simiconnector/api_homecategories');
+        $categories->setData($this->getData());
         $categories->builderQuery = $categories->getCollection();
         $categories->setPluralKey('homecategories');
         $categories = $categories->index();

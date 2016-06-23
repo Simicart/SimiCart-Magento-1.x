@@ -9,9 +9,13 @@
 class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Model_Api_Abstract {
 
     protected $_DEFAULT_ORDER = 'wishlist_item_id';
+    protected $_helperProduct;
 
     public function setBuilderQuery() {
         $data = $this->getData();
+        $this->_helperProduct = Mage::helper('simiconnector/products');
+        $this->_helperProduct->setData($data);
+
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         if ($customer->getId() && ($customer->getId() != '')) {
             $wishlist = Mage::getModel('wishlist/wishlist')->loadByCustomer($customer, true);
@@ -41,7 +45,7 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
                     }
                 }
             }
-            
+
             $options = $this->_getOptionsSelectedFromItem($itemModel, $product);
             $addition_info[$itemModel->getData('wishlist_item_id')] = array(
                 'product_type' => $product->getTypeId(),
@@ -57,7 +61,8 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
                 'product_sharing_url' => $product->getProductUrl(),
             );
         }
-        foreach ($result['wishlistitems'] as $index=>$item) {
+        die;
+        foreach ($result['wishlistitems'] as $index => $item) {
             $result['wishlistitems'][$index] = array_merge($item, $addition_info[$item['wishlist_item_id']]);
         }
         return $result;
@@ -67,31 +72,46 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
      * @param:
      * $item - Wishlist Item
      */
+
     function _checkIfSelectedAllRequiredOptions($item, $options = null) {
-        $selected = true;
+        $selected = false;
         $product = $item->getProduct();
-
-        $itemOptions = Mage::getModel('wishlist/item_option')->getCollection()
-                ->addItemFilter(array($item->getData('wishlist_item_id')));
-        if (!$options)
-            $options = $this->_getOptionsSelectedFromItem($item, $product);
-        $productObjData = new Varien_Object();
-        $productObjData->product_id = $product->getData('entity_id');
-        $product_information = Mage::getModel('connector/catalog_product')->getDetail($productObjData);
-        $product_options = $product_information['data'][0]['options'];
-
-        foreach ($product_options as $product_option) {
-            if ($product_option['is_required'] == 'YES') {
-                $selected = false;
-                foreach ($options as $option) {
-                    if (($option['option_title'] == $product_option['option_title']) && ($option['option_value']) && ($option['option_value'] != ''))
-                        $selected = true;
-                }
-            }
+        $allowedType = array('simple','downloadable','configurable');
+        if (in_array($product->getTypeId(), $allowedType)) {
+            $selected = true;
+             //if (($product->getTypeId() == 'bundle') || ($product->getTypeId() == 'bundle')
+        //$itemOptions = Mage::getModel('wishlist/item_option')->getCollection()
+          //      ->addItemFilter(array($item->getData('wishlist_item_id')));
+        $selectedoptions = $this->_getOptionsSelectedFromItem($item, $product);
+        $entity = $this->_helperProduct->getProduct($product->getEntityId());
+        $productOptions = Mage::helper('simiconnector/options')->getOptions($entity);
+        
+        zend_debug::dump($productOptions);
+        zend_debug::dump($selectedoptions);
+        echo '--------------------------------------------------------';
+        foreach ($productOptions as $productOption) {
+            //zend_debug::dump($productOption);
+        }
+        //zend_debug::dump($productOptions);
+        //zend_debug::dump($selectedoptions);
+        //$product_information = Mage::getModel('connector/catalog_product')->getDetail($productObjData);
+        //$product_options = $product_information['data'][0]['options'];
+        /*
+          foreach ($product_options as $product_option) {
+          if ($product_option['is_required'] == 'YES') {
+          $selected = false;
+          foreach ($options as $option) {
+          if (($option['option_title'] == $product_option['option_title']) && ($option['option_value']) && ($option['option_value'] != ''))
+          $selected = true;
+          }
+          }
+          }
+         */
+            
         }
         return $selected;
     }
-    
+
     function _getOptionsSelectedFromItem($item, $product) {
         $options = array();
         if (version_compare(Mage::getVersion(), '1.5.0.0', '>=') === true) {
@@ -102,7 +122,9 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
                 $options = Mage::helper('simiconnector/checkout')->convertOptionsCart($helper->getConfigurableOptions($item));
             } elseif ($product->getTypeId() == "bundle") {
                 $options = Mage::helper('simiconnector/checkout')->getOptions($item);
-            }
+            } elseif ($product->getTypeId() == "downloadable") {
+                $options = Mage::helper('simiconnector/checkout')->convertOptionsCart($helper->getCustomOptions($item));
+            } 
         } else {
             if ($product->getTypeId() != "bundle") {
                 $options = Mage::helper('simiconnector/checkout')->getUsedProductOption($item);
