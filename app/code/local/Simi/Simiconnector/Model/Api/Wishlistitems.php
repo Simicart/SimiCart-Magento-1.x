@@ -14,17 +14,19 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
 
     public function setBuilderQuery() {
         $data = $this->getData();
-
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         if ($customer->getId() && ($customer->getId() != '')) {
             $this->_WISHLIST = Mage::getModel('wishlist/wishlist')->loadByCustomer($customer, true);
-
             $sharingUrl = $this->_WISHLIST->getSharingCode();
             $this->_RETURN_MESSAGE = Mage::getStoreConfig('appwishlist/general/sharing_message') . ' ' . Mage::getUrl('wishlist/shared/index/code/' . $sharingUrl);
         } else
             throw new Exception(Mage::helper('customer')->__('Please login First.'), 4);
         if ($data['resourceid']) {
             $this->builderQuery = Mage::getModel('wishlist/item')->load($data['resourceid']);
+            if ($data['params']['add_to_cart']) {
+                $this->addWishlistItemToCart($data['resourceid']);
+                $this->builderQuery = $this->_WISHLIST->getItemCollection();
+            }
         } else {
             $this->builderQuery = $this->_WISHLIST->getItemCollection();
         }
@@ -84,16 +86,46 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
             $params['qty'] = $filter->filter($params['qty']);
         }
         $buyRequest = new Varien_Object($params);
-        $this->builderQuery = $this->_WISHLIST->addNewItem($product, $buyRequest); 
+        $this->builderQuery = $this->_WISHLIST->addNewItem($product, $buyRequest);
         return $this->show();
     }
 
     /*
      * Remove From Wishlist
      */
-     public function destroy()
-    {
-         die;
+
+    public function destroy() {
+        $data = $this->getData();
+        $item = Mage::getModel('wishlist/item')->load($data['resourceid']);
+        if ($item->getId()) {
+            $item->delete();
+            $this->_WISHLIST->save();
+            Mage::helper('wishlist')->calculate();
+        }
+        $this->builderQuery = $this->_WISHLIST->getItemCollection();
+        return $this->index();
+    }
+
+    /*
+     * Add From Wishlist To Cart
+     */
+
+    public function addWishlistItemToCart($itemId) {
+        foreach ($this->_WISHLIST->getItemCollection() as $wishlistItem) {
+            if ($wishlistItem->getData('wishlist_item_id') == $itemId)
+                $item = $wishlistItem;
+        }
+        $cart = Mage::getSingleton('checkout/cart');
+        $options = Mage::getModel('wishlist/item_option')->getCollection()
+                ->addItemFilter(array($itemId));
+        $item->setOptions($options->getOptionsByItem($itemId));
+        $item->mergeBuyRequest();
+        Mage::helper('wishlist')->calculate();
+        if ($item->addToCart($cart, true)) {
+            $cart->save()->getQuote()->collectTotals();
+        }
+        $this->_WISHLIST->save();
+        Mage::helper('wishlist')->calculate();
     }
 
     /*

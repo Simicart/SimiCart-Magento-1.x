@@ -94,7 +94,6 @@ class Simi_Simiconnector_Model_Server
         } elseif ($controller->getRequest()->isDelete()) {
             $is_method = 4;
         }
-
         $this->_data = array(
             'resource' => $resource,
             'resourceid' => $resourceid,
