@@ -80,7 +80,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
     public function addToCart() {
         $data = $this->getData();
         $cart = $this->_getCart();
-        $params = $this->_convertParams((array) $data['contents']);
+        $params = $this->convertParams((array) $data['contents']);
         if (isset($params['qty'])) {
             $filter = new Zend_Filter_LocalizedToNormalized(
                     array('locale' => Mage::app()->getLocale()->getLocaleCode())
@@ -95,7 +95,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
         $this->_RETURN_MESSAGE = Mage::helper('simiconnector')->__('%s was added to your shopping cart.', Mage::helper('core')->escapeHtml($product->getName()));
     }
 
-    private function _convertParams($params) {
+    public function convertParams($params) {
         $convertList = array(
             //Custom Option (Simple/Virtual/Downloadable)
             'options',

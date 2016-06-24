@@ -855,6 +855,34 @@
                         </qrcode_pattern>
                     </fields>
                 </barcode>
+                <wishlist translate="label">
+                    <label>General Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>699</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>        
+                        <sharing_message translate="label">
+                            <label>Message For Sharing Wishlist</label>
+                            <frontend_type>Textarea</frontend_type>                            
+                            <sort_order>2</sort_order>                            
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>  
+                            <comment>The message is used when customers share their wishlist on Facebook, Twitter, Emails... It appears before Wishlist URL.</comment>												
+                        </sharing_message>
+                        <product_sharing_message translate="label">
+                            <label>Message For Sharing Product</label>
+                            <frontend_type>Textarea</frontend_type>                            
+                            <sort_order>3</sort_order>                            
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>  
+                            <comment>The message is used when customers share a product in their wishlist on Facebook, Twitter, Emails... It appears before the product URL.</comment>												
+                        </product_sharing_message>	
+                    </fields>
+                </wishlist>
             </groups>
         </simiconnector>              
     </sections>

@@ -6,8 +6,8 @@
  * Date: 5/3/16
  * Time: 9:37 PM
  */
-class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api_Abstract
-{
+class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api_Abstract {
+
     protected $_layer = array();
     protected $_allow_filter_core = false;
     protected $_helperProduct;
@@ -15,8 +15,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
     /**
      * override
      */
-    public function setBuilderQuery()
-    {
+    public function setBuilderQuery() {
         $data = $this->getData();
         $parameters = $data['params'];
         $this->_helperProduct = Mage::helper('simiconnector/products');
@@ -53,8 +52,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
      * @return array
      * override
      */
-    public function getList($info, $all_ids, $total, $page_size, $from)
-    {
+    public function getList($info, $all_ids, $total, $page_size, $from) {
         return array(
             'all_ids' => $all_ids,
             $this->getPluralKey() => $info,
@@ -69,8 +67,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
      * @return collection
      * override
      */
-    protected function filter()
-    {
+    protected function filter() {
         $data = $this->_data;
         $parameters = $data['params'];
         if ($this->_allow_filter_core) {
@@ -87,8 +84,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
      * @throws Exception
      * override
      */
-    public function index()
-    {
+    public function index() {
         $collection = $this->builderQuery;
         $this->filter();
         $data = $this->getData();
@@ -150,8 +146,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
      * @return array
      * override
      */
-    public function show()
-    {
+    public function show() {
         $entity = $this->builderQuery;
         $data = $this->getData();
         $parameters = $data['params'];
@@ -181,27 +176,26 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         $info['images'] = $images;
         $info['app_prices'] = Mage::helper('simiconnector/price')->formatPriceFromProduct($entity, true);
         $info['app_options'] = Mage::helper('simiconnector/options')->getOptions($entity);
+        $info['wishlist_item_id'] = Mage::helper('simiconnector/wishlist')->getWishlistItemId($entity);
         return $this->getDetail($info);
     }
 
-    public function setFilterByCategoryId($cat_id)
-    {
+    public function setFilterByCategoryId($cat_id) {
         $this->_helperProduct->setCategoryProducts($cat_id);
         $this->_layer = $this->_helperProduct->getLayers();
         $this->builderQuery = $this->_helperProduct->getBuilderQuery();
     }
 
-    public function setFilterByQuery()
-    {
+    public function setFilterByQuery() {
         $this->_helperProduct->setLayers(1);
         $this->_layer = $this->_helperProduct->getLayers();
         $this->builderQuery = $this->_helperProduct->getBuilderQuery();
     }
-    
-    public function setFilterByRelated($product_id)
-    {
+
+    public function setFilterByRelated($product_id) {
         $this->_helperProduct->setRelatedProduct($product_id);
         $this->_layer = $this->_helperProduct->getLayers();
         $this->builderQuery = $this->_helperProduct->getBuilderQuery();
     }
+
 }

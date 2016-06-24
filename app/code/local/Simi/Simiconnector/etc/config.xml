@@ -71,34 +71,34 @@
                 <class>Simi_Simiconnector_Model_Mysql4</class>
                 <entities>
                     <simicategory>
-                        <table>simicategory</table>
+                        <table>simiconnector_simicategory</table>
                     </simicategory>
                     <banner>
-                        <table>connector_banner</table>
+                        <table>simiconnector_banner</table>
                     </banner>
                     <cms>
-                        <table>connector_cms</table>
+                        <table>simiconnector_cms</table>
                     </cms>
                     <productlist>
-                        <table>connector_product_list</table>
+                        <table>simiconnector_product_list</table>
                     </productlist>
                     <visibility>
-                        <table>connector_visibility</table>
+                        <table>simiconnector_visibility</table>
                     </visibility> 
                     <device>
-                        <table>connector_device</table>
+                        <table>simiconnector_device</table>
                     </device>                    
                     <siminotification>
-                        <table>connector_notice</table>
+                        <table>simiconnector_notice</table>
                     </siminotification>
                     <history>
-                        <table>connector_notice_history</table>
+                        <table>simiconnector_notice_history</table>
                     </history>
                     <simibarcode>
-                        <table>simibarcode</table>
+                        <table>simiconnector_simibarcode</table>
                     </simibarcode>
                     <simivideo>
-                        <table>simivideo_videos</table>
+                        <table>simiconnector_videos</table>
                     </simivideo>
                 </entities>
             </simiconnector_mysql4>

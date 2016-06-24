@@ -4,19 +4,19 @@ $installer = $this;
 $installer->startSetup();
 
 $installer->run("
-    DROP TABLE IF EXISTS {$installer->getTable('simicategory')};
-    DROP TABLE IF EXISTS {$installer->getTable('connector_banner')};
-    DROP TABLE IF EXISTS {$installer->getTable('connector_cms')};
-    DROP TABLE IF EXISTS {$installer->getTable('connector_device')};          
-    DROP TABLE IF EXISTS {$installer->getTable('connector_notice')};
-    DROP TABLE IF EXISTS {$installer->getTable('connector_notice_history')};
-    DROP TABLE IF EXISTS {$installer->getTable('connector_product_list')};
-    DROP TABLE IF EXISTS {$installer->getTable('connector_visibility')};
-    DROP TABLE IF EXISTS {$installer->getTable('simibarcode')};
-    DROP TABLE IF EXISTS {$installer->getTable('simivideo_videos')};
+    DROP TABLE IF EXISTS {$installer->getTable('simiconnector_simicategory')};
+    DROP TABLE IF EXISTS {$installer->getTable('simiconnector_banner')};
+    DROP TABLE IF EXISTS {$installer->getTable('simiconnector_cms')};
+    DROP TABLE IF EXISTS {$installer->getTable('simiconnector_device')};          
+    DROP TABLE IF EXISTS {$installer->getTable('simiconnector_notice')};
+    DROP TABLE IF EXISTS {$installer->getTable('simiconnector_notice_history')};
+    DROP TABLE IF EXISTS {$installer->getTable('simiconnector_product_list')};
+    DROP TABLE IF EXISTS {$installer->getTable('simiconnector_visibility')};
+    DROP TABLE IF EXISTS {$installer->getTable('simiconnector_simibarcode')};
+    DROP TABLE IF EXISTS {$installer->getTable('simiconnector_videos')};
 
 
-    CREATE TABLE {$installer->getTable('simicategory')} (
+    CREATE TABLE {$installer->getTable('simiconnector_simicategory')} (
         `simicategory_id` int(11) unsigned NOT NULL auto_increment,
         `simicategory_name` varchar(255),
         `simicategory_filename` varchar(255),
@@ -28,7 +28,7 @@ $installer->run("
         PRIMARY KEY (`simicategory_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
     
-    CREATE TABLE {$installer->getTable('connector_banner')} (
+    CREATE TABLE {$installer->getTable('simiconnector_banner')} (
         `banner_id` int(11) unsigned NOT NULL auto_increment,
         `banner_name` varchar(255) NULL, 
         `banner_url` varchar(255) NULL default '',
@@ -42,7 +42,7 @@ $installer->run("
         PRIMARY KEY (`banner_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;    
     
-    CREATE TABLE {$installer->getTable('connector_cms')} (
+    CREATE TABLE {$installer->getTable('simiconnector_cms')} (
         `cms_id` int(11) unsigned NOT NULL auto_increment,
         `cms_title` varchar(255) NULL, 
         `cms_image` varchar(255) NULL default '', 
@@ -53,7 +53,7 @@ $installer->run("
         PRIMARY KEY (`cms_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         
-    CREATE TABLE {$installer->getTable('connector_product_list')} (
+    CREATE TABLE {$installer->getTable('simiconnector_product_list')} (
         `productlist_id` int(11) unsigned NOT NULL auto_increment,
         `list_title` varchar(255) NULL, 
         `list_image` varchar(255) NULL default '', 
@@ -64,7 +64,7 @@ $installer->run("
         PRIMARY KEY (`productlist_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         
-    CREATE TABLE {$installer->getTable('connector_visibility')} (
+    CREATE TABLE {$installer->getTable('simiconnector_visibility')} (
         `entity_id` int(11) unsigned NOT NULL auto_increment,
         `content_type` tinyint(4) NOT NULL default '0',
         `item_id` tinyint(4) NOT NULL default '0',
@@ -72,11 +72,11 @@ $installer->run("
         PRIMARY KEY (`entity_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;        
     
-    CREATE TABLE {$installer->getTable('connector_device')} (
+    CREATE TABLE {$installer->getTable('simiconnector_device')} (
         `device_id` int(11) unsigned NOT NULL auto_increment,
         `device_token` varchar(255) NOT NULL UNIQUE,   
         `plaform_id` int (11),
-        `website_id` int (11),
+        `storeview_id` int (11),
         `latitude` varchar(30) NOT NULL default '',
         `longitude` varchar(30) NOT NULL default '',
         `address` varchar(255) NOT NULL default '',
@@ -92,7 +92,7 @@ $installer->run("
         PRIMARY KEY (`device_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         
-    CREATE TABLE {$installer->getTable('connector_notice')} (
+    CREATE TABLE {$installer->getTable('simiconnector_notice')} (
         `notice_id` int(11) unsigned NOT NULL auto_increment,
         `notice_title` varchar(255) NULL default '',    
         `notice_url` varchar(255) NULL default '',    
@@ -116,7 +116,7 @@ $installer->run("
         PRIMARY KEY (`notice_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
           
-    CREATE TABLE {$installer->getTable('connector_notice_history')} (
+    CREATE TABLE {$installer->getTable('simiconnector_notice_history')} (
         `history_id` int(11) unsigned NOT NULL auto_increment,
         `notice_title` varchar(255) NULL default '',    
         `notice_url` varchar(255) NULL default '',    
@@ -145,7 +145,7 @@ $installer->run("
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
     
 
-    CREATE TABLE {$installer->getTable('simibarcode')} (
+    CREATE TABLE {$installer->getTable('simiconnector_simibarcode')} (
         `barcode_id` int(11) unsigned NOT NULL auto_increment,        
         `barcode` varchar(255) default '',  
         `qrcode` varchar(255) default '',  
@@ -159,7 +159,7 @@ $installer->run("
         PRIMARY KEY  (`barcode_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8; 
 
-    CREATE TABLE {$installer->getTable('simivideo_videos')} (
+    CREATE TABLE {$installer->getTable('simiconnector_videos')} (
       `video_id` int(11) unsigned NOT NULL auto_increment,
       `video_url` varchar(255) NULL default '',
       `video_key` varchar(255) NULL default '',

@@ -128,18 +128,21 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         //text field 
         $data['custom_fields'][] = array('code'=>'text_field_sample',
             'title'=>'Text Field',
-            'type'=>'text'
+            'type'=>'text',
+            'position'=>'7',
             );
         //number field 
         $data['custom_fields'][] = array('code'=>'number_field_sample',
             'title'=>'Number Field',
-            'type'=>'number'
+            'type'=>'number',
+            'position'=>'8',
             );
         //single choice Option
         $data['custom_fields'][] = array('code'=>'single_option_sample',
             'title'=>'Sample Field Single Option',
             'type'=>'single_option',
             'option_array'=>array('Option Single 1', 'Option Single 2', 'Option Single 3'),
+            'position'=>'9',
             );
         //multi choice Option
         $data['custom_fields'][] = array('code'=>'multi_option_sample',
@@ -147,6 +150,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
             'type'=>'multi_option',
             'option_array'=>array('Option Multi 1', 'Option Multi 2', 'Option Multi 3', 'Option Multi 4', 'Option Multi 5'),
             'separated_by'=>'%',
+            'position'=>'10',
             );
         return $data;
     }
