@@ -11,7 +11,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
     protected $_layer = array();
     protected $_allow_filter_core = false;
     protected $_helperProduct;
-
+    protected $_sortOrders = array();
     /**
      * override
      */
@@ -35,7 +35,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
                     $this->setFilterByRelated($filter['related_to_id']);
                 } else {
                     $this->setFilterByCategoryId(Mage::app()->getStore()->getRootCategoryId());
-                    $this->_allow_filter_core = true;
+                   // $this->_allow_filter_core = true;
                 }
             } else {
                 //all products
@@ -62,6 +62,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
             'page_size' => $page_size,
             'from' => $from,
             'layers' => $this->_layer,
+            'orders' => $this->_sortOrders,
         );
     }
 
@@ -189,6 +190,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         $this->_helperProduct->setCategoryProducts($cat_id);
         $this->_layer = $this->_helperProduct->getLayers();
         $this->builderQuery = $this->_helperProduct->getBuilderQuery();
+        $this->_sortOrders = $this->_helperProduct->getStoreQrders();
     }
 
     public function setFilterByQuery()
@@ -196,6 +198,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         $this->_helperProduct->setLayers(1);
         $this->_layer = $this->_helperProduct->getLayers();
         $this->builderQuery = $this->_helperProduct->getBuilderQuery();
+        $this->_sortOrders = $this->_helperProduct->getStoreQrders();
     }
     
     public function setFilterByRelated($product_id)
@@ -203,5 +206,6 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         $this->_helperProduct->setRelatedProduct($product_id);
         $this->_layer = $this->_helperProduct->getLayers();
         $this->builderQuery = $this->_helperProduct->getBuilderQuery();
+        $this->_sortOrders = $this->_helperProduct->getStoreQrders();
     }
 }

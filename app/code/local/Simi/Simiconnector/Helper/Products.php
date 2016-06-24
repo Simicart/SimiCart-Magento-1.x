@@ -11,6 +11,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
     protected $_layer = array();
     protected $builderQuery;
     protected $_data = array();
+    protected $_sortOrders = array();
 
     public function setData($data) {
         $this->_data = $data;
@@ -94,8 +95,14 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
             $layers = $this->getItemsShopBy($block);
             $this->_layer = $layers;
             //update collection
-            $this->builderQuery = $block->getLayer()->getProductCollection();
+            $block_list = $layout->createBlock('catalog/product_list');
+            $block_toolbar = $layout->createBlock('catalog/product_list_toolbar');
+            $block_list->setChild('product_list_toolbar', $block_toolbar);
+
+            $this->builderQuery = $block_list->getLoadedProductCollection();
             $this->setAttributeProducts();
+            $this->setStoreOrders($block_list, $block_toolbar);
+
         } else {
             $query = Mage::helper('catalogsearch')->getQuery();
             $query->setStoreId(Mage::app()->getStore()->getId());
@@ -124,8 +131,15 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
                 $layers = $this->getItemsShopBy($block);
                 $this->_layer = $layers;
                 //update collection
-                $this->builderQuery = $block->getLayer()->getProductCollection();
+               // $block_result = $layout->createBlock('catalogsearch/result');
+                $block_list = $layout->createBlock('catalog/product_list');
+                $block_toolbar = $layout->createBlock('catalog/product_list_toolbar');
+
+                $block_list->setChild('product_list_toolbar', $block_toolbar);
+
+                $this->builderQuery = $block_list->getLoadedProductCollection();
                 $this->setAttributeProducts(1);
+                $this->setStoreOrders($block_list, $block_toolbar, 1);
 
                 if (!Mage::helper('catalogsearch')->isMinQueryLength()) {
                     $query->save();
@@ -134,6 +148,63 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
         }
     }
 
+    public function setStoreOrders($block_list, $block_toolbar, $is_search=0){
+        if(!$block_toolbar->isExpanded()) return;
+        $sort_orders = array();
+
+        if ($sort = $block_list->getSortBy()) {
+            $block_toolbar->setDefaultOrder($sort);
+        }
+        if ($dir = $block_list->getDefaultDirection()) {
+            $block_toolbar->setDefaultDirection($dir);
+        }
+        $availableOrders = $block_toolbar->getAvailableOrders();
+
+        if($is_search == 1){
+            unset($availableOrders['position']);
+            $availableOrders = array_merge(array(
+                'relevance' => $this->__('Relevance')
+            ), $availableOrders);
+        }
+
+        foreach($availableOrders as $_key=>$_order){
+            if($block_toolbar->isOrderCurrent($_key)){
+                if($block_toolbar->getCurrentDirection() == 'desc'){
+                    $sort_orders[] = array(
+                        'key' => $_key,
+                        'value' => $_order,
+                        'direction' => 'asc',
+                        'default' => '1'
+                    );
+                }else{
+                    $sort_orders[] = array(
+                        'key' => $_key,
+                        'value' => $_order,
+                        'direction' => 'desc',
+                        'default' => '1'
+                    );
+                }
+            }else{
+                $sort_orders[] = array(
+                    'key' => $_key,
+                    'value' => $_order,
+                    'direction' => 'asc',
+                    'default' => '0'
+                );
+
+                $sort_orders[] = array(
+                    'key' => $_key,
+                    'value' => $_order,
+                    'direction' => 'desc',
+                    'default' => '0'
+                );
+            }
+        }
+        $this->_sortOrders = $sort_orders;
+    }
+    public function getStoreQrders(){
+        return $this->_sortOrders;
+    }
     protected function setAttributeProducts($is_search = 0) {
         $storeId = Mage::app()->getStore()->getId();
         $this->builderQuery->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes());
