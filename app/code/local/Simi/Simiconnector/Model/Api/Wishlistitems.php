@@ -115,17 +115,35 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
             if ($wishlistItem->getData('wishlist_item_id') == $itemId)
                 $item = $wishlistItem;
         }
-        $cart = Mage::getSingleton('checkout/cart');
-        $options = Mage::getModel('wishlist/item_option')->getCollection()
-                ->addItemFilter(array($itemId));
-        $item->setOptions($options->getOptionsByItem($itemId));
-        $item->mergeBuyRequest();
-        Mage::helper('wishlist')->calculate();
-        if ($item->addToCart($cart, true)) {
-            $cart->save()->getQuote()->collectTotals();
+        $product = $item->getProduct();
+        $options = Mage::helper('simiconnector/wishlist')->getOptionsSelectedFromItem($item, $product);
+        if ($item && (Mage::helper('simiconnector/wishlist')->checkIfSelectedAllRequiredOptions($item, $options))) {
+            $isSaleAble = $product->isSaleable();
+            if ($isSaleAble) {
+                $item = Mage::getModel('wishlist/item')->load($itemId);
+                $item->setQty('1');
+                $cart = Mage::getSingleton('checkout/cart');
+                $options = Mage::getModel('wishlist/item_option')->getCollection()
+                        ->addItemFilter(array($itemId));
+                $item->setOptions($options->getOptionsByItem($itemId));
+                if ($item->addToCart($cart, true)) {
+                    $cart->save()->getQuote()->collectTotals();
+                }
+                $this->_WISHLIST->save();
+                Mage::helper('wishlist')->calculate();
+            }
         }
-        $this->_WISHLIST->save();
-        Mage::helper('wishlist')->calculate();
+    }
+
+    /*
+     * Show An Item
+     */
+
+    public function show() {
+        if ($data['params']['add_to_cart']) {
+            $this->builderQuery = $this->_WISHLIST->getItemCollection();
+            return $this->index();
+        }
     }
 
     /*
@@ -134,7 +152,6 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
 
     public function getList($info, $all_ids, $total, $page_size, $from) {
         $result = parent::getList($info, $all_ids, $total, $page_size, $from);
-        $result['total'] = Mage::helper('simiconnector/total')->getTotal();
         if ($this->_RETURN_MESSAGE) {
             $result['message'] = array($this->_RETURN_MESSAGE);
         }
