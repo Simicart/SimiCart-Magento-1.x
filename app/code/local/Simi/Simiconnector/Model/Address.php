@@ -29,9 +29,8 @@ class Simi_Simiconnector_Model_Address extends Mage_Core_Model_Abstract {
         $customer = $this->_getSession()->getCustomer();
         $address = Mage::getModel('customer/address');
         $addressId = $data['id'];
-        if (version_compare(Mage::getVersion(), '1.4.2.0', '<') === true) {
-            $address->setData($data);
-        }
+        $address->setData($data);
+
         if ($addressId && $addressId != '') {
             $existsAddress = $customer->getAddressById($addressId);
             if ($existsAddress->getId() && $existsAddress->getCustomerId() == $customer->getId()) {
@@ -45,8 +44,6 @@ class Simi_Simiconnector_Model_Address extends Mage_Core_Model_Abstract {
             $addressForm = Mage::getModel('customer/form');
             $addressForm->setFormCode('customer_address_edit')
                     ->setEntity($address);
-        }
-        if (version_compare(Mage::getVersion(), '1.4.2.0', '>=') === true) {
             $addressForm->compactData($data);
         }
         $address->setCustomerId($customer->getId());
@@ -58,7 +55,9 @@ class Simi_Simiconnector_Model_Address extends Mage_Core_Model_Abstract {
             $address->save();
             return $address;
         } else {
-            throw new Exception($this->_helperAddress()->__('Can not save address customer'));
+            if (is_array($addressErrors))
+                throw new Exception($addressErrors[0],7);
+            throw new Exception($this->_helperAddress()->__('Can not save address customer'),7);
         }
     }
 

@@ -92,7 +92,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
             $customer->setWebsiteId(Mage::app()->getWebsite()->getId());
             $customer->loadByEmail($customer_email);
             if ($customer->getId()) {
-                throw new Exception($this->__('There is already a customer registered using this email address. Please login using this email address or enter a different email address to register your account.'));
+                throw new Exception($this->__('There is already a customer registered using this email address. Please login using this email address or enter a different email address to register your account.'),7);
             }
         }
         $address = $this->convertDataAddress($billingAddress);

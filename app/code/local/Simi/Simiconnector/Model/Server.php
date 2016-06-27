@@ -33,6 +33,7 @@ class Simi_Simiconnector_Model_Server
      * 4 Invalid method
      * 5 Login failed
      * 6 Resource cannot callable
+     * 7 Missed input Value
      */
     public function run()
     {
