@@ -10,10 +10,11 @@ class Simi_Simiconnector_Model_Server
 {
 
     protected $_helper;
-    protected $_data=array();
-    protected $_method='callApi';
+    protected $_data = array();
+    protected $_method = 'callApi';
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_helper = Mage::helper('simiconnector');
     }
 
@@ -21,6 +22,16 @@ class Simi_Simiconnector_Model_Server
     {
         $this->initialize($controller);
         return $this;
+    }
+
+    public function setData($data)
+    {
+        $this->_data = $data;
+    }
+
+    public function getData()
+    {
+        return $this->_data;
     }
 
     /**
@@ -44,9 +55,9 @@ class Simi_Simiconnector_Model_Server
 
         if (!isset($data['resource'])) throw new Exception($this->_helper->__('Invalid method.'), 4);
 
-        $model = Mage::getSingleton($data['module']. '/api_' . $data['resource']);
+        $model = Mage::getSingleton($data['module'] . '/api_' . $data['resource']);
 
-        if(!$model){
+        if (!$model) {
             throw new Exception($this->_helper->__('Invalid method.'), 4);
         }
 
@@ -80,7 +91,7 @@ class Simi_Simiconnector_Model_Server
         $module = $controller->getRequest()->getModuleName();
         $params = $controller->getRequest()->getQuery();
         $contents = $controller->getRequest()->getRawBody(); // using without GET method
-        if($contents && strlen($contents)){
+        if ($contents && strlen($contents)) {
             $contents = urldecode($contents);
             $contents = json_decode($contents);
 
@@ -105,6 +116,7 @@ class Simi_Simiconnector_Model_Server
             'module' => $module,
             'controller' => $controller,
         );
+        Mage::dispatchEvent('Simi_Simiconnector_Model_Server_Initialize', array('object' => $this, 'data' => $this->_data));
     }
 
 }

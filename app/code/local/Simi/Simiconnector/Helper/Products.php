@@ -42,7 +42,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
      */
     public function setCategoryProducts($category) {
         $category = Mage::getModel('catalog/category')->load($category);
-        if ($category->getData('include_in_menu') == 0) {
+        if ($category->getData('is_anchor') == 0) {
             $this->builderQuery = $category->getProductCollection();
             $this->setAttributeProducts();
         } else {
@@ -93,6 +93,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
             //setCurrentCate
             $block->getLayer()->setCurrentCategory($category);
             $layers = $this->getItemsShopBy($block);
+            $max =  $block->getFilters();
             $this->_layer = $layers;
             //update collection
             $block_list = $layout->createBlock('catalog/product_list');
@@ -159,12 +160,15 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
             $block_toolbar->setDefaultDirection($dir);
         }
         $availableOrders = $block_toolbar->getAvailableOrders();
-
         if($is_search == 1){
             unset($availableOrders['position']);
             $availableOrders = array_merge(array(
                 'relevance' => $this->__('Relevance')
             ), $availableOrders);
+
+            $block_toolbar->setAvailableOrders($availableOrders)
+                ->setDefaultDirection('desc')
+                ->setSortBy('relevance');
         }
 
         foreach($availableOrders as $_key=>$_order){
@@ -174,14 +178,27 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
                         'key' => $_key,
                         'value' => $_order,
                         'direction' => 'asc',
+                        'default' => '0'
+                    );
+
+                    $sort_orders[] = array(
+                        'key' => $_key,
+                        'value' => $_order,
+                        'direction' => 'desc',
                         'default' => '1'
                     );
                 }else{
                     $sort_orders[] = array(
                         'key' => $_key,
                         'value' => $_order,
-                        'direction' => 'desc',
+                        'direction' => 'asc',
                         'default' => '1'
+                    );
+                    $sort_orders[] = array(
+                        'key' => $_key,
+                        'value' => $_order,
+                        'direction' => 'desc',
+                        'default' => '0'
                     );
                 }
             }else{
