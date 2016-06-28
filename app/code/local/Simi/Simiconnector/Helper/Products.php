@@ -6,22 +6,26 @@
  * Date: 5/28/16
  * Time: 4:40 PM
  */
-class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
+class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
+{
 
     protected $_layer = array();
     protected $builderQuery;
     protected $_data = array();
     protected $_sortOrders = array();
 
-    public function setData($data) {
+    public function setData($data)
+    {
         $this->_data = $data;
     }
 
-    public function getData() {
+    public function getData()
+    {
         return $this->_data;
     }
 
-    public function getLayers() {
+    public function getLayers()
+    {
         return $this->_layer;
     }
 
@@ -29,26 +33,23 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
      * @return product collection.
      *
      */
-    public function getBuilderQuery() {
+    public function getBuilderQuery()
+    {
         return $this->builderQuery;
     }
 
-    public function getProduct($product_id) {
+    public function getProduct($product_id)
+    {
         return Mage::getModel('catalog/product')->load($product_id);
     }
 
     /**
      *
      */
-    public function setCategoryProducts($category) {
+    public function setCategoryProducts($category)
+    {
         $category = Mage::getModel('catalog/category')->load($category);
-        if ($category->getData('is_anchor') == 0) {
-            $this->builderQuery = $category->getProductCollection();
-            $this->setAttributeProducts();
-        } else {
-            //has Layers
-            $this->setLayers(0, $category);
-        }
+        $this->setLayers(0, $category);
         return $this;
     }
 
@@ -56,7 +57,8 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
      * Related Product
      * @param int $product_id
      */
-    public function setRelatedProduct($product_id) {
+    public function setRelatedProduct($product_id)
+    {
         $product = Mage::getModel('catalog/product')->load($product_id);
         $this->builderQuery = $product->getRelatedProductCollection();
         $this->setAttributeProducts();
@@ -68,7 +70,8 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
      * @param int $category
      * set Layer and collection on Products
      */
-    public function setLayers($is_search = 0, $category = 0) {
+    public function setLayers($is_search = 0, $category = 0)
+    {
         $data = $this->getData();
         $controller = $data['controller'];
         $parameters = $data['params'];
@@ -76,13 +79,13 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
             $filter = $parameters[Simi_Simiconnector_Model_Api_Abstract::FILTER];
             if ($is_search == 1) {
 
-                $controller->getRequest()->setParam('q', (string) $filter['q']);
+                $controller->getRequest()->setParam('q', (string)$filter['q']);
             }
             if (isset($filter['layer'])) {
                 $filter_layer = $filter['layer'];
                 $params = array();
                 foreach ($filter_layer as $key => $value) {
-                    $params[(string) $key] = (string) $value;
+                    $params[(string)$key] = (string)$value;
                 }
                 $controller->getRequest()->setParams($params);
             }
@@ -92,9 +95,10 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
             $block = $layout->createBlock('catalog/layer_view');
             //setCurrentCate
             $block->getLayer()->setCurrentCategory($category);
-            $layers = $this->getItemsShopBy($block);
-            $max =  $block->getFilters();
-            $this->_layer = $layers;
+            if ($category->getData('is_anchor')) {
+                $layers = $this->getItemsShopBy($block);
+                $this->_layer = $layers;
+            }
             //update collection
             $block_list = $layout->createBlock('catalog/product_list');
             $block_toolbar = $layout->createBlock('catalog/product_list_toolbar');
@@ -110,8 +114,8 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
             if ($query->getQueryText() != '') {
                 if (Mage::helper('catalogsearch')->isMinQueryLength()) {
                     $query->setId(0)
-                            ->setIsActive(1)
-                            ->setIsProcessed(1);
+                        ->setIsActive(1)
+                        ->setIsProcessed(1);
                 } else {
                     if ($query->getId()) {
                         $query->setPopularity($query->getPopularity() + 1);
@@ -132,7 +136,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
                 $layers = $this->getItemsShopBy($block);
                 $this->_layer = $layers;
                 //update collection
-               // $block_result = $layout->createBlock('catalogsearch/result');
+                // $block_result = $layout->createBlock('catalogsearch/result');
                 $block_list = $layout->createBlock('catalog/product_list');
                 $block_toolbar = $layout->createBlock('catalog/product_list_toolbar');
 
@@ -149,8 +153,9 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
         }
     }
 
-    public function setStoreOrders($block_list, $block_toolbar, $is_search=0){
-        if(!$block_toolbar->isExpanded()) return;
+    public function setStoreOrders($block_list, $block_toolbar, $is_search = 0)
+    {
+        if (!$block_toolbar->isExpanded()) return;
         $sort_orders = array();
 
         if ($sort = $block_list->getSortBy()) {
@@ -160,7 +165,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
             $block_toolbar->setDefaultDirection($dir);
         }
         $availableOrders = $block_toolbar->getAvailableOrders();
-        if($is_search == 1){
+        if ($is_search == 1) {
             unset($availableOrders['position']);
             $availableOrders = array_merge(array(
                 'relevance' => $this->__('Relevance')
@@ -171,9 +176,9 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
                 ->setSortBy('relevance');
         }
 
-        foreach($availableOrders as $_key=>$_order){
-            if($block_toolbar->isOrderCurrent($_key)){
-                if($block_toolbar->getCurrentDirection() == 'desc'){
+        foreach ($availableOrders as $_key => $_order) {
+            if ($block_toolbar->isOrderCurrent($_key)) {
+                if ($block_toolbar->getCurrentDirection() == 'desc') {
                     $sort_orders[] = array(
                         'key' => $_key,
                         'value' => $_order,
@@ -187,7 +192,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
                         'direction' => 'desc',
                         'default' => '1'
                     );
-                }else{
+                } else {
                     $sort_orders[] = array(
                         'key' => $_key,
                         'value' => $_order,
@@ -201,7 +206,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
                         'default' => '0'
                     );
                 }
-            }else{
+            } else {
                 $sort_orders[] = array(
                     'key' => $_key,
                     'value' => $_order,
@@ -219,10 +224,14 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
         }
         $this->_sortOrders = $sort_orders;
     }
-    public function getStoreQrders(){
+
+    public function getStoreQrders()
+    {
         return $this->_sortOrders;
     }
-    protected function setAttributeProducts($is_search = 0) {
+
+    protected function setAttributeProducts($is_search = 0)
+    {
         $storeId = Mage::app()->getStore()->getId();
         $this->builderQuery->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes());
         $this->builderQuery->setStoreId($storeId);
@@ -236,7 +245,8 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
         $this->builderQuery->addUrlRewrite(0);
     }
 
-    protected function getItemsShopBy($block) {
+    protected function getItemsShopBy($block)
+    {
         $_children = $block->getChild();
         $refineArray = array();
         foreach ($_children as $index => $_child) {
@@ -253,7 +263,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
                         $refineArray['layer_state'][] = array(
                             'attribute' => $item->getFilter()->getRequestVar(),
                             'title' => $item->getName(),
-                            'label' => (string) strip_tags($item->getLabel()), //filter request var and correlative name
+                            'label' => (string)strip_tags($item->getLabel()), //filter request var and correlative name
                             'value' => $itemValues,
                         ); //value of each option
                     }
@@ -286,7 +296,8 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract {
         return $refineArray;
     }
 
-    public function getImageProduct($product, $file = null, $width, $height) {
+    public function getImageProduct($product, $file = null, $width, $height)
+    {
         if (!is_null($width) && !is_null($height)) {
             if ($file) {
                 return Mage::helper('catalog/image')->init($product, 'thumbnail', $file)->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($width, $height)->__toString();
