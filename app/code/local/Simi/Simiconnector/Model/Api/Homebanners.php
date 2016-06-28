@@ -35,6 +35,11 @@ class Simi_Simiconnector_Model_Api_Homebanners extends Simi_Simiconnector_Model_
             $imagesize = getimagesize($item['banner_name']);
             $item['width'] = $imagesize[0];
             $item['height'] = $imagesize[1];
+            if ($item['banner_name_tablet']) {
+                $imagesize = getimagesize($item['banner_name_tablet']);
+                $item['width_tablet'] = $imagesize[0];
+                $item['height_tablet'] = $imagesize[1];
+            }
             if ($item['type'] == 2) {
                 $categoryModel = Mage::getModel('catalog/category')->load($item['category_id']);
                 $item['has_children'] = $categoryModel->hasChildren();

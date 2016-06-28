@@ -79,25 +79,18 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
      * save item action
      */
     public function saveAction() {
-        if ($data = $this->getRequest()->getPost()) {            
+        if ($data = $this->getRequest()->getPost()) {      
+            /*
+             * Banner Image
+             */
             if (isset($_FILES['banner_name_co']['name']) && $_FILES['banner_name_co']['name'] != '') {
                 try {
                     /* Starting upload */
                     $uploader = new Varien_File_Uploader('banner_name_co');
-
-                    // Any extention would work
                     $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'gif', 'png'));
                     $uploader->setAllowRenameFiles(false);
-
-                    // Set the file upload mode 
-                    // false -> get the file directly in the specified folder
-                    // true -> get the file in the product like folders 
-                    //	(file.jpg will go in something like /media/f/i/file.jpg)
                     $uploader->setFilesDispersion(false);
-
-                    // We set media as the upload dir
                     str_replace(" ", "_", $_FILES['banner_name_co']['name']);                    
-                    
                     $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'banner' ;
                     if (!is_dir($path)) {
                         try {
@@ -120,7 +113,46 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
             if (isset($data['banner_name_co']['delete']) && $data['banner_name_co']['delete'] == 1) {                
                 Mage::helper('simiconnector')->deleteBanner($data['banner_name_co']['value']);
                 $data['banner_name'] = '';
-            }      
+            } 
+            
+            
+            /*
+             * Tablet Banner Image
+             */
+            
+            if (isset($_FILES['banner_name_tablet_co']['name']) && $_FILES['banner_name_tablet_co']['name'] != '') {
+                try {
+                    /* Starting upload */
+                    $uploader = new Varien_File_Uploader('banner_name_tablet_co');
+                    $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'gif', 'png'));
+                    $uploader->setAllowRenameFiles(false);
+                    $uploader->setFilesDispersion(false);
+                    str_replace(" ", "_", $_FILES['banner_name_tablet_co']['name']);                    
+                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'banner' ;
+                    if (!is_dir($path)) {
+                        try {
+                            mkdir($path, 0777, TRUE);
+                        } catch (Exception $e) {
+                            
+                        }
+                    }
+                    $result = $uploader->save($path, $_FILES['banner_name_tablet_co']['name']);
+                    try {
+                        chmod($path.'/'.$result['file'], 0777); 
+                    } catch (Exception $e) {
+
+                    }
+                    $data['banner_name_tablet'] = Mage::getBaseUrl('media') . 'simi/simicart/banner/' . $result['file'];
+                } catch (Exception $e) {
+                    $data['banner_name_tablet'] = Mage::getBaseUrl('media') . 'simi/simicart/banner/' . $_FILES['banner_name_tablet_co']['name'];
+                }
+            } 
+            if (isset($data['banner_name_tablet_co']['delete']) && $data['banner_name_tablet_co']['delete'] == 1) {                
+                Mage::helper('simiconnector')->deleteBanner($data['banner_name_tablet_co']['value']);
+                $data['banner_name_tablet'] = '';
+            }  
+            
+            
             if(isset($data['type']) && $data['type'] != 2 && $data['type'] != 3){
                 $data['type'] = 1;
             }   

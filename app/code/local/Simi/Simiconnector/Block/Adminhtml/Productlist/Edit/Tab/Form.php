@@ -72,6 +72,11 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
             'label' => Mage::helper('simiconnector')->__('Product List Image'),
             'name' => 'productlist_image_o',
         ));
+        
+        $fieldset->addField('list_image_tablet', 'image', array(
+            'label' => Mage::helper('simiconnector')->__('Product List Tablet Image'),
+            'name' => 'productlist_image_tablet_o',
+        ));
 
         $fieldset->addField('sort_order', 'text', array(
             'label' => Mage::helper('simiconnector')->__('Sort Order'),

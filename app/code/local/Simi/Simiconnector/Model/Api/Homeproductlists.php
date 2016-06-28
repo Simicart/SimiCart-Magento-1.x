@@ -48,6 +48,11 @@ class Simi_Simiconnector_Model_Api_Homeproductlists extends Simi_Simiconnector_M
         $imagesize = getimagesize($listModel->getData('list_image'));
         $dataArray['width'] = $imagesize[0];
         $dataArray['height'] = $imagesize[1];
+        if ($listModel->getData('list_image_tablet')) {
+            $imagesize = getimagesize($listModel->getData('list_image_tablet'));
+            $dataArray['width_tablet'] = $imagesize[0];
+            $dataArray['height_tablet'] = $imagesize[1];
+        }
         $typeArray = Mage::helper('simiconnector/productlist')->getListTypeId();
         $dataArray['type_name'] = $typeArray[$listModel->getData('list_type')];
         if ($this->SHOW_PRODUCT_ARRAY) {

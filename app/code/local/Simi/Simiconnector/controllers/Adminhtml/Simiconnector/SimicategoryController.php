@@ -50,23 +50,12 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
         if ($data = $this->getRequest()->getPost()) {
             if (isset($_FILES['simicategory_filename']['name']) && $_FILES['simicategory_filename']['name'] != '') {
                 try {
-                    /* Starting upload */
                     $uploader = new Varien_File_Uploader('simicategory_filename');
-
-                    // Any extention would work
                     $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'png'));
                     $uploader->setAllowRenameFiles(false);
-
-                    // Set the file upload mode 
-                    // false -> get the file directly in the specified folder
-                    // true -> get the file in the product like folders 
-                    //	(file.jpg will go in something like /media/f/i/file.jpg)
                     $uploader->setFilesDispersion(false);
-
-                    // We set media as the upload dir
                     str_replace(" ", "_", $_FILES['simicategory_filename']['name']);
                     $website = $data['website_id'];
-
                     $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'simicategory' . DS . $website;
                     if (!is_dir($path)) {
                         try {
@@ -75,13 +64,11 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                             
                         }
                     }
-
                     $result = $uploader->save($path, $_FILES['simicategory_filename']['name']);
                     $data['simicategory_filename'] = Mage::getBaseUrl('media') . 'simi/simicart/simicategory/' . $result['file'];
                 } catch (Exception $e) {
                     $data['simicategory_filename'] = Mage::getBaseUrl('media') . 'simi/simicart/simicategory/' . $_FILES['simicategory_filename']['name'];
                 }
-                //this way the name is saved in DB
             }
 
             if (is_array($data['simicategory_filename'])) {
@@ -89,6 +76,37 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                     $data['simicategory_filename'] = "";
                 } else {
                     $data['simicategory_filename'] = $data['simicategory_filename']['value'];
+                }
+            }
+            
+            if (isset($_FILES['simicategory_filename_tablet']['name']) && $_FILES['simicategory_filename_tablet']['name'] != '') {
+                try {
+                    $uploader = new Varien_File_Uploader('simicategory_filename_tablet');
+                    $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'png'));
+                    $uploader->setAllowRenameFiles(false);
+                    $uploader->setFilesDispersion(false);
+                    str_replace(" ", "_", $_FILES['simicategory_filename_tablet']['name']);
+                    $website = $data['website_id'];
+                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'simicategory' . DS . $website;
+                    if (!is_dir($path)) {
+                        try {
+                            mkdir($path, 0777, TRUE);
+                        } catch (Exception $e) {
+                            
+                        }
+                    }
+                    $result = $uploader->save($path, $_FILES['simicategory_filename_tablet']['name']);
+                    $data['simicategory_filename_tablet'] = Mage::getBaseUrl('media') . 'simi/simicart/simicategory/' . $result['file'];
+                } catch (Exception $e) {
+                    $data['simicategory_filename_tablet'] = Mage::getBaseUrl('media') . 'simi/simicart/simicategory/' . $_FILES['simicategory_filename_tablet']['name'];
+                }
+            }
+
+            if (is_array($data['simicategory_filename_tablet'])) {
+                if ($data['simicategory_filename_tablet']['delete'] == 1) {
+                    $data['simicategory_filename_tablet'] = "";
+                } else {
+                    $data['simicategory_filename_tablet'] = $data['simicategory_filename_tablet']['value'];
                 }
             }
 

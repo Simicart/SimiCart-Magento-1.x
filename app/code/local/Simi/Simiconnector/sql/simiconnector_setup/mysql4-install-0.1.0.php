@@ -20,6 +20,7 @@ $installer->run("
         `simicategory_id` int(11) unsigned NOT NULL auto_increment,
         `simicategory_name` varchar(255),
         `simicategory_filename` varchar(255),
+        `simicategory_filename_tablet` varchar(255),
         `category_id` int(8),
         `status` smallint(6) NOT NULL default '0',
         `website_id` int(6) default 0,
@@ -31,7 +32,8 @@ $installer->run("
     CREATE TABLE {$installer->getTable('simiconnector_banner')} (
         `banner_id` int(11) unsigned NOT NULL auto_increment,
         `banner_name` varchar(255) NULL, 
-        `banner_url` varchar(255) NULL default '',
+        `banner_url` varchar(255) NULL default '',        
+        `banner_name_tablet` varchar(255) NULL default '',
         `banner_title` varchar(255) NULL,
         `status` int(11) NULL,  
         `website_id` smallint(5) NULL default 0,
@@ -56,7 +58,8 @@ $installer->run("
     CREATE TABLE {$installer->getTable('simiconnector_product_list')} (
         `productlist_id` int(11) unsigned NOT NULL auto_increment,
         `list_title` varchar(255) NULL, 
-        `list_image` varchar(255) NULL default '', 
+        `list_image` varchar(255) NULL default '',         
+        `list_image_tablet` varchar(255) NULL default '', 
         `list_type` tinyint(4) NOT NULL default '1',        
         `list_products` text NULL default '',
         `list_status` tinyint(4) NOT NULL default '1',        

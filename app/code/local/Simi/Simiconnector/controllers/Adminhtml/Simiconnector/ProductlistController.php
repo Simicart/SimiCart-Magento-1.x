@@ -83,28 +83,16 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
         if ($data = $this->getRequest()->getPost()) {
             if (isset($_FILES['productlist_image_o']['name']) && $_FILES['productlist_image_o']['name'] != '') {
                 try {
-                    /* Starting upload */
                     $uploader = new Varien_File_Uploader('productlist_image_o');
-
-                    // Any extention would work
                     $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'gif', 'png'));
                     $uploader->setAllowRenameFiles(false);
-
-                    // Set the file upload mode 
-                    // false -> get the file directly in the specified folder
-                    // true -> get the file in the product like folders 
-                    //	(file.jpg will go in something like /media/f/i/file.jpg)
                     $uploader->setFilesDispersion(false);
-
-                    // We set media as the upload dir
                     str_replace(" ", "_", $_FILES['productlist_image_o']['name']);
-
                     $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'productlist';
                     if (!is_dir($path)) {
                         try {
                             mkdir($path, 0777, TRUE);
-                        } catch (Exception $e) {
-                            
+                        } catch (Exception $e) {                            
                         }
                     }
                     $file_name = explode(".", $_FILES['productlist_image_o']['name']);
@@ -120,6 +108,35 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
             if (isset($data['productlist_image_o']['delete']) && $data['productlist_image_o']['delete'] == 1) {
                 Mage::helper('simiconnector')->deleteFile($data['productlist_image_o']['value']);
                 $data['list_image'] = '';
+            }
+            
+            if (isset($_FILES['productlist_image_tablet_o']['name']) && $_FILES['productlist_image_tablet_o']['name'] != '') {
+                try {
+                    $uploader = new Varien_File_Uploader('productlist_image_tablet_o');
+                    $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'gif', 'png'));
+                    $uploader->setAllowRenameFiles(false);
+                    $uploader->setFilesDispersion(false);
+                    str_replace(" ", "_", $_FILES['productlist_image_tablet_o']['name']);
+                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'productlist';
+                    if (!is_dir($path)) {
+                        try {
+                            mkdir($path, 0777, TRUE);
+                        } catch (Exception $e) {                            
+                        }
+                    }
+                    $file_name = explode(".", $_FILES['productlist_image_tablet_o']['name']);
+                    $fName = $file_name[0] . "@2x." . $file_name[1];
+                    $result = $uploader->save($path, $fName);
+                    rename($path . DS . $result['file'], $path . DS . $fName);
+                    $data['list_image_tablet'] = Mage::getBaseUrl('media') . 'simi/simicart/productlist/' . $fName;
+                } catch (Exception $e) {
+                    $data['list_image_tablet'] = Mage::getBaseUrl('media') . 'simi/simicart/productlist/' . $_FILES['productlist_image_tablet_o']['name'];
+                }
+            }
+
+            if (isset($data['productlist_image_tablet_o']['delete']) && $data['productlist_image_tablet_o']['delete'] == 1) {
+                Mage::helper('simiconnector')->deleteFile($data['productlist_image_tablet_o']['value']);
+                $data['list_image_tablet'] = '';
             }
 
             $model = Mage::getModel('simiconnector/productlist');

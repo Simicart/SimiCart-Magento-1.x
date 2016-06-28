@@ -40,6 +40,12 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
             'required' => true,
             'name' => 'simicategory_filename',
         ));
+        
+        $fieldset->addField('simicategory_filename_tablet', 'image', array(
+            'label' => Mage::helper('simiconnector')->__('Tablet Image (width:220px, height:220px)'),
+            'required' => true,
+            'name' => 'simicategory_filename_tablet',
+        ));
 
         $fieldset->addField('category_id', 'text', array(
             'name' => 'category_id',
