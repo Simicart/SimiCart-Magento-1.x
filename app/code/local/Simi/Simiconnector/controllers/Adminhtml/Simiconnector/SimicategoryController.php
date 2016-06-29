@@ -122,6 +122,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
             try {
 
                 $model->save();
+                Mage::helper('simiconnector/productlist')->updateMatrixRowHeight($data['matrix_row'], $data['matrix_height_percent']);
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Category was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
                 if ($data['storeview_id'] && is_array($data['storeview_id'])) {

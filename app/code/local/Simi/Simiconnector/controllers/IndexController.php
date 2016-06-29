@@ -6,11 +6,12 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         $this->loadLayout();
         $this->renderLayout();
     }
-
+/*
     public function installDBAction() {
         $setup = new Mage_Core_Model_Resource_Setup('core_setup');
         $installer = $setup;
         $installer->startSetup();
+        
         $installer->run("
     DROP TABLE IF EXISTS {$installer->getTable('simiconnector_simicategory')};
     DROP TABLE IF EXISTS {$installer->getTable('simiconnector_banner')};
@@ -34,6 +35,9 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         `website_id` int(6) default 0,
         `storeview_id` varchar(255) NULL default '',
         `sort_order` int(6) NULL default '0',
+        `matrix_width_percent` varchar(255) NULL default '100',
+        `matrix_height_percent` varchar(255) NULL default '100',
+        `matrix_row` varchar(255) NULL default '1',
         PRIMARY KEY (`simicategory_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
     
@@ -41,7 +45,7 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         `banner_id` int(11) unsigned NOT NULL auto_increment,
         `banner_name` varchar(255) NULL, 
         `banner_url` varchar(255) NULL default '',        
-        `banner_url_tablet` varchar(255) NULL default '',
+        `banner_name_tablet` varchar(255) NULL default '',
         `banner_title` varchar(255) NULL,
         `status` int(11) NULL,  
         `website_id` smallint(5) NULL default 0,
@@ -72,6 +76,9 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         `list_products` text NULL default '',
         `list_status` tinyint(4) NOT NULL default '1',        
         `sort_order` int(6) NULL default '0',
+        `matrix_width_percent` varchar(255) NULL default '100',
+        `matrix_height_percent` varchar(255) NULL default '100',
+        `matrix_row` varchar(255) NULL default '1',
         PRIMARY KEY (`productlist_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         
@@ -184,16 +191,21 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         $installer->endSetup();
         echo 'success';
     }
-    
-    public function updateDB2Action(){
-         $setup = new Mage_Core_Model_Resource_Setup();
+
+    public function updateDB2Action() {
+        $setup = new Mage_Core_Model_Resource_Setup();
         $installer = $setup;
         $installer->startSetup();
-        $installer->getConnection()->addColumn($installer->getTable('simiconnector_banner'), 'banner_name_tablet', 'varchar(255)');
+        $installer->getConnection()->addColumn($installer->getTable('simiconnector_product_list'), 'matrix_width_percent', 'varchar(255)');
+        $installer->getConnection()->addColumn($installer->getTable('simiconnector_product_list'), 'matrix_height_percent', 'varchar(255)');
+        $installer->getConnection()->addColumn($installer->getTable('simiconnector_product_list'), 'matrix_row', 'varchar(255)');
+        
+        $installer->getConnection()->addColumn($installer->getTable('simiconnector_simicategory'), 'matrix_width_percent', 'varchar(255)');
+        $installer->getConnection()->addColumn($installer->getTable('simiconnector_simicategory'), 'matrix_height_percent', 'varchar(255)');
+        $installer->getConnection()->addColumn($installer->getTable('simiconnector_simicategory'), 'matrix_row', 'varchar(255)');
+
         $installer->endSetup();
         echo "success";
-        
-      
     }
-
+*/
 }

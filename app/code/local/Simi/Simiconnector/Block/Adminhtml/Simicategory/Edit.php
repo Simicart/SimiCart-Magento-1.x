@@ -35,7 +35,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit extends Mage_Adminhtm
 
     public function getHeaderText() {
         if (Mage::registry('simicategory_data') && Mage::registry('simicategory_data')->getId())
-            return Mage::helper('simiconnector')->__("Edit Category '%s'", $this->htmlEscape(Mage::registry('simicategory_data')->getTitle()));
+            return Mage::helper('simiconnector')->__("Edit Category '%s'", $this->htmlEscape(Mage::registry('simicategory_data')->getSimicategoryName()));
         return Mage::helper('simiconnector')->__('Add Category');
     }
 

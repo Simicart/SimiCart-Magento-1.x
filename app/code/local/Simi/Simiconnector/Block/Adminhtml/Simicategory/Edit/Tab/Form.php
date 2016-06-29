@@ -21,6 +21,11 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
                 $storeIdArray[] = $visibilityItem->getData('store_view_id');
             }
             $data['storeview_id'] = implode(',', $storeIdArray);
+        } else {
+            $storeIdArray = array();
+            foreach (Mage::getModel('core/store')->getCollection() as $storeModel)
+                $storeIdArray[] = $storeModel->getId();
+            $data['storeview_id'] = implode(',', $storeIdArray);
         }
 
         $fieldset = $form->addFieldset('simicategory_form', array('legend' => Mage::helper('simiconnector')->__('Item information')));
@@ -40,7 +45,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
             'required' => true,
             'name' => 'simicategory_filename',
         ));
-        
+
         $fieldset->addField('simicategory_filename_tablet', 'image', array(
             'label' => Mage::helper('simiconnector')->__('Tablet Image (width:220px, height:220px)'),
             'required' => true,
@@ -101,6 +106,64 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
             'values' => Mage::getSingleton('simiconnector/status')->getOptionHash(),
         ));
 
+        $matrixfieldset = $form->addFieldset('simicategory_matrix', array('legend' => Mage::helper('simiconnector')->__('Matrix Layout Config')));
+
+        if (!$data['matrix_width_percent'])
+            $data['matrix_width_percent'] = 100;
+        if (!$data['matrix_height_percent'])
+            $data['matrix_height_percent'] = 100;
+        if (!$data['matrix_row'])
+            $data['matrix_row'] = 1;
+
+        $matrixfieldset->addField('matrix_width_percent', 'text', array(
+            'label' => Mage::helper('simiconnector')->__('Width Percent'),
+            'required' => false,
+            'name' => 'matrix_width_percent',
+            'comment' => Mage::helper('simiconnector')->__('With Banner Width is 100%'),
+        ));
+
+        $matrixfieldset->addField('matrix_height_percent', 'text', array(
+            'label' => Mage::helper('simiconnector')->__('Height Percent'),
+            'required' => false,
+            'name' => 'matrix_height_percent',
+            'comment' => Mage::helper('simiconnector')->__('With Banner Height is 100%'),
+        ));
+
+        
+        $matrixfieldset->addField('matrix_row', 'select', array(
+            'label' => Mage::helper('simiconnector')->__('Row Number'),
+            'values' => Mage::helper('simiconnector/productlist')->getMatrixRowOptions($storeviewid),
+            'onchange' => 'autoFillHeight(this.value)',
+            'name' => 'matrix_row',
+        ));
+
+
+        foreach (Mage::getModel('core/store')->getCollection() as $storeView) {
+            if (!$data['storeview_scope'])
+                $data['storeview_scope'] = $storeView->getId();
+            $storeviewArray[$storeView->getId()] = $storeView->getName();
+        }
+        
+        $matrixfieldset->addField('storeview_scope', 'select', array(
+            'label' => Mage::helper('simiconnector')->__('Storeview for Mockup Preview'),
+            'name' => 'storeview_scope',
+            'values' => $storeviewArray,
+            'onchange' => 'updateMockupPreview(this.value)',
+            'after_element_html' => '<div id="mockuppreview"></div> <script>
+            '. Mage::helper('simiconnector/productlist')->autoFillMatrixRowHeight() .'
+            function updateMockupPreview(storeview){
+                var urlsend = "' . Mage::helper("adminhtml")->getUrl("*/simiconnector_productlist/getMockup") . '?storeview_id=" + storeview;
+                xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                  if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    document.getElementById("mockuppreview").innerHTML = xhttp.responseText;
+                  }
+                };
+                xhttp.open("GET", urlsend, true);
+                xhttp.send();
+            }
+            Event.observe(window, "load", function(){updateMockupPreview(\'' . $data['storeview_scope'] . '\');});</script>',
+        ));
 
         $form->setValues($data);
         return parent::_prepareForm();

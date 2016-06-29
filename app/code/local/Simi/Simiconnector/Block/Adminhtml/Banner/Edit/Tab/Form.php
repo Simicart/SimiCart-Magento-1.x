@@ -47,6 +47,12 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
             }
             $data['storeview_id'] = implode(',', $storeIdArray);
         }
+        else {
+            $storeIdArray = array();
+            foreach (Mage::getModel('core/store')->getCollection() as $storeModel)
+                $storeIdArray[] = $storeModel->getId();
+            $data['storeview_id'] = implode(',', $storeIdArray);
+        }
         
         $fieldset = $form->addFieldset('simiconnector_form', array('legend' => Mage::helper('simiconnector')->__('Banner information')));
         /*

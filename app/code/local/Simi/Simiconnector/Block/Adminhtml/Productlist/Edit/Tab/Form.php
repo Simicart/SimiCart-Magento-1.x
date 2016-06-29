@@ -46,6 +46,11 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
                 $storeIdArray[] = $visibilityItem->getData('store_view_id');
             }
             $data['storeview_id'] = implode(',', $storeIdArray);
+        } else {
+            $storeIdArray = array();
+            foreach (Mage::getModel('core/store')->getCollection() as $storeModel)
+                $storeIdArray[] = $storeModel->getId();
+            $data['storeview_id'] = implode(',', $storeIdArray);
         }
         $fieldset = $form->addFieldset('simiconnector_form', array('legend' => Mage::helper('simiconnector')->__('Product List information')));
 
@@ -72,7 +77,7 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
             'label' => Mage::helper('simiconnector')->__('Product List Image'),
             'name' => 'productlist_image_o',
         ));
-        
+
         $fieldset->addField('list_image_tablet', 'image', array(
             'label' => Mage::helper('simiconnector')->__('Product List Tablet Image'),
             'name' => 'productlist_image_tablet_o',
@@ -86,7 +91,7 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
 
         if (!$data['list_type'])
             $data['list_type'] = 1;
-            $fieldset->addField('list_type', 'select', array(
+        $fieldset->addField('list_type', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Product List Type'),
             'name' => 'list_type',
             'values' => Mage::helper('simiconnector/productlist')->getTypeOption(),
@@ -199,6 +204,65 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
                 array('value' => 1, 'label' => Mage::helper('simiconnector')->__('Yes')),
                 array('value' => 0, 'label' => Mage::helper('simiconnector')->__('No')),
             )
+        ));
+
+        $matrixfieldset = $form->addFieldset('productlist_matrix', array('legend' => Mage::helper('simiconnector')->__('Matrix Layout Config')));
+
+        if (!$data['matrix_width_percent'])
+            $data['matrix_width_percent'] = 100;
+        if (!$data['matrix_height_percent'])
+            $data['matrix_height_percent'] = 100;
+        if (!$data['matrix_row'])
+            $data['matrix_row'] = 1;
+
+        $matrixfieldset->addField('matrix_width_percent', 'text', array(
+            'label' => Mage::helper('simiconnector')->__('Width Percent'),
+            'required' => false,
+            'name' => 'matrix_width_percent',
+            'comment' => Mage::helper('simiconnector')->__('With Banner Width is 100%'),
+        ));
+
+        $matrixfieldset->addField('matrix_height_percent', 'text', array(
+            'label' => Mage::helper('simiconnector')->__('Height Percent'),
+            'required' => false,
+            'name' => 'matrix_height_percent',
+            'comment' => Mage::helper('simiconnector')->__('With Banner Height is 100%'),
+        ));
+
+        
+        $matrixfieldset->addField('matrix_row', 'select', array(
+            'label' => Mage::helper('simiconnector')->__('Row Number'),
+            'values' => Mage::helper('simiconnector/productlist')->getMatrixRowOptions($storeviewid),
+            'onchange' => 'autoFillHeight(this.value)',
+            'name' => 'matrix_row',
+        ));
+
+
+        foreach (Mage::getModel('core/store')->getCollection() as $storeView) {
+            if (!$data['storeview_scope'])
+                $data['storeview_scope'] = $storeView->getId();
+            $storeviewArray[$storeView->getId()] = $storeView->getName();
+        }
+        
+        $matrixfieldset->addField('storeview_scope', 'select', array(
+            'label' => Mage::helper('simiconnector')->__('Storeview for Mockup Preview'),
+            'name' => 'storeview_scope',
+            'values' => $storeviewArray,
+            'onchange' => 'updateMockupPreview(this.value)',
+            'after_element_html' => '<div id="mockuppreview"></div> <script>
+            '. Mage::helper('simiconnector/productlist')->autoFillMatrixRowHeight() .'
+            function updateMockupPreview(storeview){
+                var urlsend = "' . Mage::helper("adminhtml")->getUrl("*/*/getMockup") . '?storeview_id=" + storeview;
+                xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                  if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    document.getElementById("mockuppreview").innerHTML = xhttp.responseText;
+                  }
+                };
+                xhttp.open("GET", urlsend, true);
+                xhttp.send();
+            }
+            Event.observe(window, "load", function(){updateMockupPreview(\'' . $data['storeview_scope'] . '\');});</script>',
         ));
 
 

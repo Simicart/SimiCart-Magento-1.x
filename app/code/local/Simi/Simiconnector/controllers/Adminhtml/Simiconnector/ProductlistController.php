@@ -92,11 +92,13 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                     if (!is_dir($path)) {
                         try {
                             mkdir($path, 0777, TRUE);
-                        } catch (Exception $e) {                            
+                        } catch (Exception $e) {
+                            
                         }
                     }
                     $file_name = explode(".", $_FILES['productlist_image_o']['name']);
                     $fName = $file_name[0] . "@2x." . $file_name[1];
+                    $fName = str_replace(" ", "_", $fName);
                     $result = $uploader->save($path, $fName);
                     rename($path . DS . $result['file'], $path . DS . $fName);
                     $data['list_image'] = Mage::getBaseUrl('media') . 'simi/simicart/productlist/' . $fName;
@@ -109,7 +111,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                 Mage::helper('simiconnector')->deleteFile($data['productlist_image_o']['value']);
                 $data['list_image'] = '';
             }
-            
+
             if (isset($_FILES['productlist_image_tablet_o']['name']) && $_FILES['productlist_image_tablet_o']['name'] != '') {
                 try {
                     $uploader = new Varien_File_Uploader('productlist_image_tablet_o');
@@ -121,11 +123,13 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                     if (!is_dir($path)) {
                         try {
                             mkdir($path, 0777, TRUE);
-                        } catch (Exception $e) {                            
+                        } catch (Exception $e) {
+                            
                         }
                     }
                     $file_name = explode(".", $_FILES['productlist_image_tablet_o']['name']);
                     $fName = $file_name[0] . "@2x." . $file_name[1];
+                    $fName = str_replace(" ", "_", $fName);
                     $result = $uploader->save($path, $fName);
                     rename($path . DS . $result['file'], $path . DS . $fName);
                     $data['list_image_tablet'] = Mage::getBaseUrl('media') . 'simi/simicart/productlist/' . $fName;
@@ -145,6 +149,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
 
             try {
                 $model->save();
+                Mage::helper('simiconnector/productlist')->updateMatrixRowHeight($data['matrix_row'], $data['matrix_height_percent']);
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Block was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
 
@@ -234,6 +239,12 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
         if ($block) {
             $this->getResponse()->setBody($block->toHtml());
         }
+    }
+
+    public function getMockupAction() {
+        $storeviewid = $this->getRequest()->getParam('storeview_id');
+        echo Mage::helper('simiconnector/productlist')->getMatrixLayoutMockup($storeviewid);
+        exit();
     }
 
 }
