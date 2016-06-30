@@ -143,13 +143,18 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                 $data['list_image_tablet'] = '';
             }
 
+            if (!$data['matrix_width_percent_tablet'])
+                $data['matrix_width_percent_tablet'] = $data['matrix_width_percent'];
+            if (!$data['matrix_height_percent_tablet'])
+                $data['matrix_height_percent_tablet'] = $data['matrix_height_percent'];
+            
             $model = Mage::getModel('simiconnector/productlist');
             $model->setData($data)
                     ->setId($this->getRequest()->getParam('id'));
 
             try {
                 $model->save();
-                Mage::helper('simiconnector/productlist')->updateMatrixRowHeight($data['matrix_row'], $data['matrix_height_percent']);
+                Mage::helper('simiconnector/productlist')->updateMatrixRowHeight($data['matrix_row'], $data['matrix_height_percent'], $data['matrix_height_percent_tablet'] );
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Block was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
 

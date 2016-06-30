@@ -27,7 +27,9 @@ $installer->run("
         `storeview_id` varchar(255) NULL default '',
         `sort_order` int(6) NULL default '0',
         `matrix_width_percent` varchar(255) NULL default '100',
-        `matrix_height_percent` varchar(255) NULL default '100',
+        `matrix_height_percent` varchar(255) NULL default '30',
+        `matrix_width_percent_tablet` varchar(255) NULL default '100',
+        `matrix_height_percent_tablet` varchar(255) NULL default '30',
         `matrix_row` varchar(255) NULL default '1',
         PRIMARY KEY (`simicategory_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -68,7 +70,9 @@ $installer->run("
         `list_status` tinyint(4) NOT NULL default '1',        
         `sort_order` int(6) NULL default '0',
         `matrix_width_percent` varchar(255) NULL default '100',
-        `matrix_height_percent` varchar(255) NULL default '100',
+        `matrix_height_percent` varchar(255) NULL default '30',
+        `matrix_width_percent_tablet` varchar(255) NULL default '100',
+        `matrix_height_percent_tablet` varchar(255) NULL default '30',
         `matrix_row` varchar(255) NULL default '1',
         PRIMARY KEY (`productlist_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -36,7 +36,9 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         `storeview_id` varchar(255) NULL default '',
         `sort_order` int(6) NULL default '0',
         `matrix_width_percent` varchar(255) NULL default '100',
-        `matrix_height_percent` varchar(255) NULL default '100',
+        `matrix_height_percent` varchar(255) NULL default '30',
+        `matrix_width_percent_tablet` varchar(255) NULL default '100',
+        `matrix_height_percent_tablet` varchar(255) NULL default '30',
         `matrix_row` varchar(255) NULL default '1',
         PRIMARY KEY (`simicategory_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -77,7 +79,9 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         `list_status` tinyint(4) NOT NULL default '1',        
         `sort_order` int(6) NULL default '0',
         `matrix_width_percent` varchar(255) NULL default '100',
-        `matrix_height_percent` varchar(255) NULL default '100',
+        `matrix_height_percent` varchar(255) NULL default '30',
+        `matrix_width_percent_tablet` varchar(255) NULL default '100',
+        `matrix_height_percent_tablet` varchar(255) NULL default '30',
         `matrix_row` varchar(255) NULL default '1',
         PRIMARY KEY (`productlist_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -191,21 +195,19 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         $installer->endSetup();
         echo 'success';
     }
-
+*/
     public function updateDB2Action() {
         $setup = new Mage_Core_Model_Resource_Setup();
         $installer = $setup;
         $installer->startSetup();
-        $installer->getConnection()->addColumn($installer->getTable('simiconnector_product_list'), 'matrix_width_percent', 'varchar(255)');
-        $installer->getConnection()->addColumn($installer->getTable('simiconnector_product_list'), 'matrix_height_percent', 'varchar(255)');
-        $installer->getConnection()->addColumn($installer->getTable('simiconnector_product_list'), 'matrix_row', 'varchar(255)');
+        $installer->getConnection()->addColumn($installer->getTable('simiconnector_product_list'), 'matrix_width_percent_tablet', 'varchar(255)');
+        $installer->getConnection()->addColumn($installer->getTable('simiconnector_product_list'), 'matrix_height_percent_tablet', 'varchar(255)');
         
-        $installer->getConnection()->addColumn($installer->getTable('simiconnector_simicategory'), 'matrix_width_percent', 'varchar(255)');
-        $installer->getConnection()->addColumn($installer->getTable('simiconnector_simicategory'), 'matrix_height_percent', 'varchar(255)');
-        $installer->getConnection()->addColumn($installer->getTable('simiconnector_simicategory'), 'matrix_row', 'varchar(255)');
+        $installer->getConnection()->addColumn($installer->getTable('simiconnector_simicategory'), 'matrix_width_percent_tablet', 'varchar(255)');
+        $installer->getConnection()->addColumn($installer->getTable('simiconnector_simicategory'), 'matrix_height_percent_tablet', 'varchar(255)');
 
         $installer->endSetup();
         echo "success";
     }
-*/
+
 }
