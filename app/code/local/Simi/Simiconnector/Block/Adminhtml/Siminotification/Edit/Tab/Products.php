@@ -1,10 +1,8 @@
 <?php
-/**
 
- */
+
 class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Products extends Mage_Adminhtml_Block_Widget_Grid {
     
-
     public function __construct($arguments = array()) {
         parent::__construct($arguments);
         if ($this->getRequest()->getParam('current_grid_id')) {

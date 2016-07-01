@@ -99,7 +99,7 @@
                             <show_in_store>1</show_in_store>                            
                         </is_show_sample_data>		
                         <show_product_type translate="label">
-                            <label>View products default</label>
+                            <label>Products Screen Display Default By:</label>
                             <frontend_type>select</frontend_type>
                             <sort_order>799</sort_order>
                             <source_model>simiconnector/config_source_productsviewtype</source_model>
@@ -125,6 +125,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </categories_in_app>
+                        <is_show_matrix_home_title translate="label">
+                            <label>Show Title For Categories and Product Lists on Home Screen</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1099</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>                            
+                        </is_show_matrix_home_title>	
                     </fields>				
                 </general>
                 <currency translate="label">
@@ -856,7 +865,7 @@
                     </fields>
                 </barcode>
                 <wishlist translate="label">
-                    <label>General Configuration</label>
+                    <label>Wishlist Configuration</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>699</sort_order>
                     <show_in_default>1</show_in_default>

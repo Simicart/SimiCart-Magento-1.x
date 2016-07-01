@@ -1,35 +1,84 @@
 <?php
 
-/**
 
- */
-class Simi_Simiconnector_Block_Adminhtml_Device_Grid extends Mage_Adminhtml_Block_Widget_Grid {
+class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices extends Mage_Adminhtml_Block_Widget_Grid {
 
-    public function __construct() {
-        parent::__construct();
-        $this->setId('deviceGrid');
+    public function __construct($arguments = array()) {
+        parent::__construct($arguments);
+        if ($this->getRequest()->getParam('current_grid_id')) {
+            $this->setId($this->getRequest()->getParam('current_grid_id'));
+        } else {
+            $this->setId('skuChooserGrid_' . $this->getId());
+        }
+
+        $form = $this->getJsFormObject();
+        $gridId = $this->getId();
+        $this->setCheckboxCheckCallback("constructDataDevice($gridId)");
         $this->setDefaultSort('device_id');
-        $this->setDefaultDir('DESC');
-        $this->setSaveParametersInSession(true);
+        $this->setDefaultDir('ASC');
+        $this->setUseAjax(true);
+        if ($this->getRequest()->getParam('collapse')) {
+            $this->setIsCollapsed(true);
+        }
+        $this->setTemplate('simiconnector/siminotification/grid.phtml');
     }
 
     /**
-     * prepare collection for block to display
+     * Retrieve quote store object
+     * @return Mage_Core_Model_Store
+     */
+    public function getStore() {
+        return Mage::app()->getStore();
+    }
+
+    protected function _addColumnFilterToCollection($column) {
+        if ($column->getId() == 'in_devices') {
+            $selected = $this->_getSelectedDevices();
+            if (empty($selected)) {
+                $selected = '';
+            }
+            if ($column->getFilter()->getValue()) {
+                $this->getCollection()->addFieldToFilter('device_id', array('in' => $selected));
+            } else {
+                $this->getCollection()->addFieldToFilter('device_id', array('nin' => $selected));
+            }
+        } else {
+            parent::_addColumnFilterToCollection($column);
+        }
+        return $this;
+    }
+
+    /**
+     * Prepare Catalog Product Collection for attribute SKU in Promo Conditions SKU chooser
      *
-     * @return Simi_Connector_Block_Adminhtml_Banner_Grid
+     * @return Mage_Adminhtml_Block_Promo_Widget_Chooser_Sku
      */
     protected function _prepareCollection() {
         $collection = Mage::getModel('simiconnector/device')->getCollection();
         $this->setCollection($collection);
+
         return parent::_prepareCollection();
     }
 
     /**
-     * prepare columns for this grid
+     * Define Cooser Grid Columns and filters
      *
-     * @return Simi_Connector_Block_Adminhtml_Banner_Grid
+     * @return Mage_Adminhtml_Block_Promo_Widget_Chooser_Sku
      */
     protected function _prepareColumns() {
+
+        $this->addColumn('in_devices', array(
+            'header_css_class' => 'a-center',
+            'type' => 'checkbox',
+            'name' => 'in_devices',
+            'values' => $this->_getSelectedDevices(),
+            'align' => 'center',
+            'index' => 'in_devices',
+            'use_index' => true,
+            'width' => '50px',
+            'renderer' => 'simiconnector/adminhtml_siminotification_edit_tab_renderer_devices'
+        ));
+
         $this->addColumn('device_id', array(
             'header' => Mage::helper('simiconnector')->__('ID'),
             'align' => 'right',
@@ -42,7 +91,6 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Grid extends Mage_Adminhtml_Bloc
             'width' => '150px',
             'index' => 'user_email'
         ));
-
         $this->addColumn('plaform_id', array(
             'header' => Mage::helper('simiconnector')->__('Device Type'),
             'align' => 'left',
@@ -97,72 +145,41 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Grid extends Mage_Adminhtml_Bloc
             'index' => 'created_time',
             'type' => 'datetime'
         ));
-        
+
         $this->addColumn('app_id', array(
             'header' => Mage::helper('simiconnector')->__('App Id'),
             'width' => '100px',
             'align' => 'right',
             'index' => 'app_id'
         ));
-        
+
         $this->addColumn('build_version', array(
             'header' => Mage::helper('simiconnector')->__('Build Version'),
             'width' => '50px',
             'align' => 'right',
             'index' => 'build_version'
         ));
-        /*
-        $this->addColumn('device_token', array(
-            'header' => Mage::helper('simiconnector')->__('Device Token'),
-            'width' => '150px',
-            'align' => 'right',
-            'index' => 'device_token'
-        ));
-        */
-        $this->addColumn('action', array(
-            'header' => Mage::helper('simiconnector')->__('Action'),
-            'width' => '80px',
-            'type' => 'action',
-            'getter' => 'getId',
-            'actions' => array(
-                array(
-                    'caption' => Mage::helper('simiconnector')->__('View'),
-                    'url' => array('base' => '*/*/edit'),
-                    'field' => 'id'
-                )),
-            'filter' => false,
-            'sortable' => false,
-            'index' => 'stores',
-            'is_system' => true,
-        ));
+
         return parent::_prepareColumns();
     }
 
-    /**
-     * prepare mass action for this grid
-     *
-     * @return Magestore_Madapter_Block_Adminhtml_Madapter_Grid
-     */
-    protected function _prepareMassaction() {
-        $this->setMassactionIdField('notice_id');
-        $this->getMassactionBlock()->setFormFieldName('siminotification');
-
-        $this->getMassactionBlock()->addItem('delete', array(
-            'label' => Mage::helper('simiconnector')->__('Delete'),
-            'url' => $this->getUrl('*/*/massDelete'),
-            'confirm' => Mage::helper('simiconnector')->__('Are you sure?')
+    public function getGridUrl() {
+        return $this->getUrl('*/*/chooseDevices', array(
+                    '_current' => true,
+                    'current_grid_id' => $this->getId(),
+                    'selected_ids' => implode(',', $this->_getSelectedDevices()),
+                    'collapse' => null
         ));
-
-        return $this;
     }
 
-    /**
-     * get url for each row in grid
-     *
-     * @return string
-     */
-    public function getRowUrl($row) {
-        return $this->getUrl('*/*/edit', array('id' => $row->getId()));
+    protected function _getSelectedDevices() {
+        $devices = $this->getRequest()->getPost('selected', array());
+        if (!$devices) {
+            if ($this->getRequest()->getParam('selected_ids')) {
+                $devices = explode(',', $this->getRequest()->getParam('selected_ids'));
+            }
+        }
+        return $devices;
     }
 
 }

@@ -67,6 +67,9 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
         return $collection;
     }
 
+    /*
+     * Matrix Helper Functions
+     */
     public function getMatrixRowOptions() {
         $rows = array();
         $highestRow = 0;

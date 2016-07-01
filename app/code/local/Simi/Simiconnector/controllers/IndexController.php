@@ -200,11 +200,7 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         $setup = new Mage_Core_Model_Resource_Setup();
         $installer = $setup;
         $installer->startSetup();
-        $installer->getConnection()->addColumn($installer->getTable('simiconnector_product_list'), 'matrix_width_percent_tablet', 'varchar(255)');
-        $installer->getConnection()->addColumn($installer->getTable('simiconnector_product_list'), 'matrix_height_percent_tablet', 'varchar(255)');
-        
-        $installer->getConnection()->addColumn($installer->getTable('simiconnector_simicategory'), 'matrix_width_percent_tablet', 'varchar(255)');
-        $installer->getConnection()->addColumn($installer->getTable('simiconnector_simicategory'), 'matrix_height_percent_tablet', 'varchar(255)');
+        $installer->getConnection()->addColumn($installer->getTable('simiconnector_notice'), 'devices_pushed', 'text NULL default ""');
 
         $installer->endSetup();
         echo "success";

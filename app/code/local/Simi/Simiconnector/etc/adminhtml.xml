@@ -9,11 +9,6 @@
                     <title>Connector Settings</title>      
                     <sort_order>0</sort_order>
                     <children>
-                        <connector_app module="simiconnector" translate="title">
-                            <title>Apps (pending)</title>
-                            <sort_order>0</sort_order>
-                            <action>adminhtml/connector_connector</action>
-                        </connector_app>
                         <siminotification module="simiconnector" translate="title">
                             <title>Notifications</title>
                             <sort_order>2</sort_order>
@@ -35,11 +30,6 @@
                                 </history>
                             </children>
                         </siminotification>
-                        <promoteapp module="simiconnector" translate="title">				
-                            <title>Promote Apps (pending)</title>
-                            <sort_order>170</sort_order>
-                            <action>adminhtml/system_config/edit/section/popup</action>
-                        </promoteapp>
                         <settings module="simiconnector" translate="title">
                             <title>General Settings</title>
                             <sort_order>1000</sort_order>

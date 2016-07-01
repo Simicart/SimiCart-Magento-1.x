@@ -82,7 +82,8 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'decimal_separator' => Mage::getStoreConfig('simiconnector/currency/decimal_separator'),
                 'min_number_of_decimals' => Mage::getStoreConfig('simiconnector/currency/min_number_of_decimals'),
                 'max_number_of_decimals' => Mage::getStoreConfig('simiconnector/currency/max_number_of_decimals'),
-                'currencies' => $currencies
+                'currencies' => $currencies,
+                'is_show_matrix_home_title' => Mage::getStoreConfig('simiconnector/general/is_show_matrix_home_title'),
             ),
             'sales' => array(
                 'sales_reorder_allow' => Mage::getStoreConfig('sales/reorder/allow'),

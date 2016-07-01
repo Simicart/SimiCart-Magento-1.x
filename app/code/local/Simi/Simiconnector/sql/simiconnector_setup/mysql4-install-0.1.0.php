@@ -125,6 +125,7 @@ $installer->run("
         `zipcode` varchar(25) NOT NULL default '',
         `state` varchar(255) NOT NULL default '',
         `show_popup` smallint(5) unsigned NULL default 0,
+        `devices_pushed` text NULL default '',
         `created_time` datetime NOT NULL default '0000-00-00 00:00:00',
         PRIMARY KEY (`notice_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;

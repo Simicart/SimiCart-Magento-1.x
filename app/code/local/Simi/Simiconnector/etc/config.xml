@@ -153,6 +153,7 @@
                 <show_product_type>0</show_product_type>
                 <is_show_sample_data>1</is_show_sample_data>
                 <base_url></base_url>
+                <is_show_matrix_home_title>1</is_show_matrix_home_title>
             </general>  
             <currency>                                           
                 <thousand_separator>,</thousand_separator>

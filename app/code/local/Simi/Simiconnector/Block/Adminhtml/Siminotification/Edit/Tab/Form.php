@@ -31,17 +31,18 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
             'name' => 'website_id',
             'values' => $list_web,
         ));
-
-        $fieldset->addField('notice_sanbox', 'select', array(
-            'label' => Mage::helper('simiconnector')->__('Send To'),
-            'name' => 'notice_sanbox',
-            'values' => array(
-                array('value' => 0, 'label' => Mage::helper('simiconnector')->__('Both Live App and Test App')),
-                array('value' => 1, 'label' => Mage::helper('simiconnector')->__('Test App')),
-                array('value' => 2, 'label' => Mage::helper('simiconnector')->__('Live App')),
-            ),
-            'note' => '',
-        ));
+        /*
+          $fieldset->addField('notice_sanbox', 'select', array(
+          'label' => Mage::helper('simiconnector')->__('Send To'),
+          'name' => 'notice_sanbox',
+          'values' => array(
+          array('value' => 0, 'label' => Mage::helper('simiconnector')->__('Both Live App and Test App')),
+          array('value' => 1, 'label' => Mage::helper('simiconnector')->__('Test App')),
+          array('value' => 2, 'label' => Mage::helper('simiconnector')->__('Live App')),
+          ),
+          'note' => '',
+          ));
+         */
 
         $fieldset->addField('show_popup', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Show Popup'),
@@ -238,45 +239,87 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
         ));
 
         $fieldsetFilter = $form->addFieldset('filter_form', array(
-            'legend' => Mage::helper('simiconnector')->__('Notification Device & Location')
+            'legend' => Mage::helper('simiconnector')->__('Notification Devices Select')
         ));
+        $deviceIds = Mage::getModel('simiconnector/device')->getCollection()->getAllIds();
 
-        $fieldsetFilter->addField('device_id', 'select', array(
-            'label' => Mage::helper('simiconnector')->__('Device Type'),
-            'name' => 'device_id',
-            'values' => array(
-                array('value' => 0, 'label' => Mage::helper('simiconnector')->__('All')),
-                array('value' => 1, 'label' => Mage::helper('simiconnector')->__('IOS')),
-                array('value' => 2, 'label' => Mage::helper('simiconnector')->__('Android')),
-            ),
-        ));
-
-
-
-        $fieldsetFilter->addField('address', 'text', array(
-            'name' => 'address',
-            'label' => Mage::helper('simiconnector')->__('Address'),
-        ));
-
-        $fieldsetFilter->addField('country', 'select', array(
-            'name' => 'country',
-            'label' => Mage::helper('simiconnector')->__('Country'),
-            'values' => Mage::helper('simiconnector/siminotification')->getOptionCountry(),
-        ));
-
-        $fieldsetFilter->addField('state', 'text', array(
-            'name' => 'state',
-            'label' => Mage::helper('simiconnector')->__('State/Province'),
-        ));
-
-        $fieldsetFilter->addField('city', 'text', array(
-            'name' => 'city',
-            'label' => Mage::helper('simiconnector')->__('City'),
-        ));
-
-        $fieldsetFilter->addField('zipcode', 'text', array(
-            'name' => 'zipcode',
-            'label' => Mage::helper('simiconnector')->__('Zip Code'),
+        $fieldsetFilter->addField('devices_pushed', 'text', array(
+            'name' => 'devices_pushed',
+            'class' => 'required-entry',
+            'required' => true,
+            'label' => Mage::helper('simiconnector')->__('Device IDs'),
+            'note' => Mage::helper('simiconnector')->__('Select your Devices'),
+            'after_element_html' => '
+                <a id="product_link" href="javascript:void(0)" onclick="toggleMainDevices()"><img src="' . $this->getSkinUrl('images/rule_chooser_trigger.gif') . '" alt="" class="v-middle rule-chooser-trigger" title="Select Device"></a>
+                <input type="hidden" value="' . $deviceIds . '" id="device_all_ids"/>
+                <div id="main_devices_select" style="display:none"></div>  
+                <script type="text/javascript">
+                    function toggleMainDevices(check){
+                        var cate = $("main_devices_select");
+                        if($("main_devices_select").style.display == "none" || (check ==1) || (check == 2)){
+                            var url = "' . $this->getUrl('adminhtml/simiconnector_siminotification/chooseDevices') . '";                        
+                            if(check == 1){
+                                $("devices_pushed").value = $("devices_all_ids").value;
+                            }else if(check == 2){
+                                $("devices_pushed").value = "";
+                            }
+                            var params = $("devices_pushed").value.split(", ");
+                            var parameters = {"form_key": FORM_KEY,"selected[]":params };
+                            var request = new Ajax.Request(url,
+                                {
+                                    evalScripts: true,
+                                    parameters: parameters,
+                                    onComplete:function(transport){
+                                        $("main_devices_select").update(transport.responseText);
+                                        $("main_devices_select").style.display = "block"; 
+                                    }
+                                });
+                        if(cate.style.display == "none"){
+                            cate.style.display = "";
+                        }else{
+                            cate.style.display = "none";
+                        } 
+                    }else{
+                        cate.style.display = "none";                    
+                    }
+                };
+                var griddevice;
+                   
+                function constructDataDevice(div){
+                    griddevice = window[div.id+"JsObject"];
+                    if(!griddevice.reloadParams){
+                        griddevice.reloadParams = {};
+                        griddevice.reloadParams["selected[]"] = $("devices_pushed").value.split(", ");
+                    }
+                }
+                
+                function selectDevice(e) {
+                        if(e.checked == true){
+                            if(e.id == "main_on"){
+                                $("devices_pushed").value = $("device_all_ids").value;
+                            }else{
+                                if($("devices_pushed").value == "")
+                                    $("devices_pushed").value = e.value;
+                                else
+                                    $("devices_pushed").value = $("devices_pushed").value + ", "+e.value;
+                                    
+                                grid.reloadParams["selected[]"] = $("devices_pushed").value;
+                            }
+                        }else{
+                             if(e.id == "main_on"){
+                                $("devices_pushed").value = "";
+                            }else{
+                                var vl = e.value;
+                                if($("devices_pushed").value.search(vl) == 0){
+                                    $("devices_pushed").value = $("devices_pushed").value.replace(vl+", ","");
+                                }else{
+                                    $("devices_pushed").value = $("devices_pushed").value.replace(", "+ vl,"");
+                                }
+                            }
+                        }
+                    }
+            </script>
+            '
         ));
 
         $form->setValues($data);

@@ -571,4 +571,18 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
         }
     }
 
+    /*
+     * Get Device to Push Notification
+     */
+
+    public function chooseDevicesAction() {
+        $request = $this->getRequest();
+        $block = $this->getLayout()->createBlock(
+                'simiconnector/adminhtml_siminotification_edit_tab_devices', 'promo_widget_chooser_device_id', array('js_form_object' => $request->getParam('form'),
+        ));
+        if ($block) {
+            $this->getResponse()->setBody($block->toHtml());
+        }
+    }
+
 }
