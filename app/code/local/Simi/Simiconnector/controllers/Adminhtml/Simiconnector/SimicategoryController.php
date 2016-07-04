@@ -65,9 +65,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                         }
                     }
                     $result = $uploader->save($path, $_FILES['simicategory_filename']['name']);
-                    $data['simicategory_filename'] = Mage::getBaseUrl('media') . 'simi/simicart/simicategory/' . $result['file'];
+                    $data['simicategory_filename'] = Mage::getBaseUrl('media') . 'simi/simiconnector/simicategory/' . $result['file'];
                 } catch (Exception $e) {
-                    $data['simicategory_filename'] = Mage::getBaseUrl('media') . 'simi/simicart/simicategory/' . $_FILES['simicategory_filename']['name'];
+                    $data['simicategory_filename'] = Mage::getBaseUrl('media') . 'simi/simiconnector/simicategory/' . $_FILES['simicategory_filename']['name'];
                 }
             }
 
@@ -96,9 +96,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                         }
                     }
                     $result = $uploader->save($path, $_FILES['simicategory_filename_tablet']['name']);
-                    $data['simicategory_filename_tablet'] = Mage::getBaseUrl('media') . 'simi/simicart/simicategory/' . $result['file'];
+                    $data['simicategory_filename_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/simicategory/' . $result['file'];
                 } catch (Exception $e) {
-                    $data['simicategory_filename_tablet'] = Mage::getBaseUrl('media') . 'simi/simicart/simicategory/' . $_FILES['simicategory_filename_tablet']['name'];
+                    $data['simicategory_filename_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/simicategory/' . $_FILES['simicategory_filename_tablet']['name'];
                 }
             }
 

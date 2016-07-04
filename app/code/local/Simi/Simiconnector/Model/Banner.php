@@ -37,7 +37,7 @@ class Simi_Simiconnector_Model_Banner extends Mage_Core_Model_Abstract {
                 ->addFieldToFilter('website_id', array('in' => array($website_id, 0)));
 
         foreach ($collection as $item) {
-            $path = Mage::getBaseUrl('media') . 'simi/simicart/banner' . '/' . $item->getWebsiteId() . '/' . $item->getBannerName();
+            $path = Mage::getBaseUrl('media') . 'simi/simiconnector/banner' . '/' . $item->getWebsiteId() . '/' . $item->getBannerName();
             $categoryName = '';
             $categoryChildrenCount = '';
             if ($item->getCategoryId()) {

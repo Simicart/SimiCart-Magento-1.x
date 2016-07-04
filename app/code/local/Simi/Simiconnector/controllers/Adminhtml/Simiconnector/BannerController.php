@@ -105,9 +105,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                     } catch (Exception $e) {
 
                     }
-                    $data['banner_name'] = Mage::getBaseUrl('media') . 'simi/simicart/banner/' . $result['file'];
+                    $data['banner_name'] = Mage::getBaseUrl('media') . 'simi/simiconnector/banner/' . $result['file'];
                 } catch (Exception $e) {
-                    $data['banner_name'] = Mage::getBaseUrl('media') . 'simi/simicart/banner/' . $_FILES['banner_name_co']['name'];
+                    $data['banner_name'] = Mage::getBaseUrl('media') . 'simi/simiconnector/banner/' . $_FILES['banner_name_co']['name'];
                 }
             } 
             if (isset($data['banner_name_co']['delete']) && $data['banner_name_co']['delete'] == 1) {                
@@ -142,9 +142,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                     } catch (Exception $e) {
 
                     }
-                    $data['banner_name_tablet'] = Mage::getBaseUrl('media') . 'simi/simicart/banner/' . $result['file'];
+                    $data['banner_name_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/banner/' . $result['file'];
                 } catch (Exception $e) {
-                    $data['banner_name_tablet'] = Mage::getBaseUrl('media') . 'simi/simicart/banner/' . $_FILES['banner_name_tablet_co']['name'];
+                    $data['banner_name_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/banner/' . $_FILES['banner_name_tablet_co']['name'];
                 }
             } 
             if (isset($data['banner_name_tablet_co']['delete']) && $data['banner_name_tablet_co']['delete'] == 1) {                

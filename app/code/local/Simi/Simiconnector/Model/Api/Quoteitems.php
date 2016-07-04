@@ -80,7 +80,14 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
     public function addToCart() {
         $data = $this->getData();
         $cart = $this->_getCart();
-        $params = $this->convertParams((array) $data['contents']);
+		
+        $controller = $data['controller'];
+        $contents = $controller->getRequest()->getRawBody(); // using without GET method
+        if ($contents && strlen($contents)) {
+            $contents = urldecode($contents);
+            $params = json_decode($contents, true);
+        }
+        $params = $this->convertParams($params);
         if (isset($params['qty'])) {
             $filter = new Zend_Filter_LocalizedToNormalized(
                     array('locale' => Mage::app()->getLocale()->getLocaleCode())

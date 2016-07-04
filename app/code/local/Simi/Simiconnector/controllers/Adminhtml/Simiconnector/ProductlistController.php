@@ -101,9 +101,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                     $fName = str_replace(" ", "_", $fName);
                     $result = $uploader->save($path, $fName);
                     rename($path . DS . $result['file'], $path . DS . $fName);
-                    $data['list_image'] = Mage::getBaseUrl('media') . 'simi/simicart/productlist/' . $fName;
+                    $data['list_image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlist/' . $fName;
                 } catch (Exception $e) {
-                    $data['list_image'] = Mage::getBaseUrl('media') . 'simi/simicart/productlist/' . $_FILES['productlist_image_o']['name'];
+                    $data['list_image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlist/' . $_FILES['productlist_image_o']['name'];
                 }
             }
 
@@ -132,9 +132,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                     $fName = str_replace(" ", "_", $fName);
                     $result = $uploader->save($path, $fName);
                     rename($path . DS . $result['file'], $path . DS . $fName);
-                    $data['list_image_tablet'] = Mage::getBaseUrl('media') . 'simi/simicart/productlist/' . $fName;
+                    $data['list_image_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlist/' . $fName;
                 } catch (Exception $e) {
-                    $data['list_image_tablet'] = Mage::getBaseUrl('media') . 'simi/simicart/productlist/' . $_FILES['productlist_image_tablet_o']['name'];
+                    $data['list_image_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlist/' . $_FILES['productlist_image_tablet_o']['name'];
                 }
             }
 

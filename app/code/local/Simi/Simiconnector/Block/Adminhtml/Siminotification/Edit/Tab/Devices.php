@@ -3,6 +3,8 @@
 
 class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices extends Mage_Adminhtml_Block_Widget_Grid {
 
+    public $storeview_id;
+
     public function __construct($arguments = array()) {
         parent::__construct($arguments);
         if ($this->getRequest()->getParam('current_grid_id')) {
@@ -10,7 +12,6 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
         } else {
             $this->setId('skuChooserGrid_' . $this->getId());
         }
-
         $form = $this->getJsFormObject();
         $gridId = $this->getId();
         $this->setCheckboxCheckCallback("constructDataDevice($gridId)");
@@ -20,7 +21,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
         if ($this->getRequest()->getParam('collapse')) {
             $this->setIsCollapsed(true);
         }
-        $this->setTemplate('simiconnector/siminotification/grid.phtml');
+        $this->setTemplate('simiconnector/siminotification/devicegrid.phtml');
     }
 
     /**
@@ -54,7 +55,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
      * @return Mage_Adminhtml_Block_Promo_Widget_Chooser_Sku
      */
     protected function _prepareCollection() {
-        $collection = Mage::getModel('simiconnector/device')->getCollection();
+        $collection = Mage::getModel('simiconnector/device')->getCollection()->addFieldToFilter('storeview_id',$this->storeview_id);
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
@@ -168,6 +169,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
                     '_current' => true,
                     'current_grid_id' => $this->getId(),
                     'selected_ids' => implode(',', $this->_getSelectedDevices()),
+                    'storeview_id' => $this->storeview_id,
                     'collapse' => null
         ));
     }

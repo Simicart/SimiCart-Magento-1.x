@@ -188,11 +188,11 @@
                     <fields>
                         <upload_pem_file translate="label tooltip comment">
                             <label>Upload Apple PEM file</label>
-                            <comment>Android for Apple Device Notification Sending</comment>
+                            <comment>Certificate (PEM) for Apple Device Notification Sending</comment>
                             <frontend_type>file</frontend_type>
                             <sort_order>1</sort_order>
                             <backend_model>adminhtml/system_config_backend_file</backend_model>
-                            <upload_dir config="system/filesystem/media" scope_info="1">simi/simicart/pem/ios</upload_dir>
+                            <upload_dir config="system/filesystem/media" scope_info="1">simi/simiconnector/pem/manual</upload_dir>
                             <base_url type="media" scope_info="1">admin-config-uploads</base_url>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>

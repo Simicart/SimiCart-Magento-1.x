@@ -112,9 +112,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                     $fName = $file_name[0] . "@2x." . $file_name[1];
                     $result = $uploader->save($path, $fName);
                     rename($path . DS . $result['file'], $path . DS . $fName);
-                    $data['cms_image'] = Mage::getBaseUrl('media') . 'simi/simicart/cms/' . $fName;
+                    $data['cms_image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/cms/' . $fName;
                 } catch (Exception $e) {
-                    $data['cms_image'] = Mage::getBaseUrl('media') . 'simi/simicart/cms/' . $_FILES['cms_image_o']['name'];
+                    $data['cms_image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/cms/' . $_FILES['cms_image_o']['name'];
                 }
             }
 

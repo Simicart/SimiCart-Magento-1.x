@@ -72,6 +72,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
             'telephone' => $data->getTelephone(),
             'email' => $customer->getEmail(),
             'company' => $data->getCompany(),
+            'fax' => $data->getFax(),
             'latlng' => $street[2] != NULL ? $street[2] : "",
         );
     }

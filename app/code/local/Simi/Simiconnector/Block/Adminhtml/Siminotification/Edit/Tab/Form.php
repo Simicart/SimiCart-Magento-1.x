@@ -8,15 +8,6 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
     protected function _prepareForm() {
         $form = new Varien_Data_Form();
         $this->setForm($form);
-        $websites = Mage::helper('simiconnector')->getWebsites();
-
-        $list_web = array();
-        foreach ($websites as $website) {
-            $list_web[] = array(
-                'value' => $website->getId(),
-                'label' => $website->getName(),
-            );
-        }
 
         if (Mage::getSingleton('adminhtml/session')->getSiminotificationData()) {
             $data = Mage::getSingleton('adminhtml/session')->getSiminotificationData();
@@ -26,23 +17,43 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
 
         $fieldset = $form->addFieldset('siminotification_form', array('legend' => Mage::helper('simiconnector')->__('Notification Content')));
         $fieldset->addType('datetime', 'Simi_Simiconnector_Block_Adminhtml_Device_Edit_Renderer_Datetime');
-        $fieldset->addField('website_id', 'select', array(
-            'label' => Mage::helper('simiconnector')->__('Website'),
-            'name' => 'website_id',
-            'values' => $list_web,
+
+        $stores = Mage::getModel('core/store')->getCollection();
+
+        $list_store = array();
+        foreach ($stores as $store) {
+            $list_store[] = array(
+                'value' => $store->getId(),
+                'label' => $store->getName(),
+            );
+        }
+        $fieldset->addField('storeview_id', 'select', array(
+            'label' => Mage::helper('simiconnector')->__('Store View'),
+            'name' => 'storeview_id',
+            'note' => Mage::helper('simiconnector')->__('After changed this setting, you would need to re-select the devices to be sent'),
+            'values' => $list_store,
+            'onchange' => 'clearDevices()'
         ));
-        /*
-          $fieldset->addField('notice_sanbox', 'select', array(
-          'label' => Mage::helper('simiconnector')->__('Send To'),
-          'name' => 'notice_sanbox',
-          'values' => array(
-          array('value' => 0, 'label' => Mage::helper('simiconnector')->__('Both Live App and Test App')),
-          array('value' => 1, 'label' => Mage::helper('simiconnector')->__('Test App')),
-          array('value' => 2, 'label' => Mage::helper('simiconnector')->__('Live App')),
-          ),
-          'note' => '',
-          ));
-         */
+        
+        $fieldset->addField('notice_sanbox', 'select', array(
+            'label' => Mage::helper('simiconnector')->__('Send To'),
+            'name' => 'notice_sanbox',
+            'values' => array(			
+                array('value' => 1, 'label' => Mage::helper('simiconnector')->__('Test App')),
+                array('value' => 2, 'label' => Mage::helper('simiconnector')->__('Live App')),
+            ),
+            'note' => '',
+        ));
+        
+        $fieldset->addField('device_id', 'select', array(
+            'label' => Mage::helper('simiconnector')->__('Device Type'),
+            'name' => 'device_id',
+            'values' => array(
+                array('value' => 0, 'label' => Mage::helper('simiconnector')->__('All')),
+                array('value' => 1, 'label' => Mage::helper('simiconnector')->__('IOS')),
+                array('value' => 2, 'label' => Mage::helper('simiconnector')->__('Android')),
+            ),
+        ));
 
         $fieldset->addField('show_popup', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Show Popup'),
@@ -254,10 +265,17 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                 <input type="hidden" value="' . $deviceIds . '" id="device_all_ids"/>
                 <div id="main_devices_select" style="display:none"></div>  
                 <script type="text/javascript">
+                    function clearDevices(){                    
+                        $("main_devices_select").style.display == "none";
+                        toggleMainDevices(2);
+                    }
+                    function updateNumberSeleced(){
+                        $("note_devices_pushed_number").update($("devices_pushed").value.split(", ").size());
+                    }
                     function toggleMainDevices(check){
                         var cate = $("main_devices_select");
                         if($("main_devices_select").style.display == "none" || (check ==1) || (check == 2)){
-                            var url = "' . $this->getUrl('adminhtml/simiconnector_siminotification/chooseDevices') . '";                        
+                            var url = "' . $this->getUrl('adminhtml/simiconnector_siminotification/chooseDevices') . '?storeview_id="+$("storeview_id").value;                        
                             if(check == 1){
                                 $("devices_pushed").value = $("devices_all_ids").value;
                             }else if(check == 2){
@@ -282,7 +300,9 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                     }else{
                         cate.style.display = "none";                    
                     }
+                    updateNumberSeleced();
                 };
+                
                 var griddevice;
                    
                 function constructDataDevice(div){
@@ -292,7 +312,39 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                         griddevice.reloadParams["selected[]"] = $("devices_pushed").value.split(", ");
                     }
                 }
-                
+                function toogleCheckAllDevices(el){
+                    if(el == true){
+                        $$("#main_devices_select input[type=checkbox][class=checkbox]").each(function(e){
+                            if(e.name != "check_all"){
+                                if(!e.checked){
+                                    if($("devices_pushed").value == "")
+                                        $("devices_pushed").value = e.value;
+                                    else
+                                        $("devices_pushed").value = $("devices_pushed").value + ", "+e.value;
+                                    e.checked = true;
+                                    griddevice.reloadParams["selected[]"] = $("devices_pushed").value.split(", ");
+                                }
+                            }
+                        });
+                    }else{
+                        $$("#main_devices_select input[type=checkbox][class=checkbox]").each(function(e){
+                            if(e.name != "check_all"){
+                                if(e.checked){
+                                    var vl = e.value;
+                                    if($("devices_pushed").value.search(vl) == 0){
+                                        if($("devices_pushed").value == vl) $("devices_pushed").value = "";
+                                        $("devices_pushed").value = $("devices_pushed").value.replace(vl+", ","");
+                                    }else{
+                                        $("devices_pushed").value = $("devices_pushed").value.replace(", "+ vl,"");
+                                    }
+                                    e.checked = false;
+                                    griddevice.reloadParams["selected[]"] = $("devices_pushed").value.split(", ");
+                                }
+                            }
+                        });
+                    }
+                    updateNumberSeleced();
+                }
                 function selectDevice(e) {
                         if(e.checked == true){
                             if(e.id == "main_on"){
@@ -302,8 +354,8 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                                     $("devices_pushed").value = e.value;
                                 else
                                     $("devices_pushed").value = $("devices_pushed").value + ", "+e.value;
-                                    
-                                grid.reloadParams["selected[]"] = $("devices_pushed").value;
+                                e.checked == false;
+                                griddevice.reloadParams["selected[]"] = $("devices_pushed").value.split(", ");
                             }
                         }else{
                              if(e.id == "main_on"){
@@ -311,12 +363,18 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                             }else{
                                 var vl = e.value;
                                 if($("devices_pushed").value.search(vl) == 0){
-                                    $("devices_pushed").value = $("devices_pushed").value.replace(vl+", ","");
+                                    if ($("devices_pushed").value.search(",") == -1)
+                                        $("devices_pushed").value = "";
+                                    else
+                                        $("devices_pushed").value = $("devices_pushed").value.replace(vl+", ","");
                                 }else{
                                     $("devices_pushed").value = $("devices_pushed").value.replace(", "+ vl,"");
                                 }
+                                e.checked == false;
+                                griddevice.reloadParams["selected[]"] = $("devices_pushed").value.split(", ");
                             }
                         }
+                        updateNumberSeleced();
                     }
             </script>
             '
