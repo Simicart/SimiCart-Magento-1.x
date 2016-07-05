@@ -87,7 +87,7 @@ $installer->run("
     
     CREATE TABLE {$installer->getTable('simiconnector_device')} (
         `device_id` int(11) unsigned NOT NULL auto_increment,
-        `device_token` varchar(255) NOT NULL UNIQUE,   
+        `device_token` varchar(255) NOT NULL default '',   
         `plaform_id` int (11),
         `storeview_id` int (11),
         `latitude` varchar(30) NOT NULL default '',

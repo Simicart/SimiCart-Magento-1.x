@@ -50,11 +50,10 @@ class Simi_Simiconnector_Block_Adminhtml_History_Grid extends Mage_Adminhtml_Blo
             'index' => 'notice_content',
         ));
 
-        $this->addColumn('website_id', array(
-            'header' => Mage::helper('simiconnector')->__('Website'),
+        $this->addColumn('storeview_id', array(
+            'header' => Mage::helper('simiconnector')->__('Storeview Id'),
             'width' => '100px',
-            'index' => 'website_id',
-            'renderer' => 'simiconnector/adminhtml_grid_renderer_website',
+            'index' => 'storeview_id',
         ));
 
         $this->addColumn('device_id', array(

@@ -38,8 +38,10 @@ class Simi_Simiconnector_Model_Device extends Mage_Core_Model_Abstract {
         $longitude = $deviceData->longitude;
         $addresses = $this->getLocationInfo($latitude, $longitude);
         $existed_device = $this->getCollection()->addFieldToFilter('device_token', $deviceData->device_token)->getFirstItem();
-        if ($existed_device->getId())
-            $this->setId($existed_device->getId());
+        if ($existed_device->getId()) {
+            if (($existed_device->getData('storeview_id') != null) && ($existed_device->getData('storeview_id') == Mage::app()->getStore()->getStoreId()))
+                $this->setId($existed_device->getId());
+        }
         if ($addresses) {
             $this->setData('address', $addresses['address']);
             $this->setData('city', $addresses['city']);

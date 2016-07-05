@@ -60,6 +60,24 @@
                 </Simi_Simiconnector>
             </modules>
         </translate>
+        <events>
+            <catalog_product_save_before>
+                <observers>
+                    <siminotification_product_save_before>
+                        <class>simiconnector/observer</class>
+                        <method>sendNotificationProductChangePrice</method>
+                    </siminotification_product_save_before>
+                </observers>
+            </catalog_product_save_before>
+            <catalog_product_save_after>
+                <observers>
+                    <siminotification_product_save_after>
+                        <class>simiconnector/observer</class>
+                        <method>sendNotificationNewProduct</method>
+                    </siminotification_product_save_after>
+                </observers>
+            </catalog_product_save_after>
+        </events>
     </adminhtml>   
     <global>
         <models>

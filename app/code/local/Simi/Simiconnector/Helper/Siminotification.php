@@ -20,7 +20,6 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
     }
 
     public function send(&$data) {
-
         if ($data['category_id']) {
             $categoryId = $data['category_id'];
             $category = Mage::getModel('catalog/category')->load($categoryId);
@@ -106,9 +105,12 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
 
         $i = 0;
         $tokenArray = array();
+        $sentsuccess = true;
         foreach ($collectionDevice as $item) {
             if ($i == 100) {
-                $this->repeatSendiOS($tokenArray, $payload, $ch);
+                $result = $this->repeatSendiOS($tokenArray, $payload, $ch);
+                if (!$result)
+                    $sentsuccess = false;
                 $i = 0;
                 $tokenArray = array();
             }
@@ -118,19 +120,23 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             $totalDevice++;
         }
         if ($i < 100)
-            $this->repeatSendiOS($tokenArray, $payload, $ch);
+            $result = $this->repeatSendiOS($tokenArray, $payload, $ch);
+        if (!$result)
+            $sentsuccess = false;
 
-        //Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Message successfully delivered to %s devices (IOS)', $totalDevice));
+        if ($sentsuccess)
+            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Message successfully delivered to %s devices (IOS)', $totalDevice));
         return true;
     }
 
     public function repeatSendiOS($tokenArray, $payload, $ch) {
+        array_unique($tokenArray);
         $ctx = stream_context_create();
         stream_context_set_option($ctx, 'ssl', 'local_cert', $ch);
         $fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
         if (!$fp) {
             Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
-            return;
+            return false;
         }
         foreach ($tokenArray as $deviceToken) {
             $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
@@ -290,6 +296,10 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
                 break;
             default:
         }
+    }
+
+    public function getConfig($nameConfig) {
+        return Mage::getStoreConfig('simiconnector/notification/' . $nameConfig, Mage::app()->getStore()->getId());
     }
 
 }
