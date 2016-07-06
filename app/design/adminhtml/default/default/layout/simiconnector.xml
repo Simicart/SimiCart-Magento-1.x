@@ -1,5 +1,15 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
+    <adminhtml_simiconnector_appreport_index>
+        <reference name="content">
+            <block type="simiconnector/adminhtml_appreport" name="appreport" />
+        </reference>
+    </adminhtml_simiconnector_appreport_index>
+    <adminhtml_simiconnector_appreport_grid>       
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="simiconnector/adminhtml_appreport_grid" name="appreport" />
+        </block>
+    </adminhtml_simiconnector_appreport_grid>
     <adminhtml_simiconnector_simicategory_index>
         <reference name="content">
             <block type="simiconnector/adminhtml_simicategory" name="simicategory" />

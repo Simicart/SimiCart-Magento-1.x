@@ -14,7 +14,7 @@ $installer->run("
     DROP TABLE IF EXISTS {$installer->getTable('simiconnector_visibility')};
     DROP TABLE IF EXISTS {$installer->getTable('simiconnector_simibarcode')};
     DROP TABLE IF EXISTS {$installer->getTable('simiconnector_videos')};
-
+    DROP TABLE IF EXISTS {$installer->getTable('simiconnector_transactions')};
 
     CREATE TABLE {$installer->getTable('simiconnector_simicategory')} (
         `simicategory_id` int(11) unsigned NOT NULL auto_increment,
@@ -181,6 +181,12 @@ $installer->run("
       `product_ids` text NULL default '',
       `status` int(11) NULL, 
       PRIMARY KEY (`video_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;    
+
+    CREATE TABLE {$installer->getTable('simiconnector_transactions')} (
+      `transaction_id` int(11) unsigned NOT NULL auto_increment,
+      `order_id` int(30),  
+      PRIMARY KEY (`transaction_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ");

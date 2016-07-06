@@ -35,6 +35,11 @@
                             <sort_order>1000</sort_order>
                             <action>adminhtml/system_config/edit/section/simiconnector</action>
                         </settings>
+                        <simitransactions module="simiconnector" translate="title">
+                            <title>App Transactions</title>
+                            <sort_order>40</sort_order>
+                            <action>adminhtml/simiconnector_appreport</action>
+                        </simitransactions>
                     </children>
                 </core>             
                 <simi_theme module="simiconnector" translate="title">

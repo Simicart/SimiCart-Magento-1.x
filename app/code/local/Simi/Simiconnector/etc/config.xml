@@ -88,6 +88,9 @@
             <simiconnector_mysql4>
                 <class>Simi_Simiconnector_Model_Mysql4</class>
                 <entities>
+                    <appreport>
+                        <table>simiconnector_transactions</table>
+                    </appreport>
                     <simicategory>
                         <table>simiconnector_simicategory</table>
                     </simicategory>
@@ -171,7 +174,7 @@
                 <show_product_type>0</show_product_type>
                 <is_show_sample_data>1</is_show_sample_data>
                 <base_url></base_url>
-                <is_show_matrix_home_title>1</is_show_matrix_home_title>
+                <is_show_home_title>1</is_show_home_title>
             </general>  
             <currency>                                           
                 <thousand_separator>,</thousand_separator>
@@ -211,7 +214,14 @@
             <barcode>
                 <pattern>BAR[A.4][AN.6]</pattern>
                 <qrcode_pattern>QR[A.4][AN.6]</qrcode_pattern>                
-            </barcode>    
+            </barcode>  
+            <zopim>
+                <enable>0</enable>
+                <show_profile>0</show_profile>
+                <name>3</name>
+                <email>3</email>
+                <phone>3</phone>
+            </zopim>  
         </simiconnector>  
     </default>
 </config>

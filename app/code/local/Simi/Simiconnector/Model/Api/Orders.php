@@ -96,6 +96,22 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         $order = array('invoice_number' => $this->_getCheckoutSession()->getLastRealOrderId(),
             'payment_method' => $this->_getOnepage()->getQuote()->getPayment()->getMethodInstance()->getCode()
         );
+
+        /*
+         * save To App report
+         */
+        try {
+            $orderId = Mage::getModel('sales/order')->loadByIncrementId($this->_getCheckoutSession()->getLastRealOrderId())->getId();
+            $newTransaction = Mage::getModel('simiconnector/appreport');
+            $newTransaction->setOrderId($orderId);
+            $newTransaction->save();
+        } catch (Exception $exc) {
+            
+        }
+
+        /*
+         * App notification
+         */
         if (Mage::getStoreConfig('simiconnector/notification/noti_purchase_enable')) {
             $categoryId = Mage::getStoreConfig('simiconnector/notification/noti_purchase_category_id');
             $category = Mage::getModel('catalog/category')->load($categoryId);
@@ -120,6 +136,7 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             $notification['notice_type'] = 3;
             $order['notification'] = $notification;
         }
+
         $result = array('order' => $order);
         return $result;
     }

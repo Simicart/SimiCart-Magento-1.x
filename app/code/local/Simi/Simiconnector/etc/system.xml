@@ -125,15 +125,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </categories_in_app>
-                        <is_show_matrix_home_title translate="label">
-                            <label>Show Title For Categories and Product Lists on Home Screen</label>
+                        <is_show_home_title translate="label">
+                            <label>Show Title For Banners, Categories and Product Lists on Home Screen</label>
                             <frontend_type>select</frontend_type>
                             <sort_order>1099</sort_order>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>                            
-                        </is_show_matrix_home_title>	
+                        </is_show_home_title>	
                     </fields>				
                 </general>
                 <currency translate="label">
@@ -892,6 +892,81 @@
                         </product_sharing_message>	
                     </fields>
                 </wishlist>
+                <zopim translate="label">
+                    <label>Zopim Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>799</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>		
+                        <enable translate="label">
+                            <label>Enable</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable>
+                        <account_key translate="label">
+                            <label>Account Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <comment>Key get from zopim dashboard</comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </account_key>  
+                        <show_profile translate="label">
+                            <label>Allow show profile</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>4</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </show_profile>
+                        <name translate="label">
+                            <label>Name</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_showandhideoption</source_model>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <show_profile>1</show_profile>
+                            </depends>
+                        </name>	
+                        <email translate="label">
+                            <label>Email</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_showandhideoption</source_model>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <show_profile>1</show_profile>
+                            </depends>
+                        </email>	
+                        <phone translate="label">
+                            <label>Phone</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_showandhideoption</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <show_profile>1</show_profile>
+                            </depends>
+                        </phone>	                                               					
+                    </fields>				
+                </zopim>
             </groups>
         </simiconnector>              
     </sections>

@@ -83,7 +83,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'min_number_of_decimals' => Mage::getStoreConfig('simiconnector/currency/min_number_of_decimals'),
                 'max_number_of_decimals' => Mage::getStoreConfig('simiconnector/currency/max_number_of_decimals'),
                 'currencies' => $currencies,
-                'is_show_matrix_home_title' => Mage::getStoreConfig('simiconnector/general/is_show_matrix_home_title'),
+                'is_show_home_title' => Mage::getStoreConfig('simiconnector/general/is_show_home_title'),
             ),
             'sales' => array(
                 'sales_reorder_allow' => Mage::getStoreConfig('sales/reorder/allow'),
@@ -151,17 +151,25 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 ),
             ),
             'cms' => $cmsPageList,
+            'zopim_config' => array(
+                'enable' => Mage::getStoreConfig('simiconnector/zopim/enable'),
+                'account_key' => Mage::getStoreConfig('simiconnector/zopim/account_key'),
+                'show_profile' => Mage::getStoreConfig('simiconnector/zopim/show_profile'),
+                'name' => Mage::getStoreConfig('simiconnector/zopim/name'),
+                'email' => Mage::getStoreConfig('simiconnector/zopim/email'),
+                'phone' => Mage::getStoreConfig('simiconnector/zopim/phone'),
+            ),
             'allowed_countries' => $this->getAllowedCountries(),
             'stores' => $this->getStores(),
         );
         if ($checkout_info_setting = Mage::helper('simiconnector/address')->getCheckoutAddressSetting())
-                $additionInfo['customer']['address_fields_config'] = $checkout_info_setting;
-        
+            $additionInfo['customer']['address_fields_config'] = $checkout_info_setting;
+
         if ($checkout_terms = Mage::helper('simiconnector/checkout')->getCheckoutTermsAndConditions())
-                $additionInfo['checkout']['checkout_terms_and_conditions'] = $checkout_terms;
+            $additionInfo['checkout']['checkout_terms_and_conditions'] = $checkout_terms;
         //Scott add to get instant contacts
-        if(Mage::helper('simiconnector/plugins_instantcontact')->isEnabled())
-            $additionInfo['instant_contact']=Mage::helper('simiconnector/plugins_instantcontact')->getContacts();
+        if (Mage::helper('simiconnector/plugins_instantcontact')->isEnabled())
+            $additionInfo['instant_contact'] = Mage::helper('simiconnector/plugins_instantcontact')->getContacts();
         $information['storeview'] = $additionInfo;
         return $information;
     }
@@ -191,7 +199,6 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         }
         return $list;
     }
-
 
     public function getCurrencyPosition() {
         $formated = Mage::app()->getStore()->getCurrentCurrency()->formatTxt(0);
