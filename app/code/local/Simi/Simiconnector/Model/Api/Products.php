@@ -176,6 +176,13 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
                 'position' => 1,
             );
         }
+        if (!Mage::registry('product') && $entity->getId()) {
+            Mage::register('product', $entity);
+        }
+
+        $block_att = Mage::getBlockSingleton('catalog/product_view_attributes');
+        $_additional = $block_att->getAdditionalData();
+        $info['additional'] = $_additional;
         $info['images'] = $images;
         $info['app_prices'] = Mage::helper('simiconnector/price')->formatPriceFromProduct($entity, true);
         $info['app_options'] = Mage::helper('simiconnector/options')->getOptions($entity);
