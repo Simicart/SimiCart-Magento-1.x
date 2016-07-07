@@ -35,7 +35,22 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
         $this->_getOnepage()->savePayment($method);
     }
 
+    /**
+     * Add payment method
+     * @param $method_code
+     * @param $type
+     */
+    public function addPaymentMethod($method_code, $type) {
+        $this->_listPayment[] = $method_code;
+        $this->_listPayment = array_unique($this->_listPayment);
+        $this->_listCase[$method_code] = $type;
+    }
+
     public function getMethods() {
+        /*
+         * Dispatch event Simiconnector_Add_Payment_Method
+         */
+        Mage::dispatchEvent('Simiconnector_Add_Payment_Method',array('object'=>$this));
         $this->_setListPayment();
         $this->setListCase();
 
