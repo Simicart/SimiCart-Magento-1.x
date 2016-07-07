@@ -178,7 +178,9 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         $info['app_prices'] = Mage::helper('simiconnector/price')->formatPriceFromProduct($entity, true);
         $info['app_options'] = Mage::helper('simiconnector/options')->getOptions($entity);
         $info['wishlist_item_id'] = Mage::helper('simiconnector/wishlist')->getWishlistItemId($entity);
-        return $this->getDetail($info);
+        $detail_info = $this->getDetail($info);
+        Mage::dispatchEvent('Simi_Simiconnector_Model_Api_Products_Show', array('object' => $detail_info, 'api_model' => $this));
+        return $detail_info;
     }
 
     public function setFilterByCategoryId($cat_id) {
