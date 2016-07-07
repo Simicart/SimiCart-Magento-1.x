@@ -5,6 +5,8 @@
  */
 class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
 
+    public $data;
+
     protected function _getCart() {
         return Mage::getSingleton('checkout/cart');
     }
@@ -27,6 +29,7 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
     /*
      * For Cart and OnePage Order
      */
+
     public function setTotal($total, &$data) {
         /*
          * tax_cart_display_subtotal
@@ -63,18 +66,25 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
             $data['coupon_code'] = $coupon;
         }
 
+
+        $this->data = $data;
+
         /*
          * For Phoenix COD fee adding (as Example as well)
          */
         if ((Mage::getSingleton('checkout/type_onepage')->getQuote()->getPayment()->getMethod()) && (Mage::getSingleton('checkout/type_onepage')->getQuote()->getPayment()->getMethodInstance()->getCode() == 'phoenix_cashondelivery')) {
             $codFee = Mage::getSingleton('checkout/type_onepage')->getQuote()->getCodTaxAmount() + Mage::getSingleton('checkout/type_onepage')->getQuote()->getCodFee();
-            $this->_addCustomRow($data, Mage::helper('phoenix_cashondelivery')->__('Cash on Delivery fee'), 4, $codFee);
+            $this->addCustomRow(Mage::helper('phoenix_cashondelivery')->__('Cash on Delivery fee'), 4, $codFee);
         }
+
+        Mage::dispatchEvent('Simi_Simiconnector_Helper_Total_SetTotal_After', array('object' => $this, 'data' => $this->_data));
+        $data = $this->data;
     }
 
     /*
      * For Order History
      */
+
     public function showTotalOrder($order) {
         $data = array();
         $data['subtotal_excl_tax'] = $order->getSubtotal();
@@ -94,13 +104,16 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
         return $data;
     }
 
-    private function _addCustomRow(&$total, $title, $sortOrder, $value) {
-        if (isset($total['custom_rows']))
-            $customRows = $total['custom_rows'];
+    public function addCustomRow($title, $sortOrder, $value, $valueString = null) {
+        if (isset($this->data['custom_rows']))
+            $customRows = $this->data['custom_rows'];
         else
             $customRows = array();
-        $customRows[] = array('title' => $title, 'sort_order' => $sortOrder, 'value' => $value);
-        $total['custom_rows'] = $customRows;
+        if (!$valueString)
+            $customRows[] = array('title' => $title, 'sort_order' => $sortOrder, 'value' => $value);
+        else
+            $customRows[] = array('title' => $title, 'sort_order' => $sortOrder, 'value' => $value, 'value_string' => $valueString);
+        $this->data['custom_rows'] = $customRows;
     }
 
     public function displayBothTaxSub() {

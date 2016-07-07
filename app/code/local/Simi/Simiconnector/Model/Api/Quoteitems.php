@@ -5,6 +5,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
     protected $_DEFAULT_ORDER = 'item_id';
     protected $_RETURN_MESSAGE;
     protected $_removed_items;
+    public $detail_list;
 
     protected function _getSession() {
         return Mage::getSingleton('checkout/session');
@@ -26,6 +27,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
     /*
      * Change Qty, Add/remove Coupon Code
      */
+
     public function update() {
         $data = $this->getData();
         $parameters = (array) $data['contents'];
@@ -72,6 +74,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
     /*
      * Add To Cart
      */
+
     public function store() {
         $this->addToCart();
         return $this->index();
@@ -80,7 +83,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
     public function addToCart() {
         $data = $this->getData();
         $cart = $this->_getCart();
-		
+
         $controller = $data['controller'];
         $contents = $controller->getRequest()->getRawBody(); // using without GET method
         if ($contents && strlen($contents)) {
@@ -144,11 +147,13 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
     /*
      * Return Cart Detail
      */
+
     public function show() {
         return $this->index();
     }
 
     public function index() {
+        $this->_getQuote()->collectTotals()->save();        
         $collection = $this->builderQuery;
         $collection->addFieldToFilter('item_id', array('nin' => $this->_removed_items))
                 ->addFieldToFilter('parent_item_id', array('null' => true));
@@ -236,12 +241,16 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
             $info[] = $quoteitem;
             $all_ids[] = $entity->getId();
         }
-        return $this->getList($info, $all_ids, $total, $limit, $offset);
+
+        $this->detail_list = $this->getList($info, $all_ids, $total, $limit, $offset);
+        Mage::dispatchEvent('Simi_Simiconnector_Model_Api_Quoteitems_Index_After', array('object' => $this, 'data' => $this->detail_list));
+        return $this->detail_list;
     }
 
     /*
      * Add Message
      */
+
     public function getList($info, $all_ids, $total, $page_size, $from) {
         $result = parent::getList($info, $all_ids, $total, $page_size, $from);
         $result['total'] = Mage::helper('simiconnector/total')->getTotal();

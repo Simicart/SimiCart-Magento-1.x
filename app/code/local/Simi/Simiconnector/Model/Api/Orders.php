@@ -5,6 +5,7 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
     protected $_DEFAULT_ORDER = 'entity_id';
     protected $_RETURN_MESSAGE;
     protected $_QUOTE_INITED = FALSE;
+    public $detail_onepage;
 
     protected function _getCart() {
         return Mage::getSingleton('checkout/cart');
@@ -162,8 +163,9 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             $order['payment'] = $list_payment;
             $order['total'] = Mage::helper('simiconnector/total')->getTotal();
 
-            $result = array('order' => $order);
-            return $result;
+            $this->detail_onepage = array('order' => $order);
+            Mage::dispatchEvent('Simi_Simiconnector_Model_Api_Orders_Onepage_Show_After', array('object' => $this, 'data' => $this->detail_onepage));
+            return $this->detail_onepage;
         } else {
             $result = parent::show();
             $order = $result['order'];

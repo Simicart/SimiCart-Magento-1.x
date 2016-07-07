@@ -12,6 +12,8 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
     protected $_allow_filter_core = false;
     protected $_helperProduct;
     protected $_sortOrders = array();
+    public $detail_info;
+
     /**
      * override
      */
@@ -34,7 +36,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
                     $this->setFilterByRelated($filter['related_to_id']);
                 } else {
                     $this->setFilterByCategoryId(Mage::app()->getStore()->getRootCategoryId());
-                   // $this->_allow_filter_core = true;
+                    // $this->_allow_filter_core = true;
                 }
             } else {
                 //all products
@@ -178,9 +180,9 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         $info['app_prices'] = Mage::helper('simiconnector/price')->formatPriceFromProduct($entity, true);
         $info['app_options'] = Mage::helper('simiconnector/options')->getOptions($entity);
         $info['wishlist_item_id'] = Mage::helper('simiconnector/wishlist')->getWishlistItemId($entity);
-        $detail_info = $this->getDetail($info);
-        Mage::dispatchEvent('Simi_Simiconnector_Model_Api_Products_Show', array('object' => $detail_info, 'api_model' => $this));
-        return $detail_info;
+        $this->detail_info = $this->getDetail($info);
+        Mage::dispatchEvent('Simi_Simiconnector_Model_Api_Products_Show_After', array('object' => $this, 'data' => $this->detail_info));
+        return $this->detail_info;
     }
 
     public function setFilterByCategoryId($cat_id) {
