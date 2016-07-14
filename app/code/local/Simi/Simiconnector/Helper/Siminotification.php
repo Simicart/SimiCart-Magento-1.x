@@ -190,7 +190,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             'data' => array("message" => $message),
         );
 
-        $api_key = Mage::getStoreConfig('simiconnector/android_key');
+        $api_key = Mage::getStoreConfig('simiconnector/notification/android_secret_key', $collectionDevice[0]['storeview_id']);
         $headers = array(
             'Authorization: key=' . $api_key,
             'Content-Type: application/json');

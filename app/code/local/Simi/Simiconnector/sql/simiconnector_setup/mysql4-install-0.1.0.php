@@ -15,6 +15,7 @@ $installer->run("
     DROP TABLE IF EXISTS {$installer->getTable('simiconnector_simibarcode')};
     DROP TABLE IF EXISTS {$installer->getTable('simiconnector_videos')};
     DROP TABLE IF EXISTS {$installer->getTable('simiconnector_transactions')};
+    DROP TABLE IF EXISTS {$installer->getTable('simiconnector_productlabels')};
 
     CREATE TABLE {$installer->getTable('simiconnector_simicategory')} (
         `simicategory_id` int(11) unsigned NOT NULL auto_increment,
@@ -189,6 +190,30 @@ $installer->run("
       PRIMARY KEY (`transaction_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+    CREATE TABLE {$installer->getTable('simiconnector_productlabels')} (
+      `label_id` int(11) unsigned NOT NULL auto_increment,
+      `name` varchar(255) default '',
+      `description` text default '',
+      `status` smallint(6) NOT NULL default '2',
+      `from_date` datetime default NULL,
+      `to_date` datetime default NULL,
+      `priority` int(11) unsigned default '0',
+      `conditions_serialized` mediumtext default NULL,
+      `text` varchar(255) NOT NULL default '',
+      `image` varchar(255) NOT NULL default '',
+      `position` smallint(6) NOT NULL default '1',
+      `display` smallint(6) NOT NULL default '0',
+      `category_text` varchar(255) NOT NULL default '',
+      `category_image` varchar(255) NOT NULL default '',
+      `category_position` smallint(6) NOT NULL default '1',
+      `category_display` smallint(6) NOT NULL default '0',
+      `is_auto_fill` smallint(6) NOT NULL default '1',
+      `created_time` datetime NULL,
+      `update_time` datetime NULL,
+      `condition_selected` varchar(50) NOT NULL,
+      `threshold` int(11) unsigned default NULL,
+      PRIMARY KEY (`label_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ");
 
 $installer->endSetup();

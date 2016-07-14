@@ -30,6 +30,13 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
                 
             } else {
                 $this->builderQuery = Mage::getModel('sales/order')->load($data['resourceid']);
+                $order = $this->builderQuery;
+                if (!$this->builderQuery->getId()) {
+                    $this->builderQuery = Mage::getModel('sales/order')->loadByIncrementId($data['resourceid']);
+                }
+                if (!$this->builderQuery->getId()) {
+                    throw new Exception(Mage::helper('simiconnector')->__('Cannot find the Order'), 6);
+                }
             }
         } else {
             $this->builderQuery = Mage::getModel('sales/order')->getCollection()
@@ -43,8 +50,23 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
      */
 
     public function update() {
-        $this->_updateOrder();
-        return $this->show();
+        $data = $this->getData();
+        if ($data['resourceid'] == 'onepage') {
+            $this->_updateOrder();
+            return $this->show();
+        } else {
+            $order = $this->builderQuery;
+            $param = $data['contents'];
+            if ($param->status == 'cancel') {
+                $order->cancel();
+                $order->setState(Mage_Sales_Model_Order::STATE_CANCELED, true);
+                $order->save();
+            } else {
+                $order->setState($param->status, true);
+                $order->save();
+            }
+            return $this->show();
+        }
     }
 
     private function _updateOrder() {

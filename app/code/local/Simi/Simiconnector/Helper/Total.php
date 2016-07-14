@@ -49,6 +49,28 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
          */
         if (isset($total['tax'])) {
             $data['tax'] = $total['tax']->getValue();
+            $taxSumarry = array();
+            foreach ($total['tax']->getFullInfo() as $info) {
+                if (isset($info['hidden']) && $info['hidden'])
+                    continue;
+                $amount = $info['amount'];
+                $rates = $info['rates'];
+                foreach ($rates as $rate) {
+                    $title = $rate['title'];
+                    if (!is_null($rate['percent'])) {
+                        $title.= ' ('.$rate['percent'].'%)';
+                    }
+                    $taxSumarry[] = array('title' => $title,
+                        'amount' => $amount,
+                    );
+                    /*
+                     * SimiCart only show the first Rate for Each Item 
+                     */
+                    break;
+                }
+            }
+            if (count($taxSumarry))
+                $data['tax_summary'] = $taxSumarry;
         }
 
         if (isset($total['discount'])) {

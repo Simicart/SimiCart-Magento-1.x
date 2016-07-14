@@ -8,14 +8,7 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Edit_Tab_Form extends Mage_Admin
     protected function _prepareForm() {
         $form = new Varien_Data_Form();
         $this->setForm($form);
-        $websites = Mage::helper('simiconnector/siminotification')->getWebsites();
-        $list_web = array();
-        foreach ($websites as $website) {
-            $list_web[] = array(
-                'value' => $website->getId(),
-                'label' => $website->getName(),
-            );
-        }
+        
 
         if (Mage::getSingleton('adminhtml/session')->getDeviceData()) {
             $data = Mage::getSingleton('adminhtml/session')->getDeviceData();
@@ -27,13 +20,23 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Edit_Tab_Form extends Mage_Admin
         $fieldset->addType('datetime', 'Simi_Simiconnector_Block_Adminhtml_Device_Edit_Renderer_Datetime');
         $fieldset->addType('selectname', 'Simi_Simiconnector_Block_Adminhtml_Device_Edit_Renderer_Selectname');
 
-        $fieldset->addField('website_id', 'select', array(
-            'label' => Mage::helper('simiconnector')->__('Website'),
-            'name' => 'website_id',
-            'values' => $list_web,
-            'disabled' => true,
-        ));
+        $stores = Mage::getModel('core/store')->getCollection();
 
+        $list_store = array();
+        foreach ($stores as $store) {
+            $list_store[] = array(
+                'value' => $store->getId(),
+                'label' => $store->getName(),
+            );
+        }
+        $fieldset->addField('storeview_id', 'select', array(
+            'label' => Mage::helper('simiconnector')->__('Store View'),
+            'name' => 'storeview_id',
+            'values' => $list_store,
+            'disabled' => true,
+            'onchange' => 'clearDevices()'
+        ));
+        
         $fieldset->addField('plaform_id', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Device Type'),
             'name' => 'plaform_id',

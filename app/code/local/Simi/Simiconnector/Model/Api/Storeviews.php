@@ -74,7 +74,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'use_store' => Mage::getStoreConfig('web/url/use_store'),
                 'is_rtl' => $isRtl,
                 'is_show_sample_data' => Mage::getStoreConfig('simiconnector/general/is_show_sample_data'),
-                'android_sender' => Mage::getStoreConfig('simiconnector/android_sendid'),
+                'android_sender' =>  Mage::getStoreConfig('simiconnector/notification/android_app_key'),
                 'currency_symbol' => $currencySymbol,
                 'currency_code' => $currencyCode,
                 'currency_position' => $this->getCurrencyPosition(),
