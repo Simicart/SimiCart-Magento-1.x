@@ -201,13 +201,29 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         $installer = $setup;
         $installer->startSetup();
         $installer->run("
-    DROP TABLE IF EXISTS {$installer->getTable('simiconnector_productlabels')};
+            
+    DROP TABLE IF EXISTS {$installer->getTable('simiconnector_videos')};
+    DROP TABLE IF EXISTS {$installer->getTable('simiconnector_productlabels')};            
 
-           CREATE TABLE {$installer->getTable('simiconnector_productlabels')} (
+    CREATE TABLE {$installer->getTable('simiconnector_videos')} (
+      `video_id` int(11) unsigned NOT NULL auto_increment,
+      `video_url` varchar(255) NULL default '',
+      `video_key` varchar(255) NULL default '',
+      `video_title` varchar(255) NULL default '',
+      `product_ids` text NULL default '',
+      `storeview_id` int(6) default 0,
+      `status` int(11) NULL, 
+      PRIMARY KEY (`video_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;    
+
+
+    CREATE TABLE {$installer->getTable('simiconnector_productlabels')} (
       `label_id` int(11) unsigned NOT NULL auto_increment,
+      `storeview_id` int(6) default 0,
       `name` varchar(255) default '',
       `description` text default '',
       `status` smallint(6) NOT NULL default '2',
+      `product_ids` text NULL default '',
       `from_date` datetime default NULL,
       `to_date` datetime default NULL,
       `priority` int(11) unsigned default '0',

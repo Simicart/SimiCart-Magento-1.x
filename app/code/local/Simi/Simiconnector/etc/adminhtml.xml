@@ -80,9 +80,14 @@
                     <children>
                         <simivideo module="simiconnector" translate="title">
                             <title>Videos</title>
-                            <sort_order>200</sort_order>
+                            <sort_order>99</sort_order>
                             <action>adminhtml/simiconnector_simivideo</action>
                         </simivideo>
+                        <simiproductlabel module="simiconnector" translate="title">
+                            <title>Product Labels</title>
+                            <sort_order>199</sort_order>
+                            <action>adminhtml/simiconnector_simiproductlabel</action>
+                        </simiproductlabel>
                     </children>
                 </simi_rich_content>
                 <simi_user_experience module="simiconnector" translate="title">

@@ -138,6 +138,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
             );
             $info_detail['images'] = $images;
             $info_detail['app_prices'] = Mage::helper('simiconnector/price')->formatPriceFromProduct($entity);
+            $info_detail['product_label'] = Mage::helper('simiconnector/productlabel')->getProductLabel($entity);
             $info[] = $info_detail;
 
             $all_ids[] = $entity->getId();
@@ -187,6 +188,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         $info['app_prices'] = Mage::helper('simiconnector/price')->formatPriceFromProduct($entity, true);
         $info['app_options'] = Mage::helper('simiconnector/options')->getOptions($entity);
         $info['wishlist_item_id'] = Mage::helper('simiconnector/wishlist')->getWishlistItemId($entity);
+        $info['product_label'] = Mage::helper('simiconnector/productlabel')->getProductLabel($entity);
         $this->detail_info = $this->getDetail($info);
         Mage::dispatchEvent('Simi_Simiconnector_Model_Api_Products_Show_After', array('object' => $this, 'data' => $this->detail_info));
         return $this->detail_info;

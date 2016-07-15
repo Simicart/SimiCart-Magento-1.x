@@ -129,6 +129,11 @@
         </reference>
     </adminhtml_simiconnector_simivideo_index>
     
+    <adminhtml_simiconnector_simiproductlabel_index>
+        <reference name="content">
+            <block type="simiconnector/adminhtml_simiproductlabel" name="simiproductlabel" />
+        </reference>
+    </adminhtml_simiconnector_simiproductlabel_index>
     
     <adminhtml_system_config_edit>
         <reference name="head">

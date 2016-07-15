@@ -121,6 +121,9 @@
                     <simivideo>
                         <table>simiconnector_videos</table>
                     </simivideo>
+                    <simiproductlabel>
+                        <table>simiconnector_productlabels</table>
+                    </simiproductlabel>
                 </entities>
             </simiconnector_mysql4>
         </models>
@@ -212,7 +215,10 @@
             <barcode>
                 <pattern>BAR[A.4][AN.6]</pattern>
                 <qrcode_pattern>QR[A.4][AN.6]</qrcode_pattern>                
-            </barcode>  
+            </barcode> 
+            <productlabel>
+                <enable>0</enable>
+            </productlabel> 
             <zopim>
                 <enable>0</enable>
                 <show_profile>0</show_profile>
