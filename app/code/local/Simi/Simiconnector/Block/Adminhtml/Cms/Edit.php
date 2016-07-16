@@ -44,6 +44,19 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit extends Mage_Adminhtml_Block_W
 			function saveAndContinueEdit(){
 				editForm.submit($('edit_form').action+'back/edit/');
 			}
+                        function onchangeCmsType(type){
+                            switch (type) {
+                                case '1': 
+                                    $('category_id').up('tr').hide();
+                                    $('category_id').className = 'input-text'; 
+                                    $('cms_image').up('tr').show();
+                                    break;
+                                case '2':
+                                    $('category_id').up('tr').show(); 
+                                    $('category_id').className = 'required-entry input-text';                                     
+                                    $('cms_image').up('tr').hide();
+                            }
+                        }
 		";
     }
 

@@ -11,7 +11,7 @@ class Simi_Simiconnector_Model_Api_Cmspages extends Simi_Simiconnector_Model_Api
         } else {
             $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('cms');
             $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
-            $cmsCollection = Mage::getModel('simiconnector/cms')->getCollection();
+            $cmsCollection = Mage::getModel('simiconnector/cms')->getCollection()->addFieldToFilter('type','1');
             $cmsCollection->getSelect()
                     ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.cms_id AND visibility.content_type = '.$typeID.' AND visibility.store_view_id =' . Mage::app()->getStore()->getId());
             $this->builderQuery = $cmsCollection;

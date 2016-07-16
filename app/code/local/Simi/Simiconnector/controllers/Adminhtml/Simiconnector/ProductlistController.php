@@ -88,7 +88,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                     $uploader->setAllowRenameFiles(false);
                     $uploader->setFilesDispersion(false);
                     str_replace(" ", "_", $_FILES['productlist_image_o']['name']);
-                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'productlist';
+                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'productlist';
                     if (!is_dir($path)) {
                         try {
                             mkdir($path, 0777, TRUE);
@@ -119,7 +119,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                     $uploader->setAllowRenameFiles(false);
                     $uploader->setFilesDispersion(false);
                     str_replace(" ", "_", $_FILES['productlist_image_tablet_o']['name']);
-                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'productlist';
+                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'productlist';
                     if (!is_dir($path)) {
                         try {
                             mkdir($path, 0777, TRUE);

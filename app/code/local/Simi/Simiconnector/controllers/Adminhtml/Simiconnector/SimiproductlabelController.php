@@ -60,7 +60,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimiproductlabelController exte
                     $uploader->setAllowRenameFiles(false);
                     $uploader->setFilesDispersion(false);
                     str_replace(" ", "_", $_FILES['image_name_co']['name']);
-                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'productlabel';
+                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'productlabel';
                     if (!is_dir($path)) {
                         try {
                             mkdir($path, 0777, TRUE);
@@ -74,9 +74,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimiproductlabelController exte
                     } catch (Exception $e) {
                         
                     }
-                    $data['image'] = Mage::getBaseUrl('media') . 'simi/simicart/productlabel/' . $result['file'];
+                    $data['image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlabel/' . $result['file'];
                 } catch (Exception $e) {
-                    $data['image'] = Mage::getBaseUrl('media') . 'simi/simicart/productlabel/' . $_FILES['image_name_co']['name'];
+                    $data['image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlabel/' . $_FILES['image_name_co']['name'];
                 }                
             }
             if (isset($data['image_name_co']['delete']) && $data['image_name_co']['delete'] == 1) {

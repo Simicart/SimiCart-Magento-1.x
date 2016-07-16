@@ -74,7 +74,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                     $uploader->setFilesDispersion(false);
 
                     // We set media as the upload dir
-                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'notification' . DS . 'images';
+                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'notification' . DS . 'images';
                     // $result = $uploader->save($path, $_FILES['image_url']['name'] );
                     $result = $uploader->save($path, md5(time()) . '.png');
                     $imageUrl = 'simi/simiconnector/notification/images/' . md5(time()) . '.png';

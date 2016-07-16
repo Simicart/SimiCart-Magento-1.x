@@ -91,7 +91,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                     $uploader->setAllowRenameFiles(false);
                     $uploader->setFilesDispersion(false);
                     str_replace(" ", "_", $_FILES['banner_name_co']['name']);                    
-                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'banner' ;
+                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'banner' ;
                     if (!is_dir($path)) {
                         try {
                             mkdir($path, 0777, TRUE);
@@ -128,7 +128,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                     $uploader->setAllowRenameFiles(false);
                     $uploader->setFilesDispersion(false);
                     str_replace(" ", "_", $_FILES['banner_name_tablet_co']['name']);                    
-                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'banner' ;
+                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'banner' ;
                     if (!is_dir($path)) {
                         try {
                             mkdir($path, 0777, TRUE);

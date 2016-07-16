@@ -57,6 +57,8 @@ $installer->run("
         `cms_content` text NULL default '',  
         `cms_status` tinyint(4) NOT NULL default '1',
         `website_id` smallint(5) NULL default 0,
+        `type` smallint(5) unsigned default 3,
+        `category_id` int(10) unsigned  NOT NULL,
         `sort_order` int(6) NULL default '0',
         PRIMARY KEY (`cms_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

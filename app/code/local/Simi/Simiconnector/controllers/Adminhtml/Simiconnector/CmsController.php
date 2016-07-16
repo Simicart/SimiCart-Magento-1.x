@@ -100,7 +100,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                     // We set media as the upload dir
                     str_replace(" ", "_", $_FILES['cms_image_o']['name']);
 
-                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simicart' . DS . 'cms';
+                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'cms';
                     if (!is_dir($path)) {
                         try {
                             mkdir($path, 0777, TRUE);

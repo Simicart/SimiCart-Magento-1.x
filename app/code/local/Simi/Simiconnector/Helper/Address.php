@@ -9,6 +9,9 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         return Mage::getSingleton('checkout/type_onepage');
     }
 
+    /*
+     * Convert Address before Saving
+     */
     public function convertDataAddress($data) {
         $country = $data->country_id;
         $listState = Mage::helper('simiconnector/address')->getStates($country);
@@ -53,6 +56,10 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         return $list;
     }
 
+    
+    /*
+     * Get Address to be Shown
+     */
     public function getAddressDetail($data, $customer) {
         $street = $data->getStreet();
         return array(
@@ -77,6 +84,10 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         );
     }
 
+    
+    /*
+     * Save Billing Address To Quote
+     */
     public function saveBillingAddress($billingAddress) {
         if (isset($billingAddress->customer_password) && $billingAddress->customer_password) {
             $is_register_mode = true;
@@ -101,12 +112,18 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         $this->_getOnepage()->saveBilling($address, $billingAddress->entity_id);
     }
 
+    /*
+     * Save Shipping Address To quote
+     */
     public function saveShippingAddress($shippingAddress) {
         $address = $this->convertDataAddress($shippingAddress);
         $address['save_in_address_book'] = '1';
         $this->_getOnepage()->saveShipping($address, $shippingAddress->entity_id);
     }
 
+    /*
+     * Add Hidden Address Fields on Storeview Config Result
+     */
     public function getCheckoutAddressSetting() {
         if (!Mage::getStoreConfig('simiconnector/hideaddress/hideaddress_enable'))
             return NULL;
@@ -154,6 +171,55 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
             'position'=>'10',
             );
         return $data;
+    }
+    
+    
+    /*
+     * Get Geocode result from Lat and Long
+     */
+    public function getLocationInfo($lat, $lng) {
+        $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' . trim($lat) . ',' . trim($lng) . '&sensor=false';
+        $json = @file_get_contents($url);
+        $data = json_decode($json);
+        $status = $data->status;
+        if ($status == "OK") {
+            $addresses = array();
+            $address = '';
+            for ($j = 0; $j < count($data->results[0]->address_components); $j++) {
+                $addressComponents = $data->results[0]->address_components[$j];
+                $types = $addressComponents->types;
+                if (in_array('street_number', $types)) {
+                    $address .= $addressComponents->long_name;
+                }
+                if (in_array('route', $types)) {
+                    $address .= ' ' . $addressComponents->long_name;
+                }
+                if (in_array('locality', $types)) {
+                    $address .= ', ' . $addressComponents->long_name;
+                }
+                if (in_array('postal_town', $types) || in_array('administrative_area_level_1', $types)) {
+                    $city .= $addressComponents->long_name;
+                }
+                if (in_array('administrative_area_level_2', $types)) {
+                    $state .= $addressComponents->long_name;
+                }
+                if (in_array('country', $types)) {
+                    $country .= $addressComponents->short_name;
+                }
+                if (in_array('postal_code', $types)) {
+                    $zipcode .= $addressComponents->long_name;
+                }
+            }
+            $addresses['address'] = $address;
+            $addresses['city'] = $city;
+            $addresses['state'] = $state;
+            $addresses['country'] = $country;
+            $addresses['zipcode'] = $zipcode;
+            $addresses['geocoding'] = $data;
+            return $addresses;
+        } else {
+            return false;
+        }
     }
 
 }

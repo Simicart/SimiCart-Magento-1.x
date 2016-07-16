@@ -48,6 +48,9 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tab_Form extends Mage_Adminhtm
             }
             $data['storeview_id'] = implode(',', $storeIdArray);
         }
+        if (!$data['type'])
+            $data['type'] = '1';
+        
         $fieldset = $form->addFieldset('simiconnector_form', array('legend' => Mage::helper('simiconnector')->__('Block information')));
         $wysiwygConfig = Mage::getSingleton('cms/wysiwyg_config')->getConfig();
         $wysiwygConfig->addData(array(
@@ -77,10 +80,6 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tab_Form extends Mage_Adminhtm
             'name' => 'cms_title',
         ));
 
-        $fieldset->addField('cms_image', 'image', array(
-            'label' => Mage::helper('simiconnector')->__('Icon (width:64px, height:64px)'),
-            'name' => 'cms_image_o',
-        ));
 
         $fieldset->addField('cms_content', 'editor', array(
             'name' => 'cms_content',
@@ -107,6 +106,61 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tab_Form extends Mage_Adminhtm
             )
         ));
 
+        $fieldset->addField('type', 'select', array(
+            'label' => Mage::helper('simiconnector')->__('Show Block On'),
+            'class' => 'required-entry',
+            'required' => true,
+            'name' => 'type',
+            'values' => Mage::getModel('simiconnector/cms')->toOptionArray(),
+            'onchange' => 'onchangeCmsType(this.value)',
+            'after_element_html' => '<script> Event.observe(window, "load", function(){onchangeCmsType(\'' . $data['type'] . '\');});</script>',
+        ));
+
+        $fieldset->addField('cms_image', 'image', array(
+            'label' => Mage::helper('simiconnector')->__('Icon (width:64px, height:64px)'),
+            'name' => 'cms_image_o',
+        ));
+        
+        $fieldset->addField('category_id', 'text', array(
+            'name' => 'category_id',
+            'class' => 'required-entry',
+            'required' => true,
+            'label' => Mage::helper('simiconnector')->__('Category ID'),
+            'note' => Mage::helper('simiconnector')->__('Choose a category'),
+            'after_element_html' => '<a id="category_link" href="javascript:void(0)" onclick="toggleMainCategories()"><img src="' . $this->getSkinUrl('images/rule_chooser_trigger.gif') . '" alt="" class="v-middle rule-chooser-trigger" title="Select Category"></a>
+                <div id="main_categories_select" style="display:none"></div>
+                    <script type="text/javascript">
+                    function toggleMainCategories(check){
+                        var cate = $("main_categories_select");
+                        if($("main_categories_select").style.display == "none" || (check ==1) || (check == 2)){
+                            var url = "' . $this->getUrl('adminhtml/simiconnector_banner/chooserMainCategories') . '";                        
+                            if(check == 1){
+                                $("category_id").value = $("category_all_ids").value;
+                            }else if(check == 2){
+                                $("category_id").value = "";
+                            }
+                            var params = $("category_id").value.split(", ");
+                            var parameters = {"form_key": FORM_KEY,"selected[]":params };
+                            var request = new Ajax.Request(url,
+                                {
+                                    evalScripts: true,
+                                    parameters: parameters,
+                                    onComplete:function(transport){
+                                        $("main_categories_select").update(transport.responseText);
+                                        $("main_categories_select").style.display = "block"; 
+                                    }
+                                });
+                        if(cate.style.display == "none"){
+                            cate.style.display = "";
+                        }else{
+                            cate.style.display = "none";
+                        } 
+                    }else{
+                        cate.style.display = "none";                    
+                    }
+                };
+        </script>'
+        ));
 
         $form->setValues($data);
         return parent::_prepareForm();

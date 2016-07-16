@@ -10,6 +10,7 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
 
     protected $_DEFAULT_ORDER = 'position';
     protected $_visible_array;
+    
 
     public function setBuilderQuery() {
         $data = $this->getData();
@@ -24,6 +25,7 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
     }
 
     public function index() {
+        $data = $this->getData();
         $result = parent::index();
         foreach ($result['categories'] as $index => $catData) {
             $childCollection = Mage::getModel('catalog/category')->getCollection()->addFieldToFilter('parent_id', $catData['entity_id']);
@@ -33,6 +35,10 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
                 $result['categories'][$index]['has_children'] = TRUE;
             else
                 $result['categories'][$index]['has_children'] = FALSE;
+            $cms = Mage::getModel('simiconnector/cms')->getCmsForCategory($data['resourceid']);
+            if ($cms!= NULL) {
+                $result['cms'] =$cms;
+            }
         }
         return $result;
     }

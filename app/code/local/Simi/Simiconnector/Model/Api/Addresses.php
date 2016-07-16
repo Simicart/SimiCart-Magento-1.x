@@ -42,6 +42,7 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
     /*
      * Add Address
      */
+
     public function store() {
         $data = $this->getData();
         $address = Mage::getModel('simiconnector/address')->saveAddress($data);
@@ -52,6 +53,7 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
     /*
      * Edit Address
      */
+
     public function update() {
         $data = $this->getData();
         $address = Mage::getModel('simiconnector/address')->saveAddress($data);
@@ -59,10 +61,10 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
         return $this->show();
     }
 
-
     /*
      * Add Address Detail
      */
+
     public function index() {
         $result = parent::index();
         $customer = Mage::getSingleton('customer/session')->getCustomer();
@@ -73,6 +75,57 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
         }
         $result['addresses'] = $addresses;
         return $result;
+    }
+
+    /*
+     * Geocoding
+     */
+
+    public function show() {
+        $data = $this->getData();
+        if ($data['resourceid']) {
+            if ($data['resourceid'] == 'geocoding') {
+                $result = array();
+                $addressDetail = array();
+                $longitude = $data['params']['longitude'];
+                $latitude = $data['params']['latitude'];
+                $dataresult = Mage::helper('simiconnector/address')->getLocationInfo($latitude, $longitude);
+                $dataresult = $dataresult['geocoding'];
+                for ($j = 0; $j < count($dataresult->results[0]->address_components); $j++) {
+                    $addressComponents = $dataresult->results[0]->address_components[$j];
+                    $types = $addressComponents->types;
+                    if (in_array('street_number', $types)) {
+                        $address .= $addressComponents->long_name;
+                    }
+                    if (in_array('route', $types)) {
+                        $address .= ' ' . $addressComponents->long_name;
+                    }
+                    if (in_array('locality', $types)) {
+                        $address .= ', ' . $addressComponents->long_name;
+                    }
+                    $addressDetail['street'] = $address;
+                    if (in_array('postal_town', $types) || in_array('administrative_area_level_1', $types)) {
+                        $addressDetail['region'] = $addressComponents->long_name;
+                        $addressDetail['region_id'] = $addressComponents->short_name;
+                    }
+
+                    if (in_array('administrative_area_level_2', $types)) {
+                        $addressDetail['city'] = $addressComponents->short_name;
+                    }
+
+                    if (in_array('country', $types)) {
+                        $addressDetail['country_name'] = $addressComponents->long_name;
+                        $addressDetail['country_id'] = $addressComponents->short_name;
+                    }
+                    if (in_array('postal_code', $types)) {
+                        $addressDetail['postcode'] = $addressComponents->long_name;
+                    }
+                }
+                $result['address'] = $addressDetail;
+                return $result;
+            }
+        }
+        return parent::show();
     }
 
 }
