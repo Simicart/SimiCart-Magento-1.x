@@ -83,7 +83,7 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
         $data['grand_total_incl_tax'] = $total['grand_total']->getValue();
 
         $coupon = '';
-        if (Mage::getSingleton('checkout/session')->getQuote()->getCouponCode()) {
+        if (Mage::getSingleton('checkout/session')->getQuote()->getCouponCode() && ($data['discount']!= 0)) {
             $coupon = Mage::getSingleton('checkout/session')->getQuote()->getCouponCode();
             $data['coupon_code'] = $coupon;
         }

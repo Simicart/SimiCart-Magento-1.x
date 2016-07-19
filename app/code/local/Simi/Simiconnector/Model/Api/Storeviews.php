@@ -71,6 +71,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'store_id' => $this->getCurrentStoreId(),
                 'store_name' => Mage::app()->getStore()->getName(),
                 'store_code' => Mage::app()->getStore()->getCode(),
+                'group_id' => Mage::app()->getStore()->getGroupId(),
                 'use_store' => Mage::getStoreConfig('web/url/use_store'),
                 'is_rtl' => $isRtl,
                 'is_show_sample_data' => Mage::getStoreConfig('simiconnector/general/is_show_sample_data'),

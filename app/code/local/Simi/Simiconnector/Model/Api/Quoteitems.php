@@ -153,7 +153,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
     }
 
     public function index() {
-        $this->_getQuote()->collectTotals()->save();        
+        $this->_getQuote()->collectTotals()->save();
         $collection = $this->builderQuery;
         $collection->addFieldToFilter('item_id', array('nin' => $this->_removed_items))
                 ->addFieldToFilter('parent_item_id', array('null' => true));
@@ -257,6 +257,9 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
         if ($this->_RETURN_MESSAGE) {
             $result['message'] = array($this->_RETURN_MESSAGE);
         }
+        $session = Mage::getSingleton('checkout/session');
+        $result['cart_total'] = Mage::helper('checkout/cart')->getItemsCount();
+        $result['quote_id'] = $session->getQuoteId();
         return $result;
     }
 

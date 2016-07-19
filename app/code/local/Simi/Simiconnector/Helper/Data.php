@@ -107,6 +107,9 @@ class Simi_Simiconnector_Helper_Data extends Mage_Core_Helper_Abstract {
             case 'productlist':
                 $typeId = 4;
                 break;
+            case 'storelocator':
+                $typeId = 5;
+                break;
             default :
                 $typeId = 0;
                 break;
