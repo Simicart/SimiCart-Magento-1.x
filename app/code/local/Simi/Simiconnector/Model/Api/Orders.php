@@ -183,9 +183,12 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             $order['shipping_address'] = Mage::helper('simiconnector/address')->getAddressDetail($quote->getShippingAddress(), $customer);
             $order['shipping'] = Mage::helper('simiconnector/checkout_shipping')->getMethods();
             $order['payment'] = $list_payment;
-            $order['total'] = Mage::helper('simiconnector/total')->getTotal();
-
-            $this->detail_onepage = array('order' => $order);
+            $order['total'] = Mage::helper('simiconnector/total')->getTotal();			
+			$detail_onepage = array('order' => $order);
+			if ($this->_RETURN_MESSAGE) {
+				$detail_onepage['message'] = array($this->_RETURN_MESSAGE);
+			}
+            $this->detail_onepage = $detail_onepage;
             Mage::dispatchEvent('Simi_Simiconnector_Model_Api_Orders_Onepage_Show_After', array('object' => $this, 'data' => $this->detail_onepage));
             return $this->detail_onepage;
         } else {
@@ -228,18 +231,6 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             $productInfo[] = $item->toArray();
         }
         return $productInfo;
-    }
-
-    /*
-     * Add Message
-     */
-
-    public function getList($info, $all_ids, $total, $page_size, $from) {
-        $result = parent::getList($info, $all_ids, $total, $page_size, $from);
-        if ($this->_RETURN_MESSAGE) {
-            $result['message'] = array($this->_RETURN_MESSAGE);
-        }
-        return $result;
     }
 
 }

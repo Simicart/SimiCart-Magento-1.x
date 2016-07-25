@@ -97,7 +97,6 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
             ),
             'checkout' => array(
                 'enable_guest_checkout' => Mage::getStoreConfig('checkout/options/guest_checkout'),
-                'is_reload_payment_method' => Mage::getStoreConfig('simiconnector/general/is_reload_payment_method'),
                 'enable_agreements' => is_null(Mage::getStoreConfig('checkout/options/enable_agreements')) ? 0 : Mage::getStoreConfig('checkout/options/enable_agreements'),
             ),
             'tax' => array(
