@@ -16,6 +16,8 @@ $installer->run("
     DROP TABLE IF EXISTS {$installer->getTable('simiconnector_videos')};
     DROP TABLE IF EXISTS {$installer->getTable('simiconnector_transactions')};
     DROP TABLE IF EXISTS {$installer->getTable('simiconnector_productlabels')};
+	DROP TABLE IF EXISTS {$installer->getTable('simiconnector_taskbar')};
+	
 
     CREATE TABLE {$installer->getTable('simiconnector_simicategory')} (
         `simicategory_id` int(11) unsigned NOT NULL auto_increment,
@@ -218,6 +220,33 @@ $installer->run("
       `condition_selected` varchar(50) NOT NULL,
       `threshold` int(11) unsigned default NULL,
       PRIMARY KEY (`label_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	
+	CREATE TABLE {$installer->getTable('simiconnector_taskbar')} (
+      `taskbar_id` int(11) unsigned NOT NULL auto_increment,
+      `storeview_id` int(6) default 0,
+      `taskbar_color` varchar(255) default '',	  
+      `icon_color` varchar(255) default '',
+      `item1_text` varchar(255) default '',
+      `item1_image` varchar(255) default '',	  
+      `item1_type` varchar(255) default '',
+	  `item2_text` varchar(255) default '',
+      `item2_image` varchar(255) default '',	  
+      `item2_type` varchar(255) default '',
+	  `item3_text` varchar(255) default '',
+      `item3_image` varchar(255) default '',	  
+      `item3_type` varchar(255) default '',
+	  `item4_text` varchar(255) default '',
+      `item4_image` varchar(255) default '',	  
+      `item4_type` varchar(255) default '',
+	  `item5_text` varchar(255) default '',
+      `item5_image` varchar(255) default '',	  
+      `item5_type` varchar(255) default '',
+	  `item6_text` varchar(255) default '',
+      `item6_image` varchar(255) default '',	  
+      `item6_type` varchar(255) default '',
+	  
+      PRIMARY KEY (`taskbar_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ");
 

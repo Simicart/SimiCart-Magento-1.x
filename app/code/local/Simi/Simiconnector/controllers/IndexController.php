@@ -202,20 +202,34 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         $installer->startSetup();
         $installer->run("
             
-    DROP TABLE IF EXISTS {$installer->getTable('simiconnector_cms')};          
+    	DROP TABLE IF EXISTS {$installer->getTable('simiconnector_taskbar')};      
 
-    CREATE TABLE {$installer->getTable('simiconnector_cms')} (
-        `cms_id` int(11) unsigned NOT NULL auto_increment,
-        `cms_title` varchar(255) NULL, 
-        `cms_image` varchar(255) NULL default '', 
-        `cms_content` text NULL default '',  
-        `cms_status` tinyint(4) NOT NULL default '1',
-        `website_id` smallint(5) NULL default 0,
-        `type` smallint(5) unsigned default 3,
-        `category_id` int(10) unsigned  NOT NULL,
-        `sort_order` int(6) NULL default '0',
-        PRIMARY KEY (`cms_id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+   CREATE TABLE {$installer->getTable('simiconnector_taskbar')} (
+      `taskbar_id` int(11) unsigned NOT NULL auto_increment,
+      `storeview_id` int(6) default 0,
+      `taskbar_color` varchar(255) default '',	  
+      `icon_color` varchar(255) default '',
+      `item1_text` varchar(255) default '',
+      `item1_image` varchar(255) default '',	  
+      `item1_type` varchar(255) default '',
+	  `item2_text` varchar(255) default '',
+      `item2_image` varchar(255) default '',	  
+      `item2_type` varchar(255) default '',
+	  `item3_text` varchar(255) default '',
+      `item3_image` varchar(255) default '',	  
+      `item3_type` varchar(255) default '',
+	  `item4_text` varchar(255) default '',
+      `item4_image` varchar(255) default '',	  
+      `item4_type` varchar(255) default '',
+	  `item5_text` varchar(255) default '',
+      `item5_image` varchar(255) default '',	  
+      `item5_type` varchar(255) default '',
+	  `item6_text` varchar(255) default '',
+      `item6_image` varchar(255) default '',	  
+      `item6_type` varchar(255) default '',
+	  
+      PRIMARY KEY (`taskbar_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
     
         ");
         $installer->endSetup();
