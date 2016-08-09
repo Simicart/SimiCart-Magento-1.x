@@ -119,6 +119,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
             'customer' => array(
                 'address_option' => array(
                     'prefix_show' => Mage::getStoreConfig('customer/address/prefix_show'),
+                    'middlename_show' => Mage::getStoreConfig('customer/address/middlename_show'),
                     'suffix_show' => Mage::getStoreConfig('customer/address/suffix_show'),
                     'dob_show' => Mage::getStoreConfig('customer/address/dob_show'),
                     'taxvat_show' => Mage::getStoreConfig('customer/address/taxvat_show'),
