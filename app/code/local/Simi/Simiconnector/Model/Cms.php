@@ -58,5 +58,17 @@ class Simi_Simiconnector_Model_Cms extends Mage_Core_Model_Abstract {
             }
         }
     }
+    public function getCategoryCMSPages(){
+        $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('cms');
+        $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
+        $cmsCollection = Mage::getModel('simiconnector/cms')->getCollection()->addFieldToFilter('type', '2')->setOrder('sort_order','ASC');
+        $cmsCollection->getSelect()
+                ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.cms_id AND visibility.content_type = ' . $typeID . ' AND visibility.store_view_id =' . Mage::app()->getStore()->getId());
+        $cmsArray = array();
+        foreach ($cmsCollection as $cms) {
+            $cmsArray[] = $cms->toArray();
+        }
+        return $cmsArray;
+    }
 
 }

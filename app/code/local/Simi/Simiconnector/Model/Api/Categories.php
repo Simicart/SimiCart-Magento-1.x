@@ -35,10 +35,6 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
                 $result['categories'][$index]['has_children'] = TRUE;
             else
                 $result['categories'][$index]['has_children'] = FALSE;
-            $cms = Mage::getModel('simiconnector/cms')->getCmsForCategory($data['resourceid']);
-            if ($cms!= NULL) {
-                $result['cms'] =$cms;
-            }
         }
         return $result;
     }

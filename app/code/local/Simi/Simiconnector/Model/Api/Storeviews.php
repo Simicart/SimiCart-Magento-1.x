@@ -151,6 +151,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 ),
             ),
             'cms' => $cmsPageList,
+            'category_cmspages' => Mage::getModel('simiconnector/cms')->getCategoryCMSPages(),
             'zopim_config' => array(
                 'enable' => Mage::getStoreConfig('simiconnector/zopim/enable'),
                 'account_key' => Mage::getStoreConfig('simiconnector/zopim/account_key'),
