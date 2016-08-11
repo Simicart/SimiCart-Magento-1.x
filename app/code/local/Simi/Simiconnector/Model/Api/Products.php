@@ -132,9 +132,13 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
             $info_detail = $entity->toArray($fields);
 
             $images = array();
+            $imagelink = $this->_helperProduct->getImageProduct($entity, null, $parameters['image_width'], $parameters['image_height']);
+            $sizes = getimagesize($imagelink);
             $images[] = array(
-                'url' => $this->_helperProduct->getImageProduct($entity, null, $parameters['image_width'], $parameters['image_height']),
+                'url' => $imagelink,
                 'position' => 1,
+                'image_width' => $sizes[0],
+                'image_height' => $sizes[1],
             );
             $info_detail['images'] = $images;
             $info_detail['app_prices'] = Mage::helper('simiconnector/price')->formatPriceFromProduct($entity);
@@ -165,16 +169,24 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         foreach ($media_gallery['images'] as $image) {
             // Zend_debug::dump($image['disabled']);
             if ($image['disabled'] == 0) {
+                $imagelink = $this->_helperProduct->getImageProduct($entity, $image['file'], $parameters['image_width'], $parameters['image_height']);
+                $sizes = getimagesize($imagelink);
                 $images[] = array(
-                    'url' => $this->_helperProduct->getImageProduct($entity, $image['file'], $parameters['image_width'], $parameters['image_height']),
+                    'url' => $imagelink,
                     'position' => $image['position'],
+                    'image_width' => $sizes[0],
+                    'image_height' => $sizes[1],
                 );
             }
         }
         if (count($images) == 0) {
+            $imagelink = $this->_helperProduct->getImageProduct($entity, null, $parameters['image_width'], $parameters['image_height']);
+            $sizes = getimagesize($imagelink);
             $images[] = array(
-                'url' => $this->_helperProduct->getImageProduct($entity, null, $parameters['image_width'], $parameters['image_height']),
+                'url' => $imagelink,
                 'position' => 1,
+                'image_width' => $sizes[0],
+                'image_height' => $sizes[1],
             );
         }
         if (!Mage::registry('product') && $entity->getId()) {
