@@ -76,8 +76,11 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         if ($this->_allow_filter_core) {
             $query = $this->builderQuery;
             $this->_whereFilter($query, $parameters);
+
         }
-        $this->_order($parameters);
+
+        if(isset($parameters['dir']) && isset($parameters['order']))
+            $this->_order($parameters);
 
         return null;
     }

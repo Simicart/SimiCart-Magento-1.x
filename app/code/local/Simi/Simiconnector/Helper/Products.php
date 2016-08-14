@@ -192,6 +192,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
                         'direction' => 'desc',
                         'default' => '1'
                     );
+                    $this->builderQuery->setOrder($_key, 'desc');
                 } else {
                     $sort_orders[] = array(
                         'key' => $_key,
@@ -205,6 +206,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
                         'direction' => 'desc',
                         'default' => '0'
                     );
+                    $this->builderQuery->setOrder($_key, 'asc');
                 }
             } else {
                 $sort_orders[] = array(
