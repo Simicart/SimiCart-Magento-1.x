@@ -156,7 +156,7 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             $notification['categoryName'] = $categoryName;
             $notification['has_children'] = $categoryChildrenCount;
             $notification['created_time'] = now();
-            $notification['notice_type'] = 3;
+            $notification['notice_type'] = 3;           
             $order['notification'] = $notification;
         }
 
@@ -193,6 +193,16 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             return $this->detail_onepage;
         } else {
             $result = parent::show();
+			if($data['params']['reorder'] == 1){
+				$order = Mage::getModel('sales/order')->load($data['resourceid']);
+				$cart = Mage::getSingleton('checkout/cart');
+				$items = $order->getItemsCollection();
+				foreach ($items as $item) {
+					$cart->addOrderItem($item);
+				}
+				$cart->save();
+				$result['message'] = Mage::helper('simiconnector')->__('Reorder Succeeded');
+			}
             $order = $result['order'];
             $customer = Mage::getSingleton('customer/session')->getCustomer();
             $this->_updateOrderInformation($order, $customer);
@@ -221,16 +231,74 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         $order['shipping_method'] = $orderModel->getShippingDescription();
         $order['shipping_address'] = Mage::helper('simiconnector/address')->getAddressDetail($orderModel->getShippingAddress(), $customer);
         $order['billing_address'] = Mage::helper('simiconnector/address')->getAddressDetail($orderModel->getBillingAddress(), $customer);
-        $order['order_items'] = $this->_getProductFromOrderList($orderModel->getAllVisibleItems());
+        $order['order_items'] = $this->_getProductFromOrderHistoryDetail($orderModel);
         $order['total'] = Mage::helper('simiconnector/total')->showTotalOrder($orderModel);
     }
 
+	/*
     private function _getProductFromOrderList($itemCollection) {
         $productInfo = array();
         foreach ($itemCollection as $item) {
             $productInfo[] = $item->toArray();
         }
         return $productInfo;
+    }
+	*/
+    
+    public function _getProductFromOrderHistoryDetail($order) {
+        $productInfo = array();
+        $itemCollection = $order->getAllVisibleItems();
+        foreach ($itemCollection as $item) {
+            $options = array();
+            if ($item->getProductOptions()) {
+                $options = $this->_getOptions($item->getProductType(), $item->getProductOptions());
+            }
+            $product_id = $item->getProductId();
+            $product = $item->getProduct();
+            if (version_compare(Mage::getVersion(), '1.7.0.0', '<') === true) {
+                $product = Mage::getModel('catalog/product')->load($product_id);
+            }
+            $image = Mage::helper('simiconnector/products')->getImageProduct($product);
+            $productInfo[] = array_merge( array('option' => $options),
+								$item->toArray(),
+								array('image' => Mage::helper('simiconnector/products')->getImageProduct($item->getProduct()))
+								);
+        }
+
+        return $productInfo;
+    }
+    
+    public function _getOptions($type, $options) {
+        $list = array();
+        if ($type == 'bundle') {
+            foreach ($options['bundle_options'] as $option) {
+                foreach ($option['value'] as $value) {
+                    $list[] = array(
+                        'option_title' => $option['label'],
+                        'option_value' => $value['title'],
+                        'option_price' => $value['price'],
+                    );
+                }
+            }
+        } else {
+            $options = array();
+            $optionsList = array();
+            if (isset($options['additional_options'])) {
+                $optionsList = $options['additional_options'];
+            } elseif (isset($options['attributes_info'])) {
+                $optionsList = $options['attributes_info'];
+            } elseif (isset($options['options'])) {
+                $optionsList = $options['options'];
+            }
+            foreach ($optionsList as $option) {
+                $list[] = array(
+                    'option_title' => $option['label'],
+                    'option_value' => $option['value'],
+                    'option_price' => isset($option['price']) == true ? $option['price'] : 0,
+                );
+            }
+        }
+        return $list;
     }
 
 }
