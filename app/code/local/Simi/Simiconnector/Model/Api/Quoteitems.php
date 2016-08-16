@@ -200,9 +200,11 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
             if (++$check_offset <= $offset) {
                 continue;
             }
-            if (++$check_limit > $limit)
+            /*
+			if (++$check_limit > $limit)
                 break;
 
+			*/
             if ($entity->getData('parent_item_id') != NULL)
                 continue;
 
