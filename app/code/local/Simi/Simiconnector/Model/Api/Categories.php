@@ -19,7 +19,10 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
         }
         if (Mage::getStoreConfig('simiconnector/general/categories_in_app'))
             $this->_visible_array = explode(',', Mage::getStoreConfig('simiconnector/general/categories_in_app'));
-        $this->builderQuery = Mage::getModel('catalog/category')->getCollection()->addFieldToFilter('parent_id', $data['resourceid'])->addAttributeToSelect('*');
+		
+		$category = Mage::getModel('catalog/category')->load($data['resourceid']);
+		$this->builderQuery = $category->getChildrenCategories()->addAttributeToSelect('*');
+        //$this->builderQuery = Mage::getModel('catalog/category')->getCollection()->addFieldToFilter('parent_id', $data['resourceid'])->addAttributeToSelect('*');
         if ($this->_visible_array)
             $this->builderQuery->addFieldToFilter('entity_id', array('in' => $this->_visible_array));
     }
