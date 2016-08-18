@@ -252,7 +252,7 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
 
         $matrixfieldset->addField('matrix_row', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Row Number'),
-            'values' => Mage::helper('simiconnector/productlist')->getMatrixRowOptions($storeviewid),
+            'values' => Mage::helper('simiconnector/productlist')->getMatrixRowOptions(),
             'onchange' => 'autoFillHeight(this.value)',
             'name' => 'matrix_row',
         ));

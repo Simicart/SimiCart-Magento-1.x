@@ -111,6 +111,9 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
         $data = array();
         $data['subtotal_excl_tax'] = $order->getSubtotal();
         $data['subtotal_incl_tax'] = $order->getSubtotalInclTax();
+	if ($data['subtotal_incl_tax'] == null) {
+            $data['subtotal_incl_tax'] = $order->getSubtotal() + $order->getTaxAmount();
+        }
         $data['shipping_hand_excl_tax'] = $order->getShippingAmount();
         $data['shipping_hand_incl_tax'] = $order->getShippingInclTax();
         $data['tax'] = $order->getTaxAmount();
