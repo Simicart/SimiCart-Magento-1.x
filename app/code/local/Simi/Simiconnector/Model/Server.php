@@ -92,10 +92,11 @@ class Simi_Simiconnector_Model_Server
         $module = $controller->getRequest()->getModuleName();
         $params = $controller->getRequest()->getQuery();
         $contents = $controller->getRequest()->getRawBody(); // using without GET method
+        $contents_array = array();
         if ($contents && strlen($contents)) {
-            $contents = urldecode($contents);
-            $contents = json_decode($contents);
-
+            $contents_paser = urldecode($contents);
+            $contents = json_decode($contents_paser);
+            $contents_array = json_decode($contents_paser, true);
         }
 
         $is_method = 1;
@@ -113,6 +114,7 @@ class Simi_Simiconnector_Model_Server
             'nestedid' => $nestedid,
             'params' => $params,
             'contents' => $contents,
+            'contents_array' => $contents_array,
             'is_method' => $is_method,
             'module' => $module,
             'controller' => $controller,
