@@ -61,7 +61,8 @@ class Simi_Simiconnector_Model_Api_Homeproductlists extends Simi_Simiconnector_M
             $productCollection = Mage::helper('simiconnector/productlist')->getProductCollection($listModel);
             $productListAPIModel = Mage::getModel('simiconnector/api_products');
             $productListAPIModel->setData($this->getData());
-            $productListAPIModel->setBuilderQuery();
+            $productListAPIModel->setBuilderQuery();			
+            $productListAPIModel->FILTER_RESULT = false;
             $productListAPIModel->builderQuery = $productCollection;
             $productListAPIModel->pluralKey = 'products';
             $listAPI = $productListAPIModel->index();

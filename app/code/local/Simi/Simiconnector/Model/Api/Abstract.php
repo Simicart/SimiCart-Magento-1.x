@@ -8,6 +8,8 @@
  */
 abstract class Simi_Simiconnector_Model_Api_Abstract
 {
+    public $FILTER_RESULT = true;
+	
     const DEFAULT_DIR = 'asc';
     const DEFAULT_LIMIT = 15;
     const DIR = 'dir';
@@ -223,6 +225,8 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
 
     protected function filter()
     {
+        if (!$this->FILTER_RESULT)
+            return;
         $data = $this->_data;
         $parameters = $data['params'];
         $query = $this->builderQuery;

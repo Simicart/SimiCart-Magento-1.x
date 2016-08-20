@@ -74,7 +74,9 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
      * override
      */
     protected function filter()
-    {
+    {        
+		if (!$this->FILTER_RESULT)
+            return;
         $data = $this->_data;
         $parameters = $data['params'];
         if ($this->_allow_filter_core) {
