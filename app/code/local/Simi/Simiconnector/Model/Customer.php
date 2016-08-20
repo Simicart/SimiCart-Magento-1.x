@@ -151,6 +151,10 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             $customer->setPrefix($data->prefix);
         }
 
+        if (isset($data->middlename) && $data->middlename) {
+            $customer->setMiddlename($data->middlename);
+        }  
+
         if (isset($data->suffix) && $data->suffix) {
             $customer->setSuffix($data->suffix);
         }
@@ -219,6 +223,10 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
         if (isset($data->prefix) && $data->prefix) {
             $customer->setPrefix($data->prefix);
         }
+
+        if (isset($data->middlename) && $data->middlename) {
+            $customer->setMiddlename($data->middlename);
+        }  
 
         if (isset($data->suffix) && $data->suffix) {
             $customer->setSuffix($data->suffix);
