@@ -52,7 +52,7 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
                 foreach ($rates as $rate) {
                     $title = $rate['title'];
                     if (!is_null($rate['percent'])) {
-                        $title.= ' ('.$rate['percent'].'%)';
+                        $title.= ' (' . $rate['percent'] . '%)';
                     }
                     $taxSumarry[] = array('title' => $title,
                         'amount' => $amount,
@@ -70,20 +70,20 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
         if (isset($total['discount'])) {
             $data['discount'] = abs($total['discount']->getValue());
         }
-	/*
+        /*
          * tax_cart_display_subtotal
          */
-		if ($this->displayTypeSubOrder() == 3) {
-			$data['subtotal_excl_tax'] = $total['subtotal']->getValueExclTax();
-			$data['subtotal_incl_tax'] = $total['subtotal']->getValueInclTax();
-		} else if ($this->displayTypeSubOrder() == 1) {
-			$data['subtotal_excl_tax'] = $total['subtotal']->getValue();			
-			$data['subtotal_incl_tax'] = $data['subtotal_excl_tax'] + $data['tax'];
-		} else if ($this->displayTypeSubOrder() == 2) {
-			$data['subtotal_incl_tax'] = $total['subtotal']->getValue();			
-			$data['subtotal_excl_tax'] = $data['subtotal_incl_tax'] - $data['tax'];
-		}
-		
+        if ($this->displayTypeSubOrder() == 3) {
+            $data['subtotal_excl_tax'] = $total['subtotal']->getValueExclTax();
+            $data['subtotal_incl_tax'] = $total['subtotal']->getValueInclTax();
+        } else if ($this->displayTypeSubOrder() == 1) {
+            $data['subtotal_excl_tax'] = $total['subtotal']->getValue();
+            $data['subtotal_incl_tax'] = $data['subtotal_excl_tax'] + $data['tax'];
+        } else if ($this->displayTypeSubOrder() == 2) {
+            $data['subtotal_incl_tax'] = $total['subtotal']->getValue();
+            $data['subtotal_excl_tax'] = $data['subtotal_incl_tax'] - $data['tax'];
+        }
+
         /*
          * tax_cart_display_grandtotal
          */
@@ -91,7 +91,7 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
         $data['grand_total_incl_tax'] = $total['grand_total']->getValue();
 
         $coupon = '';
-        if (Mage::getSingleton('checkout/session')->getQuote()->getCouponCode() && ($data['discount']!= 0)) {
+        if (Mage::getSingleton('checkout/session')->getQuote()->getCouponCode() && ($data['discount'] != 0)) {
             $coupon = Mage::getSingleton('checkout/session')->getQuote()->getCouponCode();
             $data['coupon_code'] = $coupon;
         }
@@ -110,9 +110,9 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
         Mage::dispatchEvent('Simi_Simiconnector_Helper_Total_SetTotal_After', array('object' => $this, 'data' => $this->_data));
         $data = $this->data;
     }
-	
-	public function displayTypeSubOrder() {
-        return Mage::getStoreConfig("tax/sales_display/subtotal");
+
+    public function displayTypeSubOrder() {
+        return Mage::getStoreConfig("tax/cart_display/subtotal");
     }
 
     /*
@@ -123,7 +123,7 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
         $data = array();
         $data['subtotal_excl_tax'] = $order->getSubtotal();
         $data['subtotal_incl_tax'] = $order->getSubtotalInclTax();
-	if ($data['subtotal_incl_tax'] == null) {
+        if ($data['subtotal_incl_tax'] == null) {
             $data['subtotal_incl_tax'] = $order->getSubtotal() + $order->getTaxAmount();
         }
         $data['shipping_hand_excl_tax'] = $order->getShippingAmount();
