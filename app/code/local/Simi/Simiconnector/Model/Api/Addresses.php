@@ -62,7 +62,7 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
     }
 
     /*
-     * Add Address Detail
+     * View Address Detail
      */
 
     public function index() {
