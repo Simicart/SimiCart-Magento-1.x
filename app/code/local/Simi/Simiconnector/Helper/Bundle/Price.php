@@ -312,11 +312,11 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
     {
         $_coreHelper = $this->helper('core');
         $price['price_excluding_tax'] = array(
-            'label' => $this->helper('tax')->__('Excl. Tax:'),
+            'label' => $this->helper('tax')->__('Excl. Tax'),
             'price' => $_coreHelper->currency($_exclTax, false, false),
         );
         $price['price_including_tax'] = array(
-            'label' => $this->helper('tax')->__('Incl. Tax:'),
+            'label' => $this->helper('tax')->__('Incl. Tax'),
             'price' => $_coreHelper->currency($_inclTax, false, false),
         );
     }
@@ -325,11 +325,11 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
     {
         $_coreHelper = $this->helper('core');
         $price['from_price_excluding_tax'] = array(
-            'label' => $this->helper('tax')->__('Excl. Tax:'),
+            'label' => $this->helper('tax')->__('Excl. Tax'),
             'price' => $_coreHelper->currency($_exclTax, false, false),
         );
         $price['from_price_including_tax'] = array(
-            'label' => $this->helper('tax')->__('Incl. Tax:'),
+            'label' => $this->helper('tax')->__('Incl. Tax'),
             'price' => $_coreHelper->currency($_inclTax, false, false),
         );
     }
@@ -338,11 +338,11 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
     {
         $_coreHelper = $this->helper('core');
         $price['to_price_excluding_tax'] = array(
-            'label' => $this->helper('tax')->__('Excl. Tax:'),
+            'label' => $this->helper('tax')->__('Excl. Tax'),
             'price' => $_coreHelper->currency($_exclTax, false, false),
         );
         $price['to_price_including_tax'] = array(
-            'label' => $this->helper('tax')->__('Incl. Tax:'),
+            'label' => $this->helper('tax')->__('Incl. Tax'),
             'price' => $_coreHelper->currency($_inclTax, false, false),
         );
     }
