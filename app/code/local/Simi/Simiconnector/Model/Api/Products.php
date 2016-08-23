@@ -140,7 +140,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
             if (++$check_limit > $limit)
                 break;
             $info_detail = $entity->toArray($fields);
-
+            $all_ids[] = $entity->getId();
             $images = array();
             $imagelink = $this->_helperProduct->getImageProduct($entity, null, $parameters['image_width'], $parameters['image_height']);
             //$sizes = getimagesize($imagelink);
@@ -163,7 +163,6 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
             $info_detail['product_label'] = Mage::helper('simiconnector/productlabel')->getProductLabel($entity);
             $info[] = $info_detail;
         }
-        $all_ids = $collection->getAllIds();
         return $this->getList($info, $all_ids, $total, $limit, $offset);
     }
 

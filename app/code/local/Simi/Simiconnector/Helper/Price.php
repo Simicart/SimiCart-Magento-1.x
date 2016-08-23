@@ -380,11 +380,11 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
     public function setBothTaxPrice(&$price, $_exclTax, $_inclTax)
     {
         $price['price_excluding_tax'] = array(
-            'label' => $this->helper('tax')->__('Excl. Tax:'),
+            'label' => $this->helper('tax')->__('Excl. Tax'),
             'price' => $_exclTax,
         );
         $price['price_including_tax'] = array(
-            'label' => $this->helper('tax')->__('Incl. Tax:'),
+            'label' => $this->helper('tax')->__('Incl. Tax'),
             'price' => $_inclTax,
         );
     }
