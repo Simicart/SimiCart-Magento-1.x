@@ -28,7 +28,7 @@ class Simi_Simiconnector_Model_Api_Homecategories extends Simi_Simiconnector_Mod
     public function getCollection() {
         $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('homecategory');
         $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
-        $simicategoryCollection = Mage::getModel('simiconnector/simicategory')->getCollection()->addFieldToFilter('status','1');
+        $simicategoryCollection = Mage::getModel('simiconnector/simicategory')->getCollection()->addFieldToFilter('status', '1');
         $simicategoryCollection->getSelect()
                 ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.simicategory_id AND visibility.content_type = ' . $typeID . ' AND visibility.store_view_id =' . Mage::app()->getStore()->getId());
         return $simicategoryCollection;
@@ -40,12 +40,12 @@ class Simi_Simiconnector_Model_Api_Homecategories extends Simi_Simiconnector_Mod
 
         foreach ($result['homecategories'] as $index => $item) {
             $imageBaseDir = explode('/simi/', $item['simicategory_filename']);
-            $imagesize = @getimagesize(Mage::getBaseDir('media').'/simi/'.$imageBaseDir[1]);
+            $imagesize = @getimagesize(Mage::getBaseDir('media') . '/simi/' . $imageBaseDir[1]);
             $item['width'] = $imagesize[0];
             $item['height'] = $imagesize[1];
             if ($item['simicategory_filename_tablet']) {
                 $imageBaseDir = explode('/simi/', $item['simicategory_filename_tablet']);
-                $imagesize = @getimagesize(Mage::getBaseDir('media').'/simi/'.$imageBaseDir[1]);
+                $imagesize = @getimagesize(Mage::getBaseDir('media') . '/simi/' . $imageBaseDir[1]);
                 $item['width_tablet'] = $imagesize[0];
                 $item['height_tablet'] = $imagesize[1];
             }
@@ -81,10 +81,8 @@ class Simi_Simiconnector_Model_Api_Homecategories extends Simi_Simiconnector_Mod
      */
 
     public function getVisibleChildren($catId) {
-        $childCollection = Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addFieldToFilter('parent_id', $catId);
-        if ($this->_visible_array)
-            $childCollection->addFieldToFilter('entity_id', array('in' => $this->_visible_array));
-        return $childCollection;
+        $category = Mage::getModel('catalog/category')->load($catId);
+        return $category->getChildrenCategories()->addAttributeToSelect('*');
     }
 
 }
