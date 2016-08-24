@@ -122,7 +122,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
 
                 $data['notice_type'] = 0;
                 $data['notice_id'] = $model->getId();
-                $list = getimagesize($data['image_url']);
+                $list = @getimagesize($data['image_url']);
                 $data['width'] = $list[0];
                 $data['height'] = $list[1];
                 $resultSend = Mage::helper('simiconnector/siminotification')->sendNotice($data);

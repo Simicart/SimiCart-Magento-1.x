@@ -23,7 +23,7 @@ class Simi_Simiconnector_Model_Api_Homeproductlists extends Simi_Simiconnector_M
     public function getCollection() {
         $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('productlist');
         $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
-        $listCollection = Mage::getModel('simiconnector/productlist')->getCollection();
+        $listCollection = Mage::getModel('simiconnector/productlist')->getCollection()->addFieldToFilter('list_status','1');
         $listCollection->getSelect()
                 ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.productlist_id AND visibility.content_type = ' . $typeID . ' AND visibility.store_view_id =' . Mage::app()->getStore()->getId());
         return $listCollection;

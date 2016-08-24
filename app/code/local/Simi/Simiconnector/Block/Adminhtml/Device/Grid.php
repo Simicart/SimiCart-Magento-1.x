@@ -119,12 +119,19 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Grid extends Mage_Adminhtml_Bloc
             'index' => 'device_token'
         ));
         */
+        $storeOptions = array();
+        foreach (Mage::getModel('core/store')->getCollection() as $store) {
+            $storeOptions [$store->getId()] = $store->getName(); 
+        }
         $this->addColumn('storeview_id', array(
             'header' => Mage::helper('simiconnector')->__('Store View'),
-            'width' => '150px',
-            'align' => 'right',
-            'index' => 'storeview_id'
+            'align' => 'left',
+            'width' => '80px',
+            'index' => 'storeview_id',
+            'type' => 'options',
+            'options' => $storeOptions,
         ));
+        
         $this->addColumn('action', array(
             'header' => Mage::helper('simiconnector')->__('Action'),
             'width' => '80px',

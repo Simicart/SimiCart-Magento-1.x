@@ -48,13 +48,20 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Grid extends Mage_Admi
             'align' => 'left',
             'index' => 'notice_content',
         ));
-
-        $this->addColumn('website_id', array(
-            'header' => Mage::helper('simiconnector')->__('Website'),
-            'width' => '100px',
-            'index' => 'website_id',
-            'renderer' => 'simiconnector/adminhtml_grid_renderer_website',
+        
+        $storeOptions = array();
+        foreach (Mage::getModel('core/store')->getCollection() as $store) {
+            $storeOptions [$store->getId()] = $store->getName(); 
+        }
+        $this->addColumn('storeview_id', array(
+            'header' => Mage::helper('simiconnector')->__('Store View'),
+            'align' => 'left',
+            'width' => '80px',
+            'index' => 'storeview_id',
+            'type' => 'options',
+            'options' => $storeOptions,
         ));
+
 
         $this->addColumn('device_id', array(
             'header' => Mage::helper('simiconnector')->__('Device'),

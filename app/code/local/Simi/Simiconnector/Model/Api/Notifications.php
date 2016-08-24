@@ -19,7 +19,7 @@ class Simi_Simiconnector_Model_Api_Notifications extends Simi_Simiconnector_Mode
             if (!($deviceModel->getId())) {
                 $this->builderQuery = Mage::getModel('simiconnector/siminotification')->getCollection();
                 return;
-            }            
+            }
             $shownList = array();
             foreach (Mage::getModel('simiconnector/history')->getCollection() as $noticeHistory) {
                 $noticeId = $noticeHistory->getData('notice_id');
@@ -29,8 +29,19 @@ class Simi_Simiconnector_Model_Api_Notifications extends Simi_Simiconnector_Mode
                     }
                 }
             }
-            $this->builderQuery = Mage::getModel('simiconnector/siminotification')->getCollection()->addFieldToFilter('notice_id', array('in'=>$shownList));
+            $this->builderQuery = Mage::getModel('simiconnector/siminotification')->getCollection()->addFieldToFilter('notice_id', array('in' => $shownList));
         }
+    }
+
+    public function index() {
+        $result = parent::index();
+        foreach ($result['notifications'] as $index => $notification) {
+            $result['notifications'][$index]['image_url'] = Mage::getBaseUrl('media') . $notification['image_url'];
+            $list = @getimagesize($result['notifications'][$index]['image_url']);
+            $result['notifications'][$index]['width'] = $list[0];
+            $result['notifications'][$index]['height'] = $list[1];
+        }
+        return $result;
     }
 
 }

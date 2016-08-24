@@ -22,7 +22,7 @@ class Simi_Simiconnector_Model_Api_Homebanners extends Simi_Simiconnector_Model_
     public function getCollection() {
         $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('banner');
         $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
-        $bannerCollection = Mage::getModel('simiconnector/banner')->getCollection();
+        $bannerCollection = Mage::getModel('simiconnector/banner')->getCollection()->addFieldToFilter('status','1');
         $bannerCollection->getSelect()
                 ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.banner_id AND visibility.content_type = ' . $typeID . ' AND visibility.store_view_id =' . Mage::app()->getStore()->getId());
 

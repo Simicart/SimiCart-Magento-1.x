@@ -28,7 +28,7 @@ class Simi_Simiconnector_Model_Api_Homecategories extends Simi_Simiconnector_Mod
     public function getCollection() {
         $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('homecategory');
         $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
-        $simicategoryCollection = Mage::getModel('simiconnector/simicategory')->getCollection();
+        $simicategoryCollection = Mage::getModel('simiconnector/simicategory')->getCollection()->addFieldToFilter('status','1');
         $simicategoryCollection->getSelect()
                 ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.simicategory_id AND visibility.content_type = ' . $typeID . ' AND visibility.store_view_id =' . Mage::app()->getStore()->getId());
         return $simicategoryCollection;

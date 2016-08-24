@@ -50,10 +50,17 @@ class Simi_Simiconnector_Block_Adminhtml_History_Grid extends Mage_Adminhtml_Blo
             'index' => 'notice_content',
         ));
 
+        $storeOptions = array();
+        foreach (Mage::getModel('core/store')->getCollection() as $store) {
+            $storeOptions [$store->getId()] = $store->getName(); 
+        }
         $this->addColumn('storeview_id', array(
-            'header' => Mage::helper('simiconnector')->__('Storeview Id'),
-            'width' => '100px',
+            'header' => Mage::helper('simiconnector')->__('Store View'),
+            'align' => 'left',
+            'width' => '80px',
             'index' => 'storeview_id',
+            'type' => 'options',
+            'options' => $storeOptions,
         ));
 
         $this->addColumn('device_id', array(
