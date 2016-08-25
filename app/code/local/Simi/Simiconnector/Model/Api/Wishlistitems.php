@@ -63,6 +63,7 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
                 'selected_all_required_options' => Mage::helper('simiconnector/wishlist')->checkIfSelectedAllRequiredOptions($itemModel, $options),
                 'product_sharing_message' => $productSharingMessage,
                 'product_sharing_url' => $product->getProductUrl(),
+                'app_prices' => Mage::helper('simiconnector/price')->formatPriceFromProduct($product),
             );
         }
         foreach ($result['wishlistitems'] as $index => $item) {
