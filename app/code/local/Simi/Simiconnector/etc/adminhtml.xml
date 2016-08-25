@@ -41,7 +41,21 @@
                             <action>adminhtml/simiconnector_appreport</action>
                         </simitransactions>
                     </children>
-                </core>             
+                </core>
+                <!-- start payment -->
+                <simi_payment module="simiconnector" translate="title">
+                    <title>Payment</title>
+                    <sort_order>5</sort_order>
+                    <children>
+                        <trasfersimi module="simiconnector" translate="title">
+                            <title>Mobile Bank Transfer</title>
+                            <sort_order>180</sort_order>
+                            <action>adminhtml/system_config/edit/section/payment</action>
+                        </trasfersimi>
+                    </children>
+                </simi_payment>
+                <!-- end payment -->
+
                 <simi_theme module="simiconnector" translate="title">
                     <title>Themes</title>      
                     <sort_order>10</sort_order>
