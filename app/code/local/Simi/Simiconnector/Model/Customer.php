@@ -231,7 +231,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
         if (isset($data->suffix) && $data->suffix) {
             $customer->setSuffix($data->suffix);
         }
-
+zend_debug::dump($data);die;
         if (!$data->password)
             $data->password = $customer->generatePassword();
         $customer->setPassword($data->password);

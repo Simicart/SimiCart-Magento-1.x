@@ -10,6 +10,7 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
 
     protected $_DEFAULT_ORDER = 'wishlist_item_id';
     protected $_RETURN_MESSAGE;
+    protected $_RETURN_URL;
     protected $_WISHLIST;
 
     public function setBuilderQuery() {
@@ -19,6 +20,7 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
             $this->_WISHLIST = Mage::getModel('wishlist/wishlist')->loadByCustomer($customer, true);
             $sharingUrl = $this->_WISHLIST->getSharingCode();
             $this->_RETURN_MESSAGE = Mage::getStoreConfig('appwishlist/general/sharing_message') . ' ' . Mage::getUrl('wishlist/shared/index/code/' . $sharingUrl);
+            $this->_RETURN_URL = Mage::getUrl('wishlist/shared/index/code/' . $sharingUrl);
         } else
             throw new Exception(Mage::helper('customer')->__('Please login First.'), 4);
         if ($data['resourceid']) {
@@ -53,7 +55,7 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
             $productSharingMessage = implode(' ', array(Mage::getStoreConfig('simiconnector/wishlist/product_sharing_message'), $product->getProductUrl()));
             $options = Mage::helper('simiconnector/wishlist')->getOptionsSelectedFromItem($itemModel, $product);
             $addition_info[$itemModel->getData('wishlist_item_id')] = array(
-                'product_type' => $product->getTypeId(),
+                'type_id' => $product->getTypeId(),
                 'product_regular_price' => Mage::app()->getStore()->convertPrice($product->getPrice(), false),
                 'product_price' => Mage::app()->getStore()->convertPrice($product->getFinalPrice(), false),
                 'stock_status' => $isSaleAble,
@@ -144,7 +146,8 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
         if ($data['params']['add_to_cart']) {
             $this->builderQuery = $this->_WISHLIST->getItemCollection();
             return $this->index();
-        }
+        } 
+        return parent::show();
     }
 
     /*
@@ -155,6 +158,9 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
         $result = parent::getList($info, $all_ids, $total, $page_size, $from);
         if ($this->_RETURN_MESSAGE) {
             $result['message'] = array($this->_RETURN_MESSAGE);
+        }
+        if ($this->_RETURN_URL) {
+            $result['sharing_url'] = array($this->_RETURN_URL);
         }
         return $result;
     }
