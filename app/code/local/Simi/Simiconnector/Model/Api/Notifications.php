@@ -36,11 +36,37 @@ class Simi_Simiconnector_Model_Api_Notifications extends Simi_Simiconnector_Mode
     public function index() {
         $result = parent::index();
         foreach ($result['notifications'] as $index => $notification) {
-            $result['notifications'][$index]['image_url'] = Mage::getBaseUrl('media') . $notification['image_url'];
-            $list = @getimagesize($result['notifications'][$index]['image_url']);
-            $result['notifications'][$index]['width'] = $list[0];
-            $result['notifications'][$index]['height'] = $list[1];
+            if (!$notification['type'])
+                $notification['type'] = '1';
+            if ($notification['image_url']) {
+                $notification['image_url'] = Mage::getBaseUrl('media') . $notification['image_url'];
+                $list = @getimagesize($notification['image_url']);
+                $notification['width'] = $list[0];
+                $notification['height'] = $list[1];
+            }
+            if ($notification['category_id']) {
+                $categoryId = $notification['category_id'];
+                $category = Mage::getModel('catalog/category')->load($categoryId);
+                $categoryChildrenCount = $category->getChildrenCount();
+                $categoryName = $category->getName();
+                $notification['category_name'] = $categoryName;
+                if ($categoryChildrenCount > 0)
+                    $categoryChildrenCount = 1;
+                else
+                    $categoryChildrenCount = 0;
+                $notification['has_child'] = $categoryChildrenCount;
+                if (!$notification['has_child']) {
+                    $notification['has_child'] = '';
+                }
+            }
+            if ($notification['product_id']) {
+                $productId = $notification['product_id'];
+                $productName = Mage::getModel('catalog/product')->load($productId)->getName();
+                $notification['product_name'] = $productName;
+            }
+            $result['notifications'][$index] = $notification;
         }
+
         return $result;
     }
 

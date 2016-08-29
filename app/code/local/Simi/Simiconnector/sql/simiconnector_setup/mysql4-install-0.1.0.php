@@ -109,6 +109,7 @@ $installer->run("
         `build_version` varchar(255) NOT NULL default '',
         `device_ip` varchar(255) NOT NULL default '',
         `device_user_agent` varchar(255) NOT NULL default '',
+        `unseen_count` int (11),
         PRIMARY KEY (`device_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         

@@ -100,6 +100,12 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             'width' => $data['width'],
             'show_popup' => $data['show_popup'],
         );
+        /*
+        echo 'iOS push:';
+        zend_debug::dump($body);
+        die;
+         * 
+         */
         $payload = json_encode($body);
         $totalDevice = 0;
 
