@@ -99,20 +99,8 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
                     $customer->setData($code, $customerData[$code]);
                 }
             }
-        } else {
-            $customerForm = Mage::getModel('customer/form');
-            $customerForm->setFormCode('customer_account_edit')
-                    ->setEntity($customer);
-            $customerErrors = $customerForm->validateData($customerData);
-            if ($customerErrors !== true) {
-                if (is_array($customerErrors))
-                    throw new Exception($customerErrors[0], 4);
-                else
-                    throw new Exception($customerErrors, 4);
-            } else {
-                $customerForm->compactData($customerData);
-            }
-        }
+        } 
+		
         if ($data->change_password == 1) {
             $customer->setChangePassword(1);
             $oldPass = $this->_getSession()->getCustomer()->getPasswordHash();
@@ -133,7 +121,6 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
                 throw new Exception($this->_helperCustomer()->__('Invalid current password'), 4);
             }
         }
-        $customerErrors = $customer->validate();
 		
 		if (isset($data->taxvat)) {
             $customer->setTaxvat($data->taxvat);
@@ -159,6 +146,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             $customer->setSuffix($data->suffix);
         }
 		
+        $customerErrors = $customer->validate();
         if (is_array($customerErrors))
             throw new Exception($this->_helperCustomer()->__('Invalid profile information'), 4);
         $customer->setConfirmation(null);
