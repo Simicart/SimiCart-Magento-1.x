@@ -2,6 +2,11 @@
 
 class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstract {
 
+    public function _construct(){
+        $this->_setListPayment();
+        $this->setListCase();
+    }
+
     public function _getOnepage() {
         return Mage::getSingleton('checkout/type_onepage');
     }
@@ -51,9 +56,7 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
          * Dispatch event Simiconnector_Add_Payment_Method
          */
         Mage::dispatchEvent('Simiconnector_Add_Payment_Method',array('object'=>$this));
-        $this->_setListPayment();
-        $this->setListCase();
-
+       
         $quote = $this->_getQuote();
         $store = $quote ? $quote->getStoreId() : null;
         $methods = Mage::helper('payment')->getStoreMethods($store, $quote);
