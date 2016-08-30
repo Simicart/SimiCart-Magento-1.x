@@ -49,8 +49,12 @@ class Simi_Simiconnector_Model_Api_Homeproductlists extends Simi_Simiconnector_M
         $imagesize = @getimagesize(Mage::getBaseDir('media').'/simi/'.$imageBaseDir[1]);
         $dataArray['width'] = $imagesize[0];
         $dataArray['height'] = $imagesize[1];
-        if ($listModel->getData('list_image_tablet')) {
-            $imageBaseDir = explode('/simi/', $listModel->getData('list_image_tablet'));
+        
+        if (!$dataArray['list_image_tablet'])
+                $dataArray['list_image_tablet'] = $dataArray['list_image'];
+        
+        if ($dataArray['list_image_tablet']) {
+            $imageBaseDir = explode('/simi/', $dataArray['list_image_tablet']);
             $imagesize = @getimagesize(Mage::getBaseDir('media').'/simi/'.$imageBaseDir[1]);
             $dataArray['width_tablet'] = $imagesize[0];
             $dataArray['height_tablet'] = $imagesize[1];

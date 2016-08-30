@@ -43,6 +43,8 @@ class Simi_Simiconnector_Model_Api_Homecategories extends Simi_Simiconnector_Mod
             $imagesize = @getimagesize(Mage::getBaseDir('media') . '/simi/' . $imageBaseDir[1]);
             $item['width'] = $imagesize[0];
             $item['height'] = $imagesize[1];
+            if (!$item['simicategory_filename_tablet'])
+                $item['simicategory_filename_tablet'] = $item['simicategory_filename'];
             if ($item['simicategory_filename_tablet']) {
                 $imageBaseDir = explode('/simi/', $item['simicategory_filename_tablet']);
                 $imagesize = @getimagesize(Mage::getBaseDir('media') . '/simi/' . $imageBaseDir[1]);

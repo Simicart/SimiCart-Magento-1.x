@@ -39,6 +39,10 @@ class Simi_Simiconnector_Model_Api_Homebanners extends Simi_Simiconnector_Model_
             $imagesize = @getimagesize(Mage::getBaseDir('media').'/simi/'.$imageBaseDir[1]);
             $item['width'] = $imagesize[0];
             $item['height'] = $imagesize[1];
+            
+            if (!$item['banner_name_tablet'])
+                $item['banner_name_tablet'] = $item['banner_name'];
+            
             if ($item['banner_name_tablet']) {
                 $imageBaseDir = explode('/simi/', $item['banner_name_tablet']);
                 $imagesize = @getimagesize(Mage::getBaseDir('media').'/simi/'.$imageBaseDir[1]);
