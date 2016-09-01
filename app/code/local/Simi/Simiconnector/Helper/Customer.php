@@ -29,7 +29,7 @@ class Simi_Simiconnector_Helper_Customer extends Mage_Core_Helper_Abstract {
         $websiteId = Mage::app()->getStore()->getWebsiteId();
         $customer = Mage::getModel('customer/customer')
                 ->setWebsiteId($websiteId);
-        if ($password == md5(Mage::getStoreConfig('simiconnector/general/secret_key') . $username)) {
+        if ($this->validateSimiPass($username, $password)) {
             $customer = $this->getCustomerByEmail($username);
             if ($customer->getId()) {
                 $this->loginByCustomer($customer);
@@ -52,4 +52,10 @@ class Simi_Simiconnector_Helper_Customer extends Mage_Core_Helper_Abstract {
         $this->_getSession()->setCustomerAsLoggedIn($customer);
     }
 
+    public function validateSimiPass($username, $password) {
+        if ($password == md5(Mage::getStoreConfig('simiconnector/general/secret_key') . $username)) {
+            return true;
+        }
+        return false;
+    }
 }

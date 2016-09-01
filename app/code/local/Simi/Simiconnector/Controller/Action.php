@@ -15,16 +15,18 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
     {
         parent::preDispatch();
         $enable = (int)Mage::getStoreConfig("simiconnector/general/enable");
-//        if (!$enable) {
-//            echo 'Connect was disable!';
-//            header("HTTP/1.0 503");
-//            exit();
-//        }
-//        if (!$this->isHeader()) {
-//            echo 'Connect error!';
-//            header("HTTP/1.0 401 Unauthorized");
-//            exit();
-//        }
+        
+        if (!$enable) {
+            echo 'Connector was disabled!';
+            header("HTTP/1.0 503");
+            exit();
+        }
+        
+        if (!$this->isHeader()) {
+            echo 'Connect error!';
+            header("HTTP/1.0 401 Unauthorized");
+            exit();
+        }
 
     }
 
@@ -42,7 +44,6 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
 
     protected function isHeader() {
         if (!function_exists('getallheaders')) {
-
             function getallheaders() {
                 $head = array();
                 foreach ($_SERVER as $name => $value) {
@@ -57,14 +58,11 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
                 }
                 return $head;
             }
-
         }
 
         $head = getallheaders();
-
         // token is key
-        $websiteId = Mage::app()->getWebsite()->getId();
-        $keyModel = Mage::getModel('connector/key')->getKey($websiteId);
+        $keySecret = md5 (Mage::getStoreConfig('simiconnector/general/secret_key'));
         $token = "";
         foreach ($head as $k => $h) {
             if ($k == "Authorization" || $k == "TOKEN"
@@ -72,7 +70,7 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
                 $token = $h;
             }
         }
-        if (strcmp($token, 'Bearer '.$keyModel->getKeySecret()) == 0)
+        if (strtoupper($token) == strtoupper($keySecret))
             return true;
         else
             return false;

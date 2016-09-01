@@ -166,6 +166,8 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
 
     public function socialLogin($data) {
         $data = (object) $data['params'];
+        if (!isset($data->password) || !Mage::helper('simiconnector/customer')->validateSimiPass($data->email, $data->password))
+            throw new Exception($this->_helperCustomer()->__('Password is not Valid'), 4);
         if (!$data->email)
             throw new Exception($this->_helperCustomer()->__('Cannot Get Your Email'), 4);
         $customer = Mage::helper('simiconnector/customer')->getCustomerByEmail($data->email);
