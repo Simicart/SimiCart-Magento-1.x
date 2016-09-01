@@ -160,6 +160,16 @@
                 <class>Simi_Simiconnector_Helper</class>
             </simiconnector>
         </helpers>
+        <events>
+            <sales_quote_collect_totals_before>
+                <observers>
+                    <simi_connector_sales_quote_collect_totals_before>
+                        <class>simiconnector/observer</class>
+                        <method>sales_quote_collect_totals_before</method>
+                    </simi_connector_sales_quote_collect_totals_before>
+                </observers>
+            </sales_quote_collect_totals_before>
+        </events> 
     </global>
     <default>
         <simiconnector>
@@ -225,6 +235,9 @@
                 <email>3</email>
                 <phone>3</phone>
             </zopim>  
+            <mixpanel>
+                <token></token>
+            </mixpanel>
         </simiconnector>  
     </default>
 </config>

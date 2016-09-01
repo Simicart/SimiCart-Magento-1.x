@@ -125,7 +125,15 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>                            
-                        </is_show_home_title>	
+                        </is_show_home_title>
+                        <app_dedicated_coupon translate="label">
+                            <label>Mobile App Dedicated Coupon</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1099</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>                            
+                        </app_dedicated_coupon>	
                     </fields>				
                 </general>
                 <currency translate="label">
@@ -979,6 +987,25 @@
                         </phone>	                                               					
                     </fields>				
                 </zopim>
+                <mixpanel translate="label">
+                    <label>Mixpanel Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>999</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>		
+                        <token translate="label">
+                            <label>Mixpanel Token</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Leave this field blank to disable Mixpanel on Application</comment>
+                        </token>	                                               					
+                    </fields>				
+                </mixpanel>
             </groups>
         </simiconnector>              
     </sections>

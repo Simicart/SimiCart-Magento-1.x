@@ -148,4 +148,17 @@ class Simi_Simiconnector_Model_Observer {
         return implode(',', $idArray);
     }
 
+    public function sales_quote_collect_totals_before($observer) {
+        $quote = $observer->getQuote();
+        $coupon = $quote->getCouponCode();
+        $isApp = strpos(Mage::getUrl('*/*'), 'simiconnector');
+        $pre_fix = (string) Mage::getStoreConfig('simiconnector/general/app_dedicated_coupon');
+
+        if (($isApp == false) && $coupon) {
+            if (strpos($coupon, $pre_fix) !== false) {
+                $quote->setCouponCode('');
+            }
+        }
+    }
+
 }

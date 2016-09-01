@@ -162,6 +162,9 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'email' => Mage::getStoreConfig('simiconnector/zopim/email'),
                 'phone' => Mage::getStoreConfig('simiconnector/zopim/phone'),
             ),
+            'mixpanel_config' => array(
+                'token' => Mage::getStoreConfig('simiconnector/mixpanel/token'),
+            ),
             'allowed_countries' => $this->getAllowedCountries(),
             'stores' => $this->getStores(),
         );
