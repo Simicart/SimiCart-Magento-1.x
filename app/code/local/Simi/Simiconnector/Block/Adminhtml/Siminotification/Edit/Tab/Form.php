@@ -254,7 +254,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
         ));
         $deviceIds = Mage::getModel('simiconnector/device')->getCollection()->getAllIds();
 
-        $fieldsetFilter->addField('devices_pushed', 'text', array(
+        $fieldsetFilter->addField('devices_pushed', 'textarea', array(
             'name' => 'devices_pushed',
             'class' => 'required-entry',
             'required' => true,

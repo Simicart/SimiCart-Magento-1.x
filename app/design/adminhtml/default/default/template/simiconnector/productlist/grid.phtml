@@ -25,6 +25,10 @@ $numColumns = sizeof($this->getColumns());
                 <tr>
                     <?php if ($this->getPagerVisibility()): ?>
                         <td class="pager">
+                            <a href="#" onclick="toogleCheckAllProduct(true)"><?php echo $this->__('Select All') ?></a>
+                            <span class="separator">|</span>
+                            <a href="#" onclick="toogleCheckAllProduct(false)"><?php echo $this->__('Unselect All') ?></a>
+                            <span class="separator">|</span>
                             <?php echo $this->__('Page') ?>
 
                             <?php $_curPage = $this->getCollection()->getCurPage() ?>

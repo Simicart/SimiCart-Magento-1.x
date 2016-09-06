@@ -134,7 +134,7 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
                         }
                     }
                     function toogleCheckAllProduct(el){
-                        if(el.checked == true){
+                        if(el == true){
                             $$("#main_products_select input[type=checkbox][class=checkbox]").each(function(e){
                                 if(e.name != "check_all"){
                                     if(!e.checked){
