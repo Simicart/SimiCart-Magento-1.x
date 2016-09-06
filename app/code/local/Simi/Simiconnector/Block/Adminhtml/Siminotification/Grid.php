@@ -76,14 +76,6 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Grid extends Mage_Admi
             ),
         ));
 
-        $this->addColumn('country', array(
-                'header'    => Mage::helper('simiconnector')->__('Country'),
-                'width'     => '150px',
-                'index'     => 'country',
-                'type'      => 'options',
-                'options'   => Mage::helper('simiconnector/siminotification')->getListCountry(),
-        ));
-
         $this->addColumn('created_time', array(
                 'header'    => Mage::helper('simiconnector')->__('Created Date'),
                 'width'     => '150px',

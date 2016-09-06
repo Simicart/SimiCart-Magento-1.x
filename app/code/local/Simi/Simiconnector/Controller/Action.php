@@ -71,7 +71,7 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
                 $token = $h;
             }
         }
-        if (strtoupper($token) == strtoupper($keySecret))
+        if (strcmp($token, 'Bearer '.$keySecret) == 0)
             return true;
         else
             return false;
