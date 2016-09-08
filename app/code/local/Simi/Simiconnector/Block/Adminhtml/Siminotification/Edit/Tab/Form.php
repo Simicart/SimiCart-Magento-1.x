@@ -45,9 +45,10 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
             'note' => '',
         ));
         
-        $fieldset->addField('device_id', 'select', array(
+		$data['device_type'] = $data['device_id'];
+        $fieldset->addField('device_type', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Device Type'),
-            'name' => 'device_id',
+            'name' => 'device_type',
             'values' => array(
                 array('value' => 0, 'label' => Mage::helper('simiconnector')->__('All')),
                 array('value' => 1, 'label' => Mage::helper('simiconnector')->__('IOS')),

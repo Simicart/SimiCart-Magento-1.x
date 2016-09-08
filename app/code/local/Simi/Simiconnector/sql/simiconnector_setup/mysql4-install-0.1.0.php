@@ -85,7 +85,7 @@ $installer->run("
     CREATE TABLE {$installer->getTable('simiconnector_visibility')} (
         `entity_id` int(11) unsigned NOT NULL auto_increment,
         `content_type` tinyint(4) NOT NULL default '0',
-        `item_id` tinyint(4) NOT NULL default '0',
+        `item_id` int(10) NOT NULL default '0',
         `store_view_id` varchar(255) NULL default '0', 
         PRIMARY KEY (`entity_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;        

@@ -1,8 +1,5 @@
 <?php
 
-/**
-
- */
 class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstract {
 
     public function sendNotice($data) {
@@ -82,6 +79,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
 
     public function sendIOS($collectionDevice, $data) {
         $ch = $this->getDirPEMfile($data);
+        $dir = $this->getDirPEMPassfile();
         $message = $data['notice_content'];
         $body['aps'] = array(
             'alert' => $data['notice_title'],
@@ -101,9 +99,9 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             'show_popup' => $data['show_popup'],
         );
         /*
-        echo 'iOS push:';
-        zend_debug::dump($body);
-        die;
+          echo 'iOS push:';
+          zend_debug::dump($body);
+          die;
          * 
          */
         $payload = json_encode($body);
@@ -114,7 +112,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         $sentsuccess = true;
         foreach ($collectionDevice as $item) {
             if ($i == 100) {
-                $result = $this->repeatSendiOS($tokenArray, $payload, $ch);
+                $result = $this->repeatSendiOS($tokenArray, $payload, $ch, $dir);
                 if (!$result)
                     $sentsuccess = false;
                 $i = 0;
@@ -126,7 +124,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             $totalDevice++;
         }
         if ($i < 100)
-            $result = $this->repeatSendiOS($tokenArray, $payload, $ch);
+            $result = $this->repeatSendiOS($tokenArray, $payload, $ch, $dir);
         if (!$result)
             $sentsuccess = false;
 
@@ -135,14 +133,13 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         return true;
     }
 
-    public function repeatSendiOS($tokenArray, $payload, $ch) {
-        array_unique($tokenArray);
+    public function repeatSendiOS($tokenArray, $payload, $ch, $dir) {
         $ctx = stream_context_create();
         stream_context_set_option($ctx, 'ssl', 'local_cert', $ch);
         $fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
         if (!$fp) {
             Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
-            return false;
+            return;
         }
         foreach ($tokenArray as $deviceToken) {
             $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
@@ -154,6 +151,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             }
         }
         fclose($fp);
+        return true;
     }
 
     public function repeatSendAnddroid($total, $collectionDevice, $message) {
@@ -295,13 +293,17 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
     public function getDirPEMfile($data) {
         switch ($data['notice_sanbox']) {
             case '1':
-                return Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'pem' . DS . 'push.pem';
+                return Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'pem' . DS . Mage::getStoreConfig("simiconnector/notification/upload_pem_file_test", $data['storeview_id']);
                 break;
             case '2':
-                return Mage::getBaseUrl('media') . 'simi/simiconnector/pem/manual/' . Mage::getStoreConfig("simiconnector/notification/upload_pem_file", $data['storeview_id']);
+                return Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'pem' . DS . 'manual' . DS . Mage::getStoreConfig("simiconnector/notification/upload_pem_file", $data['storeview_id']);
                 break;
             default:
         }
+    }
+
+    public function getDirPEMPassfile() {
+        return Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'pem' . DS . 'ios' . DS . 'pass_pem.config';
     }
 
     public function getConfig($nameConfig) {

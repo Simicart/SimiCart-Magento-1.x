@@ -198,11 +198,23 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </upload_pem_file>
+                        <upload_pem_file_test translate="label tooltip comment">
+                            <label>Upload Apple Demo PEM file</label>
+                            <comment>Certificate (PEM) for Demo Apple Device Notification Sending</comment>
+                            <frontend_type>file</frontend_type>
+                            <sort_order>10</sort_order>
+                            <backend_model>adminhtml/system_config_backend_file</backend_model>
+                            <upload_dir config="system/filesystem/media" scope_info="1">simi/simiconnector/pem</upload_dir>
+                            <base_url type="media" scope_info="1">admin-config-uploads</base_url>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </upload_pem_file_test>
                         <android_app_key translate="label tooltip comment">
                             <label>Android App Key</label>
                             <comment>App Key for Android Notification Sending</comment>
                             <frontend_type>text</frontend_type>
-                            <sort_order>10</sort_order>
+                            <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -211,7 +223,7 @@
                             <label>Android Secret Key</label>
                             <comment>Secret Key for Android Notification Sending</comment>
                             <frontend_type>text</frontend_type>
-                            <sort_order>20</sort_order>
+                            <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>

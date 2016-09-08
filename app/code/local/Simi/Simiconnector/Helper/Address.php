@@ -12,6 +12,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
     /*
      * Convert Address before Saving
      */
+
     public function convertDataAddress($data) {
         $country = $data->country_id;
         $listState = Mage::helper('simiconnector/address')->getStates($country);
@@ -56,10 +57,10 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         return $list;
     }
 
-    
     /*
      * Get Address to be Shown
      */
+
     public function getAddressDetail($data, $customer) {
         $street = $data->getStreet();
         return array(
@@ -84,10 +85,10 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         );
     }
 
-    
     /*
      * Save Billing Address To Quote
      */
+
     public function saveBillingAddress($billingAddress) {
         if (isset($billingAddress->customer_password) && $billingAddress->customer_password) {
             $is_register_mode = true;
@@ -104,7 +105,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
             $customer->setWebsiteId(Mage::app()->getWebsite()->getId());
             $customer->loadByEmail($customer_email);
             if ($customer->getId()) {
-                throw new Exception($this->__('There is already a customer registered using this email address. Please login using this email address or enter a different email address to register your account.'),7);
+                throw new Exception($this->__('There is already a customer registered using this email address. Please login using this email address or enter a different email address to register your account.'), 7);
             }
         }
         $address = $this->convertDataAddress($billingAddress);
@@ -115,6 +116,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
     /*
      * Save Shipping Address To quote
      */
+
     public function saveShippingAddress($shippingAddress) {
         $address = $this->convertDataAddress($shippingAddress);
         $address['save_in_address_book'] = '1';
@@ -124,6 +126,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
     /*
      * Add Hidden Address Fields on Storeview Config Result
      */
+
     public function getCheckoutAddressSetting() {
         if (!Mage::getStoreConfig('simiconnector/hideaddress/hideaddress_enable'))
             return NULL;
@@ -144,39 +147,43 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         //sample add custom address fields
         $data['custom_fields'] = array();
         //text field 
-        $data['custom_fields'][] = array('code'=>'text_field_sample',
-            'title'=>'Text Field',
-            'type'=>'text',
-            'position'=>'7',
-            );
+        $data['custom_fields'][] = array('code' => 'text_field_sample',
+            'title' => 'Text Field',
+            'type' => 'text',
+            'required' => 'opt',
+            'position' => '7',
+        );
         //number field 
-        $data['custom_fields'][] = array('code'=>'number_field_sample',
-            'title'=>'Number Field',
-            'type'=>'number',
-            'position'=>'8',
-            );
+        $data['custom_fields'][] = array('code' => 'number_field_sample',
+            'title' => 'Number Field',
+            'type' => 'number',
+            'required' => 'req',
+            'position' => '8',
+        );
         //single choice Option
-        $data['custom_fields'][] = array('code'=>'single_option_sample',
-            'title'=>'Sample Field Single Option',
-            'type'=>'single_option',
-            'option_array'=>array('Option Single 1', 'Option Single 2', 'Option Single 3'),
-            'position'=>'9',
-            );
+        $data['custom_fields'][] = array('code' => 'single_option_sample',
+            'title' => 'Sample Field Single Option',
+            'type' => 'single_option',
+            'required' => '',
+            'option_array' => array('Option Single 1', 'Option Single 2', 'Option Single 3'),
+            'position' => '9',
+        );
         //multi choice Option
-        $data['custom_fields'][] = array('code'=>'multi_option_sample',
-            'title'=>'Sample Field Multi Option',
-            'type'=>'multi_option',
-            'option_array'=>array('Option Multi 1', 'Option Multi 2', 'Option Multi 3', 'Option Multi 4', 'Option Multi 5'),
-            'separated_by'=>'%',
-            'position'=>'10',
-            );
+        $data['custom_fields'][] = array('code' => 'multi_option_sample',
+            'title' => 'Sample Field Multi Option',
+            'type' => 'multi_option',
+            'required' => 'opt',
+            'option_array' => array('Option Multi 1', 'Option Multi 2', 'Option Multi 3', 'Option Multi 4', 'Option Multi 5'),
+            'separated_by' => '%',
+            'position' => '10',
+        );
         return $data;
     }
-    
-    
+
     /*
      * Get Geocode result from Lat and Long
      */
+
     public function getLocationInfo($lat, $lng) {
         $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' . trim($lat) . ',' . trim($lng) . '&sensor=false';
         $json = @file_get_contents($url);
