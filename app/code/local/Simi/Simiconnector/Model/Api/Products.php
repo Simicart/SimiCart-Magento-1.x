@@ -234,6 +234,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         $info['app_options'] = Mage::helper('simiconnector/options')->getOptions($entity);
         $info['wishlist_item_id'] = Mage::helper('simiconnector/wishlist')->getWishlistItemId($entity);
         $info['product_label'] = Mage::helper('simiconnector/productlabel')->getProductLabel($entity);
+        $info['product_video'] = Mage::helper('simiconnector/simivideo')->getProductVideo($entity);
         $this->detail_info = $this->getDetail($info);
         Mage::dispatchEvent('Simi_Simiconnector_Model_Api_Products_Show_After', array('object' => $this, 'data' => $this->detail_info));
         return $this->detail_info;
