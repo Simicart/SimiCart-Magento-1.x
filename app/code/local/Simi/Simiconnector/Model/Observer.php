@@ -54,9 +54,15 @@ class Simi_Simiconnector_Model_Observer {
                 $data['has_child'] = $this->getCategoryChildrenCount($helper->getConfig('noti_price_category_id'));
                 $data['created_time'] = now();
                 $data['notice_type'] = 1;
-                $data['devices_pushed'] = $this->getAllDeviceToPush();
                 $data['notice_sanbox'] = '2';
-                $resultSend = Mage::helper('simiconnector/siminotification')->sendNotice($data);
+                $storeViewCollection = Mage::getModel('core/store')->getCollection();
+                foreach($storeViewCollection as $storeview) {
+                    $data['storeview_id'] = $storeview->getId();
+                    $data['devices_pushed'] = $this->getAllDeviceToPush($storeview->getId());
+                    if ($data['devices_pushed']) {
+                        Mage::helper('simiconnector/siminotification')->sendNotice($data);
+                    }
+                }
             } elseif ($oldPrice != $newPrice && $newProduct->getId() > 0 && $newProduct->getStatus() == '1' && $newProduct->getVisibility() != '1') {
                 $data = array();
                 $content = Mage::helper('simiconnector/siminotification')->__(
@@ -75,9 +81,15 @@ class Simi_Simiconnector_Model_Observer {
                 $data['has_child'] = $this->getCategoryChildrenCount($helper->getConfig('noti_price_category_id'));
                 $data['created_time'] = now();
                 $data['notice_type'] = 1;
-                $data['devices_pushed'] = $this->getAllDeviceToPush();
                 $data['notice_sanbox'] = '2';
-                $resultSend = Mage::helper('simiconnector/siminotification')->sendNotice($data);
+                $storeViewCollection = Mage::getModel('core/store')->getCollection();
+                foreach($storeViewCollection as $storeview) {
+                    $data['storeview_id'] = $storeview->getId();
+                    $data['devices_pushed'] = $this->getAllDeviceToPush($storeview->getId());
+                    if ($data['devices_pushed']) {
+                        Mage::helper('simiconnector/siminotification')->sendNotice($data);
+                    }
+                }
             } elseif (!$newProduct->getId()) {
                 Mage::getSingleton('core/session')->setData('new_added_product_sku', $newProduct->getSku());
             }
@@ -108,10 +120,16 @@ class Simi_Simiconnector_Model_Observer {
                 $data['has_child'] = $this->getCategoryChildrenCount($helper->getConfig('new_product_category_id'));
                 $data['created_time'] = now();
                 $data['notice_type'] = 2;
-                $data['devices_pushed'] = $this->getAllDeviceToPush();
                 $data['notice_sanbox'] = '2';
                 Mage::getSingleton('core/session')->setData('new_added_product_sku', NULL);
-                $resultSend = Mage::helper('simiconnector/siminotification')->sendNotice($data);
+                $storeViewCollection = Mage::getModel('core/store')->getCollection();
+                foreach($storeViewCollection as $storeview) {
+                    $data['storeview_id'] = $storeview->getId();
+                    $data['devices_pushed'] = $this->getAllDeviceToPush($storeview->getId());
+                    if ($data['devices_pushed']) {
+                        Mage::helper('simiconnector/siminotification')->sendNotice($data);
+                    }
+                }
             }
         }
     }
@@ -136,10 +154,10 @@ class Simi_Simiconnector_Model_Observer {
         return Mage::helper('core')->currency($price, true, false);
     }
 
-    public function getAllDeviceToPush() {
+    public function getAllDeviceToPush($storeview_id) {
         $idArray = array();
         $tokenArray = array();
-        foreach (Mage::getModel('simiconnector/device')->getCollection() as $device) {
+        foreach (Mage::getModel('simiconnector/device')->getCollection()->addFieldToFilter('storeview_id',$storeview_id) as $device) {
             if (!in_array($device->getData('device_token'), $idArray)) {
                 $idArray[] = $device->getId();
                 $tokenArray[] = $device->getData('device_token');
