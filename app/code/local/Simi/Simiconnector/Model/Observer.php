@@ -32,7 +32,7 @@ class Simi_Simiconnector_Model_Observer {
         $storeViewCollection = Mage::getModel('core/store')->getCollection();
         foreach ($storeViewCollection as $storeview) {
             $storeviewId = $storeview->getId();
-            if (Mage::getStoreConfig('simiconnector/notification/noti_price_enable', $storeviewId)) {
+            if ($helper->getConfig('simiconnector/notification/noti_price_enable', $storeviewId)) {
                 $newProduct = $observer->getProduct();
                 if (!in_array($storeview->getWebsiteId(), $newProduct->getWebsiteIds()))
                     continue;
@@ -44,19 +44,19 @@ class Simi_Simiconnector_Model_Observer {
                 if ($oldSpecialPrice != $newSpecialPrice && $newProduct->getId() > 0 && $newProduct->getStatus() == '1' && $newProduct->getVisibility() != '1') {
                     $data = array();
                     $content = Mage::helper('simiconnector/siminotification')->__(
-                            $helper->getConfig('noti_price_message'), $newProduct->getName(), $this->formatPrice($oldSpecialPrice), $this->formatPrice($newSpecialPrice));
-                    $data['website_id'] = $helper->getConfig('noti_price_website');
-                    $data['show_popup'] = $helper->getConfig('noti_price_showpopup');
-                    $data['notice_title'] = $helper->getConfig('noti_price_title');
-                    $data['notice_url'] = $helper->getConfig('noti_price_url');
+                            $helper->getConfig('simiconnector/notification/noti_price_message', $storeviewId), $newProduct->getName(), $this->formatPrice($oldSpecialPrice), $this->formatPrice($newSpecialPrice));
+                    $data['website_id'] = $helper->getConfig('simiconnector/notification/noti_price_website', $storeviewId);
+                    $data['show_popup'] = $helper->getConfig('simiconnector/notification/noti_price_showpopup', $storeviewId);
+                    $data['notice_title'] = $helper->getConfig('simiconnector/notification/noti_price_title', $storeviewId);
+                    $data['notice_url'] = $helper->getConfig('simiconnector/notification/noti_price_url', $storeviewId);
                     $data['notice_content'] = $content;
-                    $data['device_id'] = $helper->getConfig('noti_price_platform');
-                    $data['notice_sanbox'] = $helper->getConfig('noti_price_sandbox');
-                    $data['type'] = $helper->getConfig('noti_price_type');
+                    $data['device_id'] = $helper->getConfig('simiconnector/notification/noti_price_platform', $storeviewId);
+                    $data['notice_sanbox'] = $helper->getConfig(simiconnector/notification/'noti_price_sandbox', $storeviewId);
+                    $data['type'] = $helper->getConfig('simiconnector/notification/noti_price_type', $storeviewId);
                     $data['product_id'] = $newProduct->getId();
-                    $data['category_id'] = $helper->getConfig('noti_price_category_id');
-                    $data['category_name'] = $this->getCategoryName($helper->getConfig('noti_price_category_id'));
-                    $data['has_child'] = $this->getCategoryChildrenCount($helper->getConfig('noti_price_category_id'));
+                    $data['category_id'] = $helper->getConfig('simiconnector/notification/noti_price_category_id', $storeviewId);
+                    $data['category_name'] = $this->getCategoryName($helper->getConfig('simiconnector/notification/noti_price_category_id', $storeviewId));
+                    $data['has_child'] = $this->getCategoryChildrenCount($helper->getConfig('simiconnector/notification/noti_price_category_id', $storeviewId));
                     $data['created_time'] = now();
                     $data['notice_type'] = 1;
                     $data['notice_sanbox'] = '2';
@@ -68,19 +68,19 @@ class Simi_Simiconnector_Model_Observer {
                 } elseif ($oldPrice != $newPrice && $newProduct->getId() > 0 && $newProduct->getStatus() == '1' && $newProduct->getVisibility() != '1') {
                     $data = array();
                     $content = Mage::helper('simiconnector/siminotification')->__(
-                            $helper->getConfig('noti_price_message'), $newProduct->getName(), $this->formatPrice($oldPrice), $this->formatPrice($newPrice));
-                    $data['website_id'] = $helper->getConfig('noti_price_website');
-                    $data['show_popup'] = $helper->getConfig('noti_price_showpopup');
-                    $data['notice_title'] = $helper->getConfig('noti_price_title');
-                    $data['notice_url'] = $helper->getConfig('noti_price_url');
+                    $helper->getConfig('simiconnector/notification/noti_price_message', $storeviewId), $newProduct->getName(), $this->formatPrice($oldPrice), $this->formatPrice($newPrice));
+                    $data['website_id'] = $helper->getConfig('simiconnector/notification/noti_price_website', $storeviewId);
+                    $data['show_popup'] = $helper->getConfig('simiconnector/notification/noti_price_showpopup', $storeviewId);
+                    $data['notice_title'] = $helper->getConfig('simiconnector/notification/noti_price_title', $storeviewId);
+                    $data['notice_url'] = $helper->getConfig('simiconnector/notification/noti_price_url', $storeviewId);
                     $data['notice_content'] = $content;
-                    $data['device_id'] = $helper->getConfig('noti_price_platform');
-                    $data['notice_sanbox'] = $helper->getConfig('noti_price_sandbox');
-                    $data['type'] = $helper->getConfig('noti_price_type');
+                    $data['device_id'] = $helper->getConfig('simiconnector/notification/noti_price_platform', $storeviewId);
+                    $data['notice_sanbox'] = $helper->getConfig('simiconnector/notification/noti_price_sandbox', $storeviewId);
+                    $data['type'] = $helper->getConfig('simiconnector/notification/noti_price_type', $storeviewId);
                     $data['product_id'] = $newProduct->getId();
-                    $data['category_id'] = $helper->getConfig('noti_price_category_id');
-                    $data['category_name'] = $this->getCategoryName($helper->getConfig('noti_price_category_id'));
-                    $data['has_child'] = $this->getCategoryChildrenCount($helper->getConfig('noti_price_category_id'));
+                    $data['category_id'] = $helper->getConfig('simiconnector/notification/noti_price_category_id', $storeviewId);
+                    $data['category_name'] = $this->getCategoryName($helper->getConfig('simiconnector/notification/noti_price_category_id', $storeviewId));
+                    $data['has_child'] = $this->getCategoryChildrenCount($helper->getConfig('simiconnector/notification/noti_price_category_id', $storeviewId));
                     $data['created_time'] = now();
                     $data['notice_type'] = 1;
                     $data['notice_sanbox'] = '2';
@@ -101,7 +101,7 @@ class Simi_Simiconnector_Model_Observer {
         $storeViewCollection = Mage::getModel('core/store')->getCollection();
         foreach ($storeViewCollection as $storeview) {
             $storeviewId = $storeview->getId();
-            if ($helper->getConfig('new_product_enable')) {
+            if ($helper->getConfig('simiconnector/notification/new_product_enable', $storeviewId)) {
                 $newProduct = $observer->getProduct();
                 if (!in_array($storeview->getWebsiteId(), $newProduct->getWebsiteIds()))
                     continue;
@@ -109,20 +109,20 @@ class Simi_Simiconnector_Model_Observer {
                                 ->setOrder('entity_id', 'desc')->getFirstItem()->getId();
                 if ($newProduct->getId() && $newProduct->getId() == $lastProductId && $newProduct->getStatus() == '1' && $newProduct->getVisibility() != '1' && $newProduct->getSku() == Mage::getSingleton('core/session')->getData('new_added_product_sku')) {
                     $content = Mage::helper('simiconnector/siminotification')->__(
-                            $helper->getConfig('new_product_message'), $newProduct->getName());
+                            $helper->getConfig('simiconnector/notification/new_product_message', $storeviewId), $newProduct->getName());
                     $data = array();
-                    $data['website_id'] = $helper->getConfig('new_product_website');
-                    $data['show_popup'] = $helper->getConfig('new_product_showpopup');
-                    $data['notice_title'] = $helper->getConfig('new_product_title');
-                    $data['notice_url'] = $helper->getConfig('new_product_url');
+                    $data['website_id'] = $helper->getConfig('simiconnector/notification/new_product_website', $storeviewId);
+                    $data['show_popup'] = $helper->getConfig('simiconnector/notification/new_product_showpopup', $storeviewId);
+                    $data['notice_title'] = $helper->getConfig('simiconnector/notification/new_product_title', $storeviewId);
+                    $data['notice_url'] = $helper->getConfig('simiconnector/notification/new_product_url', $storeviewId);
                     $data['notice_content'] = $content;
-                    $data['device_id'] = $helper->getConfig('new_product_platform');
-                    $data['notice_sanbox'] = $helper->getConfig('new_product_sandbox');
-                    $data['type'] = $helper->getConfig('new_product_type');
+                    $data['device_id'] = $helper->getConfig('simiconnector/notification/new_product_platform', $storeviewId);
+                    $data['notice_sanbox'] = $helper->getConfig('simiconnector/notification/new_product_sandbox', $storeviewId);
+                    $data['type'] = $helper->getConfig('simiconnector/notification/new_product_type', $storeviewId);
                     $data['product_id'] = $newProduct->getId();
-                    $data['category_id'] = $helper->getConfig('new_product_category_id');
-                    $data['category_name'] = $this->getCategoryName($helper->getConfig('new_product_category_id'));
-                    $data['has_child'] = $this->getCategoryChildrenCount($helper->getConfig('new_product_category_id'));
+                    $data['category_id'] = $helper->getConfig('simiconnector/notification/new_product_category_id', $storeviewId);
+                    $data['category_name'] = $this->getCategoryName($helper->getConfig('simiconnector/notification/new_product_category_id', $storeviewId));
+                    $data['has_child'] = $this->getCategoryChildrenCount($helper->getConfig('simiconnector/notification/new_product_category_id', $storeviewId));
                     $data['created_time'] = now();
                     $data['notice_type'] = 2;
                     $data['notice_sanbox'] = '2';

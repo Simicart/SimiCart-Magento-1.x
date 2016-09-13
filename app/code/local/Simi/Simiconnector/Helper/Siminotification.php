@@ -306,8 +306,10 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         return Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'pem' . DS . 'ios' . DS . 'pass_pem.config';
     }
 
-    public function getConfig($nameConfig) {
-        return Mage::getStoreConfig('simiconnector/notification/' . $nameConfig, Mage::app()->getStore()->getId());
+    public function getConfig($nameConfig, $storeviewId = null) {
+        if (!$storeviewId)
+            $storeviewId = Mage::app()->getStore()->getId();
+        return Mage::getStoreConfig($nameConfig, $storeviewId);
     }
 
 }
