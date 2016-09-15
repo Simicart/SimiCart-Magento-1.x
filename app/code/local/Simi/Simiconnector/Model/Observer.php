@@ -51,7 +51,7 @@ class Simi_Simiconnector_Model_Observer {
                     $data['notice_url'] = $helper->getConfig('simiconnector/notification/noti_price_url', $storeviewId);
                     $data['notice_content'] = $content;
                     $data['device_id'] = $helper->getConfig('simiconnector/notification/noti_price_platform', $storeviewId);
-                    $data['notice_sanbox'] = $helper->getConfig(simiconnector/notification/'noti_price_sandbox', $storeviewId);
+                    $data['notice_sanbox'] = $helper->getConfig('simiconnector/notification/noti_price_sandbox', $storeviewId);
                     $data['type'] = $helper->getConfig('simiconnector/notification/noti_price_type', $storeviewId);
                     $data['product_id'] = $newProduct->getId();
                     $data['category_id'] = $helper->getConfig('simiconnector/notification/noti_price_category_id', $storeviewId);
