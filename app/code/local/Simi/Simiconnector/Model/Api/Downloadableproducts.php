@@ -1,11 +1,6 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: Max
- * Date: 5/3/16
- * Time: 9:37 PM
- */
+
 class Simi_Simiconnector_Model_Api_Downloadableproducts extends Simi_Simiconnector_Model_Api_Abstract {
 
     protected $_DEFAULT_ORDER = 'item_id';
