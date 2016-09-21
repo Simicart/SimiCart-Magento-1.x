@@ -99,8 +99,8 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
                     $customer->setData($code, $customerData[$code]);
                 }
             }
-        } 
-		
+        }
+
         if ($data->change_password == 1) {
             $customer->setChangePassword(1);
             $oldPass = $this->_getSession()->getCustomer()->getPasswordHash();
@@ -121,8 +121,8 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
                 throw new Exception($this->_helperCustomer()->__('Invalid current password'), 4);
             }
         }
-		
-		if (isset($data->taxvat)) {
+
+        if (isset($data->taxvat)) {
             $customer->setTaxvat($data->taxvat);
         }
 
@@ -130,7 +130,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             $birthday = $data->year . "-" . $data->month . "-" . $data->day;
             $customer->setDob($birthday);
         }
-        
+
         if (isset($data->gender) && $data->gender) {
             $customer->setGender($data->gender);
         }
@@ -140,12 +140,12 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
 
         if (isset($data->middlename) && $data->middlename) {
             $customer->setMiddlename($data->middlename);
-        }  
+        }
 
         if (isset($data->suffix) && $data->suffix) {
             $customer->setSuffix($data->suffix);
         }
-		
+
         $customerErrors = $customer->validate();
         if (is_array($customerErrors))
             throw new Exception($this->_helperCustomer()->__('Invalid profile information'), 4);
@@ -216,7 +216,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
 
         if (isset($data->middlename) && $data->middlename) {
             $customer->setMiddlename($data->middlename);
-        }  
+        }
 
         if (isset($data->suffix) && $data->suffix) {
             $customer->setSuffix($data->suffix);
@@ -225,6 +225,11 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             $data->password = $customer->generatePassword();
         $customer->setPassword($data->password);
         $customer->save();
+        
+        if (isset($data->news_letter) && ($data->news_letter == '1'))
+            Mage::getModel('newsletter/subscriber')->subscribe($data->email);
+        else
+            Mage::getModel('newsletter/subscriber')->loadByEmail($data->email)->unsubscribe();
         return $customer;
     }
 

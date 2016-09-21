@@ -169,6 +169,9 @@ class Simi_Simiconnector_Model_Observer {
         return implode(',', $idArray);
     }
 
+    /*
+     * Remove coupon on Cart (coupon for app only)
+     */
     public function sales_quote_collect_totals_before($observer) {
         $quote = $observer->getQuote();
         $coupon = $quote->getCouponCode();
