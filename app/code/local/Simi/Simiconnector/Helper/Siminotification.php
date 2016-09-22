@@ -293,7 +293,10 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
     public function getDirPEMfile($data) {
         switch ($data['notice_sanbox']) {
             case '1':
-                return Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'pem' . DS . Mage::getStoreConfig("simiconnector/notification/upload_pem_file_test", $data['storeview_id']);
+                if (!Mage::getStoreConfig("simiconnector/notification/upload_pem_file_test", $data['storeview_id']))
+                   return Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'pem' . DS . 'push.pem';
+                else 
+                    return Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'pem' . DS . Mage::getStoreConfig("simiconnector/notification/upload_pem_file_test", $data['storeview_id']);
                 break;
             case '2':
                 return Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'pem' . DS . 'manual' . DS . Mage::getStoreConfig("simiconnector/notification/upload_pem_file", $data['storeview_id']);
