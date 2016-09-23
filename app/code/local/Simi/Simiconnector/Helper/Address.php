@@ -61,7 +61,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
      * Get Address to be Shown
      */
 
-    public function getAddressDetail($data, $customer) {
+    public function getAddressDetail($data, $customer = null) {
         $street = $data->getStreet();
         return array(
             'firstname' => $data->getFirstname(),
@@ -78,7 +78,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
             'country_name' => $data->getCountry() ? $data->getCountryModel()->loadByCode($data->getCountry())->getName() : NULL,
             'country_id' => $data->getCountry(),
             'telephone' => $data->getTelephone(),
-            'email' => $customer->getEmail(),
+            'email' => $customer?$customer->getEmail():$data->getEmail(),
             'company' => $data->getCompany(),
             'fax' => $data->getFax(),
             'latlng' => $street[2] != NULL ? $street[2] : "",

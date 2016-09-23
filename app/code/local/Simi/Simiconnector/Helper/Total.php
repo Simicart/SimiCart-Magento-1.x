@@ -107,7 +107,7 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
             $this->addCustomRow(Mage::helper('phoenix_cashondelivery')->__('Cash on Delivery fee'), 4, $codFee);
         }
 
-        Mage::dispatchEvent('Simi_Simiconnector_Helper_Total_SetTotal_After', array('object' => $this, 'data' => $this->_data));
+        Mage::dispatchEvent('simi_simiconnector_helper_total_settotal_after', array('object' => $this, 'data' => $this->_data));
         $data = $this->data;
     }
 

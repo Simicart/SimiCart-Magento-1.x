@@ -6,6 +6,8 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
     protected $_RETURN_MESSAGE;
     protected $_QUOTE_INITED = FALSE;
     public $detail_onepage;
+    public $place_order;
+    public $order_placed_info;
 
     protected function _getCart() {
         return Mage::getSingleton('checkout/cart');
@@ -110,6 +112,15 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
 
     public function store() {
         $this->_updateOrder();
+
+        $this->place_order = TRUE;
+        Mage::dispatchEvent('simi_simiconnector_model_api_orders_onepage_store_before', array('object' => $this, 'data' => $this->getData()));
+        if (!$this->place_order) {
+            $result = array('order' => $this->order_placed_info);
+            return $result;
+        }
+        die('a');
+
         $quote = $this->_getQuote();
         if (!$quote->validateMinimumAmount()) {
             throw new Exception(Mage::getStoreConfig('sales/minimum_order/error_message'), 4);
@@ -156,10 +167,10 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             $notification['categoryName'] = $categoryName;
             $notification['has_children'] = $categoryChildrenCount;
             $notification['created_time'] = now();
-            $notification['notice_type'] = 3;           
+            $notification['notice_type'] = 3;
             $order['notification'] = $notification;
         }
-
+        $this->order_placed_info = $order;
         $result = array('order' => $order);
         return $result;
     }
@@ -183,26 +194,26 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             $order['shipping_address'] = Mage::helper('simiconnector/address')->getAddressDetail($quote->getShippingAddress(), $customer);
             $order['shipping'] = Mage::helper('simiconnector/checkout_shipping')->getMethods();
             $order['payment'] = $list_payment;
-            $order['total'] = Mage::helper('simiconnector/total')->getTotal();			
-			$detail_onepage = array('order' => $order);
-			if ($this->_RETURN_MESSAGE) {
-				$detail_onepage['message'] = array($this->_RETURN_MESSAGE);
-			}
+            $order['total'] = Mage::helper('simiconnector/total')->getTotal();
+            $detail_onepage = array('order' => $order);
+            if ($this->_RETURN_MESSAGE) {
+                $detail_onepage['message'] = array($this->_RETURN_MESSAGE);
+            }
             $this->detail_onepage = $detail_onepage;
-            Mage::dispatchEvent('Simi_Simiconnector_Model_Api_Orders_Onepage_Show_After', array('object' => $this, 'data' => $this->detail_onepage));
+            Mage::dispatchEvent('simi_simiconnector_model_api_orders_onepage_show_after', array('object' => $this, 'data' => $this->detail_onepage));
             return $this->detail_onepage;
         } else {
             $result = parent::show();
-			if($data['params']['reorder'] == 1){
-				$order = Mage::getModel('sales/order')->load($data['resourceid']);
-				$cart = Mage::getSingleton('checkout/cart');
-				$items = $order->getItemsCollection();
-				foreach ($items as $item) {
-					$cart->addOrderItem($item);
-				}
-				$cart->save();
-				$result['message'] = Mage::helper('simiconnector')->__('Reorder Succeeded');
-			}
+            if ($data['params']['reorder'] == 1) {
+                $order = Mage::getModel('sales/order')->load($data['resourceid']);
+                $cart = Mage::getSingleton('checkout/cart');
+                $items = $order->getItemsCollection();
+                foreach ($items as $item) {
+                    $cart->addOrderItem($item);
+                }
+                $cart->save();
+                $result['message'] = Mage::helper('simiconnector')->__('Reorder Succeeded');
+            }
             $order = $result['order'];
             $customer = Mage::getSingleton('customer/session')->getCustomer();
             $this->_updateOrderInformation($order, $customer);
@@ -235,16 +246,16 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         $order['total'] = Mage::helper('simiconnector/total')->showTotalOrder($orderModel);
     }
 
-	/*
-    private function _getProductFromOrderList($itemCollection) {
-        $productInfo = array();
-        foreach ($itemCollection as $item) {
-            $productInfo[] = $item->toArray();
-        }
-        return $productInfo;
-    }
-	*/
-    
+    /*
+      private function _getProductFromOrderList($itemCollection) {
+      $productInfo = array();
+      foreach ($itemCollection as $item) {
+      $productInfo[] = $item->toArray();
+      }
+      return $productInfo;
+      }
+     */
+
     public function _getProductFromOrderHistoryDetail($order) {
         $productInfo = array();
         $itemCollection = $order->getAllVisibleItems();
@@ -259,15 +270,13 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
                 $product = Mage::getModel('catalog/product')->load($product_id);
             }
             $image = Mage::helper('simiconnector/products')->getImageProduct($product);
-            $productInfo[] = array_merge( array('option' => $options),
-								$item->toArray(),
-								array('image' => Mage::helper('simiconnector/products')->getImageProduct($item->getProduct()))
-								);
+            $productInfo[] = array_merge(array('option' => $options), $item->toArray(), array('image' => Mage::helper('simiconnector/products')->getImageProduct($item->getProduct()))
+            );
         }
 
         return $productInfo;
     }
-    
+
     public function _getOptions($type, $options) {
         $list = array();
         if ($type == 'bundle') {

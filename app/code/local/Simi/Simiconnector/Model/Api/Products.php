@@ -236,7 +236,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         $info['product_label'] = Mage::helper('simiconnector/productlabel')->getProductLabel($entity);
         $info['product_video'] = Mage::helper('simiconnector/simivideo')->getProductVideo($entity);
         $this->detail_info = $this->getDetail($info);
-        Mage::dispatchEvent('Simi_Simiconnector_Model_Api_Products_Show_After', array('object' => $this, 'data' => $this->detail_info));
+        Mage::dispatchEvent('simi_simiconnector_model_api_products_show_after', array('object' => $this, 'data' => $this->detail_info));
         return $this->detail_info;
     }
 

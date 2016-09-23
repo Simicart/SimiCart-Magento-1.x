@@ -119,7 +119,7 @@ class Simi_Simiconnector_Model_Server
             'module' => $module,
             'controller' => $controller,
         );
-        Mage::dispatchEvent('Simi_Simiconnector_Model_Server_Initialize', array('object' => $this, 'data' => $this->_data));
+        Mage::dispatchEvent('simi_simiconnector_model_server_initialize', array('object' => $this, 'data' => $this->_data));
     }
 
 }

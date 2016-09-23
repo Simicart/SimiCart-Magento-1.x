@@ -53,9 +53,9 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
 
     public function getMethods() {
         /*
-         * Dispatch event Simiconnector_Add_Payment_Method
+         * Dispatch event simiconnector_add_payment_method
          */
-        Mage::dispatchEvent('Simiconnector_Add_Payment_Method',array('object'=>$this));
+        Mage::dispatchEvent('simiconnector_add_payment_method',array('object'=>$this));
        
         $quote = $this->_getQuote();
         $store = $quote ? $quote->getStoreId() : null;

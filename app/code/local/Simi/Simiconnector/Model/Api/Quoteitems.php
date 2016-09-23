@@ -245,7 +245,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
         }
 
         $this->detail_list = $this->getList($info, $all_ids, $total, $limit, $offset);
-        Mage::dispatchEvent('Simi_Simiconnector_Model_Api_Quoteitems_Index_After', array('object' => $this, 'data' => $this->detail_list));
+        Mage::dispatchEvent('simi_simiconnector_model_api_quoteitems_index_after', array('object' => $this, 'data' => $this->detail_list));
         return $this->detail_list;
     }
 
