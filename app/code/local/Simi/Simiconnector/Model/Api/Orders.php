@@ -119,8 +119,7 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             $result = array('order' => $this->order_placed_info);
             return $result;
         }
-        die('a');
-
+        
         $quote = $this->_getQuote();
         if (!$quote->validateMinimumAmount()) {
             throw new Exception(Mage::getStoreConfig('sales/minimum_order/error_message'), 4);
