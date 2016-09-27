@@ -50,7 +50,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Grid extends Mage_Admi
                 array(
                     'caption' => Mage::helper('simiconnector')->__('Edit'),
                     'url' => array('base' => '*/*/edit'),
-                    'field' => 'id'
+                    'field' => 'label_id'
                 )),
             'filter' => false,
             'sortable' => false,

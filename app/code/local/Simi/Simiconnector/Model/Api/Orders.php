@@ -170,7 +170,8 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             $order['notification'] = $notification;
         }
         $this->order_placed_info = $order;
-        $result = array('order' => $order);
+        Mage::dispatchEvent('simi_simiconnector_model_api_orders_onepage_store_after', array('object' => $this, 'data' => $order));
+        $result = array('order' => $this->order_placed_info);
         $this->cleanSession();
         return $result;
     }
@@ -182,14 +183,18 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
     public function show() {
         $data = $this->getData();
         if ($data['resourceid'] == 'onepage') {
+            $customer = Mage::getSingleton('customer/session')->getCustomer();
+            $quote = $this->_getQuote();
             $list_payment = array();
+            /*
+             * Get Detail Payment
+             */
             $paymentHelper = Mage::helper('simiconnector/checkout_payment');
             foreach (Mage::helper('simiconnector/checkout_payment')->getMethods() as $method) {
                 $list_payment[] = $paymentHelper->getDetailsPayment($method);
             }
+            
             $order = array();
-            $quote = $this->_getQuote();
-            $customer = Mage::getSingleton('customer/session')->getCustomer();
             $order['billing_address'] = Mage::helper('simiconnector/address')->getAddressDetail($quote->getBillingAddress(), $customer);
             $order['shipping_address'] = Mage::helper('simiconnector/address')->getAddressDetail($quote->getShippingAddress(), $customer);
             $order['shipping'] = Mage::helper('simiconnector/checkout_shipping')->getMethods();

@@ -2,7 +2,7 @@
 
 class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstract {
 
-    public function _construct(){
+    public function _construct() {
         $this->_setListPayment();
         $this->setListCase();
     }
@@ -23,6 +23,7 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
         return Mage::getSingleton('payment/config');
     }
 
+    public $detail;
     protected $_listPayment = array();
     protected $_listCase;
 
@@ -56,8 +57,8 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
         /*
          * Dispatch event simiconnector_add_payment_method
          */
-        Mage::dispatchEvent('simiconnector_add_payment_method',array('object'=>$this));
-       
+        Mage::dispatchEvent('simiconnector_add_payment_method', array('object' => $this));
+
         $quote = $this->_getQuote();
         $store = $quote ? $quote->getStoreId() : null;
         $methods = Mage::helper('payment')->getStoreMethods($store, $quote);
@@ -177,7 +178,9 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
         if ((Mage::getSingleton('checkout/type_onepage')->getQuote()->getPayment()->getMethod()) && (Mage::getSingleton('checkout/type_onepage')->getQuote()->getPayment()->getMethodInstance()->getCode() == $method->getCode())) {
             $detail['p_method_selected'] = true;
         }
-        return $detail;
+        $this->detail = $detail;
+        Mage::dispatchEvent('simiconnector_change_payment_detail', array('object' => $this));
+        return $this->detail;
     }
 
     public function getListCase() {
