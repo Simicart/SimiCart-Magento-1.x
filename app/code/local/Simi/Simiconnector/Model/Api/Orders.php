@@ -119,7 +119,7 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             $result = array('order' => $this->order_placed_info);
             return $result;
         }
-        
+
         $quote = $this->_getQuote();
         if (!$quote->validateMinimumAmount()) {
             throw new Exception(Mage::getStoreConfig('sales/minimum_order/error_message'), 4);
@@ -171,6 +171,7 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         }
         $this->order_placed_info = $order;
         $result = array('order' => $order);
+        $this->cleanSession();
         return $result;
     }
 
@@ -245,16 +246,6 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         $order['total'] = Mage::helper('simiconnector/total')->showTotalOrder($orderModel);
     }
 
-    /*
-      private function _getProductFromOrderList($itemCollection) {
-      $productInfo = array();
-      foreach ($itemCollection as $item) {
-      $productInfo[] = $item->toArray();
-      }
-      return $productInfo;
-      }
-     */
-
     public function _getProductFromOrderHistoryDetail($order) {
         $productInfo = array();
         $itemCollection = $order->getAllVisibleItems();
@@ -307,6 +298,13 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             }
         }
         return $list;
+    }
+
+    public function cleanSession() {
+        $session = $this->_getOnepage()->getCheckout();
+        $lastOrderId = $session->getLastOrderId();
+        $session->clear();
+        Mage::dispatchEvent('simiconnector_checkout_onepage_controller_success_action', array('order_ids' => array($lastOrderId)));
     }
 
 }

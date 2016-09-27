@@ -52,6 +52,7 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
     }
 
     public function getMethods() {
+        $this->_construct();
         /*
          * Dispatch event simiconnector_add_payment_method
          */
