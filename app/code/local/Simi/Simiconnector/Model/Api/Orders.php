@@ -32,7 +32,6 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
                 
             } else {
                 $this->builderQuery = Mage::getModel('sales/order')->load($data['resourceid']);
-                $order = $this->builderQuery;
                 if (!$this->builderQuery->getId()) {
                     $this->builderQuery = Mage::getModel('sales/order')->loadByIncrementId($data['resourceid']);
                 }
@@ -264,7 +263,6 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             if (version_compare(Mage::getVersion(), '1.7.0.0', '<') === true) {
                 $product = Mage::getModel('catalog/product')->load($product_id);
             }
-            $image = Mage::helper('simiconnector/products')->getImageProduct($product);
             $productInfo[] = array_merge(array('option' => $options), $item->toArray(), array('image' => Mage::helper('simiconnector/products')->getImageProduct($item->getProduct()))
             );
         }
