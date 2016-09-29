@@ -17,7 +17,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         $country = $data->country_id;
         $listState = Mage::helper('simiconnector/address')->getStates($country);
         $state_id = null;
-
+        $check_state = false;
         if (count($listState) == 0) {
             $check_state = true;
         }
@@ -30,7 +30,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
             }
         }
         if (!$check_state) {
-            throw new Exception($this->_helperAddress()->__('State invalid'), 4);
+            throw new Exception($this->__('State invalid'), 4);
         }
         $latlng = isset($data->latlng) == true ? $data->latlng : '';
         $address = array();
@@ -131,12 +131,13 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         if (!Mage::getStoreConfig('simiconnector/hideaddress/hideaddress_enable'))
             return NULL;
         $addresss = array('company', 'street', 'country_id', 'region_id', 'city', 'zipcode',
-            'telephone', 'fax', 'prefix', 'suffix', 'birthday', 'gender', 'taxvat');
+            'telephone', 'fax', 'prefix', 'suffix', 'dob', 'gender', 'taxvat');
         foreach ($addresss as $address) {
             $path = "simiconnector/hideaddress/" . $address;
             $value = Mage::getStoreConfig($path);
             if (!$value || $value == null || !isset($value))
                 $value = 3;
+            $address.='_show';
             if ($value == 1)
                 $data[$address] = "req";
             else if ($value == 2)

@@ -8,6 +8,7 @@
  */
 class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_Api_Abstract {
 
+    public $storeviewInfo;
     protected $_DEFAULT_ORDER = 'store_id';
     protected $_method = 'callApi';
     protected $group_id;
@@ -176,7 +177,10 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         //Scott add to get instant contacts
         if (Mage::helper('simiconnector/plugins_instantcontact')->isEnabled())
             $additionInfo['instant_contact'] = Mage::helper('simiconnector/plugins_instantcontact')->getContacts();
-        $information['storeview'] = $additionInfo;
+        
+        $this->storeviewInfo = $additionInfo;
+        Mage::dispatchEvent('simiconnector_get_storeview_info_after', array('object' => $this));
+        $information['storeview'] = $this->storeviewInfo;
         return $information;
     }
 
