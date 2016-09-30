@@ -99,15 +99,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </show_product_type>
-                        <rtl_country translate="label">
+                        <is_rtl translate="label">
                             <label>Use RTL language</label>
-                            <frontend_type>multiselect</frontend_type>
+                            <frontend_type>select</frontend_type>
                             <sort_order>799</sort_order>
-                            <source_model>adminhtml/system_config_source_country</source_model>                        
+                            <source_model>adminhtml/system_config_source_yesno</source_model>                        
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>                            
-                        </rtl_country>
+                        </is_rtl>
                         <categories_in_app translate="label">
                             <label>Display categories on app</label>
                             <frontend_type>label</frontend_type>

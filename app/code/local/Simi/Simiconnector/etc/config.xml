@@ -185,6 +185,7 @@
                 <is_show_sample_data>1</is_show_sample_data>
                 <base_url></base_url>
                 <is_show_home_title>1</is_show_home_title>
+                <is_rtl>0</is_rtl>
             </general>  
             <currency>                                           
                 <thousand_separator>,</thousand_separator>

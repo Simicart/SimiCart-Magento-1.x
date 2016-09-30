@@ -50,12 +50,6 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
             }
         }
 
-        $rtlCountry = Mage::getStoreConfig('simiconnector/general/rtl_country', Mage::app()->getStore()->getId());
-        $isRtl = '0';
-        $rtlCountry = explode(',', $rtlCountry);
-        if (in_array($country_code, $rtlCountry)) {
-            $isRtl = '1';
-        }
         $currencies = $this->getCurrencies();
 
         $cmsData = $this->getData();
@@ -75,7 +69,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'group_id' => Mage::app()->getStore()->getGroupId(),
                 'base_url' => Mage::getStoreConfig('simiconnector/general/base_url'),
                 'use_store' => Mage::getStoreConfig('web/url/use_store'),
-                'is_rtl' => $isRtl,
+                'is_rtl' => Mage::getStoreConfig('simiconnector/general/is_rtl'),
                 'is_show_sample_data' => Mage::getStoreConfig('simiconnector/general/is_show_sample_data'),
                 'android_sender' =>  Mage::getStoreConfig('simiconnector/notification/android_app_key'),
                 'currency_symbol' => $currencySymbol,
