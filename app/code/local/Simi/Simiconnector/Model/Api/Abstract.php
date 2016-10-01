@@ -287,18 +287,17 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
     {
         $data = $this->getData();
         $parameters = $data['params'];
-        $fields = array();
         if (isset($parameters['fields']) && $parameters['fields']) {
             $fields = explode(',', $parameters['fields']);
-        }
-        $motify = array();
-        if (count($fields)) {
+            $motify = array();
             foreach ($content as $key => $item) {
                 if (in_array($key, $fields)) {
                     $motify[$key] = $item;
                 }
             }
+            return $motify;
+        }else{
+            return $content;
         }
-        return count($motify) > 0 ? $motify : $content;
     }
 }
