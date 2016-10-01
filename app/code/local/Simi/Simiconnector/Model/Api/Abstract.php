@@ -9,7 +9,7 @@
 abstract class Simi_Simiconnector_Model_Api_Abstract
 {
     public $FILTER_RESULT = true;
-	
+
     const DEFAULT_DIR = 'asc';
     const DEFAULT_LIMIT = 15;
     const DIR = 'dir';
@@ -22,7 +22,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
     const LIMIT_COUNT = 200;
 
     protected $_DEFAULT_ORDER = 'entity_id';
-     
+
     protected $_helper;
     /**
      * Singular key.
@@ -100,6 +100,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
         $this->pluralKey = $pluralKey;
         return $this;
     }
+
     //start
     public function store()
     {
@@ -136,7 +137,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
             throw new Exception($this->_helper->__('Invalid method.'), 4);
 
         $fields = array();
-        if(isset($parameters['fields']) && $parameters['fields']){
+        if (isset($parameters['fields']) && $parameters['fields']) {
             $fields = explode(',', $parameters['fields']);
         }
 
@@ -162,7 +163,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
         $data = $this->getData();
         $parameters = $data['params'];
         $fields = array();
-        if(isset($parameters['fields']) && $parameters['fields']){
+        if (isset($parameters['fields']) && $parameters['fields']) {
             $fields = explode(',', $parameters['fields']);
         }
         $info = $entity->toArray($fields);
@@ -211,7 +212,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
     {
         return array(
             'all_ids' => $all_ids,
-            $this->getPluralKey() => $info,
+            $this->getPluralKey() => $this->motifyFields($info),
             'total' => $total,
             'page_size' => $page_size,
             'from' => $from,
@@ -220,7 +221,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
 
     public function getDetail($info)
     {
-        return array($this->getSingularKey() => $info);
+        return array($this->getSingularKey() => $this->motifyFields($info));
     }
 
     protected function filter()
@@ -279,5 +280,25 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
                 return $isOr ? array('attribute' => $key, 'eq' => $value) : array('eq' => $value);
             }
         }
+    }
+
+    //Max update to get fields
+    protected function motifyFields($content)
+    {
+        $data = $this->getData();
+        $parameters = $data['params'];
+        $fields = array();
+        if (isset($parameters['fields']) && $parameters['fields']) {
+            $fields = explode(',', $parameters['fields']);
+        }
+        $motify = array();
+        if (count($fields)) {
+            foreach ($content as $key => $item) {
+                if (in_array($key, $fields)) {
+                    $motify[$key] = $item;
+                }
+            }
+        }
+        return count($motify) > 0 ? $motify : $content;
     }
 }
