@@ -143,7 +143,8 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
      */
 
     public function show() {
-        if ($data['params']['add_to_cart']) {
+        $data = $this->getData();
+        if (isset($data['params']) && isset($data['params']['add_to_cart']) && $data['params']['add_to_cart']) {
             $this->builderQuery = $this->_WISHLIST->getItemCollection();
             return $this->index();
         } 
