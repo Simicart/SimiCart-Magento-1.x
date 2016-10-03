@@ -33,7 +33,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
     }
 
     public function show() {
-        $information = parent::show();
+        //$information = parent::show();
         $country_code = Mage::getStoreConfig('general/country/default');
         $country = Mage::getModel('directory/country')->loadByCode($country_code);
         $locale = Mage::app()->getLocale()->getLocaleCode();
@@ -174,8 +174,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         
         $this->storeviewInfo = $additionInfo;
         Mage::dispatchEvent('simiconnector_get_storeview_info_after', array('object' => $this));
-        $information['storeview'] = $this->storeviewInfo;
-        return $information;
+        return $this->getDetail($this->storeviewInfo);
     }
 
     public function getAllowedCountries() {
