@@ -244,8 +244,11 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         $orderModel = Mage::getModel('sales/order')->load($order['entity_id']);
         $order['payment_method'] = $orderModel->getPayment()->getMethodInstance()->getTitle();
         $order['shipping_method'] = $orderModel->getShippingDescription();
-        $order['shipping_address'] = Mage::helper('simiconnector/address')->getAddressDetail($orderModel->getShippingAddress(), $customer);
         $order['billing_address'] = Mage::helper('simiconnector/address')->getAddressDetail($orderModel->getBillingAddress(), $customer);
+        if (!$orderModel->getShippingAddress())
+            $order['shipping_address'] = $order['billing_address'];
+        else 
+            $order['shipping_address'] = Mage::helper('simiconnector/address')->getAddressDetail($orderModel->getShippingAddress(), $customer);
         $order['order_items'] = $this->_getProductFromOrderHistoryDetail($orderModel);
         $order['total'] = Mage::helper('simiconnector/total')->showTotalOrder($orderModel);
     }
