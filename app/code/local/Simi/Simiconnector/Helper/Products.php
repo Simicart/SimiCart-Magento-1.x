@@ -92,9 +92,9 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
                 $params = array();
                 foreach ($filter_layer as $key => $value) {
                     $params[(string)$key] = (string)$value;
-                    if($key == "cat"){
-                        $category = Mage::getModel('catalog/category')->load($value);
-                    }
+//                    if($key == "cat"){
+//                        $category = Mage::getModel('catalog/category')->load($value);
+//                    }
                 }
                 $controller->getRequest()->setParams($params);
             }
@@ -103,7 +103,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
         if ($is_search == 0) {
             $block = $layout->createBlock('catalog/layer_view');
             //setCurrentCate
-            $block->getLayer()->setCurrentCategory($category);
+            //$block->getLayer()->setCurrentCategory($category);
             $design = Mage::getSingleton('catalog/design');
             $settings = $design->getDesignSettings($category);
             //if (!$settings->getPageLayout()) {
