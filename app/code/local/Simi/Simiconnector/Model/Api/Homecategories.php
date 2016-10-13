@@ -84,6 +84,14 @@ class Simi_Simiconnector_Model_Api_Homecategories extends Simi_Simiconnector_Mod
 
     public function getVisibleChildren($catId) {
         $category = Mage::getModel('catalog/category')->load($catId);
+        if (is_array($category->getChildrenCategories())) {
+            $childArray = $category->getChildrenCategories();
+            $idArray = array();
+            foreach ($childArray as $childArrayItem) {
+                $idArray[] = $childArrayItem->getId();
+            }
+            return Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addFieldToFilter('entity_id', array('in' => $idArray));
+        }
         return $category->getChildrenCategories()->addAttributeToSelect('*');
     }
 

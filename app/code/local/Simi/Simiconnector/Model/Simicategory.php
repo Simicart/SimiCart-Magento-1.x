@@ -35,36 +35,6 @@ class Simi_Simiconnector_Model_Simicategory extends Mage_Core_Model_Abstract {
             return $information;
         }
     }
-
-    public function getCurrencies() {
-        $currencies = array();
-        $codes = Mage::app()->getStore()->getAvailableCurrencyCodes(true);
-        if (is_array($codes) && count($codes) > 1) {
-
-            $rates = Mage::getModel('directory/currency')->getCurrencyRates(
-                    Mage::app()->getStore()->getBaseCurrency(), $codes
-            );
-
-            foreach ($codes as $code) {
-                if (isset($rates[$code])) {
-                    $currencies[] = array(
-                        'value' => $code,
-                        'title' => Mage::app()->getLocale()->getTranslation($code, 'nametocurrency'),
-                    );
-                }
-            }
-        } elseif (count($codes) == 1) {
-            # code...
-            $currencies[] = array(
-                'value' => $codes[0],
-                'title' => Mage::app()->getLocale()->getTranslation($codes[0], 'nametocurrency'),
-            );
-        }
-        $information = $this->statusSuccess();
-        $information['data'] = $currencies;
-        return $information;
-    }
-
     public function delete() {
         $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('homecategory');
         $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()

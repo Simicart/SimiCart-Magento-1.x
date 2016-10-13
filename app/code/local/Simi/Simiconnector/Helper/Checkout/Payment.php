@@ -159,14 +159,17 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
             $detail['show_type'] = 1;
         } elseif ($type == 2) {
             $m_code = strtoupper($method->getCode());
-            $detail['email'] = $method->getConfigData('business_account');
-            $detail['client_id'] = $method->getConfigData('client_id');
-            $detail['is_sandbox'] = $method->getConfigData('is_sandbox');
+            if ($method->getConfigData('business_account'))
+                $detail['email'] = $method->getConfigData('business_account');
+            if ($method->getConfigData('client_id'))
+                $detail['client_id'] = $method->getConfigData('client_id');
+            if ($method->getConfigData('is_sandbox'))
+                $detail['is_sandbox'] = $method->getConfigData('is_sandbox');
             $detail['payment_method'] = $m_code;
             $detail['title'] = $method->getConfigData('title');
-            $detail['bncode'] = "Magestore_SI_MagentoCE";
             $detail['show_type'] = 2;
             if (strcasecmp($m_code, 'PAYPAL_MOBILE') == 0) {
+                $detail['bncode'] = "Magestore_SI_MagentoCE";
                 $detail['use_credit_card'] = Mage::getStoreConfig('payment/paypal_mobile/use_credit_cart');
             }
         } elseif ($type == 3) {

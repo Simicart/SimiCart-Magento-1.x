@@ -24,6 +24,7 @@ class Simi_Simiconnector_Helper_Checkout_Shipping extends Mage_Core_Helper_Abstr
 
     public function getMethods() {
         $shipping = $this->_getCheckoutSession()->getQuote()->getShippingAddress();
+        $shipping->collectShippingRates();
         $methods = $shipping->getGroupedAllShippingRates();
 
         $list = array();

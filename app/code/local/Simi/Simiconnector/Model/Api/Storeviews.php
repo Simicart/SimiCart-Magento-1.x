@@ -223,9 +223,11 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
             );
             foreach ($codes as $code) {
                 if (isset($rates[$code])) {
+                    if (!$title = Mage::app()->getLocale()->getTranslation($code, 'nametocurrency'))
+                            $title = $code;
                     $currencies[] = array(
                         'value' => $code,
-                        'title' => Mage::app()->getLocale()->getTranslation($code, 'nametocurrency'),
+                        'title' => $title,
                     );
                 }
             }

@@ -10,7 +10,6 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
 
     protected $_DEFAULT_ORDER = 'position';
     protected $_visible_array;
-    
 
     public function setBuilderQuery() {
         $data = $this->getData();
@@ -19,12 +18,23 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
         }
         if (Mage::getStoreConfig('simiconnector/general/categories_in_app'))
             $this->_visible_array = explode(',', Mage::getStoreConfig('simiconnector/general/categories_in_app'));
-		
-		$category = Mage::getModel('catalog/category')->load($data['resourceid']);
-		$this->builderQuery = $category->getChildrenCategories()->addAttributeToSelect('*');
-        //$this->builderQuery = Mage::getModel('catalog/category')->getCollection()->addFieldToFilter('parent_id', $data['resourceid'])->addAttributeToSelect('*');
-        if ($this->_visible_array)
-            $this->builderQuery->addFieldToFilter('entity_id', array('in' => $this->_visible_array));
+
+        $category = Mage::getModel('catalog/category')->load($data['resourceid']);
+        if (is_array($category->getChildrenCategories())) {
+            $childArray = $category->getChildrenCategories();
+            $idArray = array();
+            foreach ($childArray as $childArrayItem) {
+                $idArray[] = $childArrayItem->getId();
+            }
+            if ($this->_visible_array)
+                $idArray = array_intersect($idArray, $this->_visible_array);
+            $this->builderQuery = Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addFieldToFilter('entity_id', array('in' => $idArray));
+        }
+        else {
+            $this->builderQuery = $category->getChildrenCategories()->addAttributeToSelect('*');
+            if ($this->_visible_array)
+                $this->builderQuery->addFieldToFilter('entity_id', array('in' => $this->_visible_array));
+        }
     }
 
     public function index() {
