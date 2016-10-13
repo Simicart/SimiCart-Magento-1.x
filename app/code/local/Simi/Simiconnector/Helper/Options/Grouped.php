@@ -31,6 +31,8 @@ class Simi_Simiconnector_Helper_Options_Grouped extends Mage_Core_Helper_Abstrac
                     'id' => $_item->getId(),
                     'name' => $_item->getName(),
                     'is_salable' => $_item->isSaleable() ? "1":"0",
+                    'qty' => is_null($_item->getData('qty')) ? "0" : $_item->getData('qty'),
+                    'position' => is_null($_item->getData('position'))? "0": $_item->getData('position'),
                 );
 
                 $final_price = $_item->getFinalPrice();
