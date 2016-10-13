@@ -156,6 +156,7 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
             $detail['payment_method'] = strtoupper($method->getCode());
             $detail['title'] = $method->getConfigData('title');
             $detail['useccv'] = $method->getConfigData('useccv');
+            $detail['is_show_name'] = '0';
             $detail['show_type'] = 1;
         } elseif ($type == 2) {
             $m_code = strtoupper($method->getCode());
