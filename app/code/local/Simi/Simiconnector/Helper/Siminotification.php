@@ -226,20 +226,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
     public function sendAndroid($collectionDevice, $data) {
         $total = count($collectionDevice);
         $this->checkIndex($data);
-        $message = array(
-            'message' => $data['notice_content'],
-            'url' => $data['notice_url'],
-            'title' => $data['notice_title'],
-            'type' => $data['type'],
-            'productID' => $data['product_id'],
-            'categoryID' => $data['category_id'],
-            'categoryName' => $data['category_name'],
-            'has_child' => $data['has_child'],
-            'imageUrl' => $data['image_url'],
-            'height' => $data['height'],
-            'width' => $data['width'],
-            'show_popup' => $data['show_popup'],
-        );
+        $message = $data;
 
         $this->repeatSendAnddroid($total, $collectionDevice->getData(), $message);
         return true;
