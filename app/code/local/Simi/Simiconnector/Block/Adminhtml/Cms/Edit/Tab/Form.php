@@ -68,7 +68,7 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tab_Form extends Mage_Adminhtm
             'label' => Mage::helper('simiconnector')->__('Store View'),
             'title' => Mage::helper('simiconnector')->__('Store View'),
             'required' => true,
-            'values' => Mage::getSingleton('adminhtml/system_store')->getStoreValuesForForm(false, true),
+            'values' => Mage::getSingleton('adminhtml/system_store')->getStoreValuesForForm(false, false),
         ));
         $renderer = $this->getLayout()->createBlock('adminhtml/store_switcher_form_renderer_fieldset_element');
         $field->setRenderer($renderer);

@@ -88,16 +88,15 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             'lastname' => $data->lastname,
             'email' => $data->email,
         );
-
         if (version_compare(Mage::getVersion(), '1.4.2.0', '<') === true) {
             $customer = Mage::getModel('customer/customer')
                     ->setId($this->_getSession()->getCustomerId())
                     ->setWebsiteId($this->_getSession()->getCustomer()->getWebsiteId());
-            $fields = Mage::getConfig()->getFieldset('customer_account');
-            foreach ($fields as $code => $node) {
-                if ($node->is('update') && isset($customerData[$code])) {
-                    $customer->setData($code, $customerData[$code]);
-                }
+        }
+        $fields = Mage::getConfig()->getFieldset('customer_account');
+        foreach ($fields as $code => $node) {
+            if ($node->is('update') && isset($customerData[$code])) {
+                $customer->setData($code, $customerData[$code]);
             }
         }
 
@@ -225,7 +224,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             $data->password = $customer->generatePassword();
         $customer->setPassword($data->password);
         $customer->save();
-        
+
         if (isset($data->news_letter) && ($data->news_letter == '1'))
             Mage::getModel('newsletter/subscriber')->subscribe($data->email);
         else

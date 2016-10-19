@@ -79,6 +79,7 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
      */
 
     public function getDetail($info) {
+        //$info['dob'] = date("Y-m-d H:i:s", strtotime($info['dob']));
         if ($this->_RETURN_MESSAGE) {
             $resultArray = parent::getDetail($info);
             $resultArray['message'] = array($this->_RETURN_MESSAGE);
