@@ -70,6 +70,7 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
     /*
      * Matrix Helper Functions
      */
+
     public function getMatrixRowOptions() {
         $rows = array();
         $highestRow = 0;
@@ -100,7 +101,8 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
         $rows = array();
         $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('homecategory');
         $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
-        $simicategoryCollection = Mage::getModel('simiconnector/simicategory')->getCollection()->setOrder('sort_order', 'desc')->addFieldToFilter('status', '1');;
+        $simicategoryCollection = Mage::getModel('simiconnector/simicategory')->getCollection()->setOrder('sort_order', 'desc')->addFieldToFilter('status', '1');
+        ;
         $simicategoryCollection->getSelect()
                 ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.simicategory_id AND visibility.content_type = ' . $typeID . ' AND visibility.store_view_id =' . $storeviewid);
 
@@ -121,11 +123,12 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
                 'matrix_width_percent_tablet' => $simicat->getData('matrix_width_percent_tablet'),
                 'matrix_height_percent_tablet' => $simicat->getData('matrix_height_percent_tablet'),
                 'title' => $title,
+                'sort_order' => $simicat->getData('sort_order')
             );
         }
 
         $listtypeID = Mage::helper('simiconnector')->getVisibilityTypeId('productlist');
-        $listCollection = Mage::getModel('simiconnector/productlist')->getCollection()->addFieldToFilter('list_status','1');
+        $listCollection = Mage::getModel('simiconnector/productlist')->getCollection()->addFieldToFilter('list_status', '1');
         $listCollection->getSelect()
                 ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.productlist_id AND visibility.content_type = ' . $listtypeID . ' AND visibility.store_view_id =' . $storeviewid);
 
@@ -144,15 +147,25 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
                 'matrix_width_percent_tablet' => $productlist->getData('matrix_width_percent_tablet'),
                 'matrix_height_percent_tablet' => $productlist->getData('matrix_height_percent_tablet'),
                 'title' => $title,
+                'sort_order' => $productlist->getData('sort_order')
             );
         }
         ksort($rows);
-
+        try {
+            foreach ($rows as $index => $row) {
+                usort($row, function($a, $b) {
+                    return $a['sort_order'] - $b['sort_order'];
+                });
+                $rows[$index] = $row;
+            }
+        } catch (Exception $e) {
+            
+        }
         $html = '</br> <b> Matrix Theme Mockup Preview: </b></br>(Save Item to update your Changes)</br></br>';
         $html.= '<table><tr><td style="text-align:center">Phone Screen Mockup Preview: </br>';
         $html.= $this->drawMatrixMockupTable(170, 320, false, $rows);
         $html.= '</td><td> </td><td style="text-align:center">Tablet Screen Mockup Preview: </br>';
-        $html.= $this->drawMatrixMockupTable(178, 512, true, $rows).'</td></tr></table>';
+        $html.= $this->drawMatrixMockupTable(178, 512, true, $rows) . '</td></tr></table>';
         return $html;
     }
 

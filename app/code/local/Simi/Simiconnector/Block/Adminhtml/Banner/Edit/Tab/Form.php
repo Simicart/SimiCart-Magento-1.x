@@ -249,9 +249,12 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
             'required' => false,
         ));
         
+        if (!isset($data['sort_order']))
+            $data['sort_order'] = 1;
         $fieldset->addField('sort_order', 'text', array(
             'label' => Mage::helper('simiconnector')->__('Sort Order'),
             'required' => false,
+            'class' => 'validate-not-negative-number',
             'name' => 'sort_order',
         ));
 
