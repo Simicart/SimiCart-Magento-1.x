@@ -597,20 +597,21 @@
                                 <hideaddress_enable>1</hideaddress_enable>
                             </depends>
                         </street>
-                        <country_id translate="label">
-                            <label>Country</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
+                        <street_default translate="label">
+                            <label>Default Address Value</label>
+                            <frontend_type>text</frontend_type>
                             <sort_order>6</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <depends>
                                 <hideaddress_enable>1</hideaddress_enable>
+                                <street separator=",">2,3</street>
                             </depends>
-                        </country_id>
-                        <region_id translate="label">
-                            <label>State/Province</label>
+                            <comment>Applied when Customers leave Address field blank</comment>
+                        </street_default>
+                        <country_id translate="label">
+                            <label>Country</label>
                             <frontend_type>select</frontend_type>
                             <source_model>simiconnector/config_source_addressrequiretype</source_model>
                             <sort_order>7</sort_order>
@@ -620,21 +621,22 @@
                             <depends>
                                 <hideaddress_enable>1</hideaddress_enable>
                             </depends>
-                        </region_id>
-                        <city translate="label">
-                            <label>City</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
+                        </country_id>
+                        <country_id_default translate="label">
+                            <label>Default Country Value</label>
+                            <frontend_type>text</frontend_type>
                             <sort_order>8</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <depends>
                                 <hideaddress_enable>1</hideaddress_enable>
+                                <country_id separator=",">2,3</country_id>
                             </depends>
-                        </city>
-                        <zipcode translate="label">
-                            <label>Zip/Postal Code</label>
+                            <comment>Applied when Customers leave Country field blank, use country ID, eg. US</comment>
+                        </country_id_default>
+                        <region_id translate="label">
+                            <label>State/Province</label>
                             <frontend_type>select</frontend_type>
                             <source_model>simiconnector/config_source_addressrequiretype</source_model>
                             <sort_order>9</sort_order>
@@ -644,12 +646,75 @@
                             <depends>
                                 <hideaddress_enable>1</hideaddress_enable>
                             </depends>
+                        </region_id>
+                        <region_id_default translate="label">
+                            <label>Default State/Province Value</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                                <region_id separator=",">2,3</region_id>
+                            </depends>
+                            <comment>Applied when Customers leave State/Province field blank, use region_id if State/Province is a option field. Eg. 1 for Alabama</comment>
+                        </region_id_default>
+                        <city translate="label">
+                            <label>City</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
+                            <sort_order>11</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                            </depends>
+                        </city>
+                        <city_default translate="label">
+                            <label>Default City Value</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>12</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                                <city separator=",">2,3</city>
+                            </depends>
+                            <comment>Applied when Customers leave City field blank</comment>
+                        </city_default>
+                        <zipcode translate="label">
+                            <label>Zip/Postal Code</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>simiconnector/config_source_addressrequiretype</source_model>
+                            <sort_order>13</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                            </depends>
                         </zipcode>
+                        <zipcode_default translate="label">
+                            <label>Default Zip/Postal Code Value</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>14</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                                <zipcode separator=",">2,3</zipcode>
+                            </depends>
+                            <comment>Applied when Customers leave Zip/Postal Code field blank</comment>
+                        </zipcode_default>
                         <telephone translate="label">
                             <label>Telephone</label>
                             <frontend_type>select</frontend_type>
                             <source_model>simiconnector/config_source_addressrequiretype</source_model>
-                            <sort_order>10</sort_order>
+                            <sort_order>15</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -657,11 +722,24 @@
                                 <hideaddress_enable>1</hideaddress_enable>
                             </depends>
                         </telephone>
+                        <telephone_default translate="label">
+                            <label>Default Telephone Value</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>16</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <hideaddress_enable>1</hideaddress_enable>
+                                <telephone separator=",">2,3</telephone>
+                            </depends>
+                            <comment>Applied when Customers leave Telephone field blank</comment>
+                        </telephone_default>
                         <fax translate="label">
                             <label>Fax</label>
                             <frontend_type>select</frontend_type>
                             <source_model>simiconnector/config_source_addressrequiretype</source_model>
-                            <sort_order>11</sort_order>
+                            <sort_order>17</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -673,7 +751,7 @@
                             <label>Prefix Name</label>
                             <frontend_type>select</frontend_type>
                             <source_model>simiconnector/config_source_addressrequiretype</source_model>
-                            <sort_order>12</sort_order>
+                            <sort_order>18</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -685,7 +763,7 @@
                             <label>Suffix Name</label>
                             <frontend_type>select</frontend_type>
                             <source_model>simiconnector/config_source_addressrequiretype</source_model>
-                            <sort_order>14</sort_order>
+                            <sort_order>19</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -697,7 +775,7 @@
                             <label>Date of Birth</label>
                             <frontend_type>select</frontend_type>
                             <source_model>simiconnector/config_source_addressrequiretype</source_model>
-                            <sort_order>15</sort_order>
+                            <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -709,7 +787,7 @@
                             <label>Gender</label>
                             <frontend_type>select</frontend_type>
                             <source_model>simiconnector/config_source_addressrequiretype</source_model>
-                            <sort_order>16</sort_order>
+                            <sort_order>21</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -721,7 +799,7 @@
                             <label>Tax/VAT number</label>
                             <frontend_type>select</frontend_type>
                             <source_model>simiconnector/config_source_addressrequiretype</source_model>
-                            <sort_order>17</sort_order>
+                            <sort_order>22</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>

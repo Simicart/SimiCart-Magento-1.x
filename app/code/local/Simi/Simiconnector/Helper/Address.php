@@ -16,7 +16,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
     public function convertDataAddress($data) {
         $country = $data->country_id;
         $listState = Mage::helper('simiconnector/address')->getStates($country);
-        $state_id = null;
+        $state_id = Mage::getStoreConfig('simiconnector/hideaddress/region_id_default');
         $check_state = false;
         if (count($listState) == 0) {
             $check_state = true;
@@ -30,8 +30,24 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
             }
         }
         if (!$check_state) {
-            throw new Exception($this->__('State invalid'), 4);
+            if (!$state_id)
+                throw new Exception($this->__('State invalid'), 4);
         }
+        if (!isset($data->country_id) && !isset($data->country_name))
+            $data->country_id = Mage::getStoreConfig('simiconnector/hideaddress/country_id_default');
+
+        if (!isset($data->street))
+            $data->street = Mage::getStoreConfig('simiconnector/hideaddress/street_default');
+
+        if (!isset($data->city))
+            $data->city = Mage::getStoreConfig('simiconnector/hideaddress/city_default');
+
+        if (!isset($data->postcode))
+            $data->postcode = Mage::getStoreConfig('simiconnector/hideaddress/zipcode_default');
+
+        if (!isset($data->telephone))
+            $data->telephone = Mage::getStoreConfig('simiconnector/hideaddress/telephone_default');
+
         $latlng = isset($data->latlng) == true ? $data->latlng : '';
         $address = array();
         foreach ((array) $data as $index => $info) {
@@ -63,6 +79,8 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
 
     public function getAddressDetail($data, $customer = null) {
         $street = $data->getStreet();
+        if (!($email = $data->getData('email')) && $customer->getEmail())
+            $email = $customer->getEmail();
         return array(
             'firstname' => $data->getFirstname(),
             'lastname' => $data->getLastname(),
@@ -78,7 +96,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
             'country_name' => $data->getCountry() ? $data->getCountryModel()->loadByCode($data->getCountry())->getName() : NULL,
             'country_id' => $data->getCountry(),
             'telephone' => $data->getTelephone(),
-            'email' => $customer?$customer->getEmail():$data->getEmail(),
+            'email' => $email,
             'company' => $data->getCompany(),
             'fax' => $data->getFax(),
             'latlng' => $street[2] != NULL ? $street[2] : "",
