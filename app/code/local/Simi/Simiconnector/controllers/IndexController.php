@@ -7,6 +7,25 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         $this->renderLayout();
     }
 
+    public function checkInstallAction(){
+        $arr = array();
+        $arr['is_install'] = "1";
+        $key = $this->getRequest()->getParam('key');
+        if ($key == null || $key == '')
+        {
+            $arr["website_key"] = "0";
+
+        }else{
+            $keySecret = md5 (Mage::getStoreConfig('simiconnector/general/secret_key'));
+            if (strcmp($key, $keySecret) == 0)
+                $arr["website_key"] = "1";
+            else
+                $arr["website_key"] = "0";
+        }
+        echo json_encode($arr);
+        exit();
+    }
+
     public function installDBAction() {
         $setup = new Mage_Core_Model_Resource_Setup('core_setup');
         $installer = $setup;
