@@ -115,7 +115,21 @@ class Simi_Simiconnector_Helper_Review extends Mage_Core_Helper_Abstract
                 'key_1' => 'nickname',
                 'key_2' => 'title',
                 'key_3' => 'detail',
-            ));
+                 'form_key'=> array(
+                     array(
+                         'key' => 'nickname',
+                         'value' => 'Nickname'
+                     ),
+                     array(
+                         'key' => 'title',
+                         'value' => 'Title'
+                     ),
+                     array(
+                         'key' => 'detail',
+                         'value' => 'Detail'
+                     ),
+                )),
+            );
             return $info;
         } else {
             return array($block->__('Only registered users can write reviews'));
