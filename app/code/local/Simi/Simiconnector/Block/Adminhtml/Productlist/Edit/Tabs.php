@@ -35,8 +35,8 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tabs extends Mage_Admi
 	 */
 	protected function _beforeToHtml(){
 		$this->addTab('form_section', array(
-			'label'	 => Mage::helper('simiconnector')->__('Block Information'),
-			'title'	 => Mage::helper('simiconnector')->__('Block Information'),
+			'label'	 => Mage::helper('simiconnector')->__('Product List Information'),
+			'title'	 => Mage::helper('simiconnector')->__('Product List Information'),
 			'content'=> $this->getLayout()->createBlock('simiconnector/adminhtml_productlist_edit_tab_form')->toHtml(),
 		));
 		return parent::_beforeToHtml();

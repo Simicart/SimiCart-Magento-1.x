@@ -129,7 +129,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
 
             try {
                 $model->save();
-                Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Block was successfully saved'));
+                Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('CMS Page was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
 
                 if ($data['storeview_id'] && is_array($data['storeview_id'])) {

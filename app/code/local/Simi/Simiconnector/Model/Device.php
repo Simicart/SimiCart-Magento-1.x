@@ -39,8 +39,7 @@ class Simi_Simiconnector_Model_Device extends Mage_Core_Model_Abstract {
         $addresses = Mage::helper('simiconnector/address')->getLocationInfo($latitude, $longitude);
         $existed_device = $this->getCollection()->addFieldToFilter('device_token', $deviceData->device_token)->getFirstItem();
         if ($existed_device->getId()) {
-            if (($existed_device->getData('storeview_id') != null) && ($existed_device->getData('storeview_id') == Mage::app()->getStore()->getStoreId()))
-                $this->setId($existed_device->getId());
+            $this->setId($existed_device->getId());
         }
         if ($addresses) {
             $this->setData('address', $addresses['address']);
@@ -57,7 +56,7 @@ class Simi_Simiconnector_Model_Device extends Mage_Core_Model_Abstract {
         $this->setData('created_time', now());
         $this->setData('user_email', $deviceData->user_email);
         $this->setData('app_id', $deviceData->app_id);
-        $this->setData('device_ip', $_SERVER['REMOTE_ADDR']);        
+        $this->setData('device_ip', $_SERVER['REMOTE_ADDR']);
         $this->setData('device_user_agent', $_SERVER['HTTP_USER_AGENT']);
         $this->setData('build_version', $deviceData->build_version);
         if (is_null($deviceData->is_demo)) {
@@ -65,5 +64,6 @@ class Simi_Simiconnector_Model_Device extends Mage_Core_Model_Abstract {
         } else
             $this->setData('is_demo', $deviceData->is_demo);
         $this->save();
-    }    
+    }
+
 }

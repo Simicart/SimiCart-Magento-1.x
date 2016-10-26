@@ -25,7 +25,7 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tabs extends Mage_Adminhtml_Bl
 		parent::__construct();
 		$this->setId('notice_tabs');
 		$this->setDestElementId('edit_form');
-		$this->setTitle(Mage::helper('simiconnector')->__('Block Information'));
+		$this->setTitle(Mage::helper('simiconnector')->__('CMS Information'));
 	}
 	
 	/**
@@ -35,8 +35,8 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tabs extends Mage_Adminhtml_Bl
 	 */
 	protected function _beforeToHtml(){
 		$this->addTab('form_section', array(
-			'label'	 => Mage::helper('simiconnector')->__('Block Information'),
-			'title'	 => Mage::helper('simiconnector')->__('Block Information'),
+			'label'	 => Mage::helper('simiconnector')->__('CMS Information'),
+			'title'	 => Mage::helper('simiconnector')->__('CMS Information'),
 			'content'	 => $this->getLayout()->createBlock('simiconnector/adminhtml_cms_edit_tab_form')->toHtml(),
 		));
 		return parent::_beforeToHtml();

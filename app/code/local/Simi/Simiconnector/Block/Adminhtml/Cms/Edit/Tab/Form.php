@@ -51,7 +51,7 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tab_Form extends Mage_Adminhtm
         if (!$data['type'])
             $data['type'] = '1';
         
-        $fieldset = $form->addFieldset('simiconnector_form', array('legend' => Mage::helper('simiconnector')->__('Block information')));
+        $fieldset = $form->addFieldset('simiconnector_form', array('legend' => Mage::helper('simiconnector')->__('CMS information')));
         $wysiwygConfig = Mage::getSingleton('cms/wysiwyg_config')->getConfig();
         $wysiwygConfig->addData(array(
             'add_variables' => false,

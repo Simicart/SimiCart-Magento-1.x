@@ -155,7 +155,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
             try {
                 $model->save();
                 Mage::helper('simiconnector/productlist')->updateMatrixRowHeight($data['matrix_row'], $data['matrix_height_percent'], $data['matrix_height_percent_tablet'] );
-                Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Block was successfully saved'));
+                Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Product List was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
 
                 if ($data['storeview_id'] && is_array($data['storeview_id'])) {
