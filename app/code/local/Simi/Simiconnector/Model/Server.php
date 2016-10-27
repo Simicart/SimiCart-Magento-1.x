@@ -18,7 +18,7 @@ class Simi_Simiconnector_Model_Server
         $this->_helper = Mage::helper('simiconnector');
     }
 
-    public function init(Mage_Api_Controller_Action $controller)
+    public function init(Simi_Simiconnector_Controller_Action $controller)
     {
         $this->initialize($controller);
         return $this;
@@ -69,13 +69,13 @@ class Simi_Simiconnector_Model_Server
     }
 
     /**
-     * @param Mage_Api_Controller_Action $controller
+     * @param Simi_Simiconnector_Controller_Action $controller
      * $is_method = 1 - get
      * $is_method = 2 - post
      * $is_method = 3 - update
      * $is_method = 4 - delete
      */
-    public function initialize(Mage_Api_Controller_Action $controller)
+    public function initialize(Simi_Simiconnector_Controller_Action $controller)
     {
 
         $request_string = $controller->getRequest()->getRequestString();
