@@ -163,6 +163,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
             else if ($value == 3)
                 $data[$address] = "";
         }
+        /*
         //sample add custom address fields
         $data['custom_fields'] = array();
         //text field 
@@ -196,6 +197,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
             'separated_by' => '%',
             'position' => '10',
         );
+         */
         return $data;
     }
 
