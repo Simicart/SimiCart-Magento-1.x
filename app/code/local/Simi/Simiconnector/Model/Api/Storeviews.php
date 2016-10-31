@@ -104,6 +104,12 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'tax_cart_display_grandtotal' => Mage::getStoreConfig('tax/cart_display/grandtotal'),
                 'tax_cart_display_full_summary' => Mage::getStoreConfig('tax/cart_display/full_summary'),
                 'tax_cart_display_zero_tax' => Mage::getStoreConfig('tax/cart_display/zero_tax'),
+		'tax_sales_display_price' => Mage::getStoreConfig('tax/sales_display/price'),
+                'tax_sales_display_subtotal' => Mage::getStoreConfig('tax/sales_display/subtotal'),
+                'tax_sales_display_shipping' => Mage::getStoreConfig('tax/sales_display/shipping'),
+                'tax_sales_display_grandtotal' => Mage::getStoreConfig('tax/sales_display/grandtotal'),
+                'tax_sales_display_full_summary' => Mage::getStoreConfig('tax/sales_display/full_summary'),
+                'tax_sales_display_zero_tax' => Mage::getStoreConfig('tax/sales_display/zero_tax'),
             ),
             'google_analytics' => array(
                 'google_analytics_active' => Mage::getStoreConfig('google/analytics/active'),
