@@ -188,7 +188,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
 
     public function callApi($data)
     {
-        Mage::helper('simiconnector/customer')->renewCustomerSesssion($data);
+        $this->renewCustomerSesssion($data);
         $this->setData($data);
         $this->setBuilderQuery(null);
         $this->setPluralKey($data['resource']);
@@ -282,7 +282,6 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
         }
     }
 
-    //Max update to get fields
     protected function motifyFields($content)
     {
         $data = $this->getData();
@@ -299,5 +298,9 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
         }else{
             return $content;
         }
+    }
+    
+    protected  function renewCustomerSesssion($data){
+        Mage::helper('simiconnector/customer')->renewCustomerSesssion($data);
     }
 }
