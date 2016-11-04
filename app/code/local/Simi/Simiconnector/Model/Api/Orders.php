@@ -1,6 +1,7 @@
 <?php
 
-class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_Abstract {
+class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_Abstract
+{
 
     protected $_DEFAULT_ORDER = 'entity_id';
     protected $_RETURN_MESSAGE;
@@ -9,27 +10,32 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
     public $place_order;
     public $order_placed_info;
 
-    protected function _getCart() {
+    protected function _getCart()
+    {
         return Mage::getSingleton('checkout/cart');
     }
 
-    protected function _getQuote() {
+    protected function _getQuote()
+    {
         return $this->_getCart()->getQuote();
     }
 
-    protected function _getCheckoutSession() {
+    protected function _getCheckoutSession()
+    {
         return Mage::getSingleton('checkout/session');
     }
 
-    public function _getOnepage() {
+    public function _getOnepage()
+    {
         return Mage::getSingleton('checkout/type_onepage');
     }
 
-    public function setBuilderQuery() {
+    public function setBuilderQuery()
+    {
         $data = $this->getData();
         if ($data['resourceid']) {
             if ($data['resourceid'] == 'onepage') {
-                
+
             } else {
                 $this->builderQuery = Mage::getModel('sales/order')->load($data['resourceid']);
                 if (!$this->builderQuery->getId()) {
@@ -41,8 +47,8 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             }
         } else {
             $this->builderQuery = Mage::getModel('sales/order')->getCollection()
-                    ->addFieldToFilter('customer_id', Mage::getSingleton('customer/session')->getCustomer()->getId())
-                    ->setOrder('entity_id', 'DESC');
+                ->addFieldToFilter('customer_id', Mage::getSingleton('customer/session')->getCustomer()->getId())
+                ->setOrder('entity_id', 'DESC');
         }
     }
 
@@ -50,7 +56,8 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
      * Update Checkout Order (onepage) Information
      */
 
-    public function update() {
+    public function update()
+    {
         $data = $this->getData();
         if ($data['resourceid'] == 'onepage') {
             $this->_updateOrder();
@@ -58,21 +65,35 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         } else {
             $order = $this->builderQuery;
             $param = $data['contents'];
+            $order_helper = Mage::helper('simiconnector/orders');
+            $result = null;
             if ($param->status == 'cancel') {
-                $order->cancel();
-                $order->setState(Mage_Sales_Model_Order::STATE_CANCELED, true);
-                $order->save();
+                $result = $order_helper->cancelOrder($order);
+            } elseif ($param->status == 'invoice') {
+                $result = $order_helper->invoiceOrder($order);
+            } elseif ($param->status == 'ship') {
+                $result = $order_helper->shipOrder($order);
+            } elseif ($param->status == 'hold') {
+                $result = $order_helper->holdOrder($order);
+            } elseif ($param->status == 'unhold') {
+                $result = $order_helper->unHoldOrder($order);
             } else {
                 $order->setState($param->status, true);
                 $order->save();
+            }
+            if (null != $result) {
+                $return_data = $this->show();
+                $return_data[$this->getSingularKey()]['message'] = $result['message'];
+                return $return_data;
             }
             return $this->show();
         }
     }
 
-    private function _updateOrder() {
+    private function _updateOrder()
+    {
         $data = $this->getData();
-        $parameters = (array) $data['contents'];
+        $parameters = (array)$data['contents'];
 
         if (isset($parameters['b_address'])) {
             $this->_initCheckout();
@@ -97,7 +118,8 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         $this->_getOnepage()->getQuote()->collectTotals()->save();
     }
 
-    private function _initCheckout() {
+    private function _initCheckout()
+    {
         if (!$this->_QUOTE_INITED) {
             $this->_getCheckoutSession()->setCartWasUpdated(false);
             $this->_getOnepage()->initCheckout();
@@ -109,7 +131,8 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
      * Place Order
      */
 
-    public function store() {
+    public function store()
+    {
         $this->_updateOrder();
 
         $this->place_order = TRUE;
@@ -138,7 +161,7 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             $newTransaction->setOrderId($orderId);
             $newTransaction->save();
         } catch (Exception $exc) {
-            
+
         }
 
         /*
@@ -179,7 +202,8 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
      * Return Order Detail (History and Onepage)
      */
 
-    public function show() {
+    public function show()
+    {
         $data = $this->getData();
         if ($data['resourceid'] == 'onepage') {
             $customer = Mage::getSingleton('customer/session')->getCustomer();
@@ -192,7 +216,7 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             foreach (Mage::helper('simiconnector/checkout_payment')->getMethods() as $method) {
                 $list_payment[] = $paymentHelper->getDetailsPayment($method);
             }
-            
+
             $order = array();
             $order['billing_address'] = Mage::helper('simiconnector/address')->getAddressDetail($quote->getBillingAddress(), $customer);
             $order['shipping_address'] = Mage::helper('simiconnector/address')->getAddressDetail($quote->getShippingAddress(), $customer);
@@ -230,7 +254,8 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
      * Order History
      */
 
-    public function index() {
+    public function index()
+    {
         $result = parent::index();
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         foreach ($result['orders'] as $index => $order) {
@@ -240,20 +265,22 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         return $result;
     }
 
-    private function _updateOrderInformation(&$order, $customer) {
+    private function _updateOrderInformation(&$order, $customer)
+    {
         $orderModel = Mage::getModel('sales/order')->load($order['entity_id']);
         $order['payment_method'] = $orderModel->getPayment()->getMethodInstance()->getTitle();
         $order['shipping_method'] = $orderModel->getShippingDescription();
         $order['billing_address'] = Mage::helper('simiconnector/address')->getAddressDetail($orderModel->getBillingAddress(), $customer);
         if (!$orderModel->getShippingAddress())
             $order['shipping_address'] = $order['billing_address'];
-        else 
+        else
             $order['shipping_address'] = Mage::helper('simiconnector/address')->getAddressDetail($orderModel->getShippingAddress(), $customer);
         $order['order_items'] = $this->_getProductFromOrderHistoryDetail($orderModel);
         $order['total'] = Mage::helper('simiconnector/total')->showTotalOrder($orderModel);
     }
 
-    public function _getProductFromOrderHistoryDetail($order) {
+    public function _getProductFromOrderHistoryDetail($order)
+    {
         $productInfo = array();
         $itemCollection = $order->getAllVisibleItems();
         foreach ($itemCollection as $item) {
@@ -273,7 +300,8 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         return $productInfo;
     }
 
-    public function _getOptions($type, $options) {
+    public function _getOptions($type, $options)
+    {
         $list = array();
         if ($type == 'bundle') {
             foreach ($options['bundle_options'] as $option) {
@@ -306,7 +334,8 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         return $list;
     }
 
-    public function cleanSession() {
+    public function cleanSession()
+    {
         $session = $this->_getOnepage()->getCheckout();
         $lastOrderId = $session->getLastOrderId();
         $session->clear();
