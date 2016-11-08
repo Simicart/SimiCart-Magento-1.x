@@ -1,0 +1,25 @@
+<?php if($this->getTheme() == null):?>
+
+<div class="notification-global">
+    <strong>Warning the configuration need be to setup</strong>.Click here to go to <a href='<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/system_config/edit/section/simiconnector")?>'>the configuration</a> and change your settings.
+</div>
+
+<script type="text/javascript">
+    //<![CDATA[
+    if($('simicategoryGrid')){
+        $('simicategoryGrid').hide();
+    }
+
+    if($('noticeGrid')){
+        $('noticeGrid').hide();
+    }
+
+    if($('bannerGrid')){
+        $('bannerGrid').hide();
+    }
+
+    $('page:main-container'). select('button')[0].hide();
+    //]]>
+</script>
+
+<?php endif;?>

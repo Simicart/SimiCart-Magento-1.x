@@ -28,7 +28,6 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
             exit();
         }
          */
-
     }
 
     protected function _getServer(){

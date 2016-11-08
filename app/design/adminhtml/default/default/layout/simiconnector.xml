@@ -13,11 +13,13 @@
     <adminhtml_simiconnector_simicategory_index>
         <reference name="content">
             <block type="simiconnector/adminhtml_simicategory" name="simicategory" />
+            <block type="simiconnector/adminhtml_simicategory" name="simicategory_more" template="simiconnector/render/category.phtml" />
         </reference>
     </adminhtml_simiconnector_simicategory_index>
     <adminhtml_simiconnector_banner_index>
         <reference name="content">
             <block type="simiconnector/adminhtml_banner" name="simiconnector_banner"/>
+            <block type="simiconnector/adminhtml_banner" name="simiconnector_banner_more" template="simiconnector/render/category.phtml" />
         </reference>
     </adminhtml_simiconnector_banner_index> 
     <adminhtml_simiconnector_cms_index>
@@ -28,6 +30,7 @@
     <adminhtml_simiconnector_productlist_index>
         <reference name="content">
             <block type="simiconnector/adminhtml_productlist" name="simiconnector_productlist"/>
+            <block type="simiconnector/adminhtml_productlist" name="simiconnector_productlist_more" template="simiconnector/render/category.phtml" />
         </reference>
     </adminhtml_simiconnector_productlist_index> 
     <adminhtml_simiconnector_cms_edit>

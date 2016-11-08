@@ -24,7 +24,7 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <fields>		
+                    <fields>
                         <enable translate="label">
                             <label>Enable</label>
                             <frontend_type>select</frontend_type>
@@ -37,23 +37,35 @@
                         </enable>
                         <secret_key translate="label">
                             <label>Secret Key</label>
-                            <!--<frontend_type>password</frontend_type>-->  
-                            <frontend_type>text</frontend_type>      
+                            <!--<frontend_type>password</frontend_type>-->
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <frontend_type>obscure</frontend_type>
                             <sort_order>99</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment>Your secret key (get from your Building Dashboard)</comment>
                         </secret_key>
-                        <base_url translate="label">
-                            <label>Base URL</label>
-                            <frontend_type>text</frontend_type>                            
-                            <sort_order>199</sort_order>                            
+                        <token_key translate="label">
+                            <label>Token Key</label>
+                            <!--<frontend_type>password</frontend_type>-->
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <frontend_type>obscure</frontend_type>
+                            <sort_order>100</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>  
-                            <comment>eg. http://simicart.com/, leave it blank if you want to use default value from Building Dashboard</comment>												
-                        </base_url> 
+                            <show_in_store>1</show_in_store>
+                            <comment>Your token key (get from your Building Dashboard)</comment>
+                        </token_key>
+                        <base_url translate="label">
+                            <label>Base URL</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>199</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>eg. http://simicart.com/, leave it blank if you want to use default value from Building Dashboard</comment>
+                        </base_url>
                         <is_show_price_zero translate="label">
                             <label>Show option price if it's $0.00?</label>
                             <frontend_type>select</frontend_type>
@@ -61,8 +73,8 @@
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>                            
-                        </is_show_price_zero>	      
+                            <show_in_store>1</show_in_store>
+                        </is_show_price_zero>
                         <is_show_all_product translate="label">
                             <label>Show "All Products" link in Category?</label>
                             <frontend_type>select</frontend_type>
@@ -70,16 +82,16 @@
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>                            
-                        </is_show_all_product>	
+                            <show_in_store>1</show_in_store>
+                        </is_show_all_product>
                         <cms_shipping_condition translate="label">
                             <label>Show CMS content in product detail</label>
-                            <frontend_type>text</frontend_type>  
-                            <sort_order>499</sort_order>                         
+                            <frontend_type>text</frontend_type>
+                            <sort_order>499</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>  
-                            <comment>Please enter its CMS ID SimiCart Connector/CMS</comment>												
+                            <show_in_store>1</show_in_store>
+                            <comment>Please enter its CMS ID SimiCart Connector/CMS</comment>
                         </cms_shipping_condition>
                         <is_show_sample_data translate="label">
                             <label>Show Sample Data on Home Screen</label>
@@ -88,8 +100,8 @@
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>                            
-                        </is_show_sample_data>		
+                            <show_in_store>1</show_in_store>
+                        </is_show_sample_data>
                         <show_product_type translate="label">
                             <label>Products Screen Display Default By:</label>
                             <frontend_type>select</frontend_type>
@@ -103,10 +115,10 @@
                             <label>Use RTL language</label>
                             <frontend_type>select</frontend_type>
                             <sort_order>799</sort_order>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>                        
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>                            
+                            <show_in_store>1</show_in_store>
                         </is_rtl>
                         <categories_in_app translate="label">
                             <label>Display categories on app</label>
@@ -124,7 +136,7 @@
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>                            
+                            <show_in_store>1</show_in_store>
                         </is_show_home_title>
                         <app_dedicated_coupon translate="label">
                             <label>Mobile App Dedicated Coupon</label>
@@ -132,9 +144,9 @@
                             <sort_order>1099</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>                            
-                        </app_dedicated_coupon>	
-                    </fields>				
+                            <show_in_store>1</show_in_store>
+                        </app_dedicated_coupon>
+                    </fields>
                 </general>
                 <currency translate="label">
                     <label>Currency Display Configuration</label>
@@ -143,40 +155,40 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <fields>		                       
+                    <fields>
                         <thousand_separator translate="label">
                             <label>Thousand Separator</label>
-                            <frontend_type>text</frontend_type>                            
-                            <sort_order>1</sort_order>                            
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>  												
+                            <show_in_store>1</show_in_store>
                         </thousand_separator>
                         <decimal_separator translate="label">
                             <label>Decimal Separator</label>
-                            <frontend_type>text</frontend_type>                            
-                            <sort_order>99</sort_order>                            
+                            <frontend_type>text</frontend_type>
+                            <sort_order>99</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>  												
+                            <show_in_store>1</show_in_store>
                         </decimal_separator>
                         <min_number_of_decimals translate="label">
                             <label>Minimum Number of Decimals</label>
-                            <frontend_type>text</frontend_type>                            
-                            <sort_order>199</sort_order>                            
+                            <frontend_type>text</frontend_type>
+                            <sort_order>199</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>  												
+                            <show_in_store>1</show_in_store>
                         </min_number_of_decimals>
                         <max_number_of_decimals translate="label">
                             <label>Maximum Number of Decimals</label>
-                            <frontend_type>text</frontend_type>                            
-                            <sort_order>299</sort_order>                            
+                            <frontend_type>text</frontend_type>
+                            <sort_order>299</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>  												
+                            <show_in_store>1</show_in_store>
                         </max_number_of_decimals>
-                    </fields>				
+                    </fields>
                 </currency>
                 <notification translate="label">
                     <label>Notification Settings</label>
@@ -228,7 +240,7 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </android_secret_key>
-                        
+
                         <noti_price_separator translate="label">
                             <label>Send Notification when Price Updated</label>
                             <sort_order>99</sort_order>
@@ -237,7 +249,7 @@
                             <show_in_store>1</show_in_store>
                             <frontend_model>simiconnector/adminhtml_system_config_form_field_separator</frontend_model>
                             <comment></comment>
-                        </noti_price_separator>		
+                        </noti_price_separator>
                         <noti_price_enable translate="label">
                             <label>Send notification to all users when price of product is changed</label>
                             <frontend_type>select</frontend_type>
@@ -247,7 +259,7 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment></comment>
-                        </noti_price_enable>                        
+                        </noti_price_enable>
                         <noti_price_showpopup translate="label">
                             <label>Show Popup</label>
                             <frontend_type>select</frontend_type>
@@ -299,7 +311,7 @@
                                 <noti_price_enable>1</noti_price_enable>
                             </depends>
                             <comment></comment>
-                        </noti_price_type>                        
+                        </noti_price_type>
                         <noti_price_category_id translate="label">
                             <label>Category ID</label>
                             <frontend_type>text</frontend_type>
@@ -339,8 +351,8 @@
                             <depends>
                                 <noti_price_enable>1</noti_price_enable>
                             </depends>
-                            <comment></comment> 
-                        </noti_price_platform> 
+                            <comment></comment>
+                        </noti_price_platform>
                         <noti_new_product_separator translate="label">
                             <label>Send Notification when there's a new product</label>
                             <sort_order>199</sort_order>
@@ -349,7 +361,7 @@
                             <show_in_store>1</show_in_store>
                             <frontend_model>simiconnector/adminhtml_system_config_form_field_separator</frontend_model>
                             <comment></comment>
-                        </noti_new_product_separator>	                      	
+                        </noti_new_product_separator>
                         <new_product_enable translate="label">
                             <label>Send notification to all users when there's a new product</label>
                             <frontend_type>select</frontend_type>
@@ -359,7 +371,7 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment></comment>
-                        </new_product_enable>                       
+                        </new_product_enable>
                         <new_product_showpopup translate="label">
                             <label>Show Popup</label>
                             <frontend_type>select</frontend_type>
@@ -411,7 +423,7 @@
                                 <new_product_enable>1</new_product_enable>
                             </depends>
                             <comment></comment>
-                        </new_product_type>                       
+                        </new_product_type>
                         <new_product_category_id translate="label">
                             <label>Category ID</label>
                             <frontend_type>text</frontend_type>
@@ -497,7 +509,7 @@
                                 <noti_purchase_enable>1</noti_purchase_enable>
                             </depends>
                             <comment><![CDATA[Characters recommended: < 250]]></comment>
-                        </noti_purchase_message> 
+                        </noti_purchase_message>
                         <noti_purchase_type translate="label">
                             <label>Direct Viewers to</label>
                             <frontend_type>select</frontend_type>
@@ -562,7 +574,7 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <fields>        
+                    <fields>
                         <hideaddress_enable translate="label">
                             <label>Enable</label>
                             <frontend_type>select</frontend_type>
@@ -808,9 +820,9 @@
                             </depends>
                         </taxvat>
                     </fields>
-                </hideaddress>                
-                <terms_conditions translate="label">	
-                    <label>Terms and Conditions</label>					
+                </hideaddress>
+                <terms_conditions translate="label">
+                    <label>Terms and Conditions</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>399</sort_order>
                     <show_in_default>1</show_in_default>
@@ -818,7 +830,7 @@
                     <show_in_store>1</show_in_store>
                     <fields>
                         <enable_terms translate="label">
-                            <label>Show Terms and Conditions</label>					
+                            <label>Show Terms and Conditions</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>10</sort_order>
@@ -827,8 +839,8 @@
                             <show_in_store>1</show_in_store>
                         </enable_terms>
                         <term_title translate="label">
-                            <label>Terms and Conditions Title</label>					
-                            <frontend_type>text</frontend_type>							
+                            <label>Terms and Conditions Title</label>
+                            <frontend_type>text</frontend_type>
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -838,8 +850,8 @@
                             </depends>
                         </term_title>
                         <term_html translate="label">
-                            <label>Terms and Conditions Content (HTML)</label>					
-                            <frontend_type>textarea</frontend_type>							
+                            <label>Terms and Conditions Content (HTML)</label>
+                            <frontend_type>textarea</frontend_type>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -933,7 +945,7 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <fields>	  
+                    <fields>
                         <pattern translate="label" module="simiconnector">
                             <label>Barcode pattern</label>
                             <frontend_type>text</frontend_type>
@@ -961,7 +973,7 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <fields>	  
+                    <fields>
                         <enable translate="label">
                             <label>Enable</label>
                             <frontend_type>select</frontend_type>
@@ -981,25 +993,25 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <fields>        
+                    <fields>
                         <sharing_message translate="label">
                             <label>Message For Sharing Wishlist</label>
-                            <frontend_type>Textarea</frontend_type>                            
-                            <sort_order>2</sort_order>                            
+                            <frontend_type>Textarea</frontend_type>
+                            <sort_order>2</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>  
-                            <comment>The message is used when customers share their wishlist on Facebook, Twitter, Emails... It appears before Wishlist URL.</comment>												
+                            <show_in_store>1</show_in_store>
+                            <comment>The message is used when customers share their wishlist on Facebook, Twitter, Emails... It appears before Wishlist URL.</comment>
                         </sharing_message>
                         <product_sharing_message translate="label">
                             <label>Message For Sharing Product</label>
-                            <frontend_type>Textarea</frontend_type>                            
-                            <sort_order>3</sort_order>                            
+                            <frontend_type>Textarea</frontend_type>
+                            <sort_order>3</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>  
-                            <comment>The message is used when customers share a product in their wishlist on Facebook, Twitter, Emails... It appears before the product URL.</comment>												
-                        </product_sharing_message>	
+                            <show_in_store>1</show_in_store>
+                            <comment>The message is used when customers share a product in their wishlist on Facebook, Twitter, Emails... It appears before the product URL.</comment>
+                        </product_sharing_message>
                     </fields>
                 </wishlist>
                 <zopim translate="label">
@@ -1009,7 +1021,7 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <fields>		
+                    <fields>
                         <enable translate="label">
                             <label>Enable</label>
                             <frontend_type>select</frontend_type>
@@ -1028,7 +1040,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </account_key>  
+                        </account_key>
                         <show_profile translate="label">
                             <label>Allow show profile</label>
                             <frontend_type>select</frontend_type>
@@ -1050,7 +1062,7 @@
                             <depends>
                                 <show_profile>1</show_profile>
                             </depends>
-                        </name>	
+                        </name>
                         <email translate="label">
                             <label>Email</label>
                             <frontend_type>select</frontend_type>
@@ -1062,7 +1074,7 @@
                             <depends>
                                 <show_profile>1</show_profile>
                             </depends>
-                        </email>	
+                        </email>
                         <phone translate="label">
                             <label>Phone</label>
                             <frontend_type>select</frontend_type>
@@ -1074,8 +1086,8 @@
                             <depends>
                                 <show_profile>1</show_profile>
                             </depends>
-                        </phone>	                                               					
-                    </fields>				
+                        </phone>
+                    </fields>
                 </zopim>
                 <mixpanel translate="label">
                     <label>Mixpanel Configuration</label>
@@ -1084,7 +1096,7 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <fields>		
+                    <fields>
                         <token translate="label">
                             <label>Mixpanel Token</label>
                             <frontend_type>text</frontend_type>
@@ -1093,10 +1105,10 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment>Leave this field blank to disable Mixpanel on Application</comment>
-                        </token>	                                               					
-                    </fields>				
+                        </token>
+                    </fields>
                 </mixpanel>
             </groups>
-        </simiconnector>              
+        </simiconnector>
     </sections>
 </config>

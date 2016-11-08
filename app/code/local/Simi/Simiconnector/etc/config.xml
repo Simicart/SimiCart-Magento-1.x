@@ -186,6 +186,8 @@
                 <base_url></base_url>
                 <is_show_home_title>1</is_show_home_title>
                 <is_rtl>0</is_rtl>
+                <secret_key backend_model="adminhtml/system_config_backend_encrypted"></secret_key>
+                <token_key backend_model="adminhtml/system_config_backend_encrypted"></token_key>
             </general>  
             <currency>                                           
                 <thousand_separator>,</thousand_separator>

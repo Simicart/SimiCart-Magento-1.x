@@ -72,16 +72,18 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
             'required' => true,
             'name' => 'list_title',
         ));
+        if(Mage::helper('simiconnector/cloud')->getThemeLayout() == 'matrix'
+            || Mage::helper('simiconnector/cloud')->getThemeLayout() == 'zara'){
+            $fieldset->addField('list_image', 'image', array(
+                'label' => Mage::helper('simiconnector')->__('Product List Image'),
+                'name' => 'productlist_image_o',
+            ));
 
-        $fieldset->addField('list_image', 'image', array(
-            'label' => Mage::helper('simiconnector')->__('Product List Image'),
-            'name' => 'productlist_image_o',
-        ));
-
-        $fieldset->addField('list_image_tablet', 'image', array(
-            'label' => Mage::helper('simiconnector')->__('Product List Tablet Image'),
-            'name' => 'productlist_image_tablet_o',
-        ));
+            $fieldset->addField('list_image_tablet', 'image', array(
+                'label' => Mage::helper('simiconnector')->__('Product List Tablet Image'),
+                'name' => 'productlist_image_tablet_o',
+            ));
+        }
 
         if (!isset($data['sort_order']))
             $data['sort_order'] = 1;
@@ -208,71 +210,71 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
                 array('value' => 0, 'label' => Mage::helper('simiconnector')->__('No')),
             )
         ));
+        if(Mage::helper('simiconnector/cloud')->getThemeLayout() == 'matrix'){
+            $matrixfieldset = $form->addFieldset('productlist_matrix', array('legend' => Mage::helper('simiconnector')->__('Matrix Layout Config')));
 
-        $matrixfieldset = $form->addFieldset('productlist_matrix', array('legend' => Mage::helper('simiconnector')->__('Matrix Layout Config')));
+            if (!$data['matrix_width_percent'])
+                $data['matrix_width_percent'] = 100;
+            if (!$data['matrix_height_percent'])
+                $data['matrix_height_percent'] = 30;
+            if (!$data['matrix_width_percent_tablet'])
+                $data['matrix_width_percent_tablet'] = 100;
+            if (!$data['matrix_height_percent_tablet'])
+                $data['matrix_height_percent_tablet'] = 30;
+            if (!$data['matrix_row'])
+                $data['matrix_row'] = 1;
 
-        if (!$data['matrix_width_percent'])
-            $data['matrix_width_percent'] = 100;
-        if (!$data['matrix_height_percent'])
-            $data['matrix_height_percent'] = 30;
-        if (!$data['matrix_width_percent_tablet'])
-            $data['matrix_width_percent_tablet'] = 100;
-        if (!$data['matrix_height_percent_tablet'])
-            $data['matrix_height_percent_tablet'] = 30;
-        if (!$data['matrix_row'])
-            $data['matrix_row'] = 1;
+            $matrixfieldset->addField('matrix_width_percent', 'text', array(
+                'label' => Mage::helper('simiconnector')->__('Image Width/ Screen Width Ratio'),
+                'required' => false,
+                'name' => 'matrix_width_percent',
+                'note' => Mage::helper('simiconnector')->__('With Screen Width is 100%'),
+            ));
 
-        $matrixfieldset->addField('matrix_width_percent', 'text', array(
-            'label' => Mage::helper('simiconnector')->__('Image Width/ Screen Width Ratio'),
-            'required' => false,
-            'name' => 'matrix_width_percent',
-            'note' => Mage::helper('simiconnector')->__('With Screen Width is 100%'),
-        ));
-
-        $matrixfieldset->addField('matrix_height_percent', 'text', array(
-            'label' => Mage::helper('simiconnector')->__('Image Height/ Screen Width Ratio'),
-            'required' => false,
-            'name' => 'matrix_height_percent',
-            'note' => Mage::helper('simiconnector')->__('With Screen Height is 100%'),
-        ));
-
-
-
-        $matrixfieldset->addField('matrix_width_percent_tablet', 'text', array(
-            'label' => Mage::helper('simiconnector')->__('Tablet Image Width/Screen Width Ratio'),
-            'required' => false,
-            'name' => 'matrix_width_percent_tablet',
-            'note' => Mage::helper('simiconnector')->__('Leave it empty if you want to use Phone Value'),
-        ));
-
-        $matrixfieldset->addField('matrix_height_percent_tablet', 'text', array(
-            'label' => Mage::helper('simiconnector')->__('Tablet Image Height/Screen Width Ratio'),
-            'required' => false,
-            'name' => 'matrix_height_percent_tablet',
-            'note' => Mage::helper('simiconnector')->__('Leave it empty if you want to use Phone Value'),
-        ));
+            $matrixfieldset->addField('matrix_height_percent', 'text', array(
+                'label' => Mage::helper('simiconnector')->__('Image Height/ Screen Width Ratio'),
+                'required' => false,
+                'name' => 'matrix_height_percent',
+                'note' => Mage::helper('simiconnector')->__('With Screen Height is 100%'),
+            ));
 
 
-        $matrixfieldset->addField('matrix_row', 'select', array(
-            'label' => Mage::helper('simiconnector')->__('Row Number'),
-            'values' => Mage::helper('simiconnector/productlist')->getMatrixRowOptions(),
-            'onchange' => 'autoFillHeight(this.value)',
-            'name' => 'matrix_row',
-        ));
+
+            $matrixfieldset->addField('matrix_width_percent_tablet', 'text', array(
+                'label' => Mage::helper('simiconnector')->__('Tablet Image Width/Screen Width Ratio'),
+                'required' => false,
+                'name' => 'matrix_width_percent_tablet',
+                'note' => Mage::helper('simiconnector')->__('Leave it empty if you want to use Phone Value'),
+            ));
+
+            $matrixfieldset->addField('matrix_height_percent_tablet', 'text', array(
+                'label' => Mage::helper('simiconnector')->__('Tablet Image Height/Screen Width Ratio'),
+                'required' => false,
+                'name' => 'matrix_height_percent_tablet',
+                'note' => Mage::helper('simiconnector')->__('Leave it empty if you want to use Phone Value'),
+            ));
 
 
-        foreach (Mage::getModel('core/store')->getCollection() as $storeView) {
-            if (!$data['storeview_scope'])
-                $data['storeview_scope'] = $storeView->getId();
-            $storeviewArray[$storeView->getId()] = $storeView->getName();
-        }
+            $matrixfieldset->addField('matrix_row', 'select', array(
+                'label' => Mage::helper('simiconnector')->__('Row Number'),
+                'values' => Mage::helper('simiconnector/productlist')->getMatrixRowOptions(),
+                'onchange' => 'autoFillHeight(this.value)',
+                'name' => 'matrix_row',
+            ));
 
-        $matrixfieldset->addField('storeview_scope', 'select', array(
-            'label' => Mage::helper('simiconnector')->__('Storeview for Mockup Preview'),
-            'name' => 'storeview_scope',
-            'values' => $storeviewArray,
-            'onchange' => 'updateMockupPreview(this.value)',
-            'after_element_html' => '<div id="mockuppreview"></div> <script>
+
+            foreach (Mage::getModel('core/store')->getCollection() as $storeView) {
+                if (!$data['storeview_scope'])
+                    $data['storeview_scope'] = $storeView->getId();
+                $storeviewArray[$storeView->getId()] = $storeView->getName();
+            }
+
+            $matrixfieldset->addField('storeview_scope', 'select', array(
+                'label' => Mage::helper('simiconnector')->__('Storeview for Mockup Preview'),
+                'name' => 'storeview_scope',
+                'values' => $storeviewArray,
+                'onchange' => 'updateMockupPreview(this.value)',
+                'after_element_html' => '<div id="mockuppreview"></div> <script>
             ' . Mage::helper('simiconnector/productlist')->autoFillMatrixRowHeight() . '
             function updateMockupPreview(storeview){
                 var urlsend = "' . Mage::helper("adminhtml")->getUrl("*/*/getMockup") . '?storeview_id=" + storeview;
@@ -286,8 +288,8 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
                 xhttp.send();
             }
             Event.observe(window, "load", function(){updateMockupPreview(\'' . $data['storeview_scope'] . '\');});</script>',
-        ));
-
+            ));
+        }
 
         $form->setValues($data);
         return parent::_prepareForm();
