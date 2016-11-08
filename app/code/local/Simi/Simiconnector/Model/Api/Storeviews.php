@@ -81,6 +81,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'max_number_of_decimals' => Mage::getStoreConfig('simiconnector/currency/max_number_of_decimals'),
                 'currencies' => $currencies,
                 'is_show_home_title' => Mage::getStoreConfig('simiconnector/general/is_show_home_title'),
+                'cust_group' => Mage::getSingleton('customer/session')->getCustomerGroupId(),
             ),
             'sales' => array(
                 'sales_reorder_allow' => Mage::getStoreConfig('sales/reorder/allow'),
