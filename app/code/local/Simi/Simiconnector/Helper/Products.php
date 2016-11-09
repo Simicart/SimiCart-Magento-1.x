@@ -40,7 +40,9 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
 
     public function getProduct($product_id)
     {
-        return Mage::getModel('catalog/product')->load($product_id);
+        $this->builderQuery = Mage::getModel('catalog/product')->load($product_id);
+        if(!$this->builderQuery->getId()) throw new Exception($this ->__('Resource cannot callable.'), 6);
+        return $this->builderQuery;
     }
 
     /**
