@@ -220,6 +220,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         $info['additional'] = $_additional;
         $info['images'] = $images;
         $info['app_prices'] = Mage::helper('simiconnector/price')->formatPriceFromProduct($entity, true);
+        $info['app_tier_prices'] = Mage::helper('simiconnector/tierprice')->formatTierPrice($entity);
         $info['app_reviews'] = array(
             'rate' => $avg,
             'number' => $ratings[5],
