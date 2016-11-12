@@ -71,7 +71,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'use_store' => Mage::getStoreConfig('web/url/use_store'),
                 'is_rtl' => Mage::getStoreConfig('simiconnector/general/is_rtl'),
                 'is_show_sample_data' => Mage::getStoreConfig('simiconnector/general/is_show_sample_data'),
-                'android_sender' =>  Mage::getStoreConfig('simiconnector/notification/android_app_key'),
+                'android_sender' => Mage::getStoreConfig('simiconnector/notification/android_app_key'),
                 'currency_symbol' => $currencySymbol,
                 'currency_code' => $currencyCode,
                 'currency_position' => $this->getCurrencyPosition(),
@@ -81,7 +81,6 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'max_number_of_decimals' => Mage::getStoreConfig('simiconnector/currency/max_number_of_decimals'),
                 'currencies' => $currencies,
                 'is_show_home_title' => Mage::getStoreConfig('simiconnector/general/is_show_home_title'),
-                'cust_group' => Mage::getSingleton('customer/session')->getCustomerGroupId(),
             ),
             'sales' => array(
                 'sales_reorder_allow' => Mage::getStoreConfig('sales/reorder/allow'),
@@ -105,12 +104,6 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'tax_cart_display_grandtotal' => Mage::getStoreConfig('tax/cart_display/grandtotal'),
                 'tax_cart_display_full_summary' => Mage::getStoreConfig('tax/cart_display/full_summary'),
                 'tax_cart_display_zero_tax' => Mage::getStoreConfig('tax/cart_display/zero_tax'),
-		'tax_sales_display_price' => Mage::getStoreConfig('tax/sales_display/price'),
-                'tax_sales_display_subtotal' => Mage::getStoreConfig('tax/sales_display/subtotal'),
-                'tax_sales_display_shipping' => Mage::getStoreConfig('tax/sales_display/shipping'),
-                'tax_sales_display_grandtotal' => Mage::getStoreConfig('tax/sales_display/grandtotal'),
-                'tax_sales_display_full_summary' => Mage::getStoreConfig('tax/sales_display/full_summary'),
-                'tax_sales_display_zero_tax' => Mage::getStoreConfig('tax/sales_display/zero_tax'),
             ),
             'google_analytics' => array(
                 'google_analytics_active' => Mage::getStoreConfig('google/analytics/active'),
@@ -153,6 +146,17 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'review' => array(
                     'catalog_review_allow_guest' => Mage::getStoreConfig('catalog/review/allow_guest'),
                 ),
+                'cataloginventory' => array(
+                    'cataloginventory_item_options_manage_stock' => Mage::getStoreConfig('cataloginventory/item_options/manage_stock'),
+                    'cataloginventory_item_options_backorders' => Mage::getStoreConfig('cataloginventory/item_options/backorders'),
+                    'cataloginventory_item_options_max_sale_qty' => Mage::getStoreConfig('cataloginventory/item_options/max_sale_qty'),
+                    'cataloginventory_item_options_min_qty' => Mage::getStoreConfig('cataloginventory/item_options/options_min_qty'),
+                    'cataloginventory_item_options_min_sale_qty' => Mage::getStoreConfig('cataloginventory/item_options/min_sale_qty'),
+                    'cataloginventory_item_options_notify_stock_qty' => Mage::getStoreConfig('cataloginventory/item_options/notify_stock_qty'),
+                    'cataloginventory_item_options_enable_qty_increments' => Mage::getStoreConfig('cataloginventory/item_options/enable_qty_increments'),
+                    'cataloginventory_item_options_qty_increments' => Mage::getStoreConfig('cataloginventory/item_options/qty_increments'),
+                    'cataloginventory_item_options_auto_return' => Mage::getStoreConfig('cataloginventory/item_options/auto_return'),
+                )
             ),
             'cms' => $cmsPageList,
             'category_cmspages' => Mage::getModel('simiconnector/cms')->getCategoryCMSPages(),
@@ -178,7 +182,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         //Scott add to get instant contacts
         if (Mage::helper('simiconnector/plugins_instantcontact')->isEnabled())
             $additionInfo['instant_contact'] = Mage::helper('simiconnector/plugins_instantcontact')->getContacts();
-        
+
         $this->storeviewInfo = $additionInfo;
         Mage::dispatchEvent('simiconnector_get_storeview_info_after', array('object' => $this));
         return $this->getDetail($this->storeviewInfo);
@@ -231,7 +235,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
             foreach ($codes as $code) {
                 if (isset($rates[$code])) {
                     if (!$title = Mage::app()->getLocale()->getTranslation($code, 'nametocurrency'))
-                            $title = $code;
+                        $title = $code;
                     $currencies[] = array(
                         'value' => $code,
                         'title' => $title,
