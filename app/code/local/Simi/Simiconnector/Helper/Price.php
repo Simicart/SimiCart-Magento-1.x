@@ -173,6 +173,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                             $priveV2['show_weee_price'] = 2;
                         }
                     }else{
+                        $priveV2['price_label'] = Mage::helper('catalog')->__('Regular Price');
                         if ($_finalPrice == $_price){
                             $this->setTaxPrice($priveV2, $_finalPrice);
                         }else{
