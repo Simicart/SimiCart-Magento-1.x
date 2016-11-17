@@ -64,7 +64,9 @@ class Simi_Simiconnector_Model_Api_Homeproductlists extends Simi_Simiconnector_M
         if ($this->SHOW_PRODUCT_ARRAY) {
             $productCollection = Mage::helper('simiconnector/productlist')->getProductCollection($listModel);
             $productListAPIModel = Mage::getModel('simiconnector/api_products');
-            $productListAPIModel->setData($this->getData());
+            $productListAPIModelData = $this->getData();
+            unset($productListAPIModelData['resourceid']);
+            $productListAPIModel->setData($productListAPIModelData);
             $productListAPIModel->setBuilderQuery();			
             $productListAPIModel->FILTER_RESULT = false;
             $productListAPIModel->builderQuery = $productCollection;
