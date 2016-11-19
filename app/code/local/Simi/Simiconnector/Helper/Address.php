@@ -128,7 +128,21 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         }
         $address = $this->convertDataAddress($billingAddress);
         $address['save_in_address_book'] = '1';
-        $this->_getOnepage()->saveBilling($address, $billingAddress->entity_id);
+        $saveBilling= $this->_getOnepage()->saveBilling($address, $billingAddress->entity_id);
+		
+		if($saveBilling['error']){
+			$error_message='';
+			if(is_array($saveBilling['message'])){
+				foreach($saveBilling['message'] as $error){
+					$error_message .=$error."\n";
+				}
+			}else{
+				$error_message = $saveBilling['message'];
+			}
+			
+			throw new Exception(Mage::helper('core')->__($error_message));
+		}
+		
     }
 
     /*
@@ -138,7 +152,20 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
     public function saveShippingAddress($shippingAddress) {
         $address = $this->convertDataAddress($shippingAddress);
         $address['save_in_address_book'] = '1';
-        $this->_getOnepage()->saveShipping($address, $shippingAddress->entity_id);
+        $saveShipping = $this->_getOnepage()->saveShipping($address, $shippingAddress->entity_id);
+		
+		if($saveShipping['error']){
+			$error_message='';
+			if(is_array($saveShipping['message'])){
+				foreach($saveShipping['message'] as $error){
+					$error_message .=$error."\n";
+				}
+			}else{
+				$error_message = $saveShipping['message'];
+			}
+			
+			throw new Exception(Mage::helper('core')->__($error_message));
+		}
     }
 
     /*
