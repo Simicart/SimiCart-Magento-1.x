@@ -79,7 +79,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
 
     public function getAddressDetail($data, $customer = null) {
         $street = $data->getStreet();
-        if (!($email = $data->getData('email')) && $customer->getEmail())
+        if (!($email = $data->getData('email')) && $customer && $customer->getEmail())
             $email = $customer->getEmail();
         return array(
             'firstname' => $data->getFirstname(),
@@ -128,21 +128,20 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         }
         $address = $this->convertDataAddress($billingAddress);
         $address['save_in_address_book'] = '1';
-        $saveBilling= $this->_getOnepage()->saveBilling($address, $billingAddress->entity_id);
-		
-		if($saveBilling['error']){
-			$error_message='';
-			if(is_array($saveBilling['message'])){
-				foreach($saveBilling['message'] as $error){
-					$error_message .=$error."\n";
-				}
-			}else{
-				$error_message = $saveBilling['message'];
-			}
-			
-			throw new Exception(Mage::helper('core')->__($error_message));
-		}
-		
+        $saveBilling = $this->_getOnepage()->saveBilling($address, $billingAddress->entity_id);
+
+        if ($saveBilling['error']) {
+            $error_message = '';
+            if (is_array($saveBilling['message'])) {
+                foreach ($saveBilling['message'] as $error) {
+                    $error_message .=$error . "\n";
+                }
+            } else {
+                $error_message = $saveBilling['message'];
+            }
+
+            throw new Exception(Mage::helper('core')->__($error_message));
+        }
     }
 
     /*
@@ -153,19 +152,19 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         $address = $this->convertDataAddress($shippingAddress);
         $address['save_in_address_book'] = '1';
         $saveShipping = $this->_getOnepage()->saveShipping($address, $shippingAddress->entity_id);
-		
-		if($saveShipping['error']){
-			$error_message='';
-			if(is_array($saveShipping['message'])){
-				foreach($saveShipping['message'] as $error){
-					$error_message .=$error."\n";
-				}
-			}else{
-				$error_message = $saveShipping['message'];
-			}
-			
-			throw new Exception(Mage::helper('core')->__($error_message));
-		}
+
+        if ($saveShipping['error']) {
+            $error_message = '';
+            if (is_array($saveShipping['message'])) {
+                foreach ($saveShipping['message'] as $error) {
+                    $error_message .=$error . "\n";
+                }
+            } else {
+                $error_message = $saveShipping['message'];
+            }
+
+            throw new Exception(Mage::helper('core')->__($error_message));
+        }
     }
 
     /*
@@ -191,39 +190,39 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
                 $data[$address] = "";
         }
         /*
-        //sample add custom address fields
-        $data['custom_fields'] = array();
-        //text field 
-        $data['custom_fields'][] = array('code' => 'text_field_sample',
-            'title' => 'Text Field',
-            'type' => 'text',
-            'required' => 'opt',
-            'position' => '7',
-        );
-        //number field 
-        $data['custom_fields'][] = array('code' => 'number_field_sample',
-            'title' => 'Number Field',
-            'type' => 'number',
-            'required' => 'req',
-            'position' => '8',
-        );
-        //single choice Option
-        $data['custom_fields'][] = array('code' => 'single_option_sample',
-            'title' => 'Sample Field Single Option',
-            'type' => 'single_option',
-            'required' => '',
-            'option_array' => array('Option Single 1', 'Option Single 2', 'Option Single 3'),
-            'position' => '9',
-        );
-        //multi choice Option
-        $data['custom_fields'][] = array('code' => 'multi_option_sample',
-            'title' => 'Sample Field Multi Option',
-            'type' => 'multi_option',
-            'required' => 'opt',
-            'option_array' => array('Option Multi 1', 'Option Multi 2', 'Option Multi 3', 'Option Multi 4', 'Option Multi 5'),
-            'separated_by' => '%',
-            'position' => '10',
-        );
+          //sample add custom address fields
+          $data['custom_fields'] = array();
+          //text field
+          $data['custom_fields'][] = array('code' => 'text_field_sample',
+          'title' => 'Text Field',
+          'type' => 'text',
+          'required' => 'opt',
+          'position' => '7',
+          );
+          //number field
+          $data['custom_fields'][] = array('code' => 'number_field_sample',
+          'title' => 'Number Field',
+          'type' => 'number',
+          'required' => 'req',
+          'position' => '8',
+          );
+          //single choice Option
+          $data['custom_fields'][] = array('code' => 'single_option_sample',
+          'title' => 'Sample Field Single Option',
+          'type' => 'single_option',
+          'required' => '',
+          'option_array' => array('Option Single 1', 'Option Single 2', 'Option Single 3'),
+          'position' => '9',
+          );
+          //multi choice Option
+          $data['custom_fields'][] = array('code' => 'multi_option_sample',
+          'title' => 'Sample Field Multi Option',
+          'type' => 'multi_option',
+          'required' => 'opt',
+          'option_array' => array('Option Multi 1', 'Option Multi 2', 'Option Multi 3', 'Option Multi 4', 'Option Multi 5'),
+          'separated_by' => '%',
+          'position' => '10',
+          );
          */
         return $data;
     }
