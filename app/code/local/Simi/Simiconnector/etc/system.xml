@@ -39,7 +39,7 @@
                             <label>Secret Key</label>
                             <!--<frontend_type>password</frontend_type>-->
                             <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
-                            <frontend_type>obscure</frontend_type>
+                            <frontend_type>text</frontend_type>
                             <sort_order>99</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -50,7 +50,7 @@
                             <label>Token Key</label>
                             <!--<frontend_type>password</frontend_type>-->
                             <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
-                            <frontend_type>obscure</frontend_type>
+                            <frontend_type>text</frontend_type>
                             <sort_order>100</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
