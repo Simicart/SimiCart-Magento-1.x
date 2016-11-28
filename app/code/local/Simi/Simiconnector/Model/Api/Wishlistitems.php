@@ -18,6 +18,11 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         if ($customer->getId() && ($customer->getId() != '')) {
             $this->_WISHLIST = Mage::getModel('wishlist/wishlist')->loadByCustomer($customer, true);
+            //check if not shared
+            if (!$this->_WISHLIST->getShared()) {
+                $this->_WISHLIST->setShared('1');
+                $this->_WISHLIST->save();
+            }
             $sharingUrl = $this->_WISHLIST->getSharingCode();
             $this->_RETURN_MESSAGE = Mage::getStoreConfig('appwishlist/general/sharing_message') . ' ' . Mage::getUrl('wishlist/shared/index/code/' . $sharingUrl);
             $this->_RETURN_URL = Mage::getUrl('wishlist/shared/index/code/' . $sharingUrl);
@@ -147,7 +152,7 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
         if (isset($data['params']) && isset($data['params']['add_to_cart']) && $data['params']['add_to_cart']) {
             $this->builderQuery = $this->_WISHLIST->getItemCollection();
             return $this->index();
-        } 
+        }
         return parent::show();
     }
 
