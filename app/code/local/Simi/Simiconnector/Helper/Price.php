@@ -289,10 +289,12 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                 $_minimalPriceDisplayValue = $_minimalPrice;
                 if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, array(0, 1, 4))){
                     $_minimalPriceDisplayValue = $_minimalPrice + $_weeeTaxAmount;
-                    $priveV2['is_low_price'] = 1;
-                    $priveV2['low_price_label'] = Mage::helper('catalog')->__('As low as:');
-                    $this->setTaxLowPrice($priveV2, $_minimalPriceDisplayValue);
-                }
+				}
+				
+				$priveV2['is_low_price'] = 1;
+				$priveV2['low_price_label'] = Mage::helper('catalog')->__('As low as');
+				$this->setTaxLowPrice($priveV2, $_minimalPriceDisplayValue);
+           
             }
         } else { // group product
             $showMinPrice = $this->getDisplayMinimalPrice();
@@ -308,7 +310,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
 
             if ($price) {
                 if ($showMinPrice) {
-                    $priveV2['price_label'] = Mage::helper('catalog')->__('Starting at:');
+                    $priveV2['price_label'] = Mage::helper('catalog')->__('Starting at');
                 }
                 if ($_taxHelper->displayBothPrices()) {
                     $priveV2['show_ex_in_price'] = 1;
