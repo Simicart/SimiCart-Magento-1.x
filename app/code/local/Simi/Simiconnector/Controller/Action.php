@@ -38,6 +38,7 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
         $this->setData($result);
         Mage::dispatchEvent($this->getFullActionName(), array('object' => $this, 'data' => $result));
         $this->_data = $this->getData();
+		ob_clean();
         echo Mage::helper('core')->jsonEncode($this->_data);
     }
 
