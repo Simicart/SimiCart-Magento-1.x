@@ -12,7 +12,7 @@ class Simi_Simiconnector_Helper_Orders extends Mage_Core_Helper_Abstract
     {
         //1 success, 2 fail.
         $result = array(
-            'status' => 1,
+            'status_updated' => 1,
             'message' => "",
         );
         if ($order->canInvoice()) {
@@ -31,13 +31,13 @@ class Simi_Simiconnector_Helper_Orders extends Mage_Core_Helper_Abstract
             } else {
                 $order->addStatusHistoryComment('Cannot create an invoice without products.', false);
                 $order->save();
-                $result['status'] = 2;
+                $result['status_updated'] = 2;
                 $result['message'] = $this->__('Cannot create an invoice without products.');
             }
         } else {
             $order->addStatusHistoryComment('Order cannot be invoiced.', false);
             $order->save();
-            $result['status'] = 2;
+            $result['status_updated'] = 2;
             $result['message'] = $this->__('Order cannot be invoiced.');
         }
         return $result;
@@ -48,7 +48,7 @@ class Simi_Simiconnector_Helper_Orders extends Mage_Core_Helper_Abstract
     {
         //1 success, 2 fail.
         $result = array(
-            'status' => 1,
+            'status_updated' => 1,
             'message' => "",
         );
         //pending.tracking
@@ -61,7 +61,7 @@ class Simi_Simiconnector_Helper_Orders extends Mage_Core_Helper_Abstract
             }
             $result['message'] = $this->__('The shipment has been created.');
         } else {
-            $result['status'] = 2;
+            $result['status_updated'] = 2;
             $result['message'] = $this->__('The shipment cannot be created');
         }
         return $result;
@@ -71,7 +71,7 @@ class Simi_Simiconnector_Helper_Orders extends Mage_Core_Helper_Abstract
     {
         //1 success, 2 fail.
         $result = array(
-            'status' => 1,
+            'status_updated' => 1,
             'message' => "",
         );
         if ($order->canCancel()) {
@@ -81,7 +81,7 @@ class Simi_Simiconnector_Helper_Orders extends Mage_Core_Helper_Abstract
             $order->save();
             $result['message'] = $this->__('The order was canceled via Mobile Tracking');
         } else {
-            $result['status'] = 2;
+            $result['status_updated'] = 2;
             $result['message'] = $this->__('The order cannot be canceled');
         }
         return $result;
@@ -91,7 +91,7 @@ class Simi_Simiconnector_Helper_Orders extends Mage_Core_Helper_Abstract
     {
         //1 success, 2 fail.
         $result = array(
-            'status' => 1,
+            'status_updated' => 1,
             'message' => "",
         );
         if ($order->canHold()) {
@@ -102,7 +102,7 @@ class Simi_Simiconnector_Helper_Orders extends Mage_Core_Helper_Abstract
         } else {
             $order->addStatusHistoryComment('The order cannot be holded', false);
             $order->save();
-            $result['status'] = 2;
+            $result['status_updated'] = 2;
             $result['message'] = $this->__('The order cannot be holded');
         }
         return $result;
@@ -111,7 +111,7 @@ class Simi_Simiconnector_Helper_Orders extends Mage_Core_Helper_Abstract
     public function unHoldOrder($order){
         //1 success, 2 fail.
         $result = array(
-            'status' => 1,
+            'status_updated' => 1,
             'message' => "",
         );
         if ($order->canUnhold()) {
@@ -122,7 +122,7 @@ class Simi_Simiconnector_Helper_Orders extends Mage_Core_Helper_Abstract
         } else {
             $order->addStatusHistoryComment('The order cannot be unholded', false);
             $order->save();
-            $result['status'] = 2;
+            $result['status_updated'] = 2;
             $result['message'] = $this->__('The order cannot be unholded');
         }
 
