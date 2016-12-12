@@ -126,6 +126,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
             $matrixfieldset->addField('matrix_width_percent', 'text', array(
                 'label' => Mage::helper('simiconnector')->__('Image Width/Screen Width Ratio'),
                 'required' => false,
+				'class' => 'required-entry validate-number',
                 'name' => 'matrix_width_percent',
                 'note' => Mage::helper('simiconnector')->__('With Screen Width is 100%'),
             ));
@@ -134,6 +135,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
                 'label' => Mage::helper('simiconnector')->__('Image Height/Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_height_percent',
+				'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('With Screen Width is 100%'),
             ));
 
@@ -141,6 +143,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
                 'label' => Mage::helper('simiconnector')->__('Tablet Image Width/Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_width_percent_tablet',
+				'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('Leave it empty if you want to use Phone Value'),
             ));
 
@@ -148,6 +151,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
                 'label' => Mage::helper('simiconnector')->__('Tablet Image Height/Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_height_percent_tablet',
+				'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('Leave it empty if you want to use Phone Value'),
             ));
 
