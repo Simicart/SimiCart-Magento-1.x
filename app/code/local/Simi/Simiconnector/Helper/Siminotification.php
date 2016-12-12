@@ -78,6 +78,9 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
     }
 
     public function sendIOS($collectionDevice, $data) {
+        $total = count($collectionDevice);
+        if ($total == 0)
+            return true;
         $ch = $this->getDirPEMfile($data);
         $dir = $this->getDirPEMPassfile();
         $message = $data['notice_content'];
@@ -225,6 +228,8 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
 
     public function sendAndroid($collectionDevice, $data) {
         $total = count($collectionDevice);
+        if ($total == 0)
+            return true;
         $this->checkIndex($data);
         $message = $data;
 
@@ -281,8 +286,8 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         switch ($data['notice_sanbox']) {
             case '1':
                 if (!Mage::getStoreConfig("simiconnector/notification/upload_pem_file_test", $data['storeview_id']))
-                   return Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'pem' . DS . 'push.pem';
-                else 
+                    return Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'pem' . DS . 'push.pem';
+                else
                     return Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'pem' . DS . Mage::getStoreConfig("simiconnector/notification/upload_pem_file_test", $data['storeview_id']);
                 break;
             case '2':
