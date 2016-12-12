@@ -123,7 +123,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             $i++;
             $totalDevice++;
         }
-        if ($i < 100)
+        if ($i <= 100)
             $result = $this->repeatSendiOS($tokenArray, $payload, $ch, $dir);
         if (!$result)
             $sentsuccess = false;
