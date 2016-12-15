@@ -54,7 +54,9 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
                         $head["Content-Type"] = $value;
                     } else if ($name == "CONTENT_LENGTH") {
                         $head["Content-Length"] = $value;
-                    }
+                    }else{
+						$head[$name] = $value;
+					}
                 }
                 return $head;
             }
