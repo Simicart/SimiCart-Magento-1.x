@@ -6,3 +6,12 @@ app/.idea/vcs.xml
 app/.idea/webServers.xml
 app/.idea/workspace.xml
 app/.idea/dictionaries/Max.xml
+/app/nbproject/private/
+nbproject/private/config.properties
+nbproject/private/private.properties
+nbproject/private/private.xml
+nbproject/project.properties
+nbproject/project.xml
+package/Simi_Simiconnector.xml
+package/package.xml
+package/simiconnector-1.0.0.tgz
