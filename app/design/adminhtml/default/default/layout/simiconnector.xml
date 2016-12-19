@@ -142,7 +142,7 @@
         <reference name="head">
             <action method="setCanLoadExtJs">
                 <flag>1</flag>
-                <file>jscolor/jscolor.js</file>
+                <file>jscolorsimi/jscolor.js</file>
             </action>
         </reference>
     </adminhtml_system_config_edit>
@@ -150,7 +150,7 @@
     <adminhtml_system_config_edit>
         <reference name="head">
             <action method="addJs">
-                <file>jscolor/jscolor.js</file>
+                <file>jscolorsimi/jscolor.js</file>
             </action>
         </reference>
     </adminhtml_system_config_edit>

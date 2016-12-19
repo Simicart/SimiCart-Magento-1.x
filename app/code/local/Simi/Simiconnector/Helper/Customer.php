@@ -23,7 +23,7 @@ class Simi_Simiconnector_Helper_Customer extends Mage_Core_Helper_Abstract {
             $data['params']['email'] = $data['contents_array']['email'];
             $data['params']['password'] = $data['contents_array']['password'];
         }
-        if ((!$data['params']['email']) || (!$data['params']['password']))
+        if ((!isset($data['params']['email'])) || (!isset($data['params']['password'])))
             return;
         try {
             $this->loginByEmailAndPass($data['params']['email'], $data['params']['password']);

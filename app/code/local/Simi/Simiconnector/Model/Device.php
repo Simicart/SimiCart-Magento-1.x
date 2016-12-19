@@ -37,10 +37,6 @@ class Simi_Simiconnector_Model_Device extends Mage_Core_Model_Abstract {
         $latitude = $deviceData->latitude;
         $longitude = $deviceData->longitude;
         $addresses = Mage::helper('simiconnector/address')->getLocationInfo($latitude, $longitude);
-        $existed_device = $this->getCollection()->addFieldToFilter('device_token', $deviceData->device_token)->getFirstItem();
-        if ($existed_device->getId()) {
-            $this->setId($existed_device->getId());
-        }
         if ($addresses) {
             $this->setData('address', $addresses['address']);
             $this->setData('city', $addresses['city']);
@@ -63,6 +59,10 @@ class Simi_Simiconnector_Model_Device extends Mage_Core_Model_Abstract {
             $this->setData('is_demo', 3);
         } else
             $this->setData('is_demo', $deviceData->is_demo);
+        $existed_device = $this->getCollection()->addFieldToFilter('device_token', $deviceData->device_token)->getFirstItem();
+        if ($existed_device->getId()) {
+            $this->setId($existed_device->getId());
+        }
         $this->save();
     }
 
