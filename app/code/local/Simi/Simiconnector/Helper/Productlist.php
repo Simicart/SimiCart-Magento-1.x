@@ -64,6 +64,10 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
             default:
                 break;
         }
+		
+		Mage::getSingleton('catalog/product_status')->addVisibleFilterToCollection($collection);
+        Mage::getSingleton('catalog/product_visibility')->addVisibleInCatalogFilterToCollection($collection);
+		
         return $collection;
     }
 
