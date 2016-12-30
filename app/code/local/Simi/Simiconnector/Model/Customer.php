@@ -55,7 +55,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
         $message = array();
         $checkCustomer = $this->getCustomerByEmail($data->email);
         if ($checkCustomer->getId()) {
-            throw new Exception($this->_helperCustomer()->__('Account is already exist'), 4);
+            throw new Exception($this->_helperCustomer()->__('Account already exists'), 4);
         }
         $customer = $this->_createCustomer($data);
         $result = array();

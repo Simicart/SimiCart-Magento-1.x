@@ -25,6 +25,10 @@ class Simi_Simiconnector_Helper_Customer extends Mage_Core_Helper_Abstract {
         }
         if ((!isset($data['params']['email'])) || (!isset($data['params']['password'])))
             return;
+        
+        if ((Mage::getSingleton('customer/session')->isLoggedIn()) && (Mage::getSingleton('customer/session')->getCustomer()->getEmail() == $data['params']['email'])) 
+            return;
+            
         try {
             $this->loginByEmailAndPass($data['params']['email'], $data['params']['password']);
         } catch (Exception $e) {

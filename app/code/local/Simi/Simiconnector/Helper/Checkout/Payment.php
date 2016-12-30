@@ -105,6 +105,7 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
     protected function _setListPayment() {
         $this->_listPayment[] = 'transfer_mobile';
         $this->_listPayment[] = 'cashondelivery';
+		$this->_listPayment[] = 'banktransfer';
         $this->_listPayment[] = 'checkmo';
         $this->_listPayment[] = 'free';
         $this->_listPayment[] = 'phoenix_cashondelivery';
@@ -121,6 +122,7 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
 
     public function setListCase() {
         $this->_listCase = array(
+            'banktransfer' => 0,
             'transfer_mobile' => 0,
             'cashondelivery' => 0,
             'checkmo' => 0,
