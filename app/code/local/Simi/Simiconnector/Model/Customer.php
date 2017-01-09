@@ -34,8 +34,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
                 $customer->changeResetPasswordLinkToken($newResetPasswordLinkToken);
                 $customer->sendPasswordResetConfirmationEmail();
             } else {
-                $information = $this->statusError(array(Mage::helper('customer')->__('Customer is not exist')));
-                return $information;
+                throw new Exception($this->_helperCustomer()->__('Customer is not exist'));
             }
         }
     }
