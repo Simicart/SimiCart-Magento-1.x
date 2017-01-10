@@ -67,6 +67,11 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
                     'confirmation', $session->getBeforeAuthUrl(), $store->getId()
             );
             throw new Exception($this->_helperCustomer()->__('Account confirmation is required. Please, check your email.'), 4);
+        } else {
+            $customer->setConfirmation(null);
+            $customer->save();
+            $customer->sendNewAccountEmail();
+            $this->getCustomerSession()->loginById($customer->getId());
         }
         return $customer;
     }

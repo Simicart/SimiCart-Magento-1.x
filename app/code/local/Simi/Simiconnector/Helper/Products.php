@@ -279,7 +279,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
                         $itemValues = implode('-', $itemValues);
                     }
 
-                    if ($item->getFilter()->getRequestVar() != null) {
+                    if ($item->getFilter() && ($item->getFilter()->getRequestVar() != null)) {
                         $refineArray['layer_state'][] = array(
                             'attribute' => $item->getFilter()->getRequestVar(),
                             'title' => $item->getName(),
