@@ -71,7 +71,6 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             $customer->setConfirmation(null);
             $customer->save();
             $customer->sendNewAccountEmail();
-            $this->getCustomerSession()->loginById($customer->getId());
         }
         return $customer;
     }
