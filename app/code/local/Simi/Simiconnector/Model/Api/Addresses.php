@@ -60,7 +60,22 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
         $this->builderQuery = $address;
         return $this->show();
     }
+    
+    /*
+     * Remove Address
+     */
 
+    public function destroy() {
+        $data = $this->getData();
+        if ($data['resourceid']) {
+           $this->builderQuery = Mage::getModel('customer/address')->load($data['resourceid']);
+           $this->builderQuery->delete();
+           return $this->show();
+        }
+        throw new Exception($this->_helper->__('No Address ID sent'), 4);
+    }
+    
+    
     /*
      * View Address Detail
      */
