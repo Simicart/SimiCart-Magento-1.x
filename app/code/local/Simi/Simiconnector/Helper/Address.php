@@ -78,6 +78,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
      */
 
     public function getAddressDetail($data, $customer = null) {
+        if(!$data) return array();
         $street = $data->getStreet();
         if (!($email = $data->getData('email')) && $customer && $customer->getEmail())
             $email = $customer->getEmail();
