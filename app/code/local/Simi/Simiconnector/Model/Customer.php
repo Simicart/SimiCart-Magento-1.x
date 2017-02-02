@@ -179,6 +179,8 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             if (!$data->lastname)
                 $data->lastname = $this->_helperCustomer()->__('Lastname');
             $customer = $this->_createCustomer($data);
+            $customer->setConfirmation(null);
+            $customer->save();
             $customer->sendPasswordReminderEmail();
         }
         Mage::helper('simiconnector/customer')->loginByCustomer($customer);
