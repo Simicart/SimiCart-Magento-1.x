@@ -18,22 +18,15 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
         }
         if (Mage::getStoreConfig('simiconnector/general/categories_in_app'))
             $this->_visible_array = explode(',', Mage::getStoreConfig('simiconnector/general/categories_in_app'));
-
+        
         $category = Mage::getModel('catalog/category')->load($data['resourceid']);
         if (is_array($category->getChildrenCategories())) {
-            $childArray = $category->getChildrenCategories();
-            $idArray = array();
-            foreach ($childArray as $childArrayItem) {
-                $idArray[] = $childArrayItem->getId();
-            }
+            $idArray =explode(',', $category->getChildren());
             if ($this->_visible_array)
                 $idArray = array_intersect($idArray, $this->_visible_array);
             $this->builderQuery = Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addFieldToFilter('entity_id', array('in' => $idArray));
-        }
-        else {
-            $this->builderQuery = $category->getChildrenCategories()->addAttributeToSelect('*');
-            if ($this->_visible_array)
-                $this->builderQuery->addFieldToFilter('entity_id', array('in' => $this->_visible_array));
+        }else {
+            $this->builderQuery = $this->_getChildrenCategories($category)->addAttributeToSelect('*');
         }
     }
 
@@ -56,4 +49,33 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
         return $this->index();
     }
 
+    public function _getChildrenCategories($category){
+        $idFilter = $category->getChildren();
+
+        if($this->_visible_array){
+            $ids = explode(',', $idFilter);
+            $idFilter = array_intersect($ids, $this->_visible_array);
+            $idFilter = implode(',',$idFilter);
+        }
+
+        $collection = $this->_getChildrenCategoriesBase($category);
+        $collection->addAttributeToFilter('is_active', 1)
+            ->addIdFilter($idFilter)
+            ->load();
+
+        return $collection;
+    }
+
+    private function _getChildrenCategoriesBase($category)
+    {
+        $collection = $category->getCollection();
+        $collection->addAttributeToSelect('url_key')
+            ->addAttributeToSelect('name')
+            ->addAttributeToSelect('all_children')
+            ->addAttributeToSelect('is_anchor')
+            ->setOrder('position', Varien_Db_Select::SQL_ASC)
+            ->joinUrlRewrite();
+
+        return $collection;
+    }
 }
