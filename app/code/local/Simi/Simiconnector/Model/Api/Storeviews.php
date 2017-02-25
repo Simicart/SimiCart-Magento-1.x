@@ -57,7 +57,6 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         $cmsData['resource'] = 'cmspages';
         $model = Mage::getSingleton('simiconnector/api_cmspages');
         $cmsPageList = call_user_func_array(array(&$model, $this->_method), array($cmsData));
-
         $additionInfo = array(
             'base' => array(
                 'country_code' => $country->getId(),
@@ -82,6 +81,8 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'currencies' => $currencies,
                 'is_show_home_title' => Mage::getStoreConfig('simiconnector/general/is_show_home_title'),
                 'cust_group' => Mage::getSingleton('customer/session')->getCustomerGroupId(),
+                'customer_identity' => Mage::getSingleton('core/session')->getEncryptedSessionId(),
+                'customer_ip'=>$_SERVER["REMOTE_ADDR"],
             ),
             'sales' => array(
                 'sales_reorder_allow' => Mage::getStoreConfig('sales/reorder/allow'),
