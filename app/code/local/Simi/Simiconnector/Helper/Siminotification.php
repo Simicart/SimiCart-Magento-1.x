@@ -188,7 +188,8 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         $registrationIDs = array();
         for ($i = $from; $i <= $to; $i++) {
             $item = $collectionDevice[$i];
-            $registrationIDs[] = $item['device_token'];
+            if (isset($item['device_token']))
+                $registrationIDs[] = $item['device_token'];
         }
 
         $url = 'https://android.googleapis.com/gcm/send';
@@ -227,6 +228,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
     }
 
     public function sendAndroid($collectionDevice, $data) {
+        unset($data['devices_pushed']);
         $total = count($collectionDevice);
         if ($total == 0)
             return true;
