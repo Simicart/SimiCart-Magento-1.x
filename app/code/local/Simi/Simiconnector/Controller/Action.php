@@ -21,12 +21,13 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
             header("HTTP/1.0 503");
             exit();
         }
-		
+        /*	
         if (!$this->isHeader()) {
             echo 'Connect error!';
             header("HTTP/1.0 401 Unauthorized");
             exit();
         }
+         */
     }
 
     protected function _getServer(){
