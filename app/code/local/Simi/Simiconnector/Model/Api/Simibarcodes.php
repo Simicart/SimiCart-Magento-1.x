@@ -6,7 +6,7 @@ class Simi_Simiconnector_Model_Api_Simibarcodes extends Simi_Simiconnector_Model
 
     public function setBuilderQuery() {
         $data = $this->getData();
-        if ($data['resourceid']) {
+        if (isset($data['resourceid']) && $data['resourceid']) {
             $this->builderQuery = Mage::getModel('simiconnector/simibarcode')->getCollection()->addFieldToFilter('barcode_status', '1')->addFieldToFilter('barcode', $data['resourceid'])->getFirstItem();
             if (!$this->builderQuery->getId())
                 $this->builderQuery = Mage::getModel('simiconnector/simibarcode')->getCollection()->addFieldToFilter('barcode_status', '1')->addFieldToFilter('qrcode', $data['resourceid'])->getFirstItem();

@@ -13,7 +13,7 @@ class Simi_Simiconnector_Model_Api_Homeproductlists extends Simi_Simiconnector_M
 
     public function setBuilderQuery() {
         $data = $this->getData();
-        if ($data['resourceid']) {
+        if (isset($data['resourceid']) && $data['resourceid']) {
             $this->builderQuery = Mage::getModel('simiconnector/productlist')->load($data['resourceid']);
         } else {
             $this->builderQuery = $this->getCollection();

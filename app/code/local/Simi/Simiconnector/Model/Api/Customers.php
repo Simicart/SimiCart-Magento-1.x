@@ -10,7 +10,7 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
 
     public function setBuilderQuery() {
         $data = $this->getData();
-        if ($data['resourceid']) {
+        if (isset($data['resourceid']) && $data['resourceid']) {
             switch ($data['resourceid']) {
                 case 'forgetpassword':
                     Mage::getModel('simiconnector/customer')->forgetPassword($data);

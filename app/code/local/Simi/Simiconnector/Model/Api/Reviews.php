@@ -17,7 +17,7 @@ class Simi_Simiconnector_Model_Api_Reviews extends Simi_Simiconnector_Model_Api_
         $this->_helper = Mage::helper('simiconnector/review');
         $data = $this->getData();
         $parameters = $data['params'];
-        if ($data['resourceid']) {
+        if (isset($data['resourceid']) && $data['resourceid']) {
             $this->builderQuery = $this->_helper->getReview($data['resourceid']);
         } else {
             if (isset($parameters[self::FILTER])) {

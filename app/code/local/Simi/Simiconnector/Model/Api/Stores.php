@@ -12,7 +12,7 @@ class Simi_Simiconnector_Model_Api_Stores extends Simi_Simiconnector_Model_Api_A
 
     public function setBuilderQuery() {
         $data = $this->getData();
-        if ($data['resourceid']) {
+        if (isset($data['resourceid']) && $data['resourceid']) {
             $this->builderQuery = Mage::getModel('core/store_group')->load($data['resourceid']);
         } else {
             $this->builderQuery = $collection = Mage::getModel('core/store_group')->getCollection()->addFieldToFilter('website_id', Mage::app()->getStore()->getWebsiteId());

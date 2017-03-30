@@ -28,9 +28,10 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
             $this->_RETURN_URL = Mage::getUrl('wishlist/shared/index/code/' . $sharingUrl);
         } else
             throw new Exception(Mage::helper('customer')->__('Please login First.'), 4);
-        if ($data['resourceid']) {
+        
+        if (isset($data['resourceid']) && $data['resourceid']) {
             $this->builderQuery = Mage::getModel('wishlist/item')->load($data['resourceid']);
-            if ($data['params']['add_to_cart']) {
+            if (isset($data['params']['add_to_cart']) && $data['params']['add_to_cart']) {
                 $this->addWishlistItemToCart($data['resourceid']);
                 $this->builderQuery = $this->_WISHLIST->getItemCollection();
             }

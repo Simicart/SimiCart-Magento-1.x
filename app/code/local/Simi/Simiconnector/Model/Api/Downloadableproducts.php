@@ -8,7 +8,7 @@ class Simi_Simiconnector_Model_Api_Downloadableproducts extends Simi_Simiconnect
 
     public function setBuilderQuery() {
         $data = $this->getData();
-        if ($data['resourceid']) {
+        if (isset($data['resourceid']) && $data['resourceid']) {
             
         } else {
             $this->builderQuery = $this->getCollectionItems();

@@ -14,7 +14,7 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
 
     public function setBuilderQuery() {
         $data = $this->getData();
-        if ($data['resourceid']) {
+        if (isset($data['resourceid']) && $data['resourceid']) {
             
         } else {
             if (!Mage::getSingleton('customer/session')->isLoggedIn()) {

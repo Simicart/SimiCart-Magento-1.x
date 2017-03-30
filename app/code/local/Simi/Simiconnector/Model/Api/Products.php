@@ -25,7 +25,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         $this->_helperProduct = Mage::helper('simiconnector/products');
         $this->_helperProduct->setData($data);
 
-        if ($data['resourceid']) {
+        if (isset($data['resourceid']) && $data['resourceid']) {
             $this->builderQuery = $this->_helperProduct->getProduct($data['resourceid']);
         } else {
             if (isset($parameters[self::FILTER])) {
@@ -133,6 +133,14 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         $check_limit = 0;
         $check_offset = 0;
 
+        if (isset($parameters['image_width'])){
+            $image_width = $parameters['image_width'];
+            $image_height = $parameters['image_height'];
+        } else {
+            $image_width = 600;
+            $image_height = 600;
+        }
+            
         foreach ($collection as $entity) {
             if (++$check_offset <= $offset) {
                 continue;
@@ -142,7 +150,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
             $info_detail = $entity->toArray($fields);
             $all_ids[] = $entity->getId();
             $images = array();
-            $imagelink = $this->_helperProduct->getImageProduct($entity, null, $parameters['image_width'], $parameters['image_height']);
+            $imagelink = $this->_helperProduct->getImageProduct($entity, null, $image_width, $image_height);
             //$sizes = getimagesize($imagelink);
             $images[] = array(
                 'url' => $imagelink,
@@ -183,10 +191,18 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         $media_gallery = $entity->getMediaGallery();
         $images = array();
 
+        if (isset($parameters['image_width'])){
+            $image_width = $parameters['image_width'];
+            $image_height = $parameters['image_height'];
+        } else {
+            $image_width = 600;
+            $image_height = 600;
+        }
+        
         foreach ($media_gallery['images'] as $image) {
             // Zend_debug::dump($image['disabled']);
             if ($image['disabled'] == 0) {
-                $imagelink = $this->_helperProduct->getImageProduct($entity, $image['file'], $parameters['image_width'], $parameters['image_height']);
+                $imagelink = $this->_helperProduct->getImageProduct($entity, $image['file'], $image_width, $image_height);
                 //$sizes = getimagesize($imagelink);
                 $images[] = array(
                     'url' => $imagelink,
@@ -197,7 +213,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
             }
         }
         if (count($images) == 0) {
-            $imagelink = $this->_helperProduct->getImageProduct($entity, null, $parameters['image_width'], $parameters['image_height']);
+            $imagelink = $this->_helperProduct->getImageProduct($entity, null, $image_width, $image_height);
             //$sizes = getimagesize($imagelink);
             $images[] = array(
                 'url' => $imagelink,

@@ -12,7 +12,7 @@ class Simi_Simiconnector_Model_Api_Homebanners extends Simi_Simiconnector_Model_
 
     public function setBuilderQuery() {
         $data = $this->getData();
-        if ($data['resourceid']) {
+        if (isset($data['resourceid']) && $data['resourceid']) {
             $this->builderQuery = Mage::getModel('simiconnector/banner')->load($data['resourceid']);
         } else {
             $this->builderQuery = $this->getCollection();

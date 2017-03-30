@@ -33,7 +33,7 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
     public function setBuilderQuery()
     {
         $data = $this->getData();
-        if ($data['resourceid']) {
+        if (isset($data['resourceid']) && $data['resourceid']) {
             if ($data['resourceid'] == 'onepage') {
 
             } else {

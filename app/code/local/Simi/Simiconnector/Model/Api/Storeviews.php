@@ -15,7 +15,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
 
     public function setBuilderQuery() {
         $data = $this->getData();
-        if ($data['resourceid']) {
+        if (isset($data['resourceid']) && $data['resourceid']) {
             $this->setStoreView($data);
             $this->setCurrency($data);
             $this->builderQuery = Mage::getModel('core/store')->load($data['resourceid']);

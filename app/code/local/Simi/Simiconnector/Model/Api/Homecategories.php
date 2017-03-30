@@ -18,7 +18,7 @@ class Simi_Simiconnector_Model_Api_Homecategories extends Simi_Simiconnector_Mod
 
     public function setBuilderQuery() {
         $data = $this->getData();
-        if ($data['resourceid']) {
+        if (isset($data['resourceid']) && $data['resourceid']) {
             $this->builderQuery = Mage::getModel('simiconnector/simicategory')->load($data['resourceid']);
         } else {
             $this->builderQuery = $this->getCollection();

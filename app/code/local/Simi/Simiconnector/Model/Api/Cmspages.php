@@ -6,7 +6,7 @@ class Simi_Simiconnector_Model_Api_Cmspages extends Simi_Simiconnector_Model_Api
 
     public function setBuilderQuery() {
         $data = $this->getData();
-        if ($data['resourceid']) {
+        if (isset($data['resourceid']) && $data['resourceid']) {
             $this->builderQuery = Mage::getModel('simiconnector/cms')->load($data['resourceid']);
         } else {
             $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('cms');

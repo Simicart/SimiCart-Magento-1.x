@@ -12,7 +12,7 @@ class Simi_Simiconnector_Model_Api_Notifications extends Simi_Simiconnector_Mode
 
     public function setBuilderQuery() {
         $data = $this->getData();
-        if ($data['resourceid']) {
+        if (isset($data['resourceid']) && $data['resourceid']) {
             $this->builderQuery = Mage::getModel('simiconnector/siminotification')->load($data['resourceid']);
         } else {
             $deviceModel = Mage::getModel('simiconnector/device')->getCollection()->addFieldToFilter('device_token', $data['params']['device_token'])->getFirstItem();
