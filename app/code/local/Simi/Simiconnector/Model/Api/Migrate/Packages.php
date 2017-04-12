@@ -1,6 +1,6 @@
 <?php
 
-class Simi_Simiconnector_Model_Api_Dashboard_Packages extends Simi_Simiconnector_Model_Api_Dashboard_Abstract {
+class Simi_Simiconnector_Model_Api_Migrate_Packages extends Simi_Simiconnector_Model_Api_Migrate_Abstract {
     public function setBuilderQuery() {
         $data = $this->getData();
         if (!$data['resourceid']) {
@@ -18,31 +18,31 @@ class Simi_Simiconnector_Model_Api_Dashboard_Packages extends Simi_Simiconnector
     public function show() {
         $result = array();
         
-        $storetModel = Mage::getSingleton('simiconnector/api_dashboard_stores');
+        $storetModel = Mage::getSingleton('simiconnector/api_migrate_stores');
         $storetModel->setBuilderQuery();
-        $storetModel->pluralKey = 'dashboard_stores';
+        $storetModel->pluralKey = 'migrate_stores';
         $result['stores'] = $storetModel->index();
         
-        $storeviewtModel = Mage::getSingleton('simiconnector/api_dashboard_storeviews');
+        $storeviewtModel = Mage::getSingleton('simiconnector/api_migrate_storeviews');
         $storeviewtModel->setBuilderQuery();
-        $storeviewtModel->pluralKey = 'dashboard_storeviews';
+        $storeviewtModel->pluralKey = 'migrate_storeviews';
         $result['storeviews'] = $storeviewtModel->index();
         
-        $productModel = Mage::getSingleton('simiconnector/api_dashboard_products');
+        $productModel = Mage::getSingleton('simiconnector/api_migrate_products');
         $productModel->setBuilderQuery();
-        $productModel->pluralKey = 'dashboard_products';
+        $productModel->pluralKey = 'migrate_products';
         $result['products'] = $productModel->index();
         
-        $categoryModel = Mage::getSingleton('simiconnector/api_dashboard_categories');
+        $categoryModel = Mage::getSingleton('simiconnector/api_migrate_categories');
         $categoryModel->setBuilderQuery();
-        $categoryModel->pluralKey = 'dashboard_categories';
+        $categoryModel->pluralKey = 'migrate_categories';
         $result['categories'] = $categoryModel->index();
         
-        $customerModel = Mage::getSingleton('simiconnector/api_dashboard_customers');
+        $customerModel = Mage::getSingleton('simiconnector/api_migrate_customers');
         $customerModel->setBuilderQuery();
-        $customerModel->pluralKey = 'dashboard_customers';
+        $customerModel->pluralKey = 'migrate_customers';
         $result['customers'] = $customerModel->index();
         
-        return array('dashboard_package'=>$result);
+        return array('migrate_package'=>$result);
     }
 }

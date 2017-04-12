@@ -1,6 +1,6 @@
 <?php
 
-class Simi_Simiconnector_Model_Api_Dashboard_Categorytrees extends Simi_Simiconnector_Model_Api_Dashboard_Abstract {
+class Simi_Simiconnector_Model_Api_Migrate_Categorytrees extends Simi_Simiconnector_Model_Api_Migrate_Abstract {
     public function setBuilderQuery() {
         $data = $this->getData();
         if (!$data['resourceid']) {
@@ -17,7 +17,7 @@ class Simi_Simiconnector_Model_Api_Dashboard_Categorytrees extends Simi_Simiconn
     {
         $result = parent::index();
         $returnedTree = array();
-        foreach ($result['dashboard_categorytrees'] as $tree) {
+        foreach ($result['migrate_categorytrees'] as $tree) {
             $paths = explode("/", $tree['path']);
             $script = "\$returnedTree";
             foreach($paths as $path) {
@@ -26,7 +26,7 @@ class Simi_Simiconnector_Model_Api_Dashboard_Categorytrees extends Simi_Simiconn
             $script.= " = \$tree;";
             eval($script);
         }
-        $result['dashboard_categorytrees'] = $returnedTree;
+        $result['migrate_categorytrees'] = $returnedTree;
         $result['total'] = count($returnedTree);
         return $result;
     }

@@ -27,7 +27,7 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
             header("HTTP/1.0 401 Unauthorized");
             exit();
         }
-        */
+         */
     }
 
     protected function _getServer()
@@ -47,7 +47,7 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
 
     protected function isHeader()
     {
-        if (strpos(Mage::helper('core/url')->getCurrentUrl(), 'dashboard_') !== false)
+        if (strpos(Mage::helper('core/url')->getCurrentUrl(), 'migrate_') !== false)
             return true;
         if (!function_exists('getallheaders')) {
 

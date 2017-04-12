@@ -6,7 +6,7 @@
  * Date: 5/3/16
  * Time: 2:59 PM
  */
-abstract class Simi_Simiconnector_Model_Api_Dashboard_Abstract extends Simi_Simiconnector_Model_Api_Abstract {
+abstract class Simi_Simiconnector_Model_Api_Migrate_Abstract extends Simi_Simiconnector_Model_Api_Abstract {
     
     public $FILTER_RESULT = false;
     const DEFAULT_LIMIT = PHP_INT_MAX;

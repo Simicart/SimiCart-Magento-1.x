@@ -1,6 +1,6 @@
 <?php
 
-class Simi_Simiconnector_Model_Api_Dashboard_Stores extends Simi_Simiconnector_Model_Api_Dashboard_Abstract {
+class Simi_Simiconnector_Model_Api_Migrate_Stores extends Simi_Simiconnector_Model_Api_Migrate_Abstract {
     public function setBuilderQuery() {
         $data = $this->getData();
         if (!$data['resourceid']) {
