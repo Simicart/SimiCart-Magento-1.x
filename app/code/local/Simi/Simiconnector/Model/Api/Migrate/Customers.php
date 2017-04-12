@@ -5,13 +5,7 @@ class Simi_Simiconnector_Model_Api_Migrate_Customers extends Simi_Simiconnector_
         $data = $this->getData();
         if (!$data['resourceid']) {
             $this->builderQuery = Mage::getModel('customer/customer')
-                    ->getCollection()
-                    ->addAttributeToSelect('firstname')
-                    ->addAttributeToSelect('lastname')
-                    ->addAttributeToSelect('middlename')
-                    ->addAttributeToSelect('suffix')
-                    ->addAttributeToSelect('is_active')
-                    ->addAttributeToSelect('email');
+                    ->getCollection();
         } else {
             $this->builderQuery = Mage::getModel('customer/customer')->load($data['resourceid']);
         }
