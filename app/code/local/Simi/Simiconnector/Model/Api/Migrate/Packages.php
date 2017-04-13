@@ -4,13 +4,13 @@ class Simi_Simiconnector_Model_Api_Migrate_Packages extends Simi_Simiconnector_M
     public function setBuilderQuery() {
         $data = $this->getData();
         if (!$data['resourceid']) {
-            throw new Exception($this->__('No Package Sent'), 4);
+            throw new Exception($this->_helper->__('No Package Sent'), 4);
         } else {
             $data = $this->getData();
             if ($data['resourceid'] == 'all') {
                 return;
             }
-            throw new Exception($this->__('Package Invalid'), 4);
+            throw new Exception($this->_helper->__('Package Invalid'), 4);
         }
     }
     
