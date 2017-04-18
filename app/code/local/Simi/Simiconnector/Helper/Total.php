@@ -76,10 +76,10 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
         if ($this->displayTypeSubOrder() == 3) {
             $data['subtotal_excl_tax'] = $total['subtotal']->getValueExclTax();
             $data['subtotal_incl_tax'] = $total['subtotal']->getValueInclTax();
-        } else if ($this->displayTypeSubOrder() == 1) {
+        } else if (($this->displayTypeSubOrder() == 1) && isset($data['tax'])) {
             $data['subtotal_excl_tax'] = $total['subtotal']->getValue();
             $data['subtotal_incl_tax'] = $data['subtotal_excl_tax'] + $data['tax'];
-        } else if ($this->displayTypeSubOrder() == 2) {
+        } else if (($this->displayTypeSubOrder() == 2) && isset($data['tax'])) {
             $data['subtotal_incl_tax'] = $total['subtotal']->getValue();
             $data['subtotal_excl_tax'] = $data['subtotal_incl_tax'] - $data['tax'];
         }
@@ -107,7 +107,7 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
             $this->addCustomRow(Mage::helper('phoenix_cashondelivery')->__('Cash on Delivery fee'), 4, $codFee);
         }
 
-        Mage::dispatchEvent('simi_simiconnector_helper_total_settotal_after', array('object' => $this, 'data' => $this->_data));
+        Mage::dispatchEvent('simi_simiconnector_helper_total_settotal_after', array('object' => $this, 'data' => $this->data));
         $data = $this->data;
     }
 

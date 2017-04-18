@@ -14,10 +14,13 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
      */
 
     public function convertDataAddress($data) {
-        $country = $data->country_id;
-        $listState = Mage::helper('simiconnector/address')->getStates($country);
+		$listState = array();
+		$check_state = false;
+		if (isset($data->country_id)) {
+			$country = $data->country_id;
+			$listState = Mage::helper('simiconnector/address')->getStates($country);
+		}
         $state_id = Mage::getStoreConfig('simiconnector/hideaddress/region_id_default');
-        $check_state = false;
         if (count($listState) == 0) {
             $check_state = true;
         }
@@ -100,7 +103,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
             'email' => $email,
             'company' => $data->getCompany(),
             'fax' => $data->getFax(),
-            'latlng' => $street[2] != NULL ? $street[2] : "",
+            'latlng' => isset($street[2]) ? $street[2] : "",
         );
     }
 
@@ -109,6 +112,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
      */
 
     public function saveBillingAddress($billingAddress) {
+		$is_register_mode = false;
         if (isset($billingAddress->customer_password) && $billingAddress->customer_password) {
             $is_register_mode = true;
             $this->_getOnepage()->saveCheckoutMethod('register');
@@ -131,7 +135,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         $address['save_in_address_book'] = '1';
         $saveBilling = $this->_getOnepage()->saveBilling($address, $billingAddress->entity_id);
 
-        if ($saveBilling['error']) {
+        if (isset($saveBilling['error'])){
             $error_message = '';
             if (is_array($saveBilling['message'])) {
                 foreach ($saveBilling['message'] as $error) {
@@ -154,7 +158,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         $address['save_in_address_book'] = '1';
         $saveShipping = $this->_getOnepage()->saveShipping($address, $shippingAddress->entity_id);
 
-        if ($saveShipping['error']) {
+        if (isset($saveShipping['error'])){
             $error_message = '';
             if (is_array($saveShipping['message'])) {
                 foreach ($saveShipping['message'] as $error) {

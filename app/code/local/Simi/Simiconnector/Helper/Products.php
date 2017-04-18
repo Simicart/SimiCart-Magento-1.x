@@ -86,7 +86,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
                 $controller->getRequest()->setParam('q', (string)$filter['q']);
                 $is_search = 1;
             }
-            if($category!=0){
+            if($category->getId() || ($category!=0)){
                 $controller->getRequest()->setParam('cat', (string)$category->getId());
             }
             if (isset($filter['layer'])) {

@@ -42,6 +42,7 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
                     break;
             }
         } else {
+            $currentCustomerId = 0;
             if (Mage::getSingleton('customer/session')->isLoggedIn()) {
                 $currentCustomerId = Mage::getSingleton('customer/session')->getId();
             }

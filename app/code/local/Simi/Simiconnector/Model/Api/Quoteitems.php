@@ -119,7 +119,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
             'bundle_option_qty',
         );
         foreach ($convertList as $type) {
-            if (!$params[$type]) {
+            if (!isset($params[$type])) {
                 continue;
             }
             $params[$type] = (array) $params[$type];
@@ -239,7 +239,14 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
 
             $quoteitem = $entity->toArray($fields);
             $quoteitem['option'] = $options;
-            $quoteitem['image'] = Mage::helper('simiconnector/products')->getImageProduct($entity->getProduct(), null, $parameters['image_width'], $parameters['image_height']);
+			if (isset($parameters['image_width'])){
+				$image_width = $parameters['image_width'];
+				$image_height = $parameters['image_height'];
+			} else {
+				$image_width = 600;
+				$image_height = 600;
+			}
+            $quoteitem['image'] = Mage::helper('simiconnector/products')->getImageProduct($entity->getProduct(), null, $image_width, $image_height);
             $info[] = $quoteitem;
             $all_ids[] = $entity->getId();
         }

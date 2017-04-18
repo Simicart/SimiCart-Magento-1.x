@@ -65,7 +65,7 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
                 'product_regular_price' => Mage::app()->getStore()->convertPrice($product->getPrice(), false),
                 'product_price' => Mage::app()->getStore()->convertPrice($product->getFinalPrice(), false),
                 'stock_status' => $isSaleAble,
-                'product_image' => Mage::helper('catalog/image')->init($product, 'small_image')->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($width, $height)->__toString(),
+                'product_image' => Mage::helper('catalog/image')->init($product, 'small_image')->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize(600, 600)->__toString(),
                 'is_show_price' => true,
                 'options' => $options,
                 'selected_all_required_options' => Mage::helper('simiconnector/wishlist')->checkIfSelectedAllRequiredOptions($itemModel, $options),
