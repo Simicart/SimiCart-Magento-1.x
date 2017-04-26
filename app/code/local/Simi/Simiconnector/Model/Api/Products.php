@@ -233,6 +233,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         $total_rating = Mage::helper('simiconnector/review')->getTotalRate($ratings);
         $avg = Mage::helper('simiconnector/review')->getAvgRate($ratings, $total_rating);
 
+        $info['description'] = Mage::helper('catalog/output')->productAttribute($entity, $entity->getDescription(), 'description');
         $info['additional'] = $_additional;
         $info['images'] = $images;
         $info['app_prices'] = Mage::helper('simiconnector/price')->formatPriceFromProduct($entity, true);
