@@ -302,7 +302,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
                             );
                         }
 
-                        if ($item->getFilter()->getRequestVar() != null) {
+                        if ($item->getFilter() && ($item->getFilter()->getRequestVar() != null)) {
                             $refineArray['layer_filter'][] = array(
                                 'attribute' => $item->getFilter()->getRequestVar(),
                                 'title' => $item->getName(), //filter request var and correlative name
