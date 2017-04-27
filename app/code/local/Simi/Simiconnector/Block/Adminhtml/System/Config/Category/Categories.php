@@ -43,6 +43,10 @@ class Simi_Simiconnector_Block_Adminhtml_System_Config_Category_Categories exten
     }
 
     public function getIdsString() {
+        if ($storecode = Mage::app()->getRequest()->getParam('store')) {
+                $storeviewModel = Mage::getModel('core/store')->getCollection()->addFieldToFilter('code', $storecode)->getFirstItem();
+                return Mage::getStoreConfig("simiconnector/general/categories_in_app", $storeviewModel->getId());
+        }
         return Mage::getStoreConfig("simiconnector/general/categories_in_app"); //Mage::registry('simiconnector_categories');//Mage::registry('bannerslider_data')->getCategories();//implode(',', $this->getCategoryIds());
     }
 
