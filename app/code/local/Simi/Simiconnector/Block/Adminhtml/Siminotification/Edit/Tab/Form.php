@@ -24,7 +24,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
         foreach ($stores as $store) {
             $list_store[] = array(
                 'value' => $store->getId(),
-                'label' => $store->getName(),
+                'label' => Mage::getModel('core/store_group')->load($store->getData('group_id'))->getName() . ' - ' . $store->getName(),
             );
         }
         $fieldset->addField('storeview_id', 'select', array(
