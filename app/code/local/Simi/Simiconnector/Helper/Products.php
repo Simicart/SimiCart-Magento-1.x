@@ -75,6 +75,11 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
     public function setLayers($is_search = 0, $category = 0)
     {
         $data = $this->getData();
+        try {
+            Mage::register('current_category', $category);
+        }
+        catch (Exception $e) {
+        }
         $controller = $data['controller'];
         $parameters = $data['params'];
         if (isset($parameters[Simi_Simiconnector_Model_Api_Abstract::FILTER])) {
@@ -86,7 +91,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
                 $controller->getRequest()->setParam('q', (string)$filter['q']);
                 $is_search = 1;
             }
-            if($category->getId() || ($category!=0)){
+            if($category && ($category->getId() || ($category!=0))){
                 $controller->getRequest()->setParam('cat', (string)$category->getId());
             }
             if (isset($filter['layer'])) {
