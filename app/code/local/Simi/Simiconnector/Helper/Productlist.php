@@ -1,8 +1,10 @@
 <?php
 
-class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
+class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
+{
 
-    public function getListTypeId() {
+    public function getListTypeId()
+    {
         return array(
             1 => Mage::helper('simiconnector')->__('Custom Product List'),
             2 => Mage::helper('simiconnector')->__('Best Seller'),
@@ -12,7 +14,8 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
         );
     }
 
-    public function getTypeOption() {
+    public function getTypeOption()
+    {
         return array(
             array('value' => 1, 'label' => Mage::helper('simiconnector')->__('Custom Product List')),
             array('value' => 2, 'label' => Mage::helper('simiconnector')->__('Best Seller')),
@@ -22,14 +25,16 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
         );
     }
 
-    public function getProductCollection($listModel) {
+    public function getProductCollection($listModel)
+    {
+        $storeId = Mage::app()->getStore()->getId();
         $collection = Mage::getResourceModel('catalog/product_collection')
-                ->addAttributeToSelect(Mage::getSingleton('catalog/config')
-                        ->getProductAttributes())
-                ->addMinimalPrice()
-                ->addFinalPrice()
-                ->addTaxPercents()
-                ->addUrlRewrite();
+            ->addAttributeToSelect(Mage::getSingleton('catalog/config')
+                ->getProductAttributes())
+            ->addMinimalPrice()
+            ->addFinalPrice()
+            ->addTaxPercents()
+            ->addUrlRewrite();
         switch ($listModel->getData('list_type')) {
             //Product List
             case 1:
@@ -38,20 +43,22 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
             //Best seller
             case 2:
                 $collection = Mage::getResourceModel('reports/product_collection')
-                        ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
-                        ->addOrderedQty()->addMinimalPrice()
-                        ->addTaxPercents()
-                        ->addStoreFilter()
-                        ->setOrder('ordered_qty', 'desc');
+                    ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
+                    ->addOrderedQty()->addMinimalPrice()
+                    ->addTaxPercents()
+                    ->addStoreFilter()
+                    ->setOrder('ordered_qty', 'desc');
+                $collection->getSelect()->joinInner(array('e2' => 'catalog_product_flat_' . $storeId), 'e2.entity_id = e.entity_id');
                 break;
             //Most Viewed
             case 3:
                 $collection = Mage::getResourceModel('reports/product_collection')
-                        ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
-                        ->addViewsCount()
-                        ->addMinimalPrice()
-                        ->addTaxPercents()
-                        ->addStoreFilter();
+                    ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
+                    ->addViewsCount()
+                    ->addMinimalPrice()
+                    ->addTaxPercents()
+                    ->addStoreFilter();
+                $collection->getSelect()->joinInner(array('e2' => 'catalog_product_flat_' . $storeId), 'e2.entity_id = e.entity_id');
                 break;
             //New Updated
             case 4:
@@ -64,10 +71,10 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
             default:
                 break;
         }
-		
-		Mage::getSingleton('catalog/product_status')->addVisibleFilterToCollection($collection);
+
+        Mage::getSingleton('catalog/product_status')->addVisibleFilterToCollection($collection);
         Mage::getSingleton('catalog/product_visibility')->addVisibleInCatalogFilterToCollection($collection);
-		
+
         return $collection;
     }
 
@@ -75,7 +82,8 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
      * Matrix Helper Functions
      */
 
-    public function getMatrixRowOptions() {
+    public function getMatrixRowOptions()
+    {
         $rows = array();
         $highestRow = 0;
         foreach (Mage::getModel('simiconnector/simicategory')->getCollection() as $simicat) {
@@ -101,24 +109,24 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
         return $returnArray;
     }
 
-    public function getMatrixLayoutMockup($storeviewid) {
+    public function getMatrixLayoutMockup($storeviewid)
+    {
         $rows = array();
         $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('homecategory');
         $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
-        $simicategoryCollection = Mage::getModel('simiconnector/simicategory')->getCollection()->setOrder('sort_order', 'desc')->addFieldToFilter('status', '1');
-        ;
+        $simicategoryCollection = Mage::getModel('simiconnector/simicategory')->getCollection()->setOrder('sort_order', 'desc')->addFieldToFilter('status', '1');;
         $simicategoryCollection->getSelect()
-                ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.simicategory_id AND visibility.content_type = ' . $typeID . ' AND visibility.store_view_id =' . $storeviewid);
+            ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.simicategory_id AND visibility.content_type = ' . $typeID . ' AND visibility.store_view_id =' . $storeviewid);
 
 
         foreach ($simicategoryCollection as $simicat) {
             if (!$rows[$simicat->getData('matrix_row')])
-                $rows[(int) $simicat->getData('matrix_row')] = array();
+                $rows[(int)$simicat->getData('matrix_row')] = array();
 
             $editUrl = Mage::helper("adminhtml")->getUrl('*/simiconnector_simicategory/edit', array('id' => $simicat->getId()));
             $title = '<a href="' . $editUrl . '" style="background-color:rgba(255,255,255,0.7); text-decoration:none; text-transform: uppercase; color: black">' . $simicat->getData('simicategory_name') . '</a>';
 
-            $rows[(int) $simicat->getData('matrix_row')][] = array(
+            $rows[(int)$simicat->getData('matrix_row')][] = array(
                 'id' => $simicat->getId(),
                 'image' => $simicat->getData('simicategory_filename'),
                 'image_tablet' => $simicat->getData('simicategory_filename_tablet'),
@@ -134,15 +142,15 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
         $listtypeID = Mage::helper('simiconnector')->getVisibilityTypeId('productlist');
         $listCollection = Mage::getModel('simiconnector/productlist')->getCollection()->addFieldToFilter('list_status', '1');
         $listCollection->getSelect()
-                ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.productlist_id AND visibility.content_type = ' . $listtypeID . ' AND visibility.store_view_id =' . $storeviewid);
+            ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.productlist_id AND visibility.content_type = ' . $listtypeID . ' AND visibility.store_view_id =' . $storeviewid);
 
         foreach ($listCollection as $productlist) {
             if (!$rows[$productlist->getData('matrix_row')])
-                $rows[(int) $productlist->getData('matrix_row')] = array();
+                $rows[(int)$productlist->getData('matrix_row')] = array();
 
             $editUrl = Mage::helper("adminhtml")->getUrl('*/*/edit', array('id' => $productlist->getId()));
             $title = '<a href="' . $editUrl . '" style="background-color:rgba(255,255,255,0.7); text-decoration:none; text-transform: uppercase; color: black">' . $productlist->getData('list_title') . '  </a>';
-            $rows[(int) $productlist->getData('matrix_row')][] = array(
+            $rows[(int)$productlist->getData('matrix_row')][] = array(
                 'id' => $productlist->getId(),
                 'image' => $productlist->getData('list_image'),
                 'image_tablet' => $productlist->getData('list_image_tablet'),
@@ -157,23 +165,24 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
         ksort($rows);
         try {
             foreach ($rows as $index => $row) {
-                usort($row, function($a, $b) {
+                usort($row, function ($a, $b) {
                     return $a['sort_order'] - $b['sort_order'];
                 });
                 $rows[$index] = $row;
             }
         } catch (Exception $e) {
-            
+
         }
         $html = '</br> <b> Matrix Theme Mockup Preview: </b></br>(Save Item to update your Changes)</br></br>';
-        $html.= '<table><tr><td style="text-align:center">Phone Screen Mockup Preview: </br>';
-        $html.= $this->drawMatrixMockupTable(170, 320, false, $rows);
-        $html.= '</td><td> </td><td style="text-align:center">Tablet Screen Mockup Preview: </br>';
-        $html.= $this->drawMatrixMockupTable(178, 512, true, $rows) . '</td></tr></table>';
+        $html .= '<table><tr><td style="text-align:center">Phone Screen Mockup Preview: </br>';
+        $html .= $this->drawMatrixMockupTable(170, 320, false, $rows);
+        $html .= '</td><td> </td><td style="text-align:center">Tablet Screen Mockup Preview: </br>';
+        $html .= $this->drawMatrixMockupTable(178, 512, true, $rows) . '</td></tr></table>';
         return $html;
     }
 
-    public function drawMatrixMockupTable($bannerHeight, $bannerWidth, $is_tablet, $rows) {
+    public function drawMatrixMockupTable($bannerHeight, $bannerWidth, $is_tablet, $rows)
+    {
         if (!$is_tablet) {
             $margin = 8;
             $screenHeight = 568;
@@ -188,7 +197,7 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
         //phone shape
         $html = '<div style="background-color:black; width:' . ($bannerWidth + $margin * 2) . 'px; height:' . ($screenHeight + $topmargin + $bottommargin) . 'px; border-radius: 30px;"><br>';
         //screen
-        $html.= '<div style="background-color:white; width:' . $bannerWidth . 'px;margin :' . $margin . 'px; height:' . $screenHeight . 'px ;margin-top: ' . $topmargin . 'px ; overflow-y:scroll; overflow-x:hidden;">';
+        $html .= '<div style="background-color:white; width:' . $bannerWidth . 'px;margin :' . $margin . 'px; height:' . $screenHeight . 'px ;margin-top: ' . $topmargin . 'px ; overflow-y:scroll; overflow-x:hidden;">';
         //logo (navigation)
         $html .= '<span style="color:white ; font-size: 18px; line-height: 35px; margin: 0 0 24px;"> <div> <div style= "background-color:#FF6347; width:' . $bannerWidth . '; height:' . ($bannerHeight / 6) . 'px ; text-align:center; background-image:url(https://www.simicart.com/skin/frontend/default/simicart2.0/images/menu.jpg); background-repeat:no-repeat;background-size: ' . ($bannerHeight / 6) . 'px ' . ($bannerHeight / 6) . 'px; " ><b>APPLICATION LOGO</b></div></div>';
         //banner
@@ -220,14 +229,15 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
                 $style = 'overflow-x: scroll; overflow-y: hidden;';
             else
                 $style = 'overflow: hidden;';
-            $html.= '<div style="' . $style . 'width: ' . $bannerWidth . 'px"> <div style="width:' . $totalWidth . 'px; height:' . $rowHeight . 'px">' . $cells;
-            $html.= '</div></div>';
+            $html .= '<div style="' . $style . 'width: ' . $bannerWidth . 'px"> <div style="width:' . $totalWidth . 'px; height:' . $rowHeight . 'px">' . $cells;
+            $html .= '</div></div>';
         }
-        $html.='</span></div></div>';
+        $html .= '</span></div></div>';
         return $html;
     }
 
-    public function autoFillMatrixRowHeight() {
+    public function autoFillMatrixRowHeight()
+    {
         $rows = array();
         foreach (Mage::getModel('simiconnector/simicategory')->getCollection() as $simicat) {
             $currentIndex = $simicat->getData('matrix_row');
@@ -255,7 +265,8 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract {
         return $script;
     }
 
-    public function updateMatrixRowHeight($matrix_row, $matrix_height_percent, $matrix_height_percent_tablet) {
+    public function updateMatrixRowHeight($matrix_row, $matrix_height_percent, $matrix_height_percent_tablet)
+    {
         foreach (Mage::getModel('simiconnector/productlist')->getCollection() as $productList) {
             if (($productList->getData('matrix_row') == $matrix_row) && (($productList->getData('matrix_height_percent') != $matrix_height_percent) || ($productList->getData('matrix_height_percent_tablet') != $matrix_height_percent_tablet))) {
                 $productList->setData('matrix_height_percent', $matrix_height_percent);
