@@ -152,45 +152,9 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             'payment_method' => $this->_getOnepage()->getQuote()->getPayment()->getMethodInstance()->getCode()
         );
 
-        /*
-         * save To App report
-         */
-        try {
-            $orderId = Mage::getModel('sales/order')->loadByIncrementId($this->_getCheckoutSession()->getLastRealOrderId())->getId();
-            $newTransaction = Mage::getModel('simiconnector/appreport');
-            $newTransaction->setOrderId($orderId);
-            $newTransaction->save();
-        } catch (Exception $exc) {
-
-        }
-
-        /*
-         * App notification
-         */
-        if (Mage::getStoreConfig('simiconnector/notification/noti_purchase_enable')) {
-            $categoryId = Mage::getStoreConfig('simiconnector/notification/noti_purchase_category_id');
-            $category = Mage::getModel('catalog/category')->load($categoryId);
-            $categoryName = $category->getName();
-            $categoryChildrenCount = $category->getChildrenCount();
-            if ($categoryChildrenCount > 0)
-                $categoryChildrenCount = 1;
-            else
-                $categoryChildrenCount = 0;
-
-            $notification['show_popup'] = '1';
-            $notification['title'] = Mage::getStoreConfig('simiconnector/notification/noti_purchase_title');
-            $notification['url'] = Mage::getStoreConfig('simiconnector/notification/noti_purchase_url');
-            $notification['message'] = Mage::getStoreConfig('simiconnector/notification/noti_purchase_message');
-            $notification['notice_sanbox'] = 0;
-            $notification['type'] = Mage::getStoreConfig('simiconnector/notification/noti_purchase_type');
-            $notification['productID'] = Mage::getStoreConfig('simiconnector/notification/noti_purchase_product_id');
-            $notification['categoryID'] = Mage::getStoreConfig('simiconnector/notification/noti_purchase_category_id');
-            $notification['categoryName'] = $categoryName;
-            $notification['has_children'] = $categoryChildrenCount;
-            $notification['created_time'] = now();
-            $notification['notice_type'] = 3;
-            $order['notification'] = $notification;
-        }
+        $incrementId = $this->_getCheckoutSession()->getLastRealOrderId();
+        $orderId = Mage::getModel('sales/order')->loadByIncrementId($incrementId)->getId();
+        Mage::helper('simiconnector/checkout')->processOrderAfter($orderId, $order);
         $this->order_placed_info = $order;
         Mage::dispatchEvent('simi_simiconnector_model_api_orders_onepage_store_after', array('object' => $this, 'data' => $order));
         $result = array('order' => $this->order_placed_info);
