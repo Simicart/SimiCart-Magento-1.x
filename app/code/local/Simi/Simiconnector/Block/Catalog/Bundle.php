@@ -9,6 +9,8 @@ class Simi_Simiconnector_Block_Catalog_Bundle extends Mage_Bundle_Block_Catalog_
      */
     public function getJsonConfig()
     {
+        /** @var $taxHelper Mage_Tax_Helper_Data */
+        $taxHelper = Mage::helper('tax');
         Mage::app()->getLocale()->getJsPriceFormat();
         $optionsArray = $this->getOptions();
         $options      = array();
@@ -42,8 +44,7 @@ class Simi_Simiconnector_Block_Catalog_Bundle extends Mage_Bundle_Block_Catalog_
             );
 
             $selectionCount = count($_option->getSelections());
-            /** @var $taxHelper Mage_Tax_Helper_Data */
-            $taxHelper = Mage::helper('tax');
+
             foreach ($_option->getSelections() as $_selection) {
                 /* @var $_selection Mage_Catalog_Model_Product */
                 $selectionId = $_selection->getSelectionId();
@@ -68,10 +69,6 @@ class Simi_Simiconnector_Block_Catalog_Bundle extends Mage_Bundle_Block_Catalog_
                 );
 
                 $canApplyMAP = false;
-
-                /* @var $taxHelper Mage_Tax_Helper_Data */
-                $taxHelper = Mage::helper('tax');
-
                 $_priceInclTax = $taxHelper->getPrice($_selection, $itemPrice, true,
                     null, null, null, null, null, false);
                 $_priceExclTax = $taxHelper->getPrice($_selection, $itemPrice, false,
