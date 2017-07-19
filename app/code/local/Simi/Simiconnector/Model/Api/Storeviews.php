@@ -128,6 +128,8 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                     'taxvat_show' => Mage::getStoreConfig('customer/address/taxvat_show'),
                     'gender_show' => Mage::getStoreConfig('customer/address/gender_show'),
                     'gender_value' => $values,
+                    'region_state_required' => Mage::getStoreConfig('general/region/state_required'),
+                    'region_display_all' => Mage::getStoreConfig('general/region/display_all'),
                 ),
                 'account_option' => array(
                     'taxvat_show' => Mage::getStoreConfig('customer/create_account/vat_frontend_visibility'),
