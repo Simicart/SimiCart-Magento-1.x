@@ -42,12 +42,12 @@ class Simi_Simiconnector_Helper_Cloud extends Mage_Core_Helper_Abstract
         $data = $this->_json;
 
         if(isset($data['errors']))
-            return null;
+            return 'matrix';
 
         if(isset($data['app-configs'][0]['layout'])){
             return $data['app-configs'][0]['layout'];
         }
-        return null;
+        return 'matrix';
 
     }
 }
