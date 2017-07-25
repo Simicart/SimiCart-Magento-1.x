@@ -27,7 +27,7 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
             header("HTTP/1.0 401 Unauthorized");
             exit();
         }
-         */
+        */
     }
 
     protected function _getServer()
@@ -76,7 +76,8 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
         $keySecret = md5(Mage::getStoreConfig('simiconnector/general/secret_key'));
         $token     = "";
         foreach ($head as $k => $h) {
-            if ($k == "Authorization" || $k == "TOKEN" || $k == "Token") {
+            $header_title = strtolower($k);
+            if ($header_title == "authorization" || $header_title == "token") {
                 $token = $h;
             }
         }
