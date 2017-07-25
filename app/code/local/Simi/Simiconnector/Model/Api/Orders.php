@@ -4,11 +4,22 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
 {
 
     protected $_DEFAULT_ORDER = 'entity_id';
+    const DEFAULT_DIR = 'desc';
     protected $_RETURN_MESSAGE;
     protected $_QUOTE_INITED = FALSE;
     public $detail_onepage;
     public $place_order;
     public $order_placed_info;
+
+
+    protected function _order($parameters)
+    {
+        $query = $this->builderQuery;
+        $order = isset($parameters[self::ORDER]) ? $parameters[self::ORDER] : $this->_DEFAULT_ORDER;
+        $order = str_replace('|', '.', $order);
+        $dir = isset($parameters[self::DIR]) ? $parameters[self::DIR] : self::DEFAULT_DIR;
+        $query->setOrder($order, $dir);
+    }
 
     protected function _getCart()
     {

@@ -181,12 +181,6 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
         if (!$block_toolbar->isExpanded()) return;
         $sort_orders = array();
 
-        if ($sort = $block_list->getSortBy()) {
-            $block_toolbar->setDefaultOrder($sort);
-        }
-        if ($dir = $block_list->getDefaultDirection()) {
-            $block_toolbar->setDefaultDirection($dir);
-        }
         $availableOrders = $block_toolbar->getAvailableOrders();
         if ($is_search == 1) {
             unset($availableOrders['position']);
@@ -197,6 +191,18 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
             $block_toolbar->setAvailableOrders($availableOrders)
                 ->setDefaultDirection('desc')
                 ->setSortBy('relevance');
+        } else {
+            if ($sort = $block_list->getSortBy()) {
+                $block_toolbar->setDefaultOrder($sort);
+            } else {
+                $block_toolbar->setDefaultOrder('entity_id');
+            }
+            if ($dir = $block_list->getDefaultDirection()) {
+                $block_toolbar->setDefaultDirection($dir);
+            } else {
+                $block_toolbar->setDefaultDirection('desc');
+            }
+
         }
 
         foreach ($availableOrders as $_key => $_order) {
