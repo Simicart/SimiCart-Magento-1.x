@@ -18,7 +18,7 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
         }
         if (Mage::getStoreConfig('simiconnector/general/categories_in_app'))
             $this->_visible_array = explode(',', Mage::getStoreConfig('simiconnector/general/categories_in_app'));
-        
+
         $category = Mage::getModel('catalog/category')->load($data['resourceid']);
         if (is_array($category->getChildrenCategories())) {
             $idArray =explode(',', $category->getChildren());
@@ -34,7 +34,9 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
         $data = $this->getData();
         $result = parent::index();
         foreach ($result['categories'] as $index => $catData) {
-            $childCollection = Mage::getModel('catalog/category')->getCollection()->addFieldToFilter('parent_id', $catData['entity_id']);
+            $childCollection = Mage::getModel('catalog/category')->getCollection()
+                ->addFieldToFilter('parent_id', $catData['entity_id'])
+                ->addAttributeToFilter('is_active', 1);
             if ($this->_visible_array)
                 $childCollection->addFieldToFilter('entity_id', array('in' => $this->_visible_array));
             if ($childCollection->count() > 0)

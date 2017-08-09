@@ -2,6 +2,9 @@
 
 class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstract {
 
+    protected $bad_device_id = array();
+    protected $size_android_sent = 0;
+
     public function sendNotice($data) {
         $trans = $this->send($data);
         // update notification history
@@ -17,6 +20,8 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
     }
 
     public function send(&$data) {
+
+
         if ($data['category_id']) {
             $categoryId = $data['category_id'];
             $category = Mage::getModel('catalog/category')->load($categoryId);
@@ -105,7 +110,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
           echo 'iOS push:';
           zend_debug::dump($body);
           die;
-         * 
+         *
          */
         $payload = json_encode($body);
         $totalDevice = 0;
@@ -157,10 +162,52 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         return true;
     }
 
+
+
+
+
+    public function sendAndroid($collectionDevice, $data) {
+        unset($data['devices_pushed']);
+        $total = count($collectionDevice);
+        if ($total == 0)
+            return true;
+        $this->checkIndex($data);
+        $message = $data;
+
+        $this->repeatSendAnddroid($total, $collectionDevice->getData(), $message);
+
+        if($this->bad_device_id && count($this->bad_device_id)){
+
+            $notice_id = $data['notice_id'];
+            $deviceArray = explode(',', str_replace(' ', '', $data['devices_pushed']));
+            Zend_Debug::dump($deviceArray);die("device array devices_pushed");
+
+            for($i = 0; $i < count($this->bad_device_id); $i++){
+                if(($key = array_search($deviceArray, $this->bad_device_id[$i])) !== false) {
+                    unset($deviceArray[$key]);
+                }
+                $model = Mage::getModel('simiconnector/device');
+                $model->setId($this->bad_device_id[$i])->delete();
+            }
+
+            $new_devices_pushed = implode(',', $deviceArray);
+            $model = Mage::getModel('simiconnector/siminotification');
+            $model->setId($notice_id);
+            $model->setDevicesPushed($new_devices_pushed);
+            $model->save();
+
+            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Deleted %s bad devices (Android)', count($this->bad_device_id)));
+        }
+
+
+        return true;
+    }
+
     public function repeatSendAnddroid($total, $collectionDevice, $message) {
-        $size = $total;
+
+        $from_user = 0;
         while (true) {
-            $from_user = 0;
+
             $check = $total - 999;
             if ($check <= 0) {
                 //send to  (total+from_user) user from_user
@@ -169,7 +216,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
                     Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Message not delivered (Android)'));
                     return false;
                 }
-                Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Message successfully delivered to %s devices (Android)', $size));
+                Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Message successfully delivered to %s devices (Android)', $this->size_android_sent));
                 return true;
             } else {
                 //send to 100 user from_user
@@ -184,19 +231,28 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         }
     }
 
+
+
     public function sendTurnAnroid($collectionDevice, $from, $to, $message) {
+
         $registrationIDs = array();
+        $devices_id = array();
         for ($i = $from; $i <= $to; $i++) {
             $item = $collectionDevice[$i];
-            if (isset($item['device_token']))
+
+            if($item['device_token']){
+                $devices_id[] = $item['device_id'];
                 $registrationIDs[] = $item['device_token'];
+            }
         }
 
-        $url = 'https://android.googleapis.com/gcm/send';
+        $url = 'https://fcm.googleapis.com/fcm/send';
         $fields = array(
             'registration_ids' => $registrationIDs,
             'data' => array("message" => $message),
         );
+
+        // Zend_Debug::dump(json_encode($devices_id));die("Field");
 
         $api_key = Mage::getStoreConfig('simiconnector/notification/android_secret_key', $collectionDevice[0]['storeview_id']);
         $headers = array(
@@ -216,28 +272,32 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             $result = curl_exec($ch);
             curl_close($ch);
         } catch (Exception $e) {
-            
+            Zend_Debug::dump($e->getMessage());die("Exception");
         }
+        $re = json_decode($result,true);
 
-        $re = json_decode($result);
+        $this->size_android_sent = $this->size_android_sent + $re['success'];
 
-        if ($re == NULL || $re->success == 0) {
-            return false;
+        if($re['failure'] != 0){
+            $data_result = $re['results'];
+
+            $size_errors = count($data_result);
+
+            for($i = 0;  $i < $size_errors; $i++){
+
+                $error =  $data_result[$i]['error'];
+
+                if($error == 'InvalidRegistration' || $error == 'NotRegistered'){
+
+                    $this->bad_device_id[] = $devices_id[$i];
+                }
+            }
+
         }
         return true;
     }
 
-    public function sendAndroid($collectionDevice, $data) {
-        unset($data['devices_pushed']);
-        $total = count($collectionDevice);
-        if ($total == 0)
-            return true;
-        $this->checkIndex($data);
-        $message = $data;
 
-        $this->repeatSendAnddroid($total, $collectionDevice->getData(), $message);
-        return true;
-    }
 
     public function checkIndex(&$data) {
         if (!isset($data['type'])) {
@@ -273,7 +333,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         $listCountry = array();
 
         $collection = Mage::getResourceModel('directory/country_collection')
-                ->loadByStore();
+            ->loadByStore();
 
         if (count($collection)) {
             foreach ($collection as $item) {
