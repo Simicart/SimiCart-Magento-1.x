@@ -50,7 +50,6 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
         if (strpos(Mage::helper('core/url')->getCurrentUrl(), 'migrate_') !== false)
             return true;
         if (!function_exists('getallheaders')) {
-
             function getallheaders()
             {
                 $head = array();
