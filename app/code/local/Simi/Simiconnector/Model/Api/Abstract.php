@@ -212,7 +212,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
     {
         return array(
             'all_ids' => $all_ids,
-            $this->getPluralKey() => $this->motifyFields($info),
+            $this->getPluralKey() => $this->motifyFields($info,true),
             'total' => $total,
             'page_size' => $page_size,
             'from' => $from,
@@ -282,19 +282,34 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
         }
     }
 
-    protected function motifyFields($content)
+    protected function motifyFields($content,$is_list=false)
     {
         $data = $this->getData();
         $parameters = $data['params'];
         if (isset($parameters['fields']) && $parameters['fields']) {
             $fields = explode(',', $parameters['fields']);
-            $motify = array();
-            foreach ($content as $key => $item) {
-                if (in_array($key, $fields)) {
-                    $motify[$key] = $item;
+            if(!$is_list){
+                $motify = array();
+                foreach ($content as $key => $item) {
+                    if (in_array($key, $fields)) {
+                        $motify[$key] = $item;
+                    }
                 }
+                return $motify;
+            }else{
+                $motify = array();
+                foreach ($content as $index => $item) {
+                    foreach ($item as $key => $value) {
+                        if (in_array($key, $fields)) {
+                            $motify[$key] = $value;
+                        }
+                    }
+                    $content[$index] = $motify;
+                }
+                return $content;
             }
-            return $motify;
+
+
         }else{
             return $content;
         }
