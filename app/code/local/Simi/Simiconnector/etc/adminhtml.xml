@@ -3,10 +3,10 @@
     <menu>
         <simiconnector module="simiconnector" translate="title">
             <title>Simiconnector</title>
-            <sort_order>71</sort_order>               
-            <children>   
+            <sort_order>71</sort_order>
+            <children>
                 <core module="simiconnector" translate="title">
-                    <title>Connector Settings</title>      
+                    <title>Connector Settings</title>
                     <sort_order>0</sort_order>
                     <children>
                         <siminotification module="simiconnector" translate="title">
@@ -57,7 +57,7 @@
                 <!-- end payment -->
 
                 <simi_theme module="simiconnector" translate="title">
-                    <title>Themes</title>      
+                    <title>Themes</title>
                     <sort_order>10</sort_order>
                     <children>
                         <default_theme module="simiconnector" translate="title">
@@ -74,7 +74,7 @@
                                     <sort_order>50</sort_order>
                                     <action>adminhtml/simiconnector_simicategory</action>
                                 </simicategory>
-                                <spotproduct module="simiconnector" translate="title">				
+                                <spotproduct module="simiconnector" translate="title">
                                     <title>Product Lists</title>
                                     <sort_order>160</sort_order>
                                     <action>adminhtml/simiconnector_productlist</action>
@@ -86,10 +86,11 @@
                             <sort_order>150</sort_order>
                             <action>adminhtml/simiconnector_cms</action>
                         </cms>
+
                     </children>
                 </simi_theme>
                 <simi_rich_content module="simiconnector" translate="title">
-                    <title>Rich Content</title>      
+                    <title>Rich Content</title>
                     <sort_order>30</sort_order>
                     <children>
                         <simivideo module="simiconnector" translate="title">
@@ -105,7 +106,7 @@
                     </children>
                 </simi_rich_content>
                 <simi_user_experience module="simiconnector" translate="title">
-                    <title>User Experience</title>      
+                    <title>User Experience</title>
                     <sort_order>40</sort_order>
                     <children>
                         <simibarcode module="simiconnector" translate="title">
@@ -131,18 +132,18 @@
                                 <children>
                                     <simiconnector module="simiconnector" translate="title">
                                         <title>SimiCart Connector</title>
-                                        <sort_order>1</sort_order>									
-                                    </simiconnector>						
+                                        <sort_order>1</sort_order>
+                                    </simiconnector>
                                 </children>
                             </config>
                         </children>
                     </system>
                     <simiconnector module="simiconnector" translate="title">
                         <title>Simiconnector</title>
-                        <sort_order>71</sort_order>               
+                        <sort_order>71</sort_order>
                         <children>
                             <core module="simiconnector" translate="title">
-                                <title>Connector Settings</title>      
+                                <title>Connector Settings</title>
                                 <sort_order>0</sort_order>
                                 <children>
                                     <connector_app module="simiconnector" translate="title">
@@ -171,18 +172,32 @@
                                         <title>Notifications</title>
                                         <sort_order>100</sort_order>
                                     </notice>
-                                    <promoteapp module="simiconnector" translate="title">				
+                                    <promoteapp module="simiconnector" translate="title">
                                         <title>Promote Apps</title>
                                         <sort_order>170</sort_order>
                                     </promoteapp>
+                                    <simitransactions module="simiconnector" translate="title">
+                                        <title>App Transactions</title>
+                                        <sort_order>40</sort_order>
+                                    </simitransactions>
                                     <settings module="simiconnector" translate="title">
                                         <title>General Settings</title>
                                         <sort_order>1000</sort_order>
                                     </settings>
                                 </children>
-                            </core>        
+                            </core>
+                            <simi_payment module="simiconnector" translate="title">
+                                <title>Payment</title>
+                                <sort_order>5</sort_order>
+                                <children>
+                                    <trasfersimi module="simiconnector" translate="title">
+                                        <title>Mobile Bank Transfer</title>
+                                        <sort_order>180</sort_order>
+                                    </trasfersimi>
+                                </children>
+                            </simi_payment>
                             <simi_theme>
-                                <title>Themes</title>      
+                                <title>Themes</title>
                                 <sort_order>10</sort_order>
                                 <children>
                                     <default_theme>
@@ -197,7 +212,7 @@
                                                 <title>Home Category</title>
                                                 <sort_order>50</sort_order>
                                             </simicategory>
-                                            <spotproduct module="simiconnector" translate="title">				
+                                            <spotproduct module="simiconnector" translate="title">
                                                 <title>Product List</title>
                                                 <sort_order>160</sort_order>
                                             </spotproduct>
@@ -208,31 +223,45 @@
                                         <sort_order>150</sort_order>
                                     </cms>
                                 </children>
-                            </simi_theme>                            
-                        </children>                        
-                    </simiconnector> 
-                    <simi_user_experience module="simiconnector" translate="title">
-                        <title>User Experience</title>      
-                        <sort_order>40</sort_order>
-                        <children>
-                            <simibarcode module="simiconnector" translate="title">
-                                <title>QR Barcode Scanner</title>
-                                <sort_order>71</sort_order>
+                            </simi_theme>
+                            <simi_rich_content module="simiconnector" translate="title">
+                                <title>Rich Content</title>
+                                <sort_order>30</sort_order>
+                                <children>
+                                    <simivideo module="simiconnector" translate="title">
+                                        <title>Videos</title>
+                                        <sort_order>99</sort_order>
+                                    </simivideo>
+                                    <simiproductlabel module="simiconnector" translate="title">
+                                        <title>Product Labels</title>
+                                        <sort_order>199</sort_order>
+                                    </simiproductlabel>
+                                </children>
+                            </simi_rich_content>
+                            <simi_user_experience module="simiconnector" translate="title">
+                                <title>User Experience</title>
+                                <sort_order>40</sort_order>
                                 <children>
                                     <simibarcode module="simiconnector" translate="title">
-                                        <title><![CDATA[Manage QR & Barcodes]]></title>
-                                        <sort_order>99</sort_order>                                
+                                        <title>QR Barcode Scanner</title>
+                                        <sort_order>71</sort_order>
+                                        <children>
+                                            <simibarcode module="simiconnector" translate="title">
+                                                <title><![CDATA[Manage QR & Barcodes]]></title>
+                                                <sort_order>99</sort_order>
+                                            </simibarcode>
+                                            <settings module="simiconnector" translate="title">
+                                                <title>Settings</title>
+                                                <sort_order>199</sort_order>
+                                            </settings>
+                                        </children>
                                     </simibarcode>
-                                    <settings module="simiconnector" translate="title">
-                                        <title>Settings</title>
-                                        <sort_order>199</sort_order>                                   
-                                    </settings>
                                 </children>
-                            </simibarcode>
+                            </simi_user_experience>
                         </children>
-                    </simi_user_experience>                   
+                    </simiconnector>
                 </children>
             </admin>
-        </resources>       
+        </resources>
     </acl>
 </config>
