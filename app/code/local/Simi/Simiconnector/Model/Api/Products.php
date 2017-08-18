@@ -36,6 +36,8 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
                     $this->setFilterByQuery();
                 } elseif (isset($filter['related_to_id'])) {
                     $this->setFilterByRelated($filter['related_to_id']);
+                } elseif (isset($filter['spot_product'])) {
+                    $this->setFilterBySpot($filter['spot_product']);
                 } else {
                     $this->setFilterByCategoryId(Mage::app()->getStore()->getRootCategoryId());
                     // $this->_allow_filter_core = true;
@@ -280,6 +282,22 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         $this->_layer = $this->_helperProduct->getLayers();
         $this->builderQuery = $this->_helperProduct->getBuilderQuery();
         $this->_sortOrders = $this->_helperProduct->getStoreQrders();
+    }
+
+    public function setFilterBySpot()
+    {
+        $data = $this->getData();
+        if (!isset($data['params']['filter']['spot_product']))
+            throw new Exception($this->_helper->__('No Spot Type Sent'), 4);
+        $type = $data['params']['filter']['spot_product'];
+        if ($type == '1') {
+            if (!isset($data['params']['filter']['product_ids']))
+                throw new Exception($this->_helper->__('No Product List Sent'), 4);
+            $listProduct = str_replace(' ', '', $data['params']['filter']['product_ids']);
+            $this->builderQuery = Mage::helper('simiconnector/productlist')->getProductCollectionByType($type, $listProduct);
+        }
+        else
+            $this->builderQuery = Mage::helper('simiconnector/productlist')->getProductCollectionByType($type);
     }
 
 }

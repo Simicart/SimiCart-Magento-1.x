@@ -27,6 +27,10 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
 
     public function getProductCollection($listModel)
     {
+        return $this->getProductCollectionByType($listModel->getData('list_type'), $listModel->getData('list_products'));
+    }
+
+    public function getProductCollectionByType($type, $listProduct = ''){
         $storeId = Mage::app()->getStore()->getId();
         $collection = Mage::getResourceModel('catalog/product_collection')
             ->addAttributeToSelect(Mage::getSingleton('catalog/config')
@@ -35,10 +39,10 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
             ->addFinalPrice()
             ->addTaxPercents()
             ->addUrlRewrite();
-        switch ($listModel->getData('list_type')) {
+        switch ($type) {
             //Product List
             case 1:
-                $collection->addFieldToFilter('entity_id', array('in' => explode(',', $listModel->getData('list_products'))));
+                $collection->addFieldToFilter('entity_id', array('in' => explode(',', $listProduct)));
                 break;
             //Best seller
             case 2:
