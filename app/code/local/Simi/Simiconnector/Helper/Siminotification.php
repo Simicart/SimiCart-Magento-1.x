@@ -180,8 +180,6 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
 
             $notice_id = $data['notice_id'];
             $deviceArray = explode(',', str_replace(' ', '', $data['devices_pushed']));
-            Zend_Debug::dump($deviceArray);die("device array devices_pushed");
-
             for($i = 0; $i < count($this->bad_device_id); $i++){
                 if(($key = array_search($deviceArray, $this->bad_device_id[$i])) !== false) {
                     unset($deviceArray[$key]);
@@ -272,7 +270,8 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             $result = curl_exec($ch);
             curl_close($ch);
         } catch (Exception $e) {
-            Zend_Debug::dump($e->getMessage());die("Exception");
+            throw new Exception("Fail:".$e->getMessage(), 1);
+            
         }
         $re = json_decode($result,true);
 
