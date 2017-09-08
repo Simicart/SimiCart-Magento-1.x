@@ -161,7 +161,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                     'cataloginventory_item_options_backorders' => Mage::getStoreConfig('cataloginventory/item_options/backorders'),
                     'cataloginventory_item_options_max_sale_qty' => Mage::getStoreConfig('cataloginventory/item_options/max_sale_qty'),
                     'cataloginventory_item_options_min_qty' => Mage::getStoreConfig('cataloginventory/item_options/options_min_qty'),
-                    'cataloginventory_item_options_min_sale_qty' => Mage::getStoreConfig('cataloginventory/item_options/min_sale_qty'),
+                    'cataloginventory_item_options_min_sale_qty' =>$this->_prepareMinSaleQty(),
                     'cataloginventory_item_options_notify_stock_qty' => Mage::getStoreConfig('cataloginventory/item_options/notify_stock_qty'),
                     'cataloginventory_item_options_enable_qty_increments' => Mage::getStoreConfig('cataloginventory/item_options/enable_qty_increments'),
                     'cataloginventory_item_options_qty_increments' => Mage::getStoreConfig('cataloginventory/item_options/qty_increments'),
@@ -291,6 +291,20 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         $storeAPIModel->builderQuery = Mage::getModel('core/store_group')->getCollection()->addFieldToFilter('website_id', Mage::app()->getStore()->getWebsiteId());
         $storeAPIModel->pluralKey = 'stores';
         return $storeAPIModel->index();
+    }
+
+    private function _prepareMinSaleQty()
+    {
+        $values = unserialize(Mage::getStoreConfig('cataloginventory/item_options/min_sale_qty'));
+        $data =array();
+        foreach ($values as $index => $value){
+            $data[]=array(
+                'customer_group_id' =>$index,
+                'min_sale_qty' =>$value,
+            );
+        }
+
+        return $data;
     }
 
 }
