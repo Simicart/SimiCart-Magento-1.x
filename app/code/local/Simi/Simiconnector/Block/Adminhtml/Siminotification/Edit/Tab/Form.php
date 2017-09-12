@@ -17,23 +17,11 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
 
         $fieldset = $form->addFieldset('siminotification_form', array('legend' => Mage::helper('simiconnector')->__('Notification Content')));
         $fieldset->addType('datetime', 'Simi_Simiconnector_Block_Adminhtml_Device_Edit_Renderer_Datetime');
-
-        $stores = Mage::getModel('core/store')->getCollection();
-
-        $list_store = array();
-        foreach ($stores as $store) {
-            $list_store[] = array(
-                'value' => $store->getId(),
-                'label' => Mage::getModel('core/store_group')->load($store->getData('group_id'))->getName() . ' - ' . $store->getName(),
-            );
-        }
         $fieldset->addField('storeview_id', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Store View'),
             'name' => 'storeview_id',
             'note' => Mage::helper('simiconnector')->__('After changed this setting, you would need to re-select the devices to be sent'),
-            'values' => $list_store,
-            'onchange' => 'clearDevices()'
-        ));
+        ))->setRenderer($this->getLayout()->createBlock('simiconnector/adminhtml_siminotification_edit_tab_renderer_storeviews'));
         
         $fieldset->addField('notice_sanbox', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Send To'),

@@ -1,0 +1,30 @@
+<?php
+ $groups = $this->getGroups();
+ $storeviews = $this->getStoreviews();
+ $currentSelect = $this->getCurrentStorviews();
+ //Zend_Debug::dump($storeviews->getData());die;
+?>
+
+<tr>
+    <td class="label"><?php echo $this->getElement()->getLabel() ?></td>
+    <td class="value">
+        <select id="<?php echo $this->getElement()->getId() ?>" name="<?php echo $this->getElement()->getName() ?>"
+                onchange="clearDevices()" class="select">
+            <?php foreach ($groups as $group):?>
+                <optgroup label="<?php echo $group->getName()?>">
+                    <?php
+                        foreach ($storeviews as $storeview):
+                            if($storeview->getGroupId() == $group->getId()):
+                     ?>
+                        <option value="<?php echo $storeview->getId()?>"
+                            <?php if ($currentSelect == $storeview->getId):?> <?php endif;?>>
+                            <?php echo $storeview->getName()?>
+                        </option>
+                    <?php
+                            endif;
+                        endforeach;
+                    ?>
+            <?php endforeach;?>
+        </select>
+    </td>
+</tr>
