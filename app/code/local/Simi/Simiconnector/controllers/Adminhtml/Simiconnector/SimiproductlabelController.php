@@ -197,7 +197,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimiproductlabelController exte
     }
 
     protected function _isAllowed() {
-        return Mage::getSingleton('admin/session')->isAllowed('connector');
+        return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
     }
 
     public function chooserMainProductsAction() {

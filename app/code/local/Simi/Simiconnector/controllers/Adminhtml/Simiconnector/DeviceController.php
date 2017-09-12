@@ -93,4 +93,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_DeviceController extends Mage_A
         $this->_redirect('*/*/index');
     }
 
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
+    }
+
 }

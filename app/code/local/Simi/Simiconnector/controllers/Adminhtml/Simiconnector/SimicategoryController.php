@@ -241,4 +241,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
         }
     }
 
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
+    }
+
 }
