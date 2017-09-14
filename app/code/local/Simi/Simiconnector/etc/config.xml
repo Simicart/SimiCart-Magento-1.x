@@ -196,8 +196,8 @@
                 <max_number_of_decimals translate="label">2</max_number_of_decimals>			
             </currency> 
             <notification>
-                <android_app_key></android_app_key>
-                <android_secret_key></android_secret_key>
+                <android_app_key>73081678619</android_app_key>
+                <android_secret_key>AAAAEQQB6xs:APA91bEdLFv5o6X4FOW15IvhEm4Pn5-WVgv7FVQIb6MEd_Djctp4wTfCZ1ODiD-61deoVzq4QCISRVZjmT9csOQw5biXoeNdw66TLQDgmYe9JaWjw2aCk7nZAwxBAlDihRZ2ILGt7WcV</android_secret_key>
                 <noti_price_enable>0</noti_price_enable>
                 <new_product_enable>0</new_product_enable>
                 <noti_purchase_enable>0</noti_purchase_enable>
