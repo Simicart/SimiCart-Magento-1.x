@@ -19,7 +19,7 @@ class Simi_Simiconnector_Helper_Cloud extends Mage_Core_Helper_Abstract
         ini_set('display_errors', 1);
         $token = (String )Mage::getStoreConfig('simiconnector/general/token_key');
         $ch = curl_init();
-        curl_setopt($ch,CURLOPT_URL, "https://api.jajahub.com/rest/app-configs/");
+        curl_setopt($ch,CURLOPT_URL, "https://www.simicart.com/appdashboard/rest/app_configs/?limit=100");
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Accept: application/json',
@@ -42,12 +42,12 @@ class Simi_Simiconnector_Helper_Cloud extends Mage_Core_Helper_Abstract
         $data = $this->_json;
 
         if(isset($data['errors']))
-            return 'matrix';
+            return null;
 
-        if(isset($data['app-configs'][0]['layout'])){
-            return $data['app-configs'][0]['layout'];
+        if(isset($data['app-configs'][0]['home'])){
+            return $data['app-configs'][0]['home'];
         }
-        return 'matrix';
+        return null;
 
     }
 }
