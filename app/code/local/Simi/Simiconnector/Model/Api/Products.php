@@ -171,6 +171,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
                 'number' => $ratings[5],
             );
             $info_detail['product_label'] = Mage::helper('simiconnector/productlabel')->getProductLabel($entity);
+            $info_detail['configurable_swatches'] = $this->_helperProduct->getSwatchesListProduct($entity);
             $info[] = $info_detail;
         }
         return $this->getList($info, $all_ids, $total, $limit, $offset);
