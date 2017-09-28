@@ -50,4 +50,22 @@ class Simi_Simiconnector_Helper_Cloud extends Mage_Core_Helper_Abstract
         return null;
 
     }
+
+    public function getWebsiteIdSimiUser(){
+        $modules = Mage::getConfig()->getNode('modules')->children();
+        $modulesArray = (array)$modules;
+        if(isset($modulesArray['Simi_Simiuser'])) {
+            try{
+                $admin = Mage::getSingleton('admin/session');
+                if($admin->isLoggedIn()){
+                    return Mage::helper('simiuser')->getCurrentUserWebsiteId();
+                }
+            }catch (Exception $e){
+                return null;
+            }
+
+        } else {
+            return null;
+        }
+    }
 }
