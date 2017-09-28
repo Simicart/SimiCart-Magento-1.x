@@ -59,7 +59,9 @@ class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Edit_Tab_Products exte
                 ->addFieldToFilter('visibility', array('neq' => '1'))
                 ->addFieldToFilter('status', '1')
         ;
-
+        if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            $collection->addWebsiteFilter(array($websiteId));
+        }
         $this->setCollection($collection);
 
         return parent::_prepareCollection();

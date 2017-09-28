@@ -23,19 +23,10 @@ class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Edit_Tab_Form extends 
             $data['status'] = 1;
         }
 
-        $stores = Mage::getModel('core/store')->getCollection();
-        $list_store = array();
-        foreach ($stores as $store) {
-            $list_store[] = array(
-                'value' => $store->getId(),
-                'label' => $store->getName(),
-            );
-        }
         $fieldset->addField('storeview_id', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Store View'),
             'name' => 'storeview_id',
-            'values' => $list_store
-        ));
+        ))->setRenderer($this->getLayout()->createBlock('simiconnector/adminhtml_simiproductlabel_edit_tab_renderer_storeviews'));
 
         $fieldset->addField('name', 'text', array(
             'label' => Mage::helper('simiconnector')->__('Label Name'),

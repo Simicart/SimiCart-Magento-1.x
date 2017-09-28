@@ -13,6 +13,10 @@ class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Grid extends Mage_Admi
     protected function _prepareCollection() {
         $webId = 0;
         $collection = Mage::getModel('simiconnector/simiproductlabel')->getCollection();
+        if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            $storeIds = Mage::app()->getWebsite($websiteId)->getStoreIds();
+            $collection->addFieldToFilter('storeview_id',array('in'=>$storeIds));
+        }
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }

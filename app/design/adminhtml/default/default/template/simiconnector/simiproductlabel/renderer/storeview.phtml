@@ -8,7 +8,7 @@
     <td class="label"><?php echo $this->getElement()->getLabel() ?></td>
     <td class="value">
         <select id="<?php echo $this->getElement()->getId() ?>" name="<?php echo $this->getElement()->getName() ?>"
-                onchange="clearDevices()" class="select">
+                class="select">
             <?php foreach ($groups as $group):?>
                 <optgroup label="<?php echo $group->getName()?>">
                     <?php
