@@ -12,6 +12,16 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Grid extends Mage_Adminhtm
 
     protected function _prepareCollection() {
         $collection = Mage::getModel('simiconnector/simicategory')->getCollection();
+        if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            $website = Mage::getModel('core/website')->load($webId);
+            $storeIds = $website->getStoreIds();
+            $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('homecategory');
+            $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
+            $collection->getSelect()
+                ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.simicategory_id AND visibility.content_type = ' . $typeID );
+            $collection->addFieldToFilter('store_view_id', array('in' => $storeIds));
+            $collection->getSelect()->group('simicategory_id');
+        }
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }

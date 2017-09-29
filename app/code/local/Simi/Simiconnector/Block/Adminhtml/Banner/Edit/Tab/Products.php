@@ -91,7 +91,10 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Products extends Mage_A
                 ->addAttributeToSelect('name', 'type_id', 'attribute_set_id')
                 ->addFieldToFilter('visibility', array('neq' => '1'))
                 ->addFieldToFilter('status', '1')
-                ;        
+                ;
+        if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            $collection->addWebsiteFilter(array($webId));
+        }
         $this->setCollection($collection);
 
         return parent::_prepareCollection();

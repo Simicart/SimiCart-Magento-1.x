@@ -18,6 +18,11 @@ class Simi_Simiconnector_Helper_Cloud extends Mage_Core_Helper_Abstract
     public function getConfigfromCloud(){
         ini_set('display_errors', 1);
         $token = (String )Mage::getStoreConfig('simiconnector/general/token_key');
+        if($webId=$this->getWebsiteIdSimiUser()){
+            $website = Mage::getModel('core/website')->load($webId);
+            $storeIds = $website->getStoreIds();
+            $token = (String )Mage::getStoreConfig('simiconnector/general/token_key', current($storeIds));
+        }
         $ch = curl_init();
         curl_setopt($ch,CURLOPT_URL, "https://www.simicart.com/appdashboard/rest/app_configs/?limit=100");
         curl_setopt($ch, CURLOPT_HEADER, false);
@@ -40,7 +45,6 @@ class Simi_Simiconnector_Helper_Cloud extends Mage_Core_Helper_Abstract
     //default, matrix, zara
     public function getThemeLayout(){
         $data = $this->_json;
-
         if(isset($data['errors']))
             return null;
 

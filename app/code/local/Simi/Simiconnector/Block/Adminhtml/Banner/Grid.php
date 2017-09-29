@@ -38,10 +38,22 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Grid extends Mage_Adminhtml_Bloc
     protected function _prepareCollection() {
         $webId = 0;
         $collection = Mage::getModel('simiconnector/banner')->getCollection();
-        if ($this->getRequest()->getParam('website')) {
-            $webId = $this->getRequest()->getParam('website');
-            $collection->addFieldToFilter('website_id', array('eq' => $webId));
+        if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            $website = Mage::getModel('core/website')->load($webId);
+            $storeIds = $website->getStoreIds();
+            $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('banner');
+            $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
+            $collection->getSelect()
+                ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.banner_id AND visibility.content_type = ' . $typeID);
+            $collection->addFieldToFilter('store_view_id', array('in' => $storeIds));
+            $collection->getSelect()->group('banner_id');
+        }else{
+            if ($this->getRequest()->getParam('website')) {
+                $webId = $this->getRequest()->getParam('website');
+                $collection->addFieldToFilter('website_id', array('eq' => $webId));
+            }
         }
+
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }

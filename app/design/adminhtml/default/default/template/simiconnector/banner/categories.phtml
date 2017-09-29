@@ -178,12 +178,11 @@ Ext.onReady(function()
             }
         }
     }, tree);
-
     // set the root node
     var parameters = {
         text:        '<?php echo htmlentities($this->getRoot()->getName()) ?>',
         draggable:   false,
-        checked:'<?php echo $this->getRoot()->getChecked() ?>',
+        checked:'<?php echo $this->is_Root() ?>',
         uiProvider: Ext.tree.CheckboxNodeUI,
         allowDrop:   <?php if ($this->getRoot()->getIsVisible()): ?>true<?php else : ?>false<?php endif; ?>,
         id:          <?php echo (int) $this->getRoot()->getId() ?>,
