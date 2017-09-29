@@ -57,6 +57,10 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         $cmsData['resource'] = 'cmspages';
         $model = Mage::getSingleton('simiconnector/api_cmspages');
         $cmsPageList = call_user_func_array(array(&$model, $this->_method), array($cmsData));
+        $base_url = Mage::getStoreConfig('simiconnector/general/base_url');
+        if (Mage::getStoreConfig('web/url/use_store') && (!$base_url || $base_url=='')) {
+            $base_url = Mage::getBaseUrl();
+        }
         $additionInfo = array(
             'base' => array(
                 'country_code' => $country->getId(),
@@ -66,7 +70,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'store_name' => Mage::app()->getStore()->getName(),
                 'store_code' => Mage::app()->getStore()->getCode(),
                 'group_id' => Mage::app()->getStore()->getGroupId(),
-                'base_url' => Mage::getStoreConfig('simiconnector/general/base_url'),
+                'base_url' => $base_url,
                 'use_store' => Mage::getStoreConfig('web/url/use_store'),
                 'is_rtl' => Mage::getStoreConfig('simiconnector/general/is_rtl'),
                 'is_show_sample_data' => Mage::getStoreConfig('simiconnector/general/is_show_sample_data'),
