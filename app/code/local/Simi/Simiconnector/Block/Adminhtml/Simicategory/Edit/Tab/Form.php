@@ -162,11 +162,24 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
                 'name' => 'matrix_row',
             ));
 
+            $storeviewArray = array();
+            if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+                $website = Mage::getModel('core/website')->load($webId);
+                $storeIds = $website->getStoreIds();
+                foreach (Mage::getModel('core/store')->getCollection() as $storeView) {
+                    if (!$data['storeview_scope'])
+                        $data['storeview_scope'] = $storeView->getId();
+                    if(in_array($storeView->getId(), $storeIds)){
+                        $storeviewArray[$storeView->getId()] = $storeView->getName();
+                    }
+                }
 
-            foreach (Mage::getModel('core/store')->getCollection() as $storeView) {
-                if (!$data['storeview_scope'])
-                    $data['storeview_scope'] = $storeView->getId();
-                $storeviewArray[$storeView->getId()] = $storeView->getName();
+            }else{
+                foreach (Mage::getModel('core/store')->getCollection() as $storeView) {
+                    if (!$data['storeview_scope'])
+                        $data['storeview_scope'] = $storeView->getId();
+                    $storeviewArray[$storeView->getId()] = $storeView->getName();
+                }
             }
 
             $matrixfieldset->addField('storeview_scope', 'select', array(
