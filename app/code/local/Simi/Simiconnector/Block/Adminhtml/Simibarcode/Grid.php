@@ -13,6 +13,13 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Grid extends Mage_Adminhtml
 
     protected function _prepareCollection() {
         $collection = Mage::getModel('simiconnector/simibarcode')->getCollection();
+        if ($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()) {
+            $productWebsiteTable = Mage::getSingleton('core/resource')->getTableName('catalog/product_website');
+            $collection->getSelect()->join(
+                array('product_website' =>$productWebsiteTable),
+                'main_table.product_entity_id = product_website.product_id AND product_website.website_id='.$websiteId
+            );
+        }
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }

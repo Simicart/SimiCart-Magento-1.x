@@ -42,12 +42,13 @@ class Simi_Simiconnector_Block_Adminhtml_System_Config_Category_Categories exten
         return explode(',', $this->getIdsString()); //$this->getProduct()->getCategoryIds();
     }
 
-    public function getIdsString() {
+    public function getIdsString()
+    {
         if ($storecode = Mage::app()->getRequest()->getParam('store')) {
-                $storeviewModel = Mage::getModel('core/store')->getCollection()->addFieldToFilter('code', $storecode)->getFirstItem();
-                return Mage::getStoreConfig("simiconnector/general/categories_in_app", $storeviewModel->getId());
+            $storeviewModel = Mage::getModel('core/store')->getCollection()->addFieldToFilter('code', $storecode)->getFirstItem();
+            return Mage::getStoreConfig("simiconnector/general/categories_in_app", $storeviewModel->getId());
         }
-        return Mage::getStoreConfig("simiconnector/general/categories_in_app"); //Mage::registry('simiconnector_categories');//Mage::registry('bannerslider_data')->getCategories();//implode(',', $this->getCategoryIds());
+        return Mage::getStoreConfig("simiconnector/general/categories_in_app");
     }
 
     public function getLoadTreeUrl($expanded = null) {
@@ -58,4 +59,65 @@ class Simi_Simiconnector_Block_Adminhtml_System_Config_Category_Categories exten
         return $this->getUrl('adminhtml/simiconnector_config/categoriesJson', $params);
     }
 
+    public function getRoot($parentNodeCategory = null, $recursionLevel = 3)
+    {
+        if (!is_null($parentNodeCategory) && $parentNodeCategory->getId()) {
+            return $this->getNode($parentNodeCategory, $recursionLevel);
+        }
+        $root = Mage::registry('root');
+        if (is_null($root)) {
+
+            if($storeCode = $this->getRequest()->getParam('store')){
+                $storeviewModel = Mage::getModel('core/store')->getCollection()
+                    ->addFieldToFilter('code', $storeCode)
+                    ->getFirstItem();
+                if($storeviewModel->getId()){
+                    $storeId = $storeviewModel->getId();
+                }
+            }elseif ($website = $this->getRequest()->getParam('website')){
+                $websiteModel = Mage::getModel('core/website')->getCollection()
+                    ->addFieldToFilter('code', $website)
+                    ->getFirstItem();
+                $storeId = $websiteModel->getDefaultStore()->getId();
+            }else{
+                if ($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()) {
+                    $storeId = Mage::app()->getWebsite($websiteId)->getDefaultStore()->getId();
+                }
+            }
+
+            if ($storeId) {
+                $store = Mage::app()->getStore($storeId);
+                $rootId = $store->getRootCategoryId();
+            }
+            else {
+                $rootId = Mage_Catalog_Model_Category::TREE_ROOT_ID;
+            }
+
+            $ids = $this->getSelectedCategoriesPathIds($rootId);
+            $tree = Mage::getResourceSingleton('catalog/category_tree')
+                ->loadByIds($ids, false, false);
+
+            if ($this->getCategory()) {
+                $tree->loadEnsuredNodes($this->getCategory(), $tree->getNodeById($rootId));
+            }
+
+            $tree->addCollectionData($this->getCategoryCollection());
+
+            $root = $tree->getNodeById($rootId);
+
+            if ($root && $rootId != Mage_Catalog_Model_Category::TREE_ROOT_ID) {
+                $root->setIsVisible(true);
+                if ($this->isReadonly()) {
+                    $root->setDisabled(true);
+                }
+            }
+            elseif($root && $root->getId() == Mage_Catalog_Model_Category::TREE_ROOT_ID) {
+                $root->setName(Mage::helper('catalog')->__('Root'));
+            }
+
+            Mage::register('root', $root);
+        }
+
+        return $root;
+    }
 }
