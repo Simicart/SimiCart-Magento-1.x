@@ -49,7 +49,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
         $model = Mage::getModel('simiconnector/productlist')->load($id);
 
         if ($model->getId() || $id == 0) {
-            if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            if($id && $webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
                 $website = Mage::getModel('core/website')->load($webId);
                 $storeIds = $website->getStoreIds();
                 $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('productlist');
