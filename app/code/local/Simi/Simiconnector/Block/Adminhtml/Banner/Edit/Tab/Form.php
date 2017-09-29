@@ -102,8 +102,12 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
             'onchange' => 'onchangeNoticeType(this.value)',
             'after_element_html' => '<script> Event.observe(window, "load", function(){onchangeNoticeType(\'' . $data['type'] . '\');});</script>',
         ));
-
-        $productIds = implode(", ", Mage::getResourceModel('catalog/product_collection')->getAllIds());
+        $productIds = null;
+        if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            $productIds = implode(", ", Mage::getResourceModel('catalog/product_collection')->addWebsiteFilter(array($webId))->getAllIds());
+        }else{
+            $productIds = implode(", ", Mage::getResourceModel('catalog/product_collection')->getAllIds());
+        }
         $fieldset->addField('product_id', 'text', array(
             'name' => 'product_id',
             'class' => 'required-entry',

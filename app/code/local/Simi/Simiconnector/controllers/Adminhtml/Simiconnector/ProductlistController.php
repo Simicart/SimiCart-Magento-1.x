@@ -49,6 +49,20 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
         $model = Mage::getModel('simiconnector/productlist')->load($id);
 
         if ($model->getId() || $id == 0) {
+            if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+                $website = Mage::getModel('core/website')->load($webId);
+                $storeIds = $website->getStoreIds();
+                $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('productlist');
+                $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
+                    ->addFieldToFilter('content_type', $typeID)
+                    ->addFieldToFilter('item_id', $id);
+                $visibleStoreViews->addFieldToFilter('store_view_id', array('in' => $storeIds));
+                if($visibleStoreViews->count() <= 0) {
+                    Mage::getSingleton('adminhtml/session')->addError(Mage::helper('simiconnector')->__('Products does not exist'));
+                    $this->_redirect('*/*/');
+                }
+
+            }
             $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
             if (!empty($data))
                 $model->setData($data);
