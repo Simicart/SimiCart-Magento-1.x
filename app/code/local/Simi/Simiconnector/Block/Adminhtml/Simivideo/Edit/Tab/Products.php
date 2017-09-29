@@ -60,6 +60,9 @@ class Simi_Simiconnector_Block_Adminhtml_Simivideo_Edit_Tab_Products extends Mag
                 ->addFieldToFilter('status', '1')
         ;
 
+        if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            $collection->addWebsiteFilter(array($websiteId));
+        }
         $this->setCollection($collection);
 
         return parent::_prepareCollection();

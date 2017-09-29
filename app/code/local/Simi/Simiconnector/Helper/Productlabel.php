@@ -35,8 +35,14 @@ class Simi_Simiconnector_Helper_Productlabel extends Mage_Core_Helper_Abstract {
     public function getProductLabel($product) {
         if (!Mage::getStoreConfig("simiconnector/productlabel/enable")) 
             return;
-        
-        foreach (Mage::getModel('simiconnector/simiproductlabel')->getCollection()->setOrder('priority','DESC') as $productLabel) {
+        $collection = Mage::getModel('simiconnector/simiproductlabel')->getCollection()->setOrder('priority','DESC');
+        if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            $storeIds = Mage::app()->getWebsite($websiteId)->getStoreIds();
+            $collection = Mage::getModel('simiconnector/simiproductlabel')->getCollection()
+                ->addFieldToFilter('storeview_id',array('in'=>$storeIds))
+                ->setOrder('priority','DESC');
+        }
+        foreach ( $collection as $productLabel) {
             if($productLabel->getData('status') == Simi_Simiconnector_Model_Status::STATUS_DISABLED)
                 continue;
             if($productLabel->getData('storeview_id') != Mage::app()->getStore()->getId())

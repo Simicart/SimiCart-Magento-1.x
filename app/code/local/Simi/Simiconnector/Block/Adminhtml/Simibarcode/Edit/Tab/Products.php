@@ -71,6 +71,9 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Products extends M
         $collection->addAttributeToFilter('visibility', array('nin' => array('1')));
         $this->setCollection($collection);
 
+        if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            $collection->addWebsiteFilter(array($websiteId));
+        }
         parent::_prepareCollection();
         $this->getCollection()->addWebsiteNamesToResult();
         return $this;
