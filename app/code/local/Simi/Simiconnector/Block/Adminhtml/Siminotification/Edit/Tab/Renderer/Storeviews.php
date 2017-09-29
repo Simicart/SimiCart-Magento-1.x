@@ -23,10 +23,16 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Renderer_Stor
     }
 
     public function getGroups(){
+        if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            return Mage::getModel('core/store_group')->getCollection()->addFieldToFilter('website_id', $websiteId);
+        }
         return Mage::getModel('core/store_group')->getCollection();
     }
 
     public function getStoreviews(){
+        if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            return Mage::getModel('core/store')->getCollection()->addFieldToFilter('website_id', $websiteId);
+        }
         return Mage::getModel('core/store')->getCollection();
     }
 

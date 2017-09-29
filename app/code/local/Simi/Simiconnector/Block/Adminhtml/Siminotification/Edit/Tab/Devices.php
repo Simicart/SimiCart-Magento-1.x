@@ -56,8 +56,11 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
      */
     protected function _prepareCollection() {
         $collection = Mage::getModel('simiconnector/device')->getCollection()->addFieldToFilter('storeview_id',$this->storeview_id);
+        if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            $storeIds = Mage::getModel('core/store')->getCollection()->addFieldToFilter('website_id', $websiteId)->getAllIds();
+            $collection->addFieldToFilter('storeview_id', array('in'=>$storeIds));
+        }
         $this->setCollection($collection);
-
         return parent::_prepareCollection();
     }
 
