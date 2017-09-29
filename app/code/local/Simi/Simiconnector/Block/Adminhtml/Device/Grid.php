@@ -20,6 +20,10 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Grid extends Mage_Adminhtml_Bloc
      */
     protected function _prepareCollection() {
         $collection = Mage::getModel('simiconnector/device')->getCollection();
+        if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            $storeIds = Mage::getModel('core/store')->getCollection()->addFieldToFilter('website_id', $websiteId)->getAllIds();
+            $collection->addFieldToFilter('storeview_id', array('in'=>$storeIds));
+        }
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -120,8 +124,12 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Grid extends Mage_Adminhtml_Bloc
         ));
         */
         $storeOptions = array();
-        foreach (Mage::getModel('core/store')->getCollection() as $store) {
-            $storeOptions [$store->getId()] = $store->getName(); 
+        $storeCollection = Mage::getModel('core/store')->getCollection();
+        if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            $storeCollection->addFieldToFilter('website_id', $websiteId);
+        }
+        foreach ($storeCollection as $store) {
+            $storeOptions [$store->getId()] = $store->getName();
         }
         $this->addColumn('storeview_id', array(
             'header' => Mage::helper('simiconnector')->__('Store View'),

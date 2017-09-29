@@ -19,7 +19,9 @@ class Simi_Simiconnector_Block_Adminhtml_History_Edit_Tab_Form extends Mage_Admi
         $fieldset->addType('datetime', 'Simi_Simiconnector_Block_Adminhtml_Device_Edit_Renderer_Datetime');
 
         $stores = Mage::getModel('core/store')->getCollection();
-
+        if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            $stores->addFieldToFilter('website_id', $websiteId);
+        }
         $list_store = array();
         foreach ($stores as $store) {
             $list_store[] = array(

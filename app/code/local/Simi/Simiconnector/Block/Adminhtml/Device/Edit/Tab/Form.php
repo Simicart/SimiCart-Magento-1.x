@@ -21,7 +21,9 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Edit_Tab_Form extends Mage_Admin
         $fieldset->addType('selectname', 'Simi_Simiconnector_Block_Adminhtml_Device_Edit_Renderer_Selectname');
 
         $stores = Mage::getModel('core/store')->getCollection();
-
+        if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            $stores->addFieldToFilter('website_id', $websiteId);
+        }
         $list_store = array();
         foreach ($stores as $store) {
             $list_store[] = array(
