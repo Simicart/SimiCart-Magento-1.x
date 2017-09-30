@@ -48,6 +48,12 @@ class Simi_Simiconnector_Block_Adminhtml_System_Config_Category_Categories exten
             $storeviewModel = Mage::getModel('core/store')->getCollection()->addFieldToFilter('code', $storecode)->getFirstItem();
             return Mage::getStoreConfig("simiconnector/general/categories_in_app", $storeviewModel->getId());
         }
+        if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()) {
+            $storecode = Mage::app()->getRequest()->getParam('store','');
+            if(!$storecode){
+                return Mage::app()->getWebsite($websiteId)->getConfig('simiconnector/general/categories_in_app');
+            }
+        }
         return Mage::getStoreConfig("simiconnector/general/categories_in_app");
     }
 
