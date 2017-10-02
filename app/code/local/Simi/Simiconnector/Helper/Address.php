@@ -155,7 +155,8 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
 
     public function saveShippingAddress($shippingAddress) {
         $address = $this->convertDataAddress($shippingAddress);
-        $address['save_in_address_book'] = '1';
+        $address['save_in_address_book'] = '0';
+        $address['same_as_billing'] = '1';
         $saveShipping = $this->_getOnepage()->saveShipping($address, $shippingAddress->entity_id);
 
         if (isset($saveShipping['error'])){
