@@ -122,11 +122,16 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                             
                         }
                     }
-                    $file_name = explode(".", $_FILES['cms_image_o']['name']);
-                    $fName = $file_name[0] . "@2x." . $file_name[1];
-                    $result = $uploader->save($path, $fName);
-                    rename($path . DS . $result['file'], $path . DS . $fName);
-                    $data['cms_image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/cms/' . $fName;
+
+                    $nameTemp = explode('.',$_FILES['cms_image_o']['name']);
+                    $fileName = md5($nameTemp[0].uniqid()).'.'.$nameTemp[1];
+                    $result = $uploader->save($path, $fileName);
+                    try {
+                        chmod($path.'/'.$result['file'], 0777);
+                    } catch (Exception $e) {
+
+                    }
+                    $data['cms_image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/cms/' . $result['file'];
                 } catch (Exception $e) {
                     $data['cms_image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/cms/' . $_FILES['cms_image_o']['name'];
                 }

@@ -114,7 +114,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                             
                         }
                     }
-                    $result = $uploader->save($path, $_FILES['banner_name_co']['name']);
+                    $nameTemp = explode('.',$_FILES['banner_name_co']['name']);
+                    $fileName = md5($nameTemp[0].uniqid()).'.'.$nameTemp[1];
+                    $result = $uploader->save($path, $fileName);
                     try {
                         chmod($path.'/'.$result['file'], 0777); 
                     } catch (Exception $e) {
@@ -151,7 +153,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                             
                         }
                     }
-                    $result = $uploader->save($path, $_FILES['banner_name_tablet_co']['name']);
+                    $nameTemp = explode('.',$_FILES['banner_name_tablet_co']['name']);
+                    $fileName = md5($nameTemp[0].uniqid()).'.'.$nameTemp[1];
+                    $result = $uploader->save($path, $fileName);
                     try {
                         chmod($path.'/'.$result['file'], 0777); 
                     } catch (Exception $e) {

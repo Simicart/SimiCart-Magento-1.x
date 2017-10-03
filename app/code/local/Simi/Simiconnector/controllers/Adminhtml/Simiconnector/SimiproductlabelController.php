@@ -68,11 +68,13 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimiproductlabelController exte
                             
                         }
                     }
-                    $result = $uploader->save($path, $_FILES['image_name_co']['name']);
+                    $nameTemp = explode('.',$_FILES['image_name_co']['name']);
+                    $fileName = md5($nameTemp[0].uniqid()).'.'.$nameTemp[1];
+                    $result = $uploader->save($path, $fileName);
                     try {
-                        chmod($path . '/' . $result['file'], 0777);
+                        chmod($path.'/'.$result['file'], 0777);
                     } catch (Exception $e) {
-                        
+
                     }
                     $data['image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlabel/' . $result['file'];
                 } catch (Exception $e) {

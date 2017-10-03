@@ -110,12 +110,15 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                             
                         }
                     }
-                    $file_name = explode(".", $_FILES['productlist_image_o']['name']);
-                    $fName = $file_name[0] . "@2x." . $file_name[1];
-                    $fName = str_replace(" ", "_", $fName);
-                    $result = $uploader->save($path, $fName);
-                    rename($path . DS . $result['file'], $path . DS . $fName);
-                    $data['list_image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlist/' . $fName;
+                    $nameTemp = explode('.',$_FILES['productlist_image_o']['name']);
+                    $fileName = md5($nameTemp[0].uniqid()).'.'.$nameTemp[1];
+                    $result = $uploader->save($path, $fileName);
+                    try {
+                        chmod($path.'/'.$result['file'], 0777);
+                    } catch (Exception $e) {
+
+                    }
+                    $data['list_image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlist/' . $result['file'];
                 } catch (Exception $e) {
                     $data['list_image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlist/' . $_FILES['productlist_image_o']['name'];
                 }
@@ -141,12 +144,15 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                             
                         }
                     }
-                    $file_name = explode(".", $_FILES['productlist_image_tablet_o']['name']);
-                    $fName = $file_name[0] . "@2x." . $file_name[1];
-                    $fName = str_replace(" ", "_", $fName);
-                    $result = $uploader->save($path, $fName);
-                    rename($path . DS . $result['file'], $path . DS . $fName);
-                    $data['list_image_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlist/' . $fName;
+                    $nameTemp = explode('.',$_FILES['productlist_image_tablet_o']['name']);
+                    $fileName = md5($nameTemp[0].uniqid()).'.'.$nameTemp[1];
+                    $result = $uploader->save($path, $fileName);
+                    try {
+                        chmod($path.'/'.$result['file'], 0777);
+                    } catch (Exception $e) {
+
+                    }
+                    $data['list_image_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlist/' . $result['file'];
                 } catch (Exception $e) {
                     $data['list_image_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlist/' . $_FILES['productlist_image_tablet_o']['name'];
                 }

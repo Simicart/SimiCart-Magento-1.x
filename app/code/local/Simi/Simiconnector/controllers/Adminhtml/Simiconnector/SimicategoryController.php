@@ -79,7 +79,14 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                             
                         }
                     }
-                    $result = $uploader->save($path, $_FILES['simicategory_filename']['name']);
+                    $nameTemp = explode('.',$_FILES['simicategory_filename']['name']);
+                    $fileName = md5($nameTemp[0].uniqid()).'.'.$nameTemp[1];
+                    $result = $uploader->save($path, $fileName);
+                    try {
+                        chmod($path.'/'.$result['file'], 0777);
+                    } catch (Exception $e) {
+
+                    }
                     $data['simicategory_filename'] = Mage::getBaseUrl('media') . 'simi/simiconnector/simicategory/' . $result['file'];
                 } catch (Exception $e) {
                     $data['simicategory_filename'] = Mage::getBaseUrl('media') . 'simi/simiconnector/simicategory/' . $_FILES['simicategory_filename']['name'];
@@ -110,7 +117,14 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                             
                         }
                     }
-                    $result = $uploader->save($path, $_FILES['simicategory_filename_tablet']['name']);
+                    $nameTemp = explode('.',$_FILES['simicategory_filename_tablet']['name']);
+                    $fileName = md5($nameTemp[0].uniqid()).'.'.$nameTemp[1];
+                    $result = $uploader->save($path, $fileName);
+                    try {
+                        chmod($path.'/'.$result['file'], 0777);
+                    } catch (Exception $e) {
+
+                    }
                     $data['simicategory_filename_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/simicategory/' . $result['file'];
                 } catch (Exception $e) {
                     $data['simicategory_filename_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/simicategory/' . $_FILES['simicategory_filename_tablet']['name'];
