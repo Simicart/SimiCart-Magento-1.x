@@ -14,7 +14,9 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
     }
 
     public function getCustomerByEmail($email) {
-        return Mage::getModel('customer/customer')->getCollection()
+        return Mage::getModel('customer/customer')
+                        ->getCollection()
+                        ->addFieldToFilter('website_id', Mage::app()->getWebsite()->getId())
                         ->addFieldToFilter('email', $email)
                         ->getFirstItem();
     }
@@ -82,8 +84,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
         $newPass = $data->new_password;
         $confPass = $data->com_password;
 
-        $customer = Mage::getModel('customer/customer');
-        $customer->setWebsiteId(Mage::app()->getWebsite()->getId());
+        $customer = Mage::getModel('customer/customer')->setWebsiteId(Mage::app()->getWebsite()->getId());
         $customer->loadByEmail($data->email);
 
         $customerData = array(
@@ -199,6 +200,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
 
     private function _createCustomer($data) {
         $customer = Mage::getModel('customer/customer')
+                ->setWebsiteId(Mage::app()->getWebsite()->getId())
                 ->setFirstname($data->firstname)
                 ->setLastname($data->lastname)
                 ->setEmail($data->email);
