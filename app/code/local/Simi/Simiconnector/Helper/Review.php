@@ -143,10 +143,13 @@ class Simi_Simiconnector_Helper_Review extends Mage_Core_Helper_Abstract
 
     public function saveReview($data)
     {
-        $allowGuest = Mage::helper('review')->getIsGuestAllowToWrite();
-        if (!$allowGuest) {
-            throw new Exception(Mage::helper('review')->__('Guest can not write'), 4);
+        if(!Mage::getSingleton('customer/session')->isLoggedIn()){
+            $allowGuest = Mage::helper('review')->getIsGuestAllowToWrite();
+            if (!$allowGuest) {
+                throw new Exception(Mage::helper('review')->__('Guest can not write'), 4);
+            }
         }
+
         if (($product = $this->_initProduct($data['product_id'])) && !empty($data)) {
             $rating = $data['ratings'];
             $session = Mage::getSingleton('core/session');
