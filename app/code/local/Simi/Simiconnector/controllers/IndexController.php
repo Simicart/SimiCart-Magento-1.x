@@ -30,28 +30,33 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
 
     public function syncKeysAction()
     {
-        $secretKey = $this->getRequest()->getParam('secret', null);
-        $publicKey = $this->getRequest()->getParam('public', null);
-        $result = array();
-        if (!$secretKey || !$publicKey) {
+        if (!Mage::getStoreConfig('simiconnector/general/secret_key') || Mage::getStoreConfig('simiconnector/general/secret_key')=='') {
+            $secretKey = $this->getRequest()->getParam('secret', null);
+            $publicKey = $this->getRequest()->getParam('public', null);
+            $result = array();
+            if (!$secretKey || !$publicKey) {
+                $result['status'] = '0';
+                $result['message'] = 'Missing key';
+                return $this->getResponse()->setBody(json_encode($result));
+            }
+            try {
+                $secretKey = Mage::helper('core')->encrypt($secretKey);
+                $publicKey = Mage::helper('core')->encrypt($publicKey);
+                $configModel = Mage::getModel('core/config');
+                $configModel->saveConfig('simiconnector/general/secret_key', $secretKey);
+                $configModel->saveConfig('simiconnector/general/token_key', $publicKey);
+                $configModel->cleanCache();
+                $result['status'] = '1';
+                $result['message'] = 'Successfully';
+            } catch (Exception $e) {
+                $result['status'] = '0';
+                $result['message'] = $e->getMessage();
+            }
+        } else {
+            $result = array();
             $result['status'] = '0';
-            $result['message'] = 'Missing key';
-            return $this->getResponse()->setBody(json_encode($result));
+            $result['message'] = 'Already Filled';
         }
-        try {
-            $secretKey = Mage::helper('core')->encrypt($secretKey);
-            $publicKey = Mage::helper('core')->encrypt($publicKey);
-            $configModel = Mage::getModel('core/config');
-            $configModel->saveConfig('simiconnector/general/secret_key', $secretKey);
-            $configModel->saveConfig('simiconnector/general/token_key', $publicKey);
-            $configModel->cleanCache();
-            $result['status'] = '1';
-            $result['message'] = 'Successfully';
-        } catch (Exception $e) {
-            $result['status'] = '0';
-            $result['message'] = $e->getMessage();
-        }
-
         return $this->getResponse()->setBody(json_encode($result));
     }
 
