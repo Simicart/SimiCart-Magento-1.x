@@ -167,9 +167,9 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
                 $website = Mage::getModel('core/website')->load($webId);
                 $storeIds = $website->getStoreIds();
                 foreach (Mage::getModel('core/store')->getCollection() as $storeView) {
-                    if (!$data['storeview_scope'])
-                        $data['storeview_scope'] = $storeView->getId();
                     if(in_array($storeView->getId(), $storeIds)){
+                        if (!$data['storeview_scope'])
+                            $data['storeview_scope'] = $storeView->getId();
                         $storeviewArray[$storeView->getId()] = $storeView->getName();
                     }
                 }

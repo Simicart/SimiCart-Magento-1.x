@@ -46,6 +46,9 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
                 break;
             //Best seller
             case 2:
+                $installer = new Mage_Core_Model_Resource_Setup('core_setup');
+                if (!$installer->tableExists('catalog_product_flat_'.$storeId))
+                    break;
                 $collection = Mage::getResourceModel('reports/product_collection')
                     ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
                     ->addOrderedQty()->addMinimalPrice()
@@ -56,6 +59,9 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
                 break;
             //Most Viewed
             case 3:
+                $installer = new Mage_Core_Model_Resource_Setup('core_setup');
+                if (!$installer->tableExists('catalog_product_flat_'.$storeId))
+                    break;
                 $collection = Mage::getResourceModel('reports/product_collection')
                     ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
                     ->addViewsCount()
