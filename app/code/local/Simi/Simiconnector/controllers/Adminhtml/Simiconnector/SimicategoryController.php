@@ -71,7 +71,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                     $uploader->setFilesDispersion(false);
                     str_replace(" ", "_", $_FILES['simicategory_filename']['name']);
                     $website = $data['website_id'];
-                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'simicategory' . DS . $website;
+                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'simicategory';
                     if (!is_dir($path)) {
                         try {
                             mkdir($path, 0777, TRUE);
@@ -109,7 +109,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                     $uploader->setFilesDispersion(false);
                     str_replace(" ", "_", $_FILES['simicategory_filename_tablet']['name']);
                     $website = $data['website_id'];
-                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'simicategory' . DS . $website;
+                    $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'simicategory';
                     if (!is_dir($path)) {
                         try {
                             mkdir($path, 0777, TRUE);
