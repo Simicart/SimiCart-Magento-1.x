@@ -140,8 +140,12 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
             }
 
             if (isset($data['category_id']) && $data['category_id']) {
-                $category_name = Mage::getModel('catalog/category')->load($data['category_id'])->getName();
-                $data['simicategory_name'] = $category_name;
+                $category = Mage::getModel('catalog/category');
+                if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+                    $category->setStoreId(Mage::getModel('core/store')->getCollection()->addFieldToFilter('website_id',$webId)
+                        ->getFirstItem()->getId());
+                }
+                $data['simicategory_name'] = $category->load($data['category_id'])->getName();
             }
 
             if (!$data['matrix_width_percent_tablet'])
