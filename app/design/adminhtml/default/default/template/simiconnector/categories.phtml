@@ -17,7 +17,7 @@
         <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('simiconnector')->__('Categories displayed on App') ?></h4>
     </div>
     <fieldset id="grop_fields">
-        <input type="hidden" name="category_ids" id="product_categories" value="<?php echo $this->getIdsString() ?>">
+        <input name="category_ids" id="product_categories" value="<?php echo $this->getIdsString() ?>">
         <div id="product-categories" class="tree"></div>
     </fieldset>
     <input type="hidden" name="groups[general][fields][categories_in_app][value]" value="<?php echo $this->getIdsString() ?>" id="all_id">
