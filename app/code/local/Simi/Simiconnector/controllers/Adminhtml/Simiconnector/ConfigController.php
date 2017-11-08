@@ -26,6 +26,17 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ConfigController extends Mage_A
     }
 
     public function categoriesJsonAction() {
+        $storeId = $this->getRequest()->getParam('store');
+        if (!$storeId && $websiteCode = $this->getRequest()->getParam('website')) {
+            $website = Mage::getModel('core/website')->getCollection()->addFieldToFilter('code', $websiteCode)->getFirstItem();
+            if($website->getId()) {
+                $group = Mage::getModel('core/store_group')->load($website->getData('default_group_id'));
+                if ($group->getId()) {
+                    $this->getRequest()->setParam('store', $group->getData('default_store_id'));
+                }
+            }
+        }
+
         $this->_initItem();
         $this->getResponse()->setBody(
                 $this->getLayout()->createBlock('simiconnector/adminhtml_system_config_category_categories')
