@@ -178,8 +178,8 @@ class Simi_Simiconnector_Model_Observer {
         $isApp = strpos(Mage::getUrl('*/*'), 'simiconnector');
         $pre_fix = (string) Mage::getStoreConfig('simiconnector/general/app_dedicated_coupon');
 
-        if (($isApp == false) && $coupon) {
-            if (strpos($coupon, $pre_fix) !== false) {
+        if ($pre_fix && ($pre_fix != '') && ($isApp == false) && $coupon) {
+            if (strpos(strtolower($coupon), strtolower($pre_fix)) !== false) {
                 $quote->setCouponCode('');
             }
         }
