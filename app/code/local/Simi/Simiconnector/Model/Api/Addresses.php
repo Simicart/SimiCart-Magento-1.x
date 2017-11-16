@@ -15,7 +15,7 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
     public function setBuilderQuery() {
         $data = $this->getData();
         if (isset($data['resourceid']) && $data['resourceid']) {
-            
+            $this->builderQuery = Mage::getModel('customer/address')->load($data['resourceid']);
         } else {
             if (!Mage::getSingleton('customer/session')->isLoggedIn()) {
                 throw new Exception($this->_helper->__('You have not logged in'), 4);
@@ -140,7 +140,11 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
                 return $result;
             }
         }
-        return parent::show();
+        $result = parent::show();
+        if($result && is_array($result) && isset($result['Address'])) {
+            $result['Address'] = array_merge($result['Address'], Mage::helper('simiconnector/address')->getAddressDetail($this->builderQuery));
+        }
+        return $result;
     }
 
 }
