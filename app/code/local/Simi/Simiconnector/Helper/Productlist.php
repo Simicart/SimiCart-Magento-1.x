@@ -96,7 +96,27 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
     {
         $rows = array();
         $highestRow = 0;
-        foreach (Mage::getModel('simiconnector/simicategory')->getCollection() as $simicat) {
+
+        $categoryCollection = Mage::getModel('simiconnector/simicategory')->getCollection();
+        $productlistCollection = Mage::getModel('simiconnector/productlist')->getCollection();
+        if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            $website = Mage::getModel('core/website')->load($webId);
+            $storeIds = $website->getStoreIds();
+            $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('homecategory');
+            $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
+            $categoryCollection->getSelect()
+                ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.simicategory_id AND visibility.content_type = ' . $typeID );
+            $categoryCollection->addFieldToFilter('store_view_id', array('in' => $storeIds));
+            $categoryCollection->getSelect()->group('simicategory_id');
+
+            $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('productlist');
+            $productlistCollection->getSelect()
+                ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.productlist_id AND visibility.content_type = ' . $typeID );
+            $productlistCollection->addFieldToFilter('store_view_id', array('in' => $storeIds));
+            $productlistCollection->getSelect()->group('productlist_id');
+        }
+
+        foreach ($categoryCollection as $simicat) {
             $currentIndex = $simicat->getData('matrix_row');
             if (!$rows[$currentIndex])
                 $rows[$currentIndex] = array();
@@ -104,7 +124,7 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
                 $highestRow = $currentIndex + 1;
             $rows[$currentIndex][] = $simicat->getData('simicategory_name');
         }
-        foreach (Mage::getModel('simiconnector/productlist')->getCollection() as $productlist) {
+        foreach ($productlistCollection as $productlist) {
             $currentIndex = $productlist->getData('matrix_row');
             if (!$rows[$currentIndex])
                 $rows[$currentIndex] = array();
