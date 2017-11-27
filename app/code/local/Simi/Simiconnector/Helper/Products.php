@@ -347,8 +347,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
 
     public function getSwatchesListProduct($_product){
         $_product= Mage::getModel('catalog/product')->load($_product->getId());
-        if(Mage::helper('configurableswatches')->isEnabled() && $_product && $_product->getId()
-            && ($_attrValues = $_product->getListSwatchAttrValues()) && count($_attrValues) > 0){
+        if($_product && $_product->getId() && ($_attrValues = $_product->getListSwatchAttrValues()) &&Mage::helper('configurableswatches')->isEnabled() && count($_attrValues) > 0){
 
             $data = array();
             $_dimHelper = Mage::helper('configurableswatches/swatchdimensions');
