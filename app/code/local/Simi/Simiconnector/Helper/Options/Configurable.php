@@ -13,7 +13,7 @@ class Simi_Simiconnector_Helper_Options_Configurable extends Mage_Core_Helper_Ab
         $block->setProduct($product);
 
         //Get Image swatch
-        Mage::register('product',$product);
+        //Mage::register('product',$product);
         $options = array();
         $configurable_options = Mage::helper('core')->jsonDecode($block->getJsonConfig());
         if ($_attrValues = $product->getListSwatchAttrValues()) {
