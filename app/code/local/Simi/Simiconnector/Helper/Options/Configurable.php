@@ -13,33 +13,36 @@ class Simi_Simiconnector_Helper_Options_Configurable extends Mage_Core_Helper_Ab
         $block->setProduct($product);
 
         //Get Image swatch
-        //Mage::register('product',$product);
-        $jsProduct = Mage::getBlockSingleton('configurableswatches/catalog_media_js_product');
-        $mediaFallbacks =  $jsProduct->getProductImageFallbacks();
-        $mediaFalback = array();
-        foreach ($mediaFallbacks as $key => $value){
-           if($key == $product->getId()){
-               $mediaFalback = $value['image_fallback'];
-               break;// break loop
-           }
-        }
-        $mediaFalback = json_decode($mediaFalback,true);
-
-        $_dimHelper = Mage::helper('configurableswatches/swatchdimensions');
-        $_swatchInnerWidth = $_dimHelper->getInnerWidth(Mage_ConfigurableSwatches_Helper_Swatchdimensions::AREA_LISTING);
-        $_swatchInnerHeight = $_dimHelper->getInnerHeight(Mage_ConfigurableSwatches_Helper_Swatchdimensions::AREA_LISTING);
+        Mage::register('product',$product);
         $options = array();
         $configurable_options = Mage::helper('core')->jsonDecode($block->getJsonConfig());
-        foreach ($configurable_options['attributes'] as $_index => $attribute){
-            foreach ($attribute['options'] as $index => $option){
-                $_swatchUrl = Mage::helper('configurableswatches/productimg')->getSwatchUrl($product, $option['label'], $_swatchInnerWidth, $_swatchInnerHeight, $_swatchType);
-                if(!empty($_swatchUrl)){
-                    $option['option_image'] = $_swatchUrl;
-                }
-                $option['base_image'] = $this->getBaseImage($product,$option,$mediaFalback);
-                $attribute['options'][$index] = $option;
+        if ($_attrValues = $product->getListSwatchAttrValues()) {
+            $jsProduct = Mage::getBlockSingleton('configurableswatches/catalog_media_js_product');
+            $mediaFallbacks =  $jsProduct->getProductImageFallbacks();
+            $mediaFalback = array();
+            foreach ($mediaFallbacks as $key => $value){
+               if($key == $product->getId()){
+                   $mediaFalback = $value['image_fallback'];
+                   break;// break loop
+               }
             }
-            $configurable_options['attributes'][$_index]= $attribute;
+            $mediaFalback = json_decode($mediaFalback,true);
+
+            $_dimHelper = Mage::helper('configurableswatches/swatchdimensions');
+            $_swatchInnerWidth = $_dimHelper->getInnerWidth(Mage_ConfigurableSwatches_Helper_Swatchdimensions::AREA_LISTING);
+            $_swatchInnerHeight = $_dimHelper->getInnerHeight(Mage_ConfigurableSwatches_Helper_Swatchdimensions::AREA_LISTING);
+
+            foreach ($configurable_options['attributes'] as $_index => $attribute){
+                foreach ($attribute['options'] as $index => $option){
+                    $_swatchUrl = Mage::helper('configurableswatches/productimg')->getSwatchUrl($product, $option['label'], $_swatchInnerWidth, $_swatchInnerHeight, $_swatchType);
+                    if(!empty($_swatchUrl)){
+                        $option['option_image'] = $_swatchUrl;
+                    }
+                    $option['base_image'] = $this->getBaseImage($product,$option,$mediaFalback);
+                    $attribute['options'][$index] = $option;
+                }
+                $configurable_options['attributes'][$_index]= $attribute;
+            }
         }
         $options['configurable_options'] = $configurable_options;
         if(!is_null($product->getOptions()) && count($product->getOptions())){
