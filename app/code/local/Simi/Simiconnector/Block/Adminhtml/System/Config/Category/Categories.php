@@ -13,16 +13,23 @@ class Simi_Simiconnector_Block_Adminhtml_System_Config_Category_Categories exten
 
     public function getCategoryCollection() {
         $storeId = $this->getRequest()->getParam('store', $this->_getDefaultStoreId());
+        if (!is_null($storeId) && !is_numeric($storeId)) {
+            $store = Mage::getModel('core/store')->getCollection()->addFieldToFilter('code', $storeId)->getFirstItem();
+            if($store->getId()) {
+                $storeId = $store->getId();
+                $this->getRequest()->setParam('store', $storeId);
+            }
+        }
         $collection = $this->getData('category_collection');
         if (is_null($collection)) {
             $collection = Mage::getModel('catalog/category')->getCollection();
 
             /* @var $collection Mage_Catalog_Model_Resource_Eav_Mysql4_Category_Collection */
-            $collection->addAttributeToSelect('name')
+            $collection->setStoreId($storeId)
+                    ->addAttributeToSelect('name')
                     ->addAttributeToSelect('is_active')
                     ->setProductStoreId($storeId)
-                    ->setLoadProductCount($this->_withProductCount)
-                    ->setStoreId($storeId);
+                    ->setLoadProductCount($this->_withProductCount);
 
             $this->setData('category_collection', $collection);
         }

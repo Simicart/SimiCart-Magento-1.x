@@ -58,9 +58,15 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Products extends M
      * @return Mage_Adminhtml_Block_Promo_Widget_Chooser_Sku
      */
     protected function _prepareCollection() {
-        $collection = Mage::getResourceModel('catalog/product_collection')
-                ->setStoreId(0)
-                ->addAttributeToSelect('name', 'type_id', 'attribute_set_id')
+        if ($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()) {
+            $collection = Mage::getResourceModel('catalog/product_collection')
+                ->addWebsiteFilter(array($websiteId));
+        } else {
+            $collection = Mage::getResourceModel('catalog/product_collection')
+                ->setStoreId(0);
+        }
+
+        $collection->addAttributeToSelect('name', 'type_id', 'attribute_set_id')
                 ->addFieldToFilter('visibility', array('neq' => '1'))
                 ->addFieldToFilter('status', '1')
                 ;        

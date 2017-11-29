@@ -266,8 +266,18 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
                 'name' => 'matrix_row',
             ));
 
-
-            foreach (Mage::getModel('core/store')->getCollection() as $storeView) {
+            $storeviewArray = array();
+            if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+                $website = Mage::getModel('core/website')->load($webId);
+                $storeIds = $website->getStoreIds();
+                foreach (Mage::getModel('core/store')->getCollection() as $storeView) {
+                    if(in_array($storeView->getId(), $storeIds)){
+                        if (!$data['storeview_scope'])
+                            $data['storeview_scope'] = $storeView->getId();
+                        $storeviewArray[$storeView->getId()] = $storeView->getName();
+                    }
+                }
+            } foreach (Mage::getModel('core/store')->getCollection() as $storeView) {
                 if (!$data['storeview_scope'])
                     $data['storeview_scope'] = $storeView->getId();
                 $storeviewArray[$storeView->getId()] = $storeView->getName();

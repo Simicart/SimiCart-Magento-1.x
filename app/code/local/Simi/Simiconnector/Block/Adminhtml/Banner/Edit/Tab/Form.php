@@ -82,13 +82,13 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
         ));
 
         $fieldset->addField('banner_name', 'image', array(
-            'label' => Mage::helper('simiconnector')->__('Image (width:640px, height:340px)'),
+            'label' => Mage::helper('simiconnector')->__('Image (width:640px, height:320px)'),
             'required' => FALSE,
             'name' => 'banner_name_co',
         ));        
         
         $fieldset->addField('banner_name_tablet', 'image', array(
-            'label' => Mage::helper('simiconnector')->__('Tablet Image (width:640px, height:340px)'),
+            'label' => Mage::helper('simiconnector')->__('Tablet Image (width:640px, height:320px)'),
             'required' => FALSE,
             'name' => 'banner_name_tablet_co',
         ));

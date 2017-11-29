@@ -16,7 +16,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simivideo_Edit_Tab_Form extends Mage_Ad
         $fieldset->addField('storeview_id', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Store View'),
             'name' => 'storeview_id',
-        ))->setRenderer($this->getLayout()->createBlock('simiconnector/adminhtml_simiproductlabel_edit_tab_renderer_storeviews'));
+        ))->setRenderer($this->getLayout()->createBlock('simiconnector/adminhtml_simivideo_edit_tab_renderer_storeviews'));
 
         $fieldset->addField('status', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Status'),

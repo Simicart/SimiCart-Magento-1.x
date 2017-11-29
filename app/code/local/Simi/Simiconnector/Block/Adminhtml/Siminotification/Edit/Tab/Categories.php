@@ -122,5 +122,14 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Categories ex
         }
         return parent::getRoot();
     }
+
+    protected function _getDefaultStoreId()
+    {
+        if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+            return Mage::getModel('core/store')->getCollection()->addFieldToFilter('website_id',$webId)
+                ->getFirstItem()->getId();
+        }
+        return Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
+    }
 }
 

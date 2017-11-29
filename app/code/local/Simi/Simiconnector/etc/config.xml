@@ -237,7 +237,10 @@
             </barcode> 
             <productlabel>
                 <enable>0</enable>
-            </productlabel> 
+            </productlabel>
+            <simivideo>
+                <enable>0</enable>
+            </simivideo>
             <zopim>
                 <enable>1</enable>
 				<account_key>3WlAvERBApxnMZGdc40no5lmvt1mJCQ8</account_key>

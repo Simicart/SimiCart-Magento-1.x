@@ -50,8 +50,12 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
      */
     public function setCategoryProducts($category)
     {
-        $category = Mage::getModel('catalog/category')->load($category);
-        $this->setLayers(0, $category);
+        try {
+            $category = Mage::getModel('catalog/category')->load($category);
+            $this->setLayers(0, $category);
+        } catch (Exception $e) {
+            $this->builderQuery = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('*');
+        }
         return $this;
     }
 
@@ -115,8 +119,8 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
             $settings = $design->getDesignSettings($category);
             //if (!$settings->getPageLayout()) {
             if ($block->canShowBlock() && $category->getData('is_anchor')) {
-                    $layers = $this->getItemsShopBy($block);
-                    $this->_layer = $layers;
+                $layers = $this->getItemsShopBy($block);
+                $this->_layer = $layers;
             }
             //}
 
@@ -343,8 +347,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
 
     public function getSwatchesListProduct($_product){
         $_product= Mage::getModel('catalog/product')->load($_product->getId());
-        if(Mage::helper('configurableswatches')->isEnabled() && $_product && $_product->getId()
-            && ($_attrValues = $_product->getListSwatchAttrValues()) && count($_attrValues) > 0){
+        if($_product && $_product->getId() && ($_attrValues = $_product->getListSwatchAttrValues()) &&Mage::helper('configurableswatches')->isEnabled() && count($_attrValues) > 0){
 
             $data = array();
             $_dimHelper = Mage::helper('configurableswatches/swatchdimensions');
