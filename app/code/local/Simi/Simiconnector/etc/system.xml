@@ -148,6 +148,26 @@
                         </app_dedicated_coupon>
                     </fields>
                 </general>
+                <simi_pwa translate="label">
+                    <label>Progressive Web App</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>2</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <sync_site_url translate="label">
+                            <label>Sync Sitemap Url</label>
+                            <frontend_type>button</frontend_type>
+                            <frontend_model>simiconnector/adminhtml_system_config_form_button</frontend_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </sync_site_url>
+                    </fields>
+                </simi_pwa>
                 <currency translate="label">
                     <label>Currency Display Configuration</label>
                     <frontend_type>text</frontend_type>
