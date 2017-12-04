@@ -63,23 +63,28 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
 
     public function saveAction() {
         if ($data = $this->getRequest()->getPost()) {
+
             if (isset($_FILES['simicategory_filename']['name']) && $_FILES['simicategory_filename']['name'] != '') {
-                try {
+                try {                                                    
                     $uploader = new Varien_File_Uploader('simicategory_filename');
-                    $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'png'));
+
+                    $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'gif', 'png'));
                     $uploader->setAllowRenameFiles(false);
-                    $uploader->setFilesDispersion(false);
+                    $uploader->setFilesDispersion(false);                    
                     str_replace(" ", "_", $_FILES['simicategory_filename']['name']);
-                    $website = $data['website_id'];
+
                     $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'simicategory';
+
                     if (!is_dir($path)) {
                         try {
                             mkdir($path, 0777, TRUE);
                         } catch (Exception $e) {
-                            
+                            Zend_debug::dump($e->getMessage());die();
                         }
                     }
+
                     $nameTemp = explode('.',$_FILES['simicategory_filename']['name']);
+                    
                     $fileName = md5($nameTemp[0].uniqid()).'.'.$nameTemp[1];
                     $result = $uploader->save($path, $fileName);
                     try {
@@ -94,7 +99,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
             }
 
             if (is_array($data['simicategory_filename'])) {
-                if ($data['simicategory_filename']['delete'] == 1) {
+                if (isset($data['simicategory_filename']['delete']) && $data['simicategory_filename']['delete'] == 1) {
                     $data['simicategory_filename'] = "";
                 } else {
                     $data['simicategory_filename'] = $data['simicategory_filename']['value'];
@@ -108,7 +113,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                     $uploader->setAllowRenameFiles(false);
                     $uploader->setFilesDispersion(false);
                     str_replace(" ", "_", $_FILES['simicategory_filename_tablet']['name']);
-                    $website = $data['website_id'];
+                    //$website = $data['website_id'];
                     $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'simicategory';
                     if (!is_dir($path)) {
                         try {
@@ -131,7 +136,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                 }
             }
 
-            if (is_array($data['simicategory_filename_tablet'])) {
+            if (isset($data['simicategory_filename_tablet']) && is_array($data['simicategory_filename_tablet'])) {
                 if ($data['simicategory_filename_tablet']['delete'] == 1) {
                     $data['simicategory_filename_tablet'] = "";
                 } else {
@@ -148,36 +153,41 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                 $data['simicategory_name'] = $category->load($data['category_id'])->getName();
             }
 
-            if (!$data['matrix_width_percent_tablet'])
-                $data['matrix_width_percent_tablet'] = $data['matrix_width_percent'];
-            if (!$data['matrix_height_percent_tablet'])
-                $data['matrix_height_percent_tablet'] = $data['matrix_height_percent'];
+            if (!isset($data['matrix_width_percent_tablet']))
+                $data['matrix_width_percent_tablet'] = isset($data['matrix_width_percent'])?$data['matrix_width_percent']:0;
+            if (!isset($data['matrix_height_percent_tablet']))
+                $data['matrix_height_percent_tablet'] = isset($data['matrix_height_percent'])?$data['matrix_height_percent']:0;
 
+            //Zend_debug::dump($data);die();
+            $storeIdsAll = $data['storeview_id'];
+            $data['storeview_id'] = "";
             $model = Mage::getModel('simiconnector/simicategory');
             $model->setData($data)
                     ->setId($this->getRequest()->getParam('id'));
 
             try {
-
                 $model->save();
-                Mage::helper('simiconnector/productlist')->updateMatrixRowHeight($data['matrix_row'], $data['matrix_height_percent'], $data['matrix_height_percent_tablet'] );
+                if(isset($data['matrix_row'])){
+                    Mage::helper('simiconnector/productlist')->updateMatrixRowHeight($data['matrix_row'], $data['matrix_height_percent'], $data['matrix_height_percent_tablet'] );
+                }                
                  Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Category was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
-                if ($data['storeview_id'] && is_array($data['storeview_id'])) {
+                if ($storeIdsAll && is_array($storeIdsAll)) {
                     $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('homecategory');
                     $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
                             ->addFieldToFilter('content_type', $typeID)
                             ->addFieldToFilter('item_id', $model->getId());
                     foreach ($visibleStoreViews as $visibilityItem)
                         $visibilityItem->delete();
-                    foreach ($data['storeview_id'] as $storeViewId) {
+                    foreach ($storeIdsAll as $storeViewId) {                        
                         $visibilityItem = Mage::getModel('simiconnector/visibility');
                         $visibilityItem->setData('content_type', $typeID);
                         $visibilityItem->setData('item_id', $model->getId());
                         $visibilityItem->setData('store_view_id', $storeViewId);
                         $visibilityItem->save();
-                    }
+                    }                    
                 }
+
                 if ($this->getRequest()->getParam('back')) {
                     $this->_redirect('*/*/edit', array('id' => $model->getId()));
                     return;

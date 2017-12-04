@@ -98,7 +98,7 @@ class Simi_Simiconnector_Block_Adminhtml_System_Config_Category_Categories exten
                 }
             }
 
-            if ($storeId) {
+            if (isset($storeId) && $storeId) {
                 $store = Mage::app()->getStore($storeId);
                 $rootId = $store->getRootCategoryId();
             }

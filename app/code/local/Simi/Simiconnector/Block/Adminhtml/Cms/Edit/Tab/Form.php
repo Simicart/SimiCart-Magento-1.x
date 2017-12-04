@@ -16,9 +16,9 @@
 /**
  * Simi Edit Form Content Tab Block
  * 
- * @category 	
- * @package 	Madapter
- * @author  	Developer
+ * @category    
+ * @package     Madapter
+ * @author      Developer
  */
 class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form {
 
@@ -37,7 +37,7 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tab_Form extends Mage_Adminhtm
         } elseif (Mage::registry('cms_data'))
             $data = Mage::registry('cms_data')->getData();
 
-        if ($data['cms_id']) {
+        if (isset($data['cms_id'])) {
             $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('cms');
             $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
                     ->addFieldToFilter('content_type', $typeID)
@@ -48,8 +48,7 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tab_Form extends Mage_Adminhtm
             }
             $data['storeview_id'] = implode(',', $storeIdArray);
         }
-        if (!$data['type'])
-            $data['type'] = '1';
+        $data['type'] = isset($data['type'])?$data['type']:'1';
         
         $fieldset = $form->addFieldset('simiconnector_form', array('legend' => Mage::helper('simiconnector')->__('CMS information')));
         $wysiwygConfig = Mage::getSingleton('cms/wysiwyg_config')->getConfig();
@@ -108,7 +107,6 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tab_Form extends Mage_Adminhtm
                 array('value' => 0, 'label' => Mage::helper('simiconnector')->__('No')),
             )
         ));
-
         $fieldset->addField('type', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Show Block On'),
             'class' => 'required-entry',

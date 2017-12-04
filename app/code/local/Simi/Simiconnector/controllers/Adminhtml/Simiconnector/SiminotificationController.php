@@ -58,6 +58,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     public function saveAction() {
         if ($data = $this->getRequest()->getPost()) {
             // Zend_debug::dump($_FILES['image_url']['name']);die();
+            $imageUrl = "";
             if (isset($_FILES['image_url']['name']) && $_FILES['image_url']['name'] != '') {
                 try {
                     /* Starting upload */
@@ -89,14 +90,14 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
 			$data['device_id'] = $data['device_type'];
             $model->setData($data)
                     ->setId($this->getRequest()->getParam('id'));
-            if (!$imageUrl && is_array($data['image_url'])) {
+            if (!$imageUrl && isset($data['image_url']) && is_array($data['image_url'])) {
                 if ($data['image_url']['delete'])
                     $data['delete'] = $data['image_url']['delete'];
                 $data['image_url'] = $data['image_url']['value'];
                 $imageUrl = $data['image_url'];
             }
 
-            if ($data['delete']) {
+            if (isset($data['delete']) && $data['delete']) {
                 $data['image_url'] = null;
                 $imageUrl = null;
             }

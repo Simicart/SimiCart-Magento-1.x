@@ -258,23 +258,23 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
                     $address .= ', ' . $addressComponents->long_name;
                 }
                 if (in_array('postal_town', $types) || in_array('administrative_area_level_1', $types)) {
-                    $city .= $addressComponents->long_name;
+                    $city = $addressComponents->long_name;
                 }
                 if (in_array('administrative_area_level_2', $types)) {
-                    $state .= $addressComponents->long_name;
+                    $state = $addressComponents->long_name;
                 }
                 if (in_array('country', $types)) {
-                    $country .= $addressComponents->short_name;
+                    $country = $addressComponents->short_name;
                 }
                 if (in_array('postal_code', $types)) {
-                    $zipcode .= $addressComponents->long_name;
+                    $zipcode = $addressComponents->long_name;
                 }
             }
             $addresses['address'] = $address;
-            $addresses['city'] = $city;
-            $addresses['state'] = $state;
-            $addresses['country'] = $country;
-            $addresses['zipcode'] = $zipcode;
+            $addresses['city'] = isset($city)?$city:'';
+            $addresses['state'] = isset($state)?$state:'';
+            $addresses['country'] = isset($country)?$country:'';
+            $addresses['zipcode'] = isset($zipcode)?$zipcode:'';
             $addresses['geocoding'] = $data;
             return $addresses;
         } else {

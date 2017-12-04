@@ -14,7 +14,7 @@ class Simi_Simiconnector_Helper_Coupon extends Mage_Core_Helper_Abstract {
                 ->save();
         $total = $this->_getCart()->getQuote()->getTotals();
         $return['discount'] = 0;
-        if ($total['discount'] && $total['discount']->getValue()) {
+        if (isset($total['discount']) && $total['discount'] && $total['discount']->getValue()) {
             $return['discount'] = abs($total['discount']->getValue());
         }
         if (strlen($couponCode)) {

@@ -7,18 +7,18 @@
  * Do not edit or add to this file if you wish to upgrade this extension to newer
  * version in the future.
  * 
- * @category 	
- * @package 	Connector
- * @copyright 	Copyright (c) 2012 
- * @license 	
+ * @category    
+ * @package     Connector
+ * @copyright   Copyright (c) 2012 
+ * @license     
  */
 
 /**
  * Simi Edit Form Content Tab Block
  * 
- * @category 	
- * @package 	Connector
- * @author  	Developer
+ * @category    
+ * @package     Connector
+ * @author      Developer
  */
 class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form {
 
@@ -36,7 +36,7 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
             Mage::getSingleton('adminhtml/session')->setConnectorData(null);
         } elseif (Mage::registry('banner_data'))
             $data = Mage::registry('banner_data')->getData();
-        if ($data['banner_id']) {
+        if (isset($data['banner_id']) && $data['banner_id']) {
             $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('banner');
             $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
                     ->addFieldToFilter('content_type', $typeID)
@@ -93,6 +93,7 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
             'name' => 'banner_name_tablet_co',
         ));
 
+        $data['type'] = isset($data['type'])?$data['type']:'1';
         $fieldset->addField('type', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Direct viewers to'),
             'class' => 'required-entry',

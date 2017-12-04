@@ -41,7 +41,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Edit_Tab_Renderer_Stor
     public function getCurrentStorviews(){
         if ($data = Mage::registry('simiproductlabel_data')) {
             $data = $data->getData();
-            return $data['storeview_id'];
+            return isset($data['storeview_id'])?$data['storeview_id']:'';
         }
         return '';
     }

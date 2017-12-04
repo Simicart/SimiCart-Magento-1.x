@@ -16,9 +16,9 @@
 /**
  * Simi Edit Form Content Tab Block
  * 
- * @category 	
- * @package 	Madapter
- * @author  	Developer
+ * @category    
+ * @package     Madapter
+ * @author      Developer
  */
 class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form {
 
@@ -36,7 +36,7 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
         } elseif (Mage::registry('productlist_data'))
             $data = Mage::registry('productlist_data')->getData();
 
-        if ($data['productlist_id']) {
+        if (isset($data['productlist_id'])) {
             $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('productlist');
             $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
                     ->addFieldToFilter('content_type', $typeID)
@@ -94,7 +94,7 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
             'name' => 'sort_order',
         ));
 
-        if (!$data['list_type'])
+        if (!isset($data['list_type']))
             $data['list_type'] = 1;
         $fieldset->addField('list_type', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Product List Type'),
@@ -228,7 +228,7 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
                 'label' => Mage::helper('simiconnector')->__('Image Width/ Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_width_percent',
-				'class' => 'required-entry validate-number',
+                'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('With Screen Width is 100%'),
             ));
 
@@ -236,7 +236,7 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
                 'label' => Mage::helper('simiconnector')->__('Image Height/ Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_height_percent',
-				'class' => 'required-entry validate-number',
+                'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('With Screen Height is 100%'),
             ));
 
@@ -246,7 +246,7 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
                 'label' => Mage::helper('simiconnector')->__('Tablet Image Width/Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_width_percent_tablet',
-				'class' => 'required-entry validate-number',
+                'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('Leave it empty if you want to use Phone Value'),
             ));
 
@@ -254,7 +254,7 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
                 'label' => Mage::helper('simiconnector')->__('Tablet Image Height/Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_height_percent_tablet',
-				'class' => 'required-entry validate-number',
+                'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('Leave it empty if you want to use Phone Value'),
             ));
 
