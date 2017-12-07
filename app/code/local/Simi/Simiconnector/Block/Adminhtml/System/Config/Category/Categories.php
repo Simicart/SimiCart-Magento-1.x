@@ -26,10 +26,10 @@ class Simi_Simiconnector_Block_Adminhtml_System_Config_Category_Categories exten
 
             /* @var $collection Mage_Catalog_Model_Resource_Eav_Mysql4_Category_Collection */
             $collection->setStoreId($storeId)
-                    ->addAttributeToSelect('name')
-                    ->addAttributeToSelect('is_active')
-                    ->setProductStoreId($storeId)
-                    ->setLoadProductCount($this->_withProductCount);
+                ->addAttributeToSelect('name')
+                ->addAttributeToSelect('is_active')
+                ->setProductStoreId($storeId)
+                ->setLoadProductCount($this->_withProductCount);
 
             $this->setData('category_collection', $collection);
         }
@@ -52,7 +52,10 @@ class Simi_Simiconnector_Block_Adminhtml_System_Config_Category_Categories exten
     public function getIdsString()
     {
         if ($storecode = Mage::app()->getRequest()->getParam('store')) {
-            $storeviewModel = Mage::getModel('core/store')->getCollection()->addFieldToFilter('code', $storecode)->getFirstItem();
+            $storeviewModel = Mage::getModel('core/store')->load($storecode);
+            if (!$storeviewModel->getId()) {
+                $storeviewModel = Mage::getModel('core/store')->getCollection()->addFieldToFilter('code', $storecode)->getFirstItem();
+            }
             return Mage::getStoreConfig("simiconnector/general/categories_in_app", $storeviewModel->getId());
         }
         if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()) {
