@@ -112,15 +112,15 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
         if(Mage::helper('simiconnector/cloud')->getThemeLayout() == 'matrix'){
             $matrixfieldset = $form->addFieldset('simicategory_matrix', array('legend' => Mage::helper('simiconnector')->__('Matrix Layout Config')));
 
-            if (!$data['matrix_width_percent'])
+            if (!isset($data['matrix_width_percent']))
                 $data['matrix_width_percent'] = 100;
-            if (!$data['matrix_height_percent'])
+            if (!isset($data['matrix_height_percent']))
                 $data['matrix_height_percent'] = 30;
-            if (!$data['matrix_width_percent_tablet'])
+            if (!isset($data['matrix_width_percent_tablet']))
                 $data['matrix_width_percent_tablet'] = 100;
-            if (!$data['matrix_height_percent_tablet'])
+            if (!isset($data['matrix_height_percent_tablet']))
                 $data['matrix_height_percent_tablet'] = 30;
-            if (!$data['matrix_row'])
+            if (!isset($data['matrix_row']))
                 $data['matrix_row'] = 1;
 
             $matrixfieldset->addField('matrix_width_percent', 'text', array(
@@ -168,7 +168,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
                 $storeIds = $website->getStoreIds();
                 foreach (Mage::getModel('core/store')->getCollection() as $storeView) {
                     if(in_array($storeView->getId(), $storeIds)){
-                        if (!$data['storeview_scope'])
+                        if (!isset($data['storeview_scope']))
                             $data['storeview_scope'] = $storeView->getId();
                         $storeviewArray[$storeView->getId()] = $storeView->getName();
                     }
@@ -176,7 +176,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
 
             }else{
                 foreach (Mage::getModel('core/store')->getCollection() as $storeView) {
-                    if (!$data['storeview_scope'])
+                    if (!isset($data['storeview_scope']))
                         $data['storeview_scope'] = $storeView->getId();
                     $storeviewArray[$storeView->getId()] = $storeView->getName();
                 }

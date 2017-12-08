@@ -98,7 +98,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                 }
             }
 
-            if (is_array($data['simicategory_filename'])) {
+            if (isset($data['simicategory_filename']) && is_array($data['simicategory_filename'])) {
                 if (isset($data['simicategory_filename']['delete']) && $data['simicategory_filename']['delete'] == 1) {
                     $data['simicategory_filename'] = "";
                 } else {

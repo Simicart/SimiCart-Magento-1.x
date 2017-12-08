@@ -118,7 +118,7 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
 
         foreach ($categoryCollection as $simicat) {
             $currentIndex = $simicat->getData('matrix_row');
-            if (!$rows[$currentIndex])
+            if (!isset($rows[$currentIndex]) ||  !$rows[$currentIndex])
                 $rows[$currentIndex] = array();
             if ($currentIndex >= $highestRow)
                 $highestRow = $currentIndex + 1;
@@ -126,7 +126,7 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
         }
         foreach ($productlistCollection as $productlist) {
             $currentIndex = $productlist->getData('matrix_row');
-            if (!$rows[$currentIndex])
+            if (!isset($rows[$currentIndex]) || !$rows[$currentIndex])
                 $rows[$currentIndex] = array();
             if ($currentIndex >= $highestRow)
                 $highestRow = $currentIndex + 1;
@@ -150,7 +150,7 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
 
 
         foreach ($simicategoryCollection as $simicat) {
-            if (!$rows[$simicat->getData('matrix_row')])
+            if (!isset($rows[$simicat->getData('matrix_row')]) || !$rows[$simicat->getData('matrix_row')])
                 $rows[(int)$simicat->getData('matrix_row')] = array();
 
             $editUrl = Mage::helper("adminhtml")->getUrl('*/simiconnector_simicategory/edit', array('id' => $simicat->getId()));
@@ -271,12 +271,12 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
         $rows = array();
         foreach (Mage::getModel('simiconnector/simicategory')->getCollection() as $simicat) {
             $currentIndex = $simicat->getData('matrix_row');
-            if (!$rows[$currentIndex])
+            if (!isset($rows[$currentIndex]) || !$rows[$currentIndex])
                 $rows[$currentIndex] = array('phone' => $simicat->getData('matrix_height_percent'), 'tablet' => $simicat->getData('matrix_height_percent_tablet'));
         }
         foreach (Mage::getModel('simiconnector/productlist')->getCollection() as $productlist) {
             $currentIndex = $productlist->getData('matrix_row');
-            if (!$rows[$currentIndex])
+            if (!isset($rows[$currentIndex]) || !$rows[$currentIndex])
                 $rows[$currentIndex] = array('phone' => $productlist->getData('matrix_height_percent'), 'tablet' => $productlist->getData('matrix_height_percent_tablet'));
         }
         ksort($rows);
