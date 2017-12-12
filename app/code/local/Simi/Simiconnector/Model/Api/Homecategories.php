@@ -56,7 +56,7 @@ class Simi_Simiconnector_Model_Api_Homecategories extends Simi_Simiconnector_Mod
             $childCollection = $this->getVisibleChildren($item['category_id']);
             if ($childCollection->count() > 0) {
                 $item['has_children'] = TRUE;
-                if ($data['params']['get_child_cat']) {
+                if (isset($data['params']['get_child_cat']) && $data['params']['get_child_cat']) {
                     $childArray = array();
                     foreach ($childCollection as $childCat) {
                         $childInfo = $childCat->toArray();
