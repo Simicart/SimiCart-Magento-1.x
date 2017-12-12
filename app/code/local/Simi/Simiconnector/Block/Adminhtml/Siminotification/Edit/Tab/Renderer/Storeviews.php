@@ -39,7 +39,8 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Renderer_Stor
     public function getCurrentStorviews(){
         if ($data = Mage::registry('siminotification_data')) {
             $data = $data->getData();
-            return $data['storeview_id'];
+            if(is_array($data) && isset($data['storeview_id']))
+                return $data['storeview_id'];
         }
         return '';
     }

@@ -11,7 +11,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
             Mage::getSingleton('adminhtml/session')->setSimicategoryData(null);
         } elseif (Mage::registry('simicategory_data'))
             $data = Mage::registry('simicategory_data')->getData();
-        if ($data['simicategory_id']) {
+        if (isset($data['simicategory_id'])) {
             $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('homecategory');
             $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
                     ->addFieldToFilter('content_type', $typeID)
@@ -112,21 +112,21 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
         if(Mage::helper('simiconnector/cloud')->getThemeLayout() == 'matrix'){
             $matrixfieldset = $form->addFieldset('simicategory_matrix', array('legend' => Mage::helper('simiconnector')->__('Matrix Layout Config')));
 
-            if (!$data['matrix_width_percent'])
+            if (!isset($data['matrix_width_percent']))
                 $data['matrix_width_percent'] = 100;
-            if (!$data['matrix_height_percent'])
+            if (!isset($data['matrix_height_percent']))
                 $data['matrix_height_percent'] = 30;
-            if (!$data['matrix_width_percent_tablet'])
+            if (!isset($data['matrix_width_percent_tablet']))
                 $data['matrix_width_percent_tablet'] = 100;
-            if (!$data['matrix_height_percent_tablet'])
+            if (!isset($data['matrix_height_percent_tablet']))
                 $data['matrix_height_percent_tablet'] = 30;
-            if (!$data['matrix_row'])
+            if (!isset($data['matrix_row']))
                 $data['matrix_row'] = 1;
 
             $matrixfieldset->addField('matrix_width_percent', 'text', array(
                 'label' => Mage::helper('simiconnector')->__('Image Width/Screen Width Ratio'),
                 'required' => false,
-				'class' => 'required-entry validate-number',
+                'class' => 'required-entry validate-number',
                 'name' => 'matrix_width_percent',
                 'note' => Mage::helper('simiconnector')->__('With Screen Width is 100%'),
             ));
@@ -135,7 +135,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
                 'label' => Mage::helper('simiconnector')->__('Image Height/Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_height_percent',
-				'class' => 'required-entry validate-number',
+                'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('With Screen Width is 100%'),
             ));
 
@@ -143,7 +143,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
                 'label' => Mage::helper('simiconnector')->__('Tablet Image Width/Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_width_percent_tablet',
-				'class' => 'required-entry validate-number',
+                'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('Leave it empty if you want to use Phone Value'),
             ));
 
@@ -151,7 +151,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
                 'label' => Mage::helper('simiconnector')->__('Tablet Image Height/Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_height_percent_tablet',
-				'class' => 'required-entry validate-number',
+                'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('Leave it empty if you want to use Phone Value'),
             ));
 
@@ -168,7 +168,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
                 $storeIds = $website->getStoreIds();
                 foreach (Mage::getModel('core/store')->getCollection() as $storeView) {
                     if(in_array($storeView->getId(), $storeIds)){
-                        if (!$data['storeview_scope'])
+                        if (!isset($data['storeview_scope']))
                             $data['storeview_scope'] = $storeView->getId();
                         $storeviewArray[$storeView->getId()] = $storeView->getName();
                     }
@@ -176,7 +176,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
 
             }else{
                 foreach (Mage::getModel('core/store')->getCollection() as $storeView) {
-                    if (!$data['storeview_scope'])
+                    if (!isset($data['storeview_scope']))
                         $data['storeview_scope'] = $storeView->getId();
                     $storeviewArray[$storeView->getId()] = $storeView->getName();
                 }

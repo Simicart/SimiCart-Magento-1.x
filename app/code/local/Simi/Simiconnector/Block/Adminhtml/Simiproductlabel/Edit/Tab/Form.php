@@ -19,9 +19,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Edit_Tab_Form extends 
             'values' => Mage::getSingleton('simiconnector/status')->getOptionHash(),
         ));
 
-        if ($data['status'] == null) {
-            $data['status'] = 1;
-        }
+        $data['status'] = isset($data['status'])?$data['status']:'1';
 
         $fieldset->addField('storeview_id', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Store View'),
@@ -71,11 +69,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Edit_Tab_Form extends 
             'required' => false,
             'name' => 'text',
         ));
-
-        if ($data['is_auto_fill'] == null) {
-            $data['is_auto_fill'] = 1;
-        }
-
+        $data['is_auto_fill'] = isset($data['is_auto_fill'])?$data['is_auto_fill']:1;
 
         $productIds = implode(", ", Mage::getResourceModel('catalog/product_collection')->getAllIds());
         $fieldset->addField('product_ids', 'text', array(

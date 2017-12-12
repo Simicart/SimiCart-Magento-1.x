@@ -43,4 +43,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ConfigController extends Mage_A
                         ->getCategoryChildrenJson($this->getRequest()->getParam('category')));
     }
 
+    protected function _isAllowed() {
+        return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
+    }
 }

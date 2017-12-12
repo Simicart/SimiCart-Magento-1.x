@@ -82,9 +82,9 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
     public function updateProfile($data) {
         $data = $data['contents'];
         $result = array();
-        $currPass = $data->old_password;
-        $newPass = $data->new_password;
-        $confPass = $data->com_password;
+        $currPass = isset($data->old_password)?$data->old_password:'';
+        $newPass = isset($data->new_password)?$data->new_password:'';
+        $confPass = isset($data->com_password)?$data->com_password:'';
 
         $customer = Mage::getModel('customer/customer')->setWebsiteId(Mage::app()->getWebsite()->getId());
         $customer->loadByEmail($data->email);
@@ -106,7 +106,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             }
         }
 
-        if ($data->change_password == 1) {
+        if (isset($data->change_password) && ($data->change_password == 1)) {
             $customer->setChangePassword(1);
             $oldPass = $this->_getSession()->getCustomer()->getPasswordHash();
             if (Mage::helper('core/string')->strpos($oldPass, ':')) {

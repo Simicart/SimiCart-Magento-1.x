@@ -32,8 +32,9 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
             ),
             'note' => '',
         ));
-        
-		$data['device_type'] = $data['device_id'];
+        if(isset($data['device_id'])){
+            $data['device_type'] = $data['device_id'];
+        }		
         $fieldset->addField('device_type', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Device Type'),
             'name' => 'device_type',
@@ -76,6 +77,9 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
             'note' => Mage::helper('simiconnector')->__('Characters recommended: < 250'),
         ));
 
+        if(!isset($data['type'])){
+            $data['type'] = 0;
+        }
         $fieldset->addField('type', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Direct viewers to'),
             'class' => 'required-entry',
@@ -242,6 +246,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
             'legend' => Mage::helper('simiconnector')->__('Notification Devices Select')
         ));
         $deviceIds = Mage::getModel('simiconnector/device')->getCollection()->getAllIds();
+        $deviceIds = implode(",", $deviceIds);
 
         $fieldsetFilter->addField('devices_pushed', 'textarea', array(
             'name' => 'devices_pushed',

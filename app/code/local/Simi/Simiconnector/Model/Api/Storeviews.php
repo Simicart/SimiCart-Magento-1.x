@@ -15,7 +15,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
 
     public function setBuilderQuery() {
         $data = $this->getData();
-        if (isset($data['resourceid']) && $data['resourceid'] && $data['resourceid'] != 'pwa') {
+        if (isset($data['resourceid']) && $data['resourceid']) {
             $this->setStoreView($data);
             $this->setCurrency($data);
             $this->builderQuery = Mage::getModel('core/store')->load($data['resourceid']);
@@ -196,10 +196,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         //Scott add to get instant contacts
         if (Mage::helper('simiconnector/plugins_instantcontact')->isEnabled())
             $additionInfo['instant_contact'] = Mage::helper('simiconnector/plugins_instantcontact')->getContacts();
-        $params = $cmsData['params'];
-        if (isset($params['pwa']) && $params['pwa']){
-            $this->getSiteUrls($additionInfo);
-        }
+
         $this->storeviewInfo = $additionInfo;
         Mage::dispatchEvent('simiconnector_get_storeview_info_after', array('object' => $this));
         return $this->getDetail($this->storeviewInfo);
@@ -302,107 +299,20 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
 
     private function _prepareMinSaleQty()
     {
-        $values = unserialize(Mage::getStoreConfig('cataloginventory/item_options/min_sale_qty'));
-        $data =array();
-        foreach ($values as $index => $value){
-            $data[]=array(
-                'customer_group_id' =>$index,
-                'min_sale_qty' =>$value,
-            );
+        try {
+            $values = unserialize(Mage::getStoreConfig('cataloginventory/item_options/min_sale_qty'));
+            $data =array();
+            foreach ($values as $index => $value){
+                $data[]=array(
+                    'customer_group_id' =>$index,
+                    'min_sale_qty' =>$value,
+                );
+            }
+        } catch (Exception $e) {
+            return array();
         }
 
         return $data;
     }
 
-    public function getSiteUrls(&$additionInfo){
-        $path = dirname(__FILE__).'/site_url.json';
-        if (file_exists($path)){
-            $urls = file_get_contents($path);
-            if (!$urls){
-                $urls = $this->setSiteUrls();
-                file_put_contents($path,$urls);
-            }
-        }else {
-            $fp = @fopen($path,'w+');
-            if ($fp){
-                $urls = $this->setSiteUrls();
-                file_put_contents($path,$urls);
-            }
-        }
-        $additionInfo['urls'] = json_decode($urls);
-    }
-
-    public function setSiteUrls(){
-        $storeId = $this->getCurrentStoreId();
-        $baseUrl = Mage::app()->getStore($storeId)->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK);
-        // get categories
-        $collection = Mage::getModel('simiconnector/catemap')->getCollection($storeId);
-        $categories = new Varien_Object();
-        $categories->setItems($collection);
-        $categories_url = array();
-        foreach ($categories->getItems() as $item)
-        {
-            $categories_url[] = array(
-                'id' => $item->getId(),
-                'url' =>$item->getUrl(),
-                'child' => $item->getChild() ? true : false,
-                'name' => $item->getCategoryName()
-            );
-        }
-        $urls['categories_url'] = $categories_url;
-        unset($collection);
-
-        // get products
-        $collection = Mage::getResourceModel('sitemap/catalog_product')->getCollection($storeId);
-        $products = new Varien_Object();
-        $products->setItems($collection);
-        $products_url = array();
-        foreach ($products->getItems() as $item)
-        {
-            $products_url[] = array(
-                'id' => $item->getId(),
-                'url' =>$item->getUrl(),
-            );
-        }
-        $urls['products_url'] = $products_url;
-        unset($collection);
-
-        // get cms pages
-        $cms_url = array();
-        $collection = Mage::getResourceModel('sitemap/cms_page')->getCollection($storeId);
-        foreach ($collection as $item)
-        {
-            $cms_url[] = array(
-                'id' => $item->getId(),
-                'url' =>$item->getUrl(),
-            );
-        }
-        $urls['cms_url'] = $cms_url;
-        unset($collection);
-        return json_encode($urls);
-    }
-
-    public function store(){
-        $data = $this->getData();
-        $params = (array) $data['contents'];
-        if ($data['resourceid'] == 'pwa'){
-            $path = dirname(__FILE__).'/site_url.json';
-            if (file_exists($path)){
-                $fp = @fopen($path,'w+');
-                if ($fp){
-                    $urls = $this->setSiteUrls();
-                    file_put_contents($path,$urls);
-                }
-                else {
-                    unlink($path);
-                }
-            }
-            $result = array();
-            $message = Mage::helper('simiconnector')->__('Sync Sitemap Url Successfully !');
-            $result['message'] = $message;
-            return array(
-                "storeview" => $result
-            );
-        }
-    }
 }
