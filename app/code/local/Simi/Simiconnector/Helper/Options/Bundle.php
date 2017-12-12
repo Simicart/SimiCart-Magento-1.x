@@ -15,6 +15,10 @@ class Simi_Simiconnector_Helper_Options_Bundle extends Mage_Core_Helper_Abstract
         $options = array();
         $configurable_options = Mage::helper('core')->jsonDecode($block->getJsonConfig());
         $options['bundle_options'] = $configurable_options;
+        if(!is_null($product->getOptions()) && count($product->getOptions())){
+            $custom_options = Mage::helper('simiconnector/options_simple')->getOptions($product);
+            $options['custom_options'] = $custom_options['custom_options'];
+        }
         return $options;
     }
 }
