@@ -10,38 +10,29 @@ class Simi_Simiconnector_Helper_Customer extends Mage_Core_Helper_Abstract
         return Mage::getSingleton('customer/session');
     }
 
-    public function renewCustomerSesssion($data)
-    {
-        $loginParams = array();
-
-        if (isset($data['params']['customer_access_token'])) {
-            $loginInfo = $this->prepareDataLogin($data['params']['customer_access_token']);
-            $loginParams['email'] = $loginInfo['email'];
-            $loginParams['password'] = $loginInfo['password'];
-        }
-
+     public function renewCustomerSesssion($data) {
         if (isset($data['params']['quote_id']) && $data['params']['quote_id']) {
             $checkoutsession = Mage::getSingleton('checkout/session');
             $checkoutsession->setQuoteId($data['params']['quote_id']);
         }
         if (($data['resource'] == 'customers') && (($data['resourceid'] == 'login') || ($data['resourceid'] == 'sociallogin')))
             return;
-
-        if (isset($data['contents_array']['customer_access_token'])) {
-            $loginInfo = $this->prepareDataLogin($data['contents_array']['customer_access_token']);
-            $loginParams['email'] = $loginInfo['email'];
-            $loginParams['password'] = $loginInfo['password'];
+        
+        if (isset($data['contents_array']['email']) && isset($data['contents_array']['password']))
+        {
+            $data['params']['email'] = $data['contents_array']['email'];
+            $data['params']['password'] = $data['contents_array']['password'];
         }
-        if ((!isset($loginParams['email'])) || (!isset($loginParams['password'])))
+        if ((!isset($data['params']['email'])) || (!isset($data['params']['password'])))
             return;
-
-        if ((Mage::getSingleton('customer/session')->isLoggedIn()) && (Mage::getSingleton('customer/session')->getCustomer()->getEmail() == $data['params']['email']))
+        
+        if ((Mage::getSingleton('customer/session')->isLoggedIn()) && (Mage::getSingleton('customer/session')->getCustomer()->getEmail() == $data['params']['email'])) 
             return;
-
+            
         try {
-            $this->loginByEmailAndPass($loginParams['email'], $loginParams['password']);
+            $this->loginByEmailAndPass($data['params']['email'], $data['params']['password']);
         } catch (Exception $e) {
-
+            
         }
     }
 
