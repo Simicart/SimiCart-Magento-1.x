@@ -18,4 +18,13 @@ class Simi_Simiconnector_Model_Api_Cmspages extends Simi_Simiconnector_Model_Api
         }
     }
 
+    public function index() {
+        $result = parent::index();
+        foreach ($result['cmspages'] as $index => $cmsData) {
+            $cmsData['cms_content'] = Mage::helper('cms')->getPageTemplateProcessor()->filter($cmsData['cms_content']);
+            $result['cmspages'][$index] = $cmsData;
+        }
+        return $result;
+    }
+
 }
