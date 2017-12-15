@@ -73,32 +73,4 @@ class Simi_Simiconnector_Helper_Customer extends Mage_Core_Helper_Abstract
         }
         return false;
     }
-
-
-    public function prepareDataLogin($data)
-    {
-        $result = array();
-
-        if (!$data) {
-            throw  new Exception($this->__('Invalid email address or password. Please try again'), 4);
-        }
-
-        $secretKey = Mage::getStoreConfig('simiconnector/general/secret_key');
-        $total = 0;
-
-        for ($i = 0; $i < strlen($secretKey); $i++) {
-            if (is_numeric($secretKey[$i])) {
-                $total += $secretKey[$i];
-            }
-        }
-        $total = $total * 2;
-        $total = str_split((string)$total);
-        $data = base64_decode($data);
-        $data = explode(':', $data);
-        $result['email'] = base64_decode($data[0]);
-        $simiPassword = base64_decode($data[1]);
-        $simiPassword = substr($simiPassword, $total[0],strlen($simiPassword) - strlen($secretKey));
-        $result['password'] = base64_decode($simiPassword);
-        return $result;
-    }
 }

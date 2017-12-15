@@ -42,9 +42,8 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
     }
 
     public function login($data) {
-        $loginInfo = Mage::helper('simiconnector/customer')
-            ->prepareDataLogin($data['params']['customer_access_token']);
-        return Mage::helper('simiconnector/customer')->loginByEmailAndPass($loginInfo['email'], $loginInfo  ['password']);
+        return Mage::helper('simiconnector/customer')
+            ->loginByEmailAndPass($data['params']['email'], $data['params']['password']);
     }
 
     public function logout() {
