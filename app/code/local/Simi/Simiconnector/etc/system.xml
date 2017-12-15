@@ -93,15 +93,6 @@
                             <show_in_store>1</show_in_store>
                             <comment>Please enter its CMS ID SimiCart Connector/CMS</comment>
                         </cms_shipping_condition>
-                        <is_show_sample_data translate="label">
-                            <label>Show Sample Data on Home Screen</label>
-                            <frontend_type>select</frontend_type>
-                            <sort_order>599</sort_order>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </is_show_sample_data>
                         <show_product_type translate="label">
                             <label>Products Screen Display Default By:</label>
                             <frontend_type>select</frontend_type>
@@ -984,6 +975,18 @@
                             <show_in_store>1</show_in_store>
                             <comment></comment>
                         </enable>
+                        <!--
+                        <multi_label translate="label">
+                            <label>Show Multi Label</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>99</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </multi_label>
+                        -->
                     </fields>
                 </productlabel>
                 <simivideo translate="label" module="simiconnector">

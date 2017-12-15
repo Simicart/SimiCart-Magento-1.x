@@ -182,7 +182,6 @@
                 <is_show_all_product>1</is_show_all_product>
                 <cms_shipping_condition></cms_shipping_condition>
                 <show_product_type>0</show_product_type>
-                <is_show_sample_data>1</is_show_sample_data>
                 <base_url></base_url>
                 <is_show_home_title>1</is_show_home_title>
                 <is_rtl>0</is_rtl>
@@ -237,6 +236,7 @@
             </barcode> 
             <productlabel>
                 <enable>0</enable>
+                <multi_label>0</multi_label>
             </productlabel>
             <simivideo>
                 <enable>0</enable>
