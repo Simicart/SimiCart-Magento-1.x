@@ -170,7 +170,14 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
                 'rate' => $avg,
                 'number' => $ratings[5],
             );
-            $info_detail['product_label'] = Mage::helper('simiconnector/productlabel')->getProductLabel($entity);
+            if (Mage::getStoreConfig("simiconnector/productlabel/enable")) {
+                if (!Mage::getStoreConfig("simiconnector/productlabel/multi_label")) {
+                    $info_detail['product_label'] = Mage::helper('simiconnector/productlabel')->getProductLabel($entity);
+                } else {
+                    $info_detail['product_labels'] = Mage::helper('simiconnector/productlabel')->getProductLabels($entity);
+                }
+            }
+
             $info_detail['configurable_swatches'] = $this->_helperProduct->getSwatchesListProduct($entity);
             $info[] = $info_detail;
         }
@@ -201,7 +208,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
             $image_width = 600;
             $image_height = 600;
         }
-        
+
         foreach ($media_gallery['images'] as $image) {
             // Zend_debug::dump($image['disabled']);
             if ($image['disabled'] == 0) {
@@ -254,7 +261,13 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
 
         $info['app_options'] = Mage::helper('simiconnector/options')->getOptions($entity);
         $info['wishlist_item_id'] = Mage::helper('simiconnector/wishlist')->getWishlistItemId($entity);
-        $info['product_label'] = Mage::helper('simiconnector/productlabel')->getProductLabel($entity);
+        if (Mage::getStoreConfig("simiconnector/productlabel/enable")) {
+            if (!Mage::getStoreConfig("simiconnector/productlabel/multi_label")) {
+                $info['product_label'] = Mage::helper('simiconnector/productlabel')->getProductLabel($entity);
+            } else {
+                $info['product_labels'] = Mage::helper('simiconnector/productlabel')->getProductLabels($entity);
+            }
+        }
         $info['product_video'] = Mage::helper('simiconnector/simivideo')->getProductVideo($entity);
         $this->detail_info = $this->getDetail($info);
         Mage::dispatchEvent('simi_simiconnector_model_api_products_show_after', array('object' => $this, 'data' => $this->detail_info));

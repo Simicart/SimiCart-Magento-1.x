@@ -975,7 +975,6 @@
                             <show_in_store>1</show_in_store>
                             <comment></comment>
                         </enable>
-                        <!--
                         <multi_label translate="label">
                             <label>Show Multi Label</label>
                             <frontend_type>select</frontend_type>
@@ -986,7 +985,6 @@
                             <show_in_store>1</show_in_store>
                             <comment></comment>
                         </multi_label>
-                        -->
                     </fields>
                 </productlabel>
                 <simivideo translate="label" module="simiconnector">

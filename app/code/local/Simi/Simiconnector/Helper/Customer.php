@@ -12,9 +12,14 @@ class Simi_Simiconnector_Helper_Customer extends Mage_Core_Helper_Abstract
 
      public function renewCustomerSesssion($data) {
         if (isset($data['params']['quote_id']) && $data['params']['quote_id']) {
-            $checkoutsession = Mage::getSingleton('checkout/session');
-            $checkoutsession->setQuoteId($data['params']['quote_id']);
+            if (($quote = Mage::getModel('sales/quote')->load($data['params']['quote_id'])) && $quote->getId()) {
+                if (Mage::app()->getStore()->getId() == $quote->getData('store_id')) {
+                    $checkoutsession = Mage::getSingleton('checkout/session');
+                    $checkoutsession->setQuoteId($quote->getId());
+                }
+            }
         }
+
         if (($data['resource'] == 'customers') && (($data['resourceid'] == 'login') || ($data['resourceid'] == 'sociallogin')))
             return;
         
