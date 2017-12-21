@@ -278,7 +278,7 @@ class Simi_Simiconnector_Helper_Tierprice extends Mage_Core_Helper_Abstract
                     $price['formated_price'] = Mage::app()->getStore()->formatPrice($tierPrice, false, false);
                     $price['formated_price_incl_tax'] = Mage::app()->getStore()->formatPrice(
                         Mage::app()->getStore()->convertPrice(
-                            Mage::helper('tax')->getPrice($product, $price['website_price'], false)
+                            Mage::helper('tax')->getPrice($product, $price['website_price'], true)
                         ), false, false
                     );
 
