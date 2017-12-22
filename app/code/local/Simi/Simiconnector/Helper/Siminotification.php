@@ -90,7 +90,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         $dir = $this->getDirPEMPassfile();
         $message = $data['notice_content'];
         $body['aps'] = array(
-            'alert' => $data['notice_title'],
+            'alert' => array('title'=>$data['notice_title'],'body'=>$message),
             'sound' => 'default',
             'badge' => 1,
             'title' => $data['notice_title'],
