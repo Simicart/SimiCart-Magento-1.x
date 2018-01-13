@@ -17,16 +17,14 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
         $enable = (int) Mage::getStoreConfig("simiconnector/general/enable");
 
         if (!$enable) {
-            echo 'Connector was disabled!';
-            header("HTTP/1.0 503");
-            exit();
+            throw new Exception('Connector was disabled!');
         }
 
         /*
         if (!$this->isHeader()) {
             echo 'Connect error!';
             header("HTTP/1.0 401 Unauthorized");
-            exit();
+            //exit();
         }
         */
     }
@@ -38,12 +36,18 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
 
     protected function _printData($result)
     {
-        header("Content-Type: application/json");
+        $this->getResponse()->clearHeaders()->setHeader(
+            'Content-type',
+            'application/json'
+        );
         $this->setData($result);
         Mage::dispatchEvent($this->getFullActionName(), array('object' => $this, 'data' => $result));
         $this->_data = $this->getData();
         ob_clean();
-        echo Mage::helper('core')->jsonEncode($this->_data);
+        $this->getResponse()->setBody(
+            Mage::helper('core')->jsonEncode($this->_data)
+        );
+        //echo Mage::helper('core')->jsonEncode($this->_data);
     }
 
     protected function isHeader()

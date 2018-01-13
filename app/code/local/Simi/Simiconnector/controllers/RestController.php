@@ -37,7 +37,7 @@ class Simi_Simiconnector_RestController extends Simi_Simiconnector_Controller_Ac
             $this->_printData($results);
         }
 
-        exit();
+        //exit();
         ob_end_flush();
     }
 

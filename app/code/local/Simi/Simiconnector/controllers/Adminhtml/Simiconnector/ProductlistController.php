@@ -285,8 +285,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
     public function getMockupAction() 
     {
         $storeviewid = $this->getRequest()->getParam('storeview_id');
-        echo Mage::helper('simiconnector/productlist')->getMatrixLayoutMockup($storeviewid);
-        exit();
+        $this->getResponse()->setBody(Mage::helper('simiconnector/productlist')->getMatrixLayoutMockup($storeviewid));
     }
 
 }

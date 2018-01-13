@@ -121,8 +121,8 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract
         if (isset($data->change_password) && ($data->change_password == 1)) {
             $customer->setChangePassword(1);
             $oldPass = $this->_getSession()->getCustomer()->getPasswordHash();
-            if (Mage::helper('core/string')->strpos($oldPass, ':')) {
-                list($_salt, $salt) = explode(':', $oldPass);
+            if (strpos($oldPass, ':') !== false) {
+                list(, $salt) = explode(':', $oldPass);
             } else {
                 $salt = false;
             }

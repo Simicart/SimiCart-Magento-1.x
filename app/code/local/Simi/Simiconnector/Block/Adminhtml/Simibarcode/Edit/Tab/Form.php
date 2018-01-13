@@ -19,7 +19,6 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Form extends Mage_
         } elseif (Mage::registry('simibarcode_data'))
             $data = Mage::registry('simibarcode_data')->getData();
 
-        //zend_debug::dump($data);die;
         $width = $height = 200;
         $sampleQR = '<img src="http://chart.googleapis.com/chart?chs='.$width.'x'.$height.'&cht=qr&chl='.$data['qrcode'].'" />';
         $sampleBar = '</br></br><img src="'.Mage::helper("adminhtml")->getUrl('*/*/barcode').'?code='.$data['barcode'].'" />';

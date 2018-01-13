@@ -14,7 +14,7 @@ class Simi_Simiconnector_Model_Api_Migrate_Categorytrees extends Simi_Simiconnec
             $this->builderQuery = Mage::getModel('catalog/category')->load($data['resourceid']);
         }
     }
-    
+    /*
     public function index()
     {
         $result = parent::index();
@@ -34,4 +34,5 @@ class Simi_Simiconnector_Model_Api_Migrate_Categorytrees extends Simi_Simiconnec
         $result['total'] = count($returnedTree);
         return $result;
     }
+    */
 }

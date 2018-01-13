@@ -112,12 +112,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             'width' => $data['width'],
             'show_popup' => $data['show_popup'],
         );
-        /*
-          echo 'iOS push:';
-          zend_debug::dump($body);
-          die;
-         *
-         */
+        
         $payload = json_encode($body);
         $totalDevice = 0;
 
@@ -264,8 +259,6 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             'registration_ids' => $registrationIDs,
             'data' => array("message" => $message),
         );
-
-        // Zend_Debug::dump(json_encode($devices_id));die("Field");
 
         $api_key = Mage::getStoreConfig('simiconnector/notification/android_secret_key', $collectionDevice[0]['storeview_id']);
         $headers = array(

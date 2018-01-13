@@ -23,9 +23,9 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
             else
                 $arr["website_key"] = "0";
         }
-
-        echo json_encode($arr);
-        exit();
+        $this->getResponse()->setBody(
+            Mage::helper('core')->jsonEncode($arr)
+        );
     }
 
     public function syncKeysAction()
@@ -62,6 +62,7 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         return $this->getResponse()->setBody(json_encode($result));
     }
 
+    /*
     public function installDBAction()
     {
         $setup = new Mage_Core_Model_Resource_Setup('core_setup');
@@ -76,27 +77,30 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         $installer->endSetup();
         echo 'success';
     }
+    */
 
 
-    public function checkPortAction()
-    {
+    public function checkPortAction() {
         $host = 'gateway.sandbox.push.apple.com';
         $port = 2195;
         $hostip = @gethostbyname($host);
-
+        
         if ($hostip == $host) {
-            echo "Server is down or does not exist";
+            $config = array('2195_port_status' => 'Server is down or does not exist');
         } else {
             if (!$x = @fsockopen($hostip, $port, $errno, $errstr, 5)) {
-                echo "Port $port is closed.";
+                $config = array('2195_port_status' => 'closed');
             } else {
-                echo "Port $port is open.";
+                $config = array('2195_port_status' => 'opened');
                 if ($x) {
                     @fclose($x);
                 }
             }
         }
-
-        exit();
+        
+        // Set the response body / contents to be the JSON data
+        $this->getResponse()->setBody(
+            Mage::helper('core')->jsonEncode($config)
+        );
     }
 }

@@ -63,7 +63,6 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     public function saveAction() 
     {
         if ($data = $this->getRequest()->getPost()) {
-            // Zend_debug::dump($_FILES['image_url']['name']);die();
             $imageUrl = "";
             if (isset($_FILES['image_url']['name']) && $_FILES['image_url']['name'] != '') {
                 try {
@@ -89,8 +88,6 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                     $imageUrl = 'simi/simiconnector/notification/images/' . md5(time()) . '.png';
                 }
             }
-
-            // Zend_debug::dump($data);die();
 
             $data['created_time'] = now();
             $model = Mage::getModel('simiconnector/siminotification');
@@ -303,14 +300,14 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     public function chooseDevicesAction() 
     {
         $request = $this->getRequest();
-        echo '<p class="note"><span id="note_devices_pushed_number"> </span> <span> '.Mage::helper('simiconnector')->__('Device(s) Selected').'</span></p>';
+        $devicesSelected =  '<p class="note"><span id="note_devices_pushed_number"> </span> <span> '.Mage::helper('simiconnector')->__('Device(s) Selected').'</span></p>';
         $block = $this->getLayout()->createBlock(
             'simiconnector/adminhtml_siminotification_edit_tab_devices', 'promo_widget_chooser_device_id', array('js_form_object' => $request->getParam('form'),
             )
         );
         if ($block) {
             $block->storeview_id = $this->getRequest()->getParam('storeview_id');
-            $this->getResponse()->setBody($block->toHtml());
+            $this->getResponse()->setBody($devicesSelected.$block->toHtml());
         }
     }
 

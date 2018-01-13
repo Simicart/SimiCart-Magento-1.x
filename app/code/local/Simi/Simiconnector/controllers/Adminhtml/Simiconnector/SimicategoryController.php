@@ -83,7 +83,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                         try {
                             mkdir($path, 0777, TRUE);
                         } catch (Exception $e) {
-                            Zend_debug::dump($e->getMessage());die();
+                            
                         }
                     }
 
@@ -165,7 +165,6 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
             if (!isset($data['matrix_height_percent_tablet']))
                 $data['matrix_height_percent_tablet'] = isset($data['matrix_height_percent'])?$data['matrix_height_percent']:0;
 
-            //Zend_debug::dump($data);die();
             $storeIdsAll = $data['storeview_id'];
             $data['storeview_id'] = "";
             $model = Mage::getModel('simiconnector/simicategory');
