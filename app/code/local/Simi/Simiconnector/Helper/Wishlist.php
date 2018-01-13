@@ -1,13 +1,15 @@
 <?php
 
-class Simi_Simiconnector_Helper_Wishlist extends Mage_Core_Helper_Abstract {
+class Simi_Simiconnector_Helper_Wishlist extends Mage_Core_Helper_Abstract
+{
 
     /*
      * Get Wishlist Item Id
      * 
      * @param Product Model
      */
-    public function getWishlistItemId($product) {
+    public function getWishlistItemId($product) 
+    {
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         if ($customer->getId() && ($customer->getId() != '')) {
             $wishlist = Mage::getModel('wishlist/wishlist')->loadByCustomer($customer, true);
@@ -18,14 +20,17 @@ class Simi_Simiconnector_Helper_Wishlist extends Mage_Core_Helper_Abstract {
                 if ($product->getTypeId() == 'configurable') {
                     $productOptions = array_merge($productOptions, $this->getConfigurableOptions($product));
                 }
+
                 if ($product->getTypeId() == 'downloadable') {
                     $productOptions = array_merge($productOptions, $this->getDownloadableOptions($product));
                 }
+
                 foreach ($productOptions as $productOption) {
                     if ($productOption['is_required'] == 'YES') {
                         return;
                     }
                 }
+
                 return $item->getId();
             }
         }
@@ -36,7 +41,8 @@ class Simi_Simiconnector_Helper_Wishlist extends Mage_Core_Helper_Abstract {
      * $item - Wishlist Item
      */
 
-    public function checkIfSelectedAllRequiredOptions($item, $options = null) {
+    public function checkIfSelectedAllRequiredOptions($item, $options = null) 
+    {
         $selected = false;
         $product = $item->getProduct();
         $allowedType = array('simple', 'downloadable', 'configurable');
@@ -47,9 +53,11 @@ class Simi_Simiconnector_Helper_Wishlist extends Mage_Core_Helper_Abstract {
             if ($product->getTypeId() == 'configurable') {
                 $productOptions = array_merge($productOptions, $this->getConfigurableOptions($product));
             }
+
             if ($product->getTypeId() == 'downloadable') {
                 $productOptions = array_merge($productOptions, $this->getDownloadableOptions($product));
             }
+
             foreach ($productOptions as $productOption) {
                 if ($productOption['is_required'] == 'YES') {
                     $selected = false;
@@ -60,10 +68,12 @@ class Simi_Simiconnector_Helper_Wishlist extends Mage_Core_Helper_Abstract {
                 }
             }
         }
+
         return $selected;
     }
 
-    public function getOptionsSelectedFromItem($item, $product) {
+    public function getOptionsSelectedFromItem($item, $product) 
+    {
         $options = array();
         if (version_compare(Mage::getVersion(), '1.5.0.0', '>=') === true) {
             $helper = Mage::helper('catalog/product_configuration');
@@ -81,6 +91,7 @@ class Simi_Simiconnector_Helper_Wishlist extends Mage_Core_Helper_Abstract {
                 $options = Mage::helper('simiconnector/checkout')->getOptions($item);
             }
         }
+
         return $options;
     }
 
@@ -88,7 +99,8 @@ class Simi_Simiconnector_Helper_Wishlist extends Mage_Core_Helper_Abstract {
      * Configurable Options
      */
 
-    public function getConfigurableOptions($_product) {
+    public function getConfigurableOptions($_product) 
+    {
         $options = array();
         $currentProduct = $_product;
         $products = $this->getAllowProducts($_product);
@@ -105,9 +117,11 @@ class Simi_Simiconnector_Helper_Wishlist extends Mage_Core_Helper_Abstract {
                 if (!isset($options[$productAttributeId])) {
                     $options[$productAttributeId] = array();
                 }
+
                 if (!isset($options[$productAttributeId][$attributeValue])) {
                     $options[$productAttributeId][$attributeValue] = array();
                 }
+
                 $options[$productAttributeId][$attributeValue][] = $productId;
             }
         }
@@ -120,10 +134,12 @@ class Simi_Simiconnector_Helper_Wishlist extends Mage_Core_Helper_Abstract {
                     if (!isset($options[$attributeId][$value['value_index']])) {
                         continue;
                     }
+
                     $productsIndex = array();
                     if (isset($options[$attributeId][$value['value_index']])) {
                         $productsIndex = $options[$attributeId][$value['value_index']];
                     }
+
                     $infor = array(
                         'option_id' => $value['value_index'],
                         'option_value' => $value['label'],
@@ -134,15 +150,18 @@ class Simi_Simiconnector_Helper_Wishlist extends Mage_Core_Helper_Abstract {
                 }
             }
         }
+
         return $information;
     }
 
-    public function getAllowProducts($_product) {
+    public function getAllowProducts($_product) 
+    {
         $products = array();
         $skipSaleableCheck = true;
         if (version_compare(Mage::getVersion(), '1.7.0.0', '>=') === true) {
             $skipSaleableCheck = Mage::helper('catalog/product')->getSkipSaleableCheck();
         }
+
         $allProducts = $_product->getTypeInstance(true)
                 ->getUsedProducts(null, $_product);
         foreach ($allProducts as $product) {
@@ -150,6 +169,7 @@ class Simi_Simiconnector_Helper_Wishlist extends Mage_Core_Helper_Abstract {
                 $products[] = $product;
             }
         }
+
         return $products;
     }
 
@@ -157,10 +177,10 @@ class Simi_Simiconnector_Helper_Wishlist extends Mage_Core_Helper_Abstract {
      * Custom Options
      */
 
-    public function getCustomOptions($product) {
+    public function getCustomOptions($product) 
+    {
         $information = array();
         foreach ($product->getOptions() as $_option) {
-
             if ($_option->getGroupByType() == Mage_Catalog_Model_Product_Option::OPTION_GROUP_SELECT) {
                 foreach ($_option->getValues() as $value) {
                     $info = array(
@@ -186,6 +206,7 @@ class Simi_Simiconnector_Helper_Wishlist extends Mage_Core_Helper_Abstract {
                 $information[] = $info;
             }
         }
+
         return $information;
     }
 
@@ -193,7 +214,8 @@ class Simi_Simiconnector_Helper_Wishlist extends Mage_Core_Helper_Abstract {
      * Downloadable Options
      */
 
-    public function getDownloadableOptions($product) {
+    public function getDownloadableOptions($product) 
+    {
         $info = array();
         $block = Mage::getBlockSingleton('downloadable/catalog_product_links');
         $block->setProduct($product);
@@ -212,6 +234,7 @@ class Simi_Simiconnector_Helper_Wishlist extends Mage_Core_Helper_Abstract {
             );
             $info[] = $item;
         }
+
         return $info;
     }
 

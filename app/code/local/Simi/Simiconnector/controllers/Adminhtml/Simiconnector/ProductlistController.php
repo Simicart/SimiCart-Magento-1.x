@@ -19,14 +19,16 @@
  * @package     Connector
  * @author      Developer
  */
-class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends Mage_Adminhtml_Controller_Action {
+class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends Mage_Adminhtml_Controller_Action
+{
 
     /**
      * init layout and set active for current menu
      *
      * @return Simi_Connector_Adminhtml_BannerController
      */
-    protected function _initAction() {
+    protected function _initAction() 
+    {
         $this->loadLayout()
                 ->_setActiveMenu('simiconnector/productlist')
                 ->_addBreadcrumb(Mage::helper('adminhtml')->__('Custom Product List Manager'), Mage::helper('adminhtml')->__('Product List Manager'));
@@ -36,7 +38,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
     /**
      * index action
      */
-    public function indexAction() {
+    public function indexAction() 
+    {
         $this->_initAction()
                 ->renderLayout();
     }
@@ -44,7 +47,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
     /**
      * view and edit item action
      */
-    public function editAction() {
+    public function editAction() 
+    {
         $id = $this->getRequest()->getParam('id');
         $model = Mage::getModel('simiconnector/productlist')->load($id);
 
@@ -61,8 +65,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                     Mage::getSingleton('adminhtml/session')->addError(Mage::helper('simiconnector')->__('Products does not exist'));
                     $this->_redirect('*/*/');
                 }
-
             }
+
             $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
             if (!empty($data))
                 $model->setData($data);
@@ -86,14 +90,16 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
         }
     }
 
-    public function newAction() {
+    public function newAction() 
+    {
         $this->_forward('edit');
     }
 
     /**
      * save item action
      */
-    public function saveAction() {
+    public function saveAction() 
+    {
         if ($data = $this->getRequest()->getPost()) {
             if (isset($_FILES['productlist_image_o']['name']) && $_FILES['productlist_image_o']['name'] != '') {
                 try {
@@ -107,17 +113,17 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                         try {
                             mkdir($path, 0777, TRUE);
                         } catch (Exception $e) {
-                            
                         }
                     }
-                    $nameTemp = explode('.',$_FILES['productlist_image_o']['name']);
+
+                    $nameTemp = explode('.', $_FILES['productlist_image_o']['name']);
                     $fileName = md5($nameTemp[0].uniqid()).'.'.$nameTemp[1];
                     $result = $uploader->save($path, $fileName);
                     try {
                         chmod($path.'/'.$result['file'], 0777);
                     } catch (Exception $e) {
-
                     }
+
                     $data['list_image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlist/' . $result['file'];
                 } catch (Exception $e) {
                     $data['list_image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlist/' . $_FILES['productlist_image_o']['name'];
@@ -141,17 +147,17 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                         try {
                             mkdir($path, 0777, TRUE);
                         } catch (Exception $e) {
-                            
                         }
                     }
-                    $nameTemp = explode('.',$_FILES['productlist_image_tablet_o']['name']);
+
+                    $nameTemp = explode('.', $_FILES['productlist_image_tablet_o']['name']);
                     $fileName = md5($nameTemp[0].uniqid()).'.'.$nameTemp[1];
                     $result = $uploader->save($path, $fileName);
                     try {
                         chmod($path.'/'.$result['file'], 0777);
                     } catch (Exception $e) {
-
                     }
+
                     $data['list_image_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlist/' . $result['file'];
                 } catch (Exception $e) {
                     $data['list_image_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/productlist/' . $_FILES['productlist_image_tablet_o']['name'];
@@ -174,7 +180,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
 
             try {
                 $model->save();
-                Mage::helper('simiconnector/productlist')->updateMatrixRowHeight($data['matrix_row'], $data['matrix_height_percent'], $data['matrix_height_percent_tablet'] );
+                Mage::helper('simiconnector/productlist')->updateMatrixRowHeight($data['matrix_row'], $data['matrix_height_percent'], $data['matrix_height_percent_tablet']);
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Product List was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
 
@@ -198,6 +204,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                     $this->_redirect('*/*/edit', array('id' => $model->getId()));
                     return;
                 }
+
                 $this->_redirect('*/*/');
                 return;
             } catch (Exception $e) {
@@ -207,6 +214,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                 return;
             }
         }
+
         Mage::getSingleton('adminhtml/session')->addError(Mage::helper('simiconnector')->__('Unable to find item to save'));
         $this->_redirect('*/*/');
     }
@@ -214,7 +222,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
     /**
      * delete item action
      */
-    public function deleteAction() {
+    public function deleteAction() 
+    {
         if ($this->getRequest()->getParam('id') > 0) {
             try {
                 $model = Mage::getModel('simiconnector/productlist');
@@ -227,13 +236,15 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                 $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
             }
         }
+
         $this->_redirect('*/*/');
     }
 
     /**
      * mass delete item(s) action
      */
-    public function massDeleteAction() {
+    public function massDeleteAction() 
+    {
         $bannerIds = $this->getRequest()->getParam('simiconnector');
 
         if (!is_array($bannerIds)) {
@@ -244,29 +255,35 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                     $notice = Mage::getModel('simiconnector/productlist')->load($bannerId);
                     $notice->delete();
                 }
+
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Total of %d record(s) were successfully deleted', count($bannerIds)));
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
             }
         }
+
         $this->_redirect('*/*/index');
     }
 
-    protected function _isAllowed() {
+    protected function _isAllowed() 
+    {
         return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
     }
 
-    public function chooserMainProductsAction() {
+    public function chooserMainProductsAction() 
+    {
         $request = $this->getRequest();
         $block = $this->getLayout()->createBlock(
-                'simiconnector/adminhtml_productlist_edit_tab_products', 'promo_widget_chooser_sku', array('js_form_object' => $request->getParam('form'),
-        ));
+            'simiconnector/adminhtml_productlist_edit_tab_products', 'promo_widget_chooser_sku', array('js_form_object' => $request->getParam('form'),
+            )
+        );
         if ($block) {
             $this->getResponse()->setBody($block->toHtml());
         }
     }
 
-    public function getMockupAction() {
+    public function getMockupAction() 
+    {
         $storeviewid = $this->getRequest()->getParam('storeview_id');
         echo Mage::helper('simiconnector/productlist')->getMatrixLayoutMockup($storeviewid);
         exit();

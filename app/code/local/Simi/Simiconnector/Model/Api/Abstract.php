@@ -127,6 +127,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
         if (isset($parameters[self::OFFSET]) && $parameters[self::OFFSET]) {
             $offset = $parameters[self::OFFSET];
         }
+
         $collection->setPageSize($offset + $limit);
 
         $all_ids = array();
@@ -148,12 +149,14 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
             if (++$check_offset <= $offset) {
                 continue;
             }
+
             if (++$check_limit > $limit)
                 break;
 
             $info[] = $entity->toArray($fields);
             $all_ids[] = $entity->getId();
         }
+
         return $this->getList($info, $all_ids, $total, $limit, $offset);
     }
 
@@ -166,6 +169,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
         if (isset($parameters['fields']) && $parameters['fields']) {
             $fields = explode(',', $parameters['fields']);
         }
+
         $info = $entity->toArray($fields);
         return $this->getDetail($info);
     }
@@ -212,7 +216,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
     {
         return array(
             'all_ids' => $all_ids,
-            $this->getPluralKey() => $this->motifyFields($info,true),
+            $this->getPluralKey() => $this->motifyFields($info, true),
             'total' => $total,
             'page_size' => $page_size,
             'from' => $from,
@@ -255,6 +259,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
                     foreach ($value as $k => $v) {
                         $filters[] = $this->_addCondition($k, $v, true);
                     }
+
                     if (count($filters)) $query->addAttributeToFilter($filters);
                 } else {
                     $filter = $this->_addCondition($key, $value);
@@ -295,6 +300,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
                         $motify[$key] = $item;
                     }
                 }
+
                 return $motify;
             }else{
                 $motify = array();
@@ -304,18 +310,19 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
                             $motify[$key] = $value;
                         }
                     }
+
                     $content[$index] = $motify;
                 }
+
                 return $content;
             }
-
-
         }else{
             return $content;
         }
     }
     
-    protected  function renewCustomerSesssion($data){
+    protected  function renewCustomerSesssion($data)
+    {
         Mage::helper('simiconnector/customer')->renewCustomerSesssion($data);
     }
 }

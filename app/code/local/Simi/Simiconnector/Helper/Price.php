@@ -15,7 +15,8 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
         return Mage::helper($helper);
     }
 
-    public function getProductAttribute($attribute) {
+    public function getProductAttribute($attribute) 
+    {
         return $this->_product->getResource()->getAttribute($attribute);
     }
 
@@ -53,6 +54,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
             if ($_weeeHelper->isTaxable()) {
                 $_weeeTaxAmountInclTaxes = $_weeeHelper->getAmountInclTaxes($_weeeTaxAttributes);
             }
+
             $_weeeTaxAmount = $_store->roundPrice($_store->convertPrice($_weeeTaxAmount));
             $_weeeTaxAmountInclTaxes = $_store->roundPrice($_store->convertPrice($_weeeTaxAmountInclTaxes));
 
@@ -80,6 +82,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                             $wee .= " + ";
                             $priveV2["weee"] = $wee;
                         }
+
                         $this->setWeePrice($priveV2, $wee);
                         $_exclTax = $_price + $_weeeTaxAmount;
                         $_inclTax = $_finalPriceInclTax + $_weeeTaxAmountInclTaxes;
@@ -95,6 +98,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                             $wee .= " + ";
                             $priveV2["weee"] = $wee;
                         }
+
                         $this->setWeePrice($priveV2, $wee);
                         $_exclTax = $_price + $_weeeTaxAmount;
                         $_inclTax = $_finalPriceInclTax + $_weeeTaxAmountInclTaxes;
@@ -110,6 +114,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                             $wee .= " <br/> ";
                             $priveV2["weee"] = $wee;
                         }
+
                         $this->setWeePrice($priveV2, $wee);
                         $_exclTax = $_price;
                         $_inclTax = $_finalPriceInclTax + $_weeeTaxAmountInclTaxes;
@@ -121,6 +126,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                         if ($_finalPrice == $_price){
                             $_exclTax = $_price;
                         }
+
                         $_inclTax = $_finalPriceInclTax;
                         $this->setBothTaxPrice($priveV2, $_exclTax, $_inclTax);
                     }
@@ -139,6 +145,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                                 $wee .= " + ";
                                 $priveV2["weee"] = $wee;
                             }
+
                             //$priveV2['show_type'] = 4;
                             $priveV2['show_weee_price'] = 1;
                         }
@@ -154,6 +161,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                                 $wee .= " + ";
                                 $priveV2["weee"] = $wee;
                             }
+
                             //$priveV2['show_type'] = 4;
                             $priveV2['show_weee_price'] = 1;
                         }
@@ -170,6 +178,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                                 $wee .= " <br/> ";
                                 $priveV2["weee"] = $wee;
                             }
+
                             $priveV2['show_weee_price'] = 2;
                         }
                     }else{
@@ -216,6 +225,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                             $wee .= " + ";
                             $priveV2["weee"] = $wee;
                         }
+
                         $this->setWeePrice($priveV2, $wee);
                         $priveV2['show_weee_price'] = 1;
                     }else{
@@ -230,6 +240,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                             $wee .= " + ";
                             $priveV2["weee"] = $wee;
                         }
+
                         $this->setWeePrice($priveV2, $wee);
                         $priveV2['show_weee_price'] = 1;
                     }
@@ -249,6 +260,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                         $wee .= " + ";
                         $priveV2["weee"] = $wee;
                     }
+
                     $this->setWeePrice($priveV2, $wee);
                     $priveV2['show_weee_price'] = 1;
                 }elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 2)){
@@ -267,6 +279,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                         $wee .= " <br/> ";
                         $priveV2["weee"] = $wee;
                     }
+
                     $this->setWeePrice($priveV2, $wee);
                     $priveV2['show_weee_price'] = 1;
                 }else{
@@ -289,12 +302,11 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                 $_minimalPriceDisplayValue = $_minimalPrice;
                 if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, array(0, 1, 4))){
                     $_minimalPriceDisplayValue = $_minimalPrice + $_weeeTaxAmount;
-				}
-				
-				$priveV2['is_low_price'] = 1;
-				$priveV2['low_price_label'] = Mage::helper('catalog')->__('As low as');
-				$this->setTaxLowPrice($priveV2, $_minimalPriceDisplayValue);
-           
+                }
+                
+                $priveV2['is_low_price'] = 1;
+                $priveV2['low_price_label'] = Mage::helper('catalog')->__('As low as');
+                $this->setTaxLowPrice($priveV2, $_minimalPriceDisplayValue);
             }
         } else { // group product
             $showMinPrice = $this->getDisplayMinimalPrice();
@@ -312,6 +324,7 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                 if ($showMinPrice) {
                     $priveV2['price_label'] = Mage::helper('catalog')->__('Starting at');
                 }
+
                 if ($_taxHelper->displayBothPrices()) {
                     $priveV2['show_ex_in_price'] = 1;
                     $this->setBothTaxPrice($priveV2, $_exclTax, $_inclTax);
@@ -321,10 +334,12 @@ class Simi_Simiconnector_Helper_Price extends Mage_Core_Helper_Abstract
                     if (!$_taxHelper->displayPriceIncludingTax()) {
                         $_showPrice = $_exclTax;
                     }
+
                     $this->setTaxPrice($priveV2, $_showPrice);
                 }
             }
         }
+
         return $priveV2;
     }
 

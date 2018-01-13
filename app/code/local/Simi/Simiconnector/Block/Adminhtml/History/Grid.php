@@ -5,7 +5,8 @@
  */
 class Simi_Simiconnector_Block_Adminhtml_History_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
-	public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
         $this->setId('noticeGrid');
         $this->setDefaultSort('history_id');
@@ -18,12 +19,14 @@ class Simi_Simiconnector_Block_Adminhtml_History_Grid extends Mage_Adminhtml_Blo
      *
      * @return Simi_Connector_Block_Adminhtml_Banner_Grid
      */
-    protected function _prepareCollection() {
+    protected function _prepareCollection() 
+    {
         $collection = Mage::getModel('simiconnector/history')->getCollection();
         if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
             $storeIds = Mage::getModel('core/store')->getCollection()->addFieldToFilter('website_id', $websiteId)->getAllIds();
             $collection->addFieldToFilter('storeview_id', array('in'=>$storeIds));
         }
+
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -33,45 +36,57 @@ class Simi_Simiconnector_Block_Adminhtml_History_Grid extends Mage_Adminhtml_Blo
      *
      * @return Simi_Connector_Block_Adminhtml_Banner_Grid
      */
-    protected function _prepareColumns() {
-        $this->addColumn('history_id', array(
+    protected function _prepareColumns() 
+    {
+        $this->addColumn(
+            'history_id', array(
             'header' => Mage::helper('simiconnector')->__('ID'),
             'align' => 'right',
             'width' => '50px',
             'index' => 'history_id',
-        ));
+            )
+        );
 
-        $this->addColumn('notice_title', array(
+        $this->addColumn(
+            'notice_title', array(
             'header' => Mage::helper('simiconnector')->__('Title'),
             'align' => 'left',
             'width' => '150px',
             'index' => 'notice_title',
-        ));
+            )
+        );
 
-        $this->addColumn('notice_content', array(
+        $this->addColumn(
+            'notice_content', array(
             'header' => Mage::helper('simiconnector')->__('Message'),
             'align' => 'left',
             'index' => 'notice_content',
-        ));
+            )
+        );
 
         $storeOptions = array();
         $storeCollection = Mage::getModel('core/store')->getCollection();
         if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
             $storeCollection->addFieldToFilter('website_id', $websiteId);
         }
+
         foreach ($storeCollection as $store) {
             $storeOptions [$store->getId()] = $store->getName();
         }
-        $this->addColumn('storeview_id', array(
+
+        $this->addColumn(
+            'storeview_id', array(
             'header' => Mage::helper('simiconnector')->__('Store View'),
             'align' => 'left',
             'width' => '80px',
             'index' => 'storeview_id',
             'type' => 'options',
             'options' => $storeOptions,
-        ));
+            )
+        );
 
-        $this->addColumn('device_id', array(
+        $this->addColumn(
+            'device_id', array(
             'header' => Mage::helper('simiconnector')->__('Device'),
             'align' => 'left',
             'width' => '80px',
@@ -82,10 +97,12 @@ class Simi_Simiconnector_Block_Adminhtml_History_Grid extends Mage_Adminhtml_Blo
                 1 => Mage::helper('simiconnector')->__('IOS'),
                 2 => Mage::helper('simiconnector')->__('Android'),
             ),
-        ));
+            )
+        );
 
 
-        $this->addColumn('notice_type', array(
+        $this->addColumn(
+            'notice_type', array(
             'header' => Mage::helper('simiconnector')->__('Type'),
             'align' => 'left',
             'width' => '120px',
@@ -97,16 +114,20 @@ class Simi_Simiconnector_Block_Adminhtml_History_Grid extends Mage_Adminhtml_Blo
                 2 => Mage::helper('simiconnector')->__('New Product'),
                 3 => Mage::helper('simiconnector')->__('Order Purchase'),
             ),
-        ));
+            )
+        );
 
-        $this->addColumn('created_time', array(
+        $this->addColumn(
+            'created_time', array(
                 'header'    => Mage::helper('simiconnector')->__('Sent Date'),
                 'width'     => '150px',
                 'index'     => 'created_time',
                 'type'      => 'datetime',
-        ));
+            )
+        );
 
-        $this->addColumn('status', array(
+        $this->addColumn(
+            'status', array(
             'header' => Mage::helper('simiconnector')->__('Status'),
             'align' => 'left',
             'width' => '80px',
@@ -116,9 +137,11 @@ class Simi_Simiconnector_Block_Adminhtml_History_Grid extends Mage_Adminhtml_Blo
                 1 => Mage::helper('simiconnector')->__('Successfully'),
                 0 => Mage::helper('simiconnector')->__('Unsuccessfully'),
             ),
-        ));
+            )
+        );
 
-        $this->addColumn('action', array(
+        $this->addColumn(
+            'action', array(
             'header' => Mage::helper('simiconnector')->__('Action'),
             'width' => '60px',
             'type' => 'action',
@@ -134,7 +157,8 @@ class Simi_Simiconnector_Block_Adminhtml_History_Grid extends Mage_Adminhtml_Blo
             'sortable' => false,
             'index' => 'stores',
             'is_system' => true,
-        ));
+            )
+        );
 
 
         return parent::_prepareColumns();
@@ -145,15 +169,18 @@ class Simi_Simiconnector_Block_Adminhtml_History_Grid extends Mage_Adminhtml_Blo
      *
      * @return Magestore_Madapter_Block_Adminhtml_Madapter_Grid
      */
-    protected function _prepareMassaction() {
+    protected function _prepareMassaction() 
+    {
         $this->setMassactionIdField('history_id');
         $this->getMassactionBlock()->setFormFieldName('history');
 
-        $this->getMassactionBlock()->addItem('delete', array(
+        $this->getMassactionBlock()->addItem(
+            'delete', array(
             'label' => Mage::helper('simiconnector')->__('Delete'),
             'url' => $this->getUrl('*/*/massDelete'),
             'confirm' => Mage::helper('simiconnector')->__('Are you sure?')
-        ));
+            )
+        );
 
         return $this;
     }
@@ -163,7 +190,8 @@ class Simi_Simiconnector_Block_Adminhtml_History_Grid extends Mage_Adminhtml_Blo
      *
      * @return string
      */
-    public function getRowUrl($row) {
+    public function getRowUrl($row) 
+    {
         return $this->getUrl('*/*/edit', array('id' => $row->getId()));
     }
 }

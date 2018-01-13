@@ -9,7 +9,8 @@
 class Simi_Simiconnector_Helper_Plugins_Instantcontact extends Mage_Core_Helper_Abstract
 {
 
-    public function getConfig($value) {
+    public function getConfig($value) 
+    {
         return Mage::getStoreConfig("simiconnector/instant_contact/" . $value);
     }
     public function isEnabled()
@@ -17,10 +18,12 @@ class Simi_Simiconnector_Helper_Plugins_Instantcontact extends Mage_Core_Helper_
         if($this->getConfig('enable')==1){
             return true;
         }
+
         return false;
     }
 
-    public function getContacts(){
+    public function getContacts()
+    {
         $data = array(
             'email' => $this->_getEmails(),
             'phone' => $this->_getPhoneNumbers(),
@@ -33,20 +36,24 @@ class Simi_Simiconnector_Helper_Plugins_Instantcontact extends Mage_Core_Helper_
         return $data;
     }
 
-    public function _getPhoneNumbers() {
+    public function _getPhoneNumbers() 
+    {
         return explode(",", str_replace(' ', '', $this->getConfig("phone")));
     }
 
-    public function _getMessageNumbers() {
+    public function _getMessageNumbers() 
+    {
         return explode(",", str_replace(' ', '', $this->getConfig("message")));
     }
 
-    public function _getEmails() {
+    public function _getEmails() 
+    {
         $emails = explode(",", str_replace(' ', '', $this->getConfig("email")));
         foreach ($emails as $index=>$email) {
             if(!filter_var($email, FILTER_VALIDATE_EMAIL))
                 unset($emails[$index]);
         }
+
         return $emails;
     }
 }

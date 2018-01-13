@@ -10,11 +10,13 @@ class Simi_Simiconnector_Helper_Tierprice extends Mage_Core_Helper_Abstract
 {
     private $_product;
 
-    public function setProduct($product) {
+    public function setProduct($product) 
+    {
         $this->_product = $product;
     }
 
-    public function processTierPrices($product, &$tierPrices, $includeIndex = true) {
+    public function processTierPrices($product, &$tierPrices, $includeIndex = true) 
+    {
         $weeeAmount = Mage::helper('weee')->getAmountForDisplay($product);
         $weeeAmountInclTax = $weeeAmount;
         if (version_compare(Mage::getVersion(), '1.9.0.0', '>=') === true) {
@@ -23,18 +25,26 @@ class Simi_Simiconnector_Helper_Tierprice extends Mage_Core_Helper_Abstract
 
         $store = Mage::app()->getStore();
         foreach ($tierPrices as $index => &$tier) {
-            $html = $store->formatPrice($store->convertPrice(
-                Mage::helper('tax')->getPrice($product, $tier['website_price'], true) + $weeeAmountInclTax), false);
+            $html = $store->formatPrice(
+                $store->convertPrice(
+                    Mage::helper('tax')->getPrice($product, $tier['website_price'], true) + $weeeAmountInclTax
+                ), false
+            );
             $tier['formated_price_incl_weee'] = $html;
-            $html = $store->formatPrice($store->convertPrice(
-                Mage::helper('tax')->getPrice($product, $tier['website_price']) + $weeeAmount), false);
+            $html = $store->formatPrice(
+                $store->convertPrice(
+                    Mage::helper('tax')->getPrice($product, $tier['website_price']) + $weeeAmount
+                ), false
+            );
             $tier['formated_price_incl_weee_only'] = $html;
             $tier['formated_weee'] = $store->formatPrice($store->convertPrice($weeeAmount), false);
         }
+
         return $this;
     }
 
-    public function formatTierPrice($product) {
+    public function formatTierPrice($product) 
+    {
         $data = array();
         $_product = $product;
         $this->_product = $product;
@@ -66,7 +76,6 @@ class Simi_Simiconnector_Helper_Tierprice extends Mage_Core_Helper_Abstract
                     }
                 } else {
                     if (Mage::helper('tax')->displayBothPrices()) {
-
                         if (Mage::helper('weee')->typeOfDisplay($_product, 0)) {
                             $stringHt = Mage::helper('catalog')->__('Buy %1$s for %2$s (%3$s incl. tax) each', $_price['price_qty'], $_price['formated_price_incl_weee_only'], $_price['formated_price_incl_weee']);
                         } elseif (Mage::helper('weee')->typeOfDisplay($_product, 1)) {
@@ -84,6 +93,7 @@ class Simi_Simiconnector_Helper_Tierprice extends Mage_Core_Helper_Abstract
                                     $stringHt .= Mage::helper('core')->currency($_attribute->getAmount());
                                 }
                             }
+
                             $stringHt .= " ";
                             $stringHt .= Mage::helper('catalog')->__('each');
                         } elseif (Mage::helper('weee')->typeOfDisplay($_product, 4)) {
@@ -100,6 +110,7 @@ class Simi_Simiconnector_Helper_Tierprice extends Mage_Core_Helper_Abstract
                                     $stringHt .= Mage::helper('core')->currency($_attribute->getAmount() + $_attribute->getTaxAmount());
                                 }
                             }
+
                             $stringHt .= " ";
                             $stringHt .= Mage::helper('catalog')->__('each');
                         } elseif (Mage::helper('weee')->typeOfDisplay($_product, 2)) {
@@ -111,18 +122,18 @@ class Simi_Simiconnector_Helper_Tierprice extends Mage_Core_Helper_Abstract
                                     $stringHt .= ':';
                                     $stringHt .= Mage::helper('core')->currency($_attribute->getAmount());
                                 }
+
                                 $stringHt .= " ";
                                 $stringHt .= Mage::helper('catalog')->__('Total incl. Tax: %1$s', $_price['formated_price_incl_weee']);
                             }
+
                             $stringHt .= " ";
                             $stringHt .= Mage::helper('catalog')->__('each');
                         } else {
                             $stringHt = Mage::helper('catalog')->__('Buy %1$s for %2$s (%3$s incl. tax) each', $_price['price_qty'], $_price['formated_price'], $_price['formated_price_incl_tax']);
                         }
                     } else {
-
                         if (Mage::helper('tax')->displayPriceIncludingTax()) {
-
                             if (Mage::helper('weee')->typeOfDisplay($_product, 0)) {
                                 $stringHt = Mage::helper('catalog')->__('Buy %1$s for %2$s each', $_price['price_qty'], $_price['formated_price_incl_weee']);
                             } elseif (Mage::helper('weee')->typeOfDisplay($_product, 1)) {
@@ -138,6 +149,7 @@ class Simi_Simiconnector_Helper_Tierprice extends Mage_Core_Helper_Abstract
                                         $stringHt .= " ";
                                     }
                                 }
+
                                 $stringHt .= Mage::helper('catalog')->__('each');
                             } elseif (Mage::helper('weee')->typeOfDisplay($_product, 4)) {
                                 $stringHt = Mage::helper('catalog')->__('Buy %1$s for %2$s', $_price['price_qty'], $_price['formated_price_incl_weee']);
@@ -152,9 +164,9 @@ class Simi_Simiconnector_Helper_Tierprice extends Mage_Core_Helper_Abstract
                                         $stringHt .= " ";
                                     }
                                 }
+
                                 $stringHt .= Mage::helper('catalog')->__('each');
                             } elseif (Mage::helper('weee')->typeOfDisplay($_product, 2)) {
-
                                 $stringHt = Mage::helper('catalog')->__('Buy %1$s for %2$s', $_price['price_qty'], $_price['formated_price_incl_tax']);
                                 if ($_weeeTaxAttributes) {
                                     foreach ($_weeeTaxAttributes as $_attribute) {
@@ -162,9 +174,11 @@ class Simi_Simiconnector_Helper_Tierprice extends Mage_Core_Helper_Abstract
                                         $stringHt .=$_attribute->getName();
                                         $stringHt .= Mage::helper('core')->currency($_attribute->getAmount());
                                     }
+
                                     $stringHt .= " ";
                                     $stringHt .= Mage::helper('catalog')->__('Total incl. Tax: %1$s', $_price['formated_price_incl_weee']);
                                 }
+
                                 $stringHt .= " ";
                                 $stringHt .= Mage::helper('catalog')->__('each');
                             } else {
@@ -186,6 +200,7 @@ class Simi_Simiconnector_Helper_Tierprice extends Mage_Core_Helper_Abstract
                                         $stringHt .= " ";
                                     }
                                 }
+
                                 $stringHt .= " ";
                                 $stringHt .= Mage::helper('catalog')->__('each');
                             } elseif (Mage::helper('weee')->typeOfDisplay($_product, 4)) {
@@ -201,6 +216,7 @@ class Simi_Simiconnector_Helper_Tierprice extends Mage_Core_Helper_Abstract
                                         $stringHt .= " ";
                                     }
                                 }
+
                                 $stringHt .= " ";
                                 $stringHt .= Mage::helper('catalog')->__('each');
                             } elseif (Mage::helper('weee')->typeOfDisplay($_product, 2)) {
@@ -211,9 +227,11 @@ class Simi_Simiconnector_Helper_Tierprice extends Mage_Core_Helper_Abstract
                                         $stringHt .=$_attribute->getName();
                                         $stringHt .= Mage::helper('core')->currency($_attribute->getAmount());
                                     }
+
                                     $stringHt .= " ";
                                     $stringHt .= Mage::helper('catalog')->__('Total incl. Tax: %1$s', $_price['formated_price_incl_weee_only']);
                                 }
+
                                 $stringHt .= Mage::helper('catalog')->__('each');
                             } else {
                                 $stringHt = Mage::helper('catalog')->__('Buy %1$s for %2$s each', $_price['price_qty'], $_price['formated_price']);
@@ -234,9 +252,11 @@ class Simi_Simiconnector_Helper_Tierprice extends Mage_Core_Helper_Abstract
                             $stringHt .= '%';
                         }
                     }
+
                     $stringHt .= " ";
                     $stringHt .= $_catalogHelper->getMsrpPriceMessage($_product);
                 }
+
                 $data[] = $stringHt;
             }
         }
@@ -244,17 +264,17 @@ class Simi_Simiconnector_Helper_Tierprice extends Mage_Core_Helper_Abstract
         return $data;
     }
 
-    public function getTierPrices($product = null) {
+    public function getTierPrices($product = null) 
+    {
         if ($product == NULL) {
-
             $product = $this->_product;
         }
+
         $prices = $product->getFormatedTierPrice();
 
         $res = array();
         if (is_array($prices)) {
             foreach ($prices as $price) {
-
                 $price['price_qty'] = $price['price_qty'] * 1;
 
                 $productPrice = $product->getPrice();
@@ -298,6 +318,7 @@ class Simi_Simiconnector_Helper_Tierprice extends Mage_Core_Helper_Abstract
                 }
             }
         }
+
         return $res;
     }
 }

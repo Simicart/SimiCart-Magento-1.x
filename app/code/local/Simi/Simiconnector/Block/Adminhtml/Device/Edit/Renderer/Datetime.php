@@ -1,6 +1,7 @@
 <?php
 
-class Simi_Simiconnector_Block_Adminhtml_Device_Edit_Renderer_Datetime extends Varien_Data_Form_Element_Abstract {
+class Simi_Simiconnector_Block_Adminhtml_Device_Edit_Renderer_Datetime extends Varien_Data_Form_Element_Abstract
+{
 
     /**
      * Retrieve Element HTML
@@ -9,7 +10,7 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Edit_Renderer_Datetime extends V
      */
     public function getElementHtml()
     {
-	    $values = explode(',', $this->getEscapedValue());
+        $values = explode(',', $this->getEscapedValue());
         $html = $this->getBold() ? '<strong>' : ''; 
         foreach($values as $id => $value){     
              $dateFormatIso = Mage::app()->getLocale()

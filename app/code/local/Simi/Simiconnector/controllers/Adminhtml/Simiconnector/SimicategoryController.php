@@ -1,20 +1,24 @@
 <?php
 
-class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends Mage_Adminhtml_Controller_Action {
+class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends Mage_Adminhtml_Controller_Action
+{
 
-    protected function _initAction() {
+    protected function _initAction() 
+    {
         $this->loadLayout()
                 ->_setActiveMenu('simiconnector/simicategory')
                 ->_addBreadcrumb(Mage::helper('adminhtml')->__('Categories Manager'), Mage::helper('adminhtml')->__('Category Manager'));
         return $this;
     }
 
-    public function indexAction() {
+    public function indexAction() 
+    {
         $this->_initAction()
                 ->renderLayout();
     }
 
-    public function editAction() {
+    public function editAction() 
+    {
         $id = $this->getRequest()->getParam('id');
         $model = Mage::getModel('simiconnector/simicategory')->load($id);
 
@@ -31,7 +35,6 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                     Mage::getSingleton('adminhtml/session')->addError(Mage::helper('simiconnector')->__('Category does not exist'));
                     $this->_redirect('*/*/');
                 }
-
             }
 
             $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
@@ -57,13 +60,14 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
         }
     }
 
-    public function newAction() {
+    public function newAction() 
+    {
         $this->_forward('edit');
     }
 
-    public function saveAction() {
+    public function saveAction() 
+    {
         if ($data = $this->getRequest()->getPost()) {
-
             if (isset($_FILES['simicategory_filename']['name']) && $_FILES['simicategory_filename']['name'] != '') {
                 try {                                                    
                     $uploader = new Varien_File_Uploader('simicategory_filename');
@@ -83,15 +87,15 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                         }
                     }
 
-                    $nameTemp = explode('.',$_FILES['simicategory_filename']['name']);
+                    $nameTemp = explode('.', $_FILES['simicategory_filename']['name']);
                     
                     $fileName = md5($nameTemp[0].uniqid()).'.'.$nameTemp[1];
                     $result = $uploader->save($path, $fileName);
                     try {
                         chmod($path.'/'.$result['file'], 0777);
                     } catch (Exception $e) {
-
                     }
+
                     $data['simicategory_filename'] = Mage::getBaseUrl('media') . 'simi/simiconnector/simicategory/' . $result['file'];
                 } catch (Exception $e) {
                     $data['simicategory_filename'] = Mage::getBaseUrl('media') . 'simi/simiconnector/simicategory/' . $_FILES['simicategory_filename']['name'];
@@ -119,17 +123,17 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                         try {
                             mkdir($path, 0777, TRUE);
                         } catch (Exception $e) {
-                            
                         }
                     }
-                    $nameTemp = explode('.',$_FILES['simicategory_filename_tablet']['name']);
+
+                    $nameTemp = explode('.', $_FILES['simicategory_filename_tablet']['name']);
                     $fileName = md5($nameTemp[0].uniqid()).'.'.$nameTemp[1];
                     $result = $uploader->save($path, $fileName);
                     try {
                         chmod($path.'/'.$result['file'], 0777);
                     } catch (Exception $e) {
-
                     }
+
                     $data['simicategory_filename_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/simicategory/' . $result['file'];
                 } catch (Exception $e) {
                     $data['simicategory_filename_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/simicategory/' . $_FILES['simicategory_filename_tablet']['name'];
@@ -147,9 +151,12 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
             if (isset($data['category_id']) && $data['category_id']) {
                 $category = Mage::getModel('catalog/category');
                 if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
-                    $category->setStoreId(Mage::getModel('core/store')->getCollection()->addFieldToFilter('website_id',$webId)
-                        ->getFirstItem()->getId());
+                    $category->setStoreId(
+                        Mage::getModel('core/store')->getCollection()->addFieldToFilter('website_id', $webId)
+                        ->getFirstItem()->getId()
+                    );
                 }
+
                 $data['simicategory_name'] = $category->load($data['category_id'])->getName();
             }
 
@@ -168,8 +175,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
             try {
                 $model->save();
                 if(isset($data['matrix_row'])){
-                    Mage::helper('simiconnector/productlist')->updateMatrixRowHeight($data['matrix_row'], $data['matrix_height_percent'], $data['matrix_height_percent_tablet'] );
-                }                
+                    Mage::helper('simiconnector/productlist')->updateMatrixRowHeight($data['matrix_row'], $data['matrix_height_percent'], $data['matrix_height_percent_tablet']);
+                }
+                
                  Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Category was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
                 if ($storeIdsAll && is_array($storeIdsAll)) {
@@ -192,6 +200,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                     $this->_redirect('*/*/edit', array('id' => $model->getId()));
                     return;
                 }
+
                 $this->_redirect('*/*/');
                 return;
             } catch (Exception $e) {
@@ -201,11 +210,13 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                 return;
             }
         }
+
         Mage::getSingleton('adminhtml/session')->addError(Mage::helper('simiconnector')->__('Unable to find item to save'));
         $this->_redirect('*/*/');
     }
 
-    public function deleteAction() {
+    public function deleteAction() 
+    {
         if ($this->getRequest()->getParam('id') > 0) {
             try {
                 $model = Mage::getModel('simiconnector/simicategory');
@@ -218,10 +229,12 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                 $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
             }
         }
+
         $this->_redirect('*/*/');
     }
 
-    public function massDeleteAction() {
+    public function massDeleteAction() 
+    {
         $simicategoryIds = $this->getRequest()->getParam('simicategory');
         if (!is_array($simicategoryIds)) {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please select item(s)'));
@@ -231,15 +244,18 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                     $simicategory = Mage::getModel('simiconnector/simicategory')->load($simicategoryId);
                     $simicategory->delete();
                 }
+
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Total of %d record(s) were successfully deleted', count($simicategoryIds)));
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
             }
         }
+
         $this->_redirect('*/*/index');
     }
 
-    public function massStatusAction() {
+    public function massStatusAction() 
+    {
         $simicategoryIds = $this->getRequest()->getParam('simicategory');
         if (!is_array($simicategoryIds)) {
             Mage::getSingleton('adminhtml/session')->addError($this->__('Please select item(s)'));
@@ -252,29 +268,34 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                             ->setIsMassupdate(true)
                             ->save();
                 }
+
                 $this->_getSession()->addSuccess(
-                        $this->__('Total of %d record(s) were successfully updated', count($simicategoryIds))
+                    $this->__('Total of %d record(s) were successfully updated', count($simicategoryIds))
                 );
             } catch (Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
             }
         }
+
         $this->_redirect('*/*/index');
     }
 
-    public function exportCsvAction() {
+    public function exportCsvAction() 
+    {
         $fileName = 'simicategory.csv';
         $content = $this->getLayout()->createBlock('simiconnector/adminhtml_simicategory_grid')->getCsv();
         $this->_prepareDownloadResponse($fileName, $content);
     }
 
-    public function exportXmlAction() {
+    public function exportXmlAction() 
+    {
         $fileName = 'simicategory.xml';
         $content = $this->getLayout()->createBlock('simiconnector/adminhtml_simicategory_grid')->getXml();
         $this->_prepareDownloadResponse($fileName, $content);
     }
 
-    public function chooserMainCategoriesAction() {
+    public function chooserMainCategoriesAction() 
+    {
         $request = $this->getRequest();
         $id = $request->getParam('selected', array());
         $block = $this->getLayout()->createBlock('simiconnector/adminhtml_banner_edit_tab_categories', 'maincontent_category', array('js_form_object' => $request->getParam('form')))
@@ -284,7 +305,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
         }
     }
 
-    protected function _isAllowed() {
+    protected function _isAllowed() 
+    {
         return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
     }
 

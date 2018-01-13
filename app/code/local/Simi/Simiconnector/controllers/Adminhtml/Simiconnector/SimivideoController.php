@@ -1,25 +1,27 @@
 <?php
 
-class Simi_Simiconnector_Adminhtml_Simiconnector_SimivideoController extends Mage_Adminhtml_Controller_Action {
+class Simi_Simiconnector_Adminhtml_Simiconnector_SimivideoController extends Mage_Adminhtml_Controller_Action
+{
 
     /**
      * init layout and set active for current menu
      *
      * @return Simi_Simivideo_Adminhtml_SimivideoController
      */
-    protected function _initAction() {
+    protected function _initAction() 
+    {
         $this->loadLayout()
             ->_setActiveMenu('simiconnector/simivideo')
             ->_addBreadcrumb(
                 Mage::helper('adminhtml')->__('Videos'), Mage::helper('adminhtml')->__('Videos')
-        );
+            );
         return $this;
     }
 
     
     
      public function editAction()
-    {
+     {
         $videoId     = $this->getRequest()->getParam('video_id');
         $model  = Mage::getModel('simiconnector/simivideo')->load($videoId);
         if ($model->getId() || $videoId == 0) {
@@ -27,6 +29,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimivideoController extends Mag
             if (!empty($data)) {
                 $model->setData($data);
             }
+
             Mage::register('simivideo_data', $model);
 
             $this->loadLayout();
@@ -47,7 +50,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimivideoController extends Mag
             );
             $this->_redirect('*/*/');
         }
-    }
+     }
  
     public function newAction()
     {
@@ -64,16 +67,17 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimivideoController extends Mag
             $model->setData($data)
                 ->setId($this->getRequest()->getParam('video_id'));
                 $url = $model->getData('video_url');
-                parse_str( parse_url($url, PHP_URL_QUERY ), $my_array_of_vars);
+                parse_str(parse_url($url, PHP_URL_QUERY), $my_array_of_vars);
                 if ($my_array_of_vars['v'])
-                    $model->setData('video_key',$my_array_of_vars['v']);
+                    $model->setData('video_key', $my_array_of_vars['v']);
                 else {
                     Mage::getSingleton('adminhtml/session')->addError(Mage::helper('simiconnector')->__('The url you used is not a Full and Valid Youtube video url'));
                     $model->setData('video_key', null);                    
                     //Mage::getSingleton('adminhtml/session')->setFormData($data);
                     //$this->_redirect('*/*/edit', array('video_id' => $this->getRequest()->getParam('video_id')));
                     //return;
-                }             
+                }
+             
             try {
                 $model->save();
                 Mage::getSingleton('adminhtml/session')->addSuccess(
@@ -85,6 +89,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimivideoController extends Mag
                     $this->_redirect('*/*/edit', array('video_id' => $model->getId()));
                     return;
                 }
+
                 $this->_redirect('*/*/');
                 return;
             } catch (Exception $e) {
@@ -94,6 +99,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimivideoController extends Mag
                 return;
             }
         }
+
         Mage::getSingleton('adminhtml/session')->addError(
             Mage::helper('simiconnector')->__('Unable to find item to save')
         );
@@ -119,6 +125,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimivideoController extends Mag
                 $this->_redirect('*/*/edit', array('video_id' => $this->getRequest()->getParam('video_id')));
             }
         }
+
         $this->_redirect('*/*/');
     }
 
@@ -136,14 +143,18 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimivideoController extends Mag
                     $video = Mage::getModel('simiconnector/simivideo')->load($videoId);
                     $video->delete();
                 }
+
                 Mage::getSingleton('adminhtml/session')->addSuccess(
-                    Mage::helper('adminhtml')->__('Total of %d record(s) were successfully deleted',
-                    count($videoIds))
+                    Mage::helper('adminhtml')->__(
+                        'Total of %d record(s) were successfully deleted',
+                        count($videoIds)
+                    )
                 );
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
             }
         }
+
         $this->_redirect('*/*/index');
     }
     
@@ -164,6 +175,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimivideoController extends Mag
                         ->setIsMassupdate(true)
                         ->save();
                 }
+
                 $this->_getSession()->addSuccess(
                     $this->__('Total of %d record(s) were successfully updated', count($videoIds))
                 );
@@ -171,26 +183,31 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimivideoController extends Mag
                 $this->_getSession()->addError($e->getMessage());
             }
         }
+
         $this->_redirect('*/*/index');
     }
 
     /**
      * index action
      */
-    public function indexAction() {
+    public function indexAction() 
+    {
         $this->_initAction()
             ->renderLayout();
     }
 
-    protected function _isAllowed() {
+    protected function _isAllowed() 
+    {
         return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
     }
     
-    public function chooserMainProductsAction() {        
+    public function chooserMainProductsAction() 
+    {        
         $request = $this->getRequest();
         $block = $this->getLayout()->createBlock(
-                'simiconnector/adminhtml_simivideo_edit_tab_products', 'simivideo_widget_chooser_sku', array('js_form_object' => $request->getParam('form'),
-                ));
+            'simiconnector/adminhtml_simivideo_edit_tab_products', 'simivideo_widget_chooser_sku', array('js_form_object' => $request->getParam('form'),
+            )
+        );
         if ($block) {
             $this->getResponse()->setBody($block->toHtml());
         }

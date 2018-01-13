@@ -8,7 +8,8 @@
  */
 class Simi_Simiconnector_Helper_Options_Bundle extends Mage_Core_Helper_Abstract
 {
-    function getOptions($product){
+    function getOptions($product)
+    {
         //Mage_Bundle_Block_Catalog_Product_View_Type_Bundle
         $block = Mage::getBlockSingleton('simiconnector/catalog_bundle');
         $block->setProduct($product);
@@ -19,6 +20,7 @@ class Simi_Simiconnector_Helper_Options_Bundle extends Mage_Core_Helper_Abstract
             $custom_options = Mage::helper('simiconnector/options_simple')->getOptions($product);
             $options['custom_options'] = $custom_options['custom_options'];
         }
+
         return $options;
     }
 }

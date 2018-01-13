@@ -1,8 +1,10 @@
 <?php
 
-class Simi_Simiconnector_Adminhtml_Simiconnector_HistoryController extends Mage_Adminhtml_Controller_Action {
+class Simi_Simiconnector_Adminhtml_Simiconnector_HistoryController extends Mage_Adminhtml_Controller_Action
+{
 
-    protected function _initAction() {
+    protected function _initAction() 
+    {
         $this->loadLayout()
                 ->_setActiveMenu('simiconnector/history')
                 ->_addBreadcrumb(Mage::helper('adminhtml')->__('Notification History Manager'), Mage::helper('adminhtml')->__('Notification History Manager'));
@@ -12,7 +14,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_HistoryController extends Mage_
     /**
      * index action
      */
-    public function indexAction() {
+    public function indexAction() 
+    {
         $this->_initAction()
                 ->renderLayout();
     }
@@ -20,7 +23,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_HistoryController extends Mage_
     /**
      * view and edit item action
      */
-    public function editAction() {
+    public function editAction() 
+    {
         $id = $this->getRequest()->getParam('id');
         $model = Mage::getModel('simiconnector/history')->load($id);
 
@@ -48,14 +52,16 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_HistoryController extends Mage_
         }
     }
 
-    public function newAction() {
+    public function newAction() 
+    {
         $this->_forward('edit');
     }
 
     /**
      * delete item action
      */
-    public function deleteAction() {
+    public function deleteAction() 
+    {
         if ($this->getRequest()->getParam('id') > 0) {
             try {
                 $model = Mage::getModel('simiconnector/history');
@@ -68,13 +74,15 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_HistoryController extends Mage_
                 $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
             }
         }
+
         $this->_redirect('*/*/');
     }
 
     /**
      * mass delete item(s) action
      */
-    public function massDeleteAction() {
+    public function massDeleteAction() 
+    {
         $notificationIds = $this->getRequest()->getParam('history');
 
         if (!is_array($notificationIds)) {
@@ -85,15 +93,18 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_HistoryController extends Mage_
                     $history = Mage::getModel('simiconnector/history')->load($notificationId);
                     $history->delete();
                 }
+
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Total of %d notification(s) were successfully deleted', count($notificationIds)));
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
             }
         }
+
         $this->_redirect('*/*/index');
     }
 
-    protected function _isAllowed() {
+    protected function _isAllowed() 
+    {
         return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
     }
 

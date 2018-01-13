@@ -24,7 +24,7 @@ class Simi_Simiconnector_Block_Adminhtml_Appreport extends Mage_Adminhtml_Block_
         $this->_controller = 'adminhtml_appreport';
         $this->_blockGroup = 'simiconnector';
         $this->_headerText = Mage::helper('simiconnector')->__('App Transactions');                
-		parent::__construct();
+        parent::__construct();
                 $this->removeButton("add");
     }
 }

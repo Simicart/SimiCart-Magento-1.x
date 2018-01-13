@@ -56,6 +56,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
         } catch (Exception $e) {
             $this->builderQuery = Mage::getModel('catalog/product')->getCollection()->addAttributeToSelect('*');
         }
+
         return $this;
     }
 
@@ -84,6 +85,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
         }
         catch (Exception $e) {
         }
+
         $controller = $data['controller'];
         $parameters = $data['params'];
         if (isset($parameters[Simi_Simiconnector_Model_Api_Abstract::FILTER])) {
@@ -91,13 +93,16 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
             if ($is_search == 1) {
                 $controller->getRequest()->setParam('q', (string)$filter['q']);
             }
+
             if(isset($filter['q']) && $filter['q'] != ''){
                 $controller->getRequest()->setParam('q', (string)$filter['q']);
                 $is_search = 1;
             }
+
             if($category && ($category->getId() || ($category!=0))){
                 $controller->getRequest()->setParam('cat', (string)$category->getId());
             }
+
             if (isset($filter['layer'])) {
                 $filter_layer = $filter['layer'];
                 $params = array();
@@ -107,9 +112,11 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
 //                        $category = Mage::getModel('catalog/category')->load($value);
 //                    }
                 }
+
                 $controller->getRequest()->setParams($params);
             }
         }
+
         $layout = $controller->getLayout();
         if ($is_search == 0) {
             $block = $layout->createBlock('catalog/layer_view');
@@ -122,6 +129,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
                 $layers = $this->getItemsShopBy($block);
                 $this->_layer = $layers;
             }
+
             //}
 
             //update collection
@@ -132,7 +140,6 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
             $this->builderQuery = $block_list->getLoadedProductCollection();
             $this->setAttributeProducts();
             $this->setStoreOrders($block_list, $block_toolbar);
-
         } else {
             $query = Mage::helper('catalogsearch')->getQuery();
             $query->setStoreId(Mage::app()->getStore()->getId());
@@ -162,6 +169,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
                     $layers = $this->getItemsShopBy($block);
                     $this->_layer = $layers;
                 }
+
                 //update collection
                 // $block_result = $layout->createBlock('catalogsearch/result');
                 $block_list = $layout->createBlock('catalog/product_list');
@@ -188,9 +196,11 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
         $availableOrders = $block_toolbar->getAvailableOrders();
         if ($is_search == 1) {
             unset($availableOrders['position']);
-            $availableOrders = array_merge(array(
+            $availableOrders = array_merge(
+                array(
                 'relevance' => $this->__('Relevance')
-            ), $availableOrders);
+                ), $availableOrders
+            );
 
             $block_toolbar->setAvailableOrders($availableOrders)
                 ->setDefaultDirection('desc')
@@ -201,12 +211,12 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
             } else {
                 $block_toolbar->setDefaultOrder('entity_id');
             }
+
             if ($dir = $block_list->getDefaultDirection()) {
                 $block_toolbar->setDefaultDirection($dir);
             } else {
                 $block_toolbar->setDefaultDirection('desc');
             }
-
         }
 
         foreach ($availableOrders as $_key => $_order) {
@@ -257,6 +267,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
                 );
             }
         }
+
         $this->_sortOrders = $sort_orders;
     }
 
@@ -277,6 +288,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
         } else {
             Mage::getSingleton('catalog/product_visibility')->addVisibleInSearchFilterToCollection($this->builderQuery);
         }
+
         $this->builderQuery->addUrlRewrite(0);
     }
 
@@ -303,6 +315,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
                         ); //value of each option
                     }
                 }
+
                 // $refineArray[] = $itemArray;
             } else {
                 $items = $_child->getItems();
@@ -328,6 +341,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
                 }
             }
         }
+
         return $refineArray;
     }
 
@@ -337,18 +351,21 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
             if ($file) {
                 return Mage::helper('catalog/image')->init($product, 'thumbnail', $file)->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($width, null)->__toString();
             }
+
             return Mage::helper('catalog/image')->init($product, 'small_image')->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($width, null)->__toString();
         }
+
         if ($file) {
             return Mage::helper('catalog/image')->init($product, 'thumbnail', $file)->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize(600, 600)->__toString();
         }
+
         return Mage::helper('catalog/image')->init($product, 'small_image')->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize(600, 600)->__toString();
     }
 
-    public function getSwatchesListProduct($_product){
+    public function getSwatchesListProduct($_product)
+    {
         $_product= Mage::getModel('catalog/product')->load($_product->getId());
         if($_product && $_product->getId() && ($_attrValues = $_product->getListSwatchAttrValues()) &&Mage::helper('configurableswatches')->isEnabled() && count($_attrValues) > 0){
-
             $data = array();
             $_dimHelper = Mage::helper('configurableswatches/swatchdimensions');
             $_swatchInnerWidth = $_dimHelper->getInnerWidth(Mage_ConfigurableSwatches_Helper_Swatchdimensions::AREA_LISTING);
@@ -369,6 +386,7 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
                     );
                 }
             }
+
             return $data;
         }
 

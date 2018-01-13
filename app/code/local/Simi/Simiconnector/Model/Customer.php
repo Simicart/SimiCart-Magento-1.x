@@ -3,17 +3,21 @@
 /**
  * 
  */
-class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
+class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract
+{
 
-    protected function _helperCustomer() {
+    protected function _helperCustomer() 
+    {
         return Mage::helper('simiconnector/customer');
     }
 
-    protected function _getSession() {
+    protected function _getSession() 
+    {
         return Mage::getSingleton('customer/session');
     }
 
-    public function getCustomerByEmail($email) {
+    public function getCustomerByEmail($email) 
+    {
         return Mage::getModel('customer/customer')
                         ->getCollection()
                         ->addFieldToFilter('website_id', Mage::app()->getWebsite()->getId())
@@ -21,7 +25,8 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
                         ->getFirstItem();
     }
 
-    public function forgetPassword($data) {
+    public function forgetPassword($data) 
+    {
         $data = $data['params'];
         $email = $data['email'];
         if (is_null($email)) {
@@ -30,6 +35,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             if (!Zend_Validate::is($email, 'EmailAddress')) {
                 throw new Exception($this->_helperCustomer()->__('Invalid email address.'), 4);
             }
+
             $customer = Mage::helper('simiconnector/customer')->getCustomerByEmail($email);
             if ($customer->getId()) {
                 $newResetPasswordLinkToken = Mage::helper('customer')->generateResetPasswordLinkToken();
@@ -41,24 +47,28 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
         }
     }
 
-    public function login($data) {
+    public function login($data) 
+    {
         return Mage::helper('simiconnector/customer')
             ->loginByEmailAndPass($data['params']['email'], $data['params']['password']);
     }
 
-    public function logout() {
+    public function logout() 
+    {
         $this->_getSession()->logout()
                 ->setBeforeAuthUrl(Mage::getUrl());
         return true;
     }
 
-    public function register($data) {
+    public function register($data) 
+    {
         $data = $data['contents'];
         $message = array();
         $checkCustomer = $this->getCustomerByEmail($data->email);
         if ($checkCustomer->getId()) {
             throw new Exception($this->_helperCustomer()->__('Account already exists'), 4);
         }
+
         $customer = $this->_createCustomer($data);
         $result = array();
         $result['user_id'] = $customer->getId();
@@ -67,7 +77,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             $app = Mage::app();
             $store = $app->getStore();
             $customer->sendNewAccountEmail(
-                    'confirmation', $session->getBeforeAuthUrl(), $store->getId()
+                'confirmation', $session->getBeforeAuthUrl(), $store->getId()
             );
             throw new Exception($this->_helperCustomer()->__('Account confirmation is required. Please, check your email.'), 4);
         } else {
@@ -75,10 +85,12 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             $customer->save();
             $customer->sendNewAccountEmail();
         }
+
         return $customer;
     }
 
-    public function updateProfile($data) {
+    public function updateProfile($data) 
+    {
         $data = $data['contents'];
         $result = array();
         $currPass = isset($data->old_password)?$data->old_password:'';
@@ -98,6 +110,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
                     ->setId($this->_getSession()->getCustomerId())
                     ->setWebsiteId($this->_getSession()->getCustomer()->getWebsiteId());
         }
+
         $fields = Mage::getConfig()->getFieldset('customer_account');
         foreach ($fields as $code => $node) {
             if ($node->is('update') && isset($customerData[$code])) {
@@ -113,6 +126,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             } else {
                 $salt = false;
             }
+
             if ($customer->hashPassword($currPass, $salt) == $oldPass) {
                 if (strlen($newPass)) {
                     $customer->setPassword($newPass);
@@ -138,6 +152,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
         if (isset($data->gender) && $data->gender) {
             $customer->setGender($data->gender);
         }
+
         if (isset($data->prefix) && $data->prefix) {
             $customer->setPrefix($data->prefix);
         }
@@ -168,7 +183,8 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
      * $data->email
      */
 
-    public function socialLogin($data) {
+    public function socialLogin($data) 
+    {
         $data = (object) $data['params'];
         if (!isset($data->password) || !Mage::helper('simiconnector/customer')->validateSimiPass($data->email, $data->password))
             throw new Exception($this->_helperCustomer()->__('Password is not Valid'), 4);
@@ -185,6 +201,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
             $customer->save();
             $customer->sendPasswordReminderEmail();
         }
+
         Mage::helper('simiconnector/customer')->loginByCustomer($customer);
         return $customer;
     }
@@ -199,7 +216,8 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
      * $data->password
      */
 
-    private function _createCustomer($data) {
+    private function _createCustomer($data) 
+    {
         $customer = Mage::getModel('customer/customer')
                 ->setWebsiteId(Mage::app()->getWebsite()->getId())
                 ->setFirstname($data->firstname)
@@ -217,6 +235,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
         if (isset($data->gender) && $data->gender) {
             $customer->setGender($data->gender);
         }
+
         if (isset($data->prefix) && $data->prefix) {
             $customer->setPrefix($data->prefix);
         }
@@ -228,6 +247,7 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract {
         if (isset($data->suffix) && $data->suffix) {
             $customer->setSuffix($data->suffix);
         }
+
         if (!$data->password)
             $data->password = $customer->generatePassword();
         $customer->setPassword($data->password);

@@ -49,6 +49,7 @@ class Simi_Simiconnector_Helper_Review extends Mage_Core_Helper_Abstract
                 foreach ($review->getRatingVotes() as $vote) {
                     $y += ($vote->getPercent() / 20);
                 }
+
                 $x = (int)($y / count($review->getRatingVotes()));
                 $z = $y % 3;
                 $x = $z < 5 ? $x : $x + 1;
@@ -67,6 +68,7 @@ class Simi_Simiconnector_Helper_Review extends Mage_Core_Helper_Abstract
                 }
             }
         }
+
         return $star;
     }
 
@@ -105,12 +107,14 @@ class Simi_Simiconnector_Helper_Review extends Mage_Core_Helper_Abstract
                             'value' => $_option->getId(),
                         );
                     }
+
                     $rates[] = array(
                         'rate_code' => $block->escapeHtml($_rating->getRatingCode()),
                         'rate_options' => $_options,
                     );
                 }
             }
+
             $info[] = array('rates' => $rates, 'form_review' => array(
                 'key_1' => 'nickname',
                 'key_2' => 'title',

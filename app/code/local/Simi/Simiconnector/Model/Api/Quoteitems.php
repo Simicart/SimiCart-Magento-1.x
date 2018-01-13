@@ -1,25 +1,30 @@
 <?php
 
-class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_Api_Abstract {
+class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_Api_Abstract
+{
 
     protected $_DEFAULT_ORDER = 'item_id';
     protected $_RETURN_MESSAGE;
     protected $_removed_items;
     public $detail_list;
 
-    protected function _getSession() {
+    protected function _getSession() 
+    {
         return Mage::getSingleton('checkout/session');
     }
 
-    protected function _getCart() {
+    protected function _getCart() 
+    {
         return Mage::getSingleton('checkout/cart');
     }
 
-    protected function _getQuote() {
+    protected function _getQuote() 
+    {
         return $this->_getCart()->getQuote();
     }
 
-    public function setBuilderQuery() {
+    public function setBuilderQuery() 
+    {
         $quote = $this->_getQuote();
         $this->builderQuery = $quote->getItemsCollection();
     }
@@ -28,24 +33,28 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
      * Change Qty, Add/remove Coupon Code
      */
 
-    public function update() {
+    public function update() 
+    {
         $data = $this->getData();
         $parameters = (array) $data['contents'];
         if (isset($parameters['coupon_code'])) {
             $this->_RETURN_MESSAGE = Mage::helper('simiconnector/coupon')->setCoupon($parameters['coupon_code']);
         }
+
         $this->_updateItems($parameters);
         return $this->index();
     }
 
-    private function _updateItems($parameters) {
+    private function _updateItems($parameters) 
+    {
         $cartData = array();
         foreach ($parameters as $index => $qty) {
             $cartData[$index] = array('qty' => $qty);
         }
+
         if (count($cartData)) {
             $filter = new Zend_Filter_LocalizedToNormalized(
-                    array('locale' => Mage::app()->getLocale()->getLocaleCode())
+                array('locale' => Mage::app()->getLocale()->getLocaleCode())
             );
             $removedItems = array();
             foreach ($cartData as $index => $data) {
@@ -56,6 +65,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
                     }
                 }
             }
+
             $this->_removed_items = $removedItems;
             $cart = $this->_getCart();
             if (!$cart->getCustomerSession()->getCustomer()->getId() && $cart->getQuote()->getCustomerId()) {
@@ -65,6 +75,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
             if (version_compare(Mage::getVersion(), '1.4.2.0', '>=') === true) {
                 $cartData = $cart->suggestItemsQty($cartData);
             }
+
             $cart->updateItems($cartData)
                     ->save();
             Mage::getSingleton('checkout/session')->setCartWasUpdated(true);
@@ -75,12 +86,14 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
      * Add To Cart
      */
 
-    public function store() {
+    public function store() 
+    {
         $this->addToCart();
         return $this->index();
     }
 
-    public function addToCart() {
+    public function addToCart() 
+    {
         $data = $this->getData();
         $cart = $this->_getCart();
 
@@ -90,13 +103,15 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
             $contents = urldecode($contents);
             $params = json_decode($contents, true);
         }
+
         $params = $this->convertParams($params);
         if (isset($params['qty'])) {
             $filter = new Zend_Filter_LocalizedToNormalized(
-                    array('locale' => Mage::app()->getLocale()->getLocaleCode())
+                array('locale' => Mage::app()->getLocale()->getLocaleCode())
             );
             $params['qty'] = $filter->filter($params['qty']);
         }
+
         $product = $this->_initProduct($params['product']);
         $cart->addProduct($product, $params);
         $cart->save();
@@ -105,7 +120,8 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
         $this->_RETURN_MESSAGE = Mage::helper('simiconnector')->__('%s was added to your shopping cart.', Mage::helper('core')->escapeHtml($product->getName()));
     }
 
-    public function convertParams($params) {
+    public function convertParams($params) 
+    {
         $convertList = array(
             //Custom Option (Simple/Virtual/Downloadable)
             'options',
@@ -122,17 +138,21 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
             if (!isset($params[$type])) {
                 continue;
             }
+
             $params[$type] = (array) $params[$type];
             $convertedParam = array();
             foreach ($params[$type] as $index => $item) {
                 $convertedParam[(int) $index] = $item;
             }
+
             $params[$type] = $convertedParam;
         }
+
         return $params;
     }
 
-    protected function _initProduct($productId) {
+    protected function _initProduct($productId) 
+    {
         if ($productId) {
             $product = Mage::getModel('catalog/product')
                     ->setStoreId(Mage::app()->getStore()->getId())
@@ -141,6 +161,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
                 return $product;
             }
         }
+
         return false;
     }
 
@@ -148,11 +169,13 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
      * Return Cart Detail
      */
 
-    public function show() {
+    public function show() 
+    {
         return $this->index();
     }
 
-    public function index() {
+    public function index() 
+    {
         $this->_getQuote()->collectTotals()->save();
         $collection = $this->builderQuery;
         $collection->addFieldToFilter('item_id', array('nin' => $this->_removed_items))
@@ -175,6 +198,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
         if (isset($parameters[self::OFFSET]) && $parameters[self::OFFSET]) {
             $offset = $parameters[self::OFFSET];
         }
+
         $collection->setPageSize($offset + $limit);
 
         $all_ids = array();
@@ -200,6 +224,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
             if (++$check_offset <= $offset) {
                 continue;
             }
+
             /*
 			if (++$check_limit > $limit)
                 break;
@@ -239,13 +264,14 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
 
             $quoteitem = $entity->toArray($fields);
             $quoteitem['option'] = $options;
-			if (isset($parameters['image_width'])){
-				$image_width = $parameters['image_width'];
-				$image_height = $parameters['image_height'];
-			} else {
-				$image_width = 600;
-				$image_height = 600;
-			}
+            if (isset($parameters['image_width'])){
+                $image_width = $parameters['image_width'];
+                $image_height = $parameters['image_height'];
+            } else {
+                $image_width = 600;
+                $image_height = 600;
+            }
+
             $quoteitem['image'] = Mage::helper('simiconnector/products')->getImageProduct($entity->getProduct(), null, $image_width, $image_height);
             $info[] = $quoteitem;
             $all_ids[] = $entity->getId();
@@ -260,12 +286,14 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
      * Add Message
      */
 
-    public function getList($info, $all_ids, $total, $page_size, $from) {
+    public function getList($info, $all_ids, $total, $page_size, $from) 
+    {
         $result = parent::getList($info, $all_ids, $total, $page_size, $from);
         $result['total'] = Mage::helper('simiconnector/total')->getTotal();
         if ($this->_RETURN_MESSAGE) {
             $result['message'] = array($this->_RETURN_MESSAGE);
         }
+
         $session = Mage::getSingleton('checkout/session');
         $result['cart_total'] = Mage::helper('checkout/cart')->getItemsCount();
         $result['quote_id'] = $session->getQuoteId();

@@ -8,7 +8,8 @@
  */
 class Simi_Simiconnector_Helper_Bundle_Tierprice extends Simi_Simiconnector_Helper_Tierprice
 {
-    public function formatTierPrice($product) {
+    public function formatTierPrice($product) 
+    {
         $data = array();
         $_product = $product;
         $_tierPrices = $this->getTierPrices($_product);
@@ -19,6 +20,7 @@ class Simi_Simiconnector_Helper_Bundle_Tierprice extends Simi_Simiconnector_Help
                 $data[] = $stringHt;
             }
         }
+
         return $data;
     }
 }

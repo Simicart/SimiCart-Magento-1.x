@@ -21,6 +21,7 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
             header("HTTP/1.0 503");
             exit();
         }
+
         /*
         if (!$this->isHeader()) {
             echo 'Connect error!';
@@ -65,6 +66,7 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
                         $head[$name] = $value;
                     }
                 }
+
                 return $head;
             }
 
@@ -80,6 +82,7 @@ class Simi_Simiconnector_Controller_Action extends Mage_Core_Controller_Front_Ac
                 $token = $h;
             }
         }
+
         if (strcmp($token, 'Bearer ' . $keySecret) == 0)
             return true;
         else

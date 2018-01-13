@@ -1,6 +1,7 @@
 <?php
 
-class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Renderer_Barcodecustom extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract {
+class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Renderer_Barcodecustom extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
+{
 
     protected $_values;
 
@@ -22,8 +23,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Renderer_Barcodecustom
                     }
                 }
             }
-            
         }
+
         $checked = 'checked="checked"';
         if($value)
             $checked = '';
@@ -40,4 +41,3 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Renderer_Barcodecustom
 
 }
 
-?>

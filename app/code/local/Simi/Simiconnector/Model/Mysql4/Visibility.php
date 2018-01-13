@@ -21,7 +21,8 @@
  */
 class Simi_Simiconnector_Model_Mysql4_Visibility extends Mage_Core_Model_Mysql4_Abstract
 {
-	public function _construct(){
-		$this->_init('simiconnector/visibility', 'entity_id');
-	}
+    public function _construct()
+    {
+        $this->_init('simiconnector/visibility', 'entity_id');
+    }
 }

@@ -16,13 +16,15 @@
 /**
  * Connector Edit Block
  * 
- * @category 	
- * @package 	Connector
- * @author  	Developer
+ * @category     
+ * @package     Connector
+ * @author      Developer
  */
-class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {
+class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
+{
 
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
 
         $this->_objectId = 'id';
@@ -32,11 +34,13 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit extends Mage_Adminhtml
         $this->_updateButton('save', 'label', Mage::helper('simiconnector')->__('Save List'));
         $this->_updateButton('delete', 'label', Mage::helper('simiconnector')->__('Delete List'));
 
-        $this->_addButton('saveandcontinue', array(
+        $this->_addButton(
+            'saveandcontinue', array(
             'label' => Mage::helper('adminhtml')->__('Save And Continue Edit'),
             'onclick' => 'saveAndContinueEdit()',
             'class' => 'save',
-                ), -100);
+            ), -100
+        );
 
         $this->_formScripts[] = "
 			function toggleEditor() {
@@ -67,7 +71,8 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit extends Mage_Adminhtml
      *
      * @return string
      */
-    public function getHeaderText() {
+    public function getHeaderText() 
+    {
         if (Mage::registry('productlist_data') && Mage::registry('productlist_data')->getId())
             return Mage::helper('simiconnector')->__("Edit List '%s'", $this->htmlEscape(Mage::registry('productlist_data')->getListTitle()));
         return Mage::helper('simiconnector')->__('Add List');

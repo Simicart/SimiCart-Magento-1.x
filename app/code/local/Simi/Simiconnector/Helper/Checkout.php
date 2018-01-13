@@ -3,12 +3,14 @@
 /**
 
  */
-class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract {
+class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract
+{
     /*
      * Product Options
      */
 
-    public function convertOptionsCart($options) {
+    public function convertOptionsCart($options) 
+    {
         $data = array();
         foreach ($options as $option) {
             $data[] = array(
@@ -17,10 +19,12 @@ class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract {
                 'option_price' => isset($option['price']) == true ? $option['price'] : 0,
             );
         }
+
         return $data;
     }
 
-    public function getBundleOptions(Mage_Catalog_Model_Product_Configuration_Item_Interface $item) {
+    public function getBundleOptions(Mage_Catalog_Model_Product_Configuration_Item_Interface $item) 
+    {
         $options = array();
         $product = $item->getProduct();
         /**
@@ -41,14 +45,12 @@ class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract {
             $selectionsQuoteItemOption = $item->getOptionByCode('bundle_selection_ids');
 
             $selectionsCollection = $typeInstance->getSelectionsByIds(
-                    unserialize($selectionsQuoteItemOption->getValue()), $product
+                unserialize($selectionsQuoteItemOption->getValue()), $product
             );
 
             $bundleOptions = $optionsCollection->appendSelections($selectionsCollection, true);
             foreach ($bundleOptions as $bundleOption) {
                 if ($bundleOption->getSelections()) {
-
-
                     $bundleSelections = $bundleOption->getSelections();
 
                     foreach ($bundleSelections as $bundleSelection) {
@@ -63,6 +65,7 @@ class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract {
                             );
                         }
                     }
+
                     if ($check)
                         $options[] = $option;
                 }
@@ -78,9 +81,10 @@ class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract {
      * @param Mage_Catalog_Model_Product_Configuration_Item_Interface $item
      * @return array
      */
-    public function getOptions(Mage_Catalog_Model_Product_Configuration_Item_Interface $item) {
+    public function getOptions(Mage_Catalog_Model_Product_Configuration_Item_Interface $item) 
+    {
         return array_merge(
-                $this->getBundleOptions($item), $this->convertOptionsCart(Mage::helper('catalog/product_configuration')->getCustomOptions($item))
+            $this->getBundleOptions($item), $this->convertOptionsCart(Mage::helper('catalog/product_configuration')->getCustomOptions($item))
         );
     }
 
@@ -89,7 +93,8 @@ class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract {
      * @param Mage_Sales_Model_Quote_Item $item
      * @return type
      */
-    public function getUsedProductOption(Mage_Sales_Model_Quote_Item $item) {
+    public function getUsedProductOption(Mage_Sales_Model_Quote_Item $item) 
+    {
         $typeId = $item->getProduct()->getTypeId();
         switch ($typeId) {
             case Mage_Catalog_Model_Product_Type_Configurable::TYPE_CODE:
@@ -103,7 +108,8 @@ class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract {
         return $this->getCustomOptions($item);
     }
 
-    public function getConfigurableOptions(Mage_Sales_Model_Quote_Item $item) {
+    public function getConfigurableOptions(Mage_Sales_Model_Quote_Item $item) 
+    {
         $product = $item->getProduct();
 
         $attributes = $product->getTypeInstance(true)
@@ -112,18 +118,19 @@ class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract {
         return $this->convertOptionsCart($options);
     }
 
-    public function getGroupedOptions(Mage_Catalog_Model_Product_Configuration_Item_Interface $item) {
+    public function getGroupedOptions(Mage_Catalog_Model_Product_Configuration_Item_Interface $item) 
+    {
         return;
     }
 
-    public function getCustomOptions(Mage_Sales_Model_Quote_Item $item) {
+    public function getCustomOptions(Mage_Sales_Model_Quote_Item $item) 
+    {
         $options = array();
         $product = $item->getProduct();
         if ($optionIds = $item->getOptionByCode('option_ids')) {
             $options = array();
             foreach (explode(',', $optionIds->getValue()) as $optionId) {
                 if ($option = $product->getOptionById($optionId)) {
-
                     $quoteItemOption = $item->getOptionByCode('option_' . $option->getId());
 
                     $group = $option->groupFactory($option->getType())
@@ -141,13 +148,16 @@ class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract {
                 }
             }
         }
+
         if ($addOptions = $item->getOptionByCode('additional_options')) {
             $options = array_merge($options, unserialize($addOptions->getValue()));
         }
+
         return $this->convertOptionsCart($options);
     }
 
-    public function getCheckoutTermsAndConditions() {
+    public function getCheckoutTermsAndConditions() 
+    {
         if (!Mage::getStoreConfig('simiconnector/terms_conditions/enable_terms'))
             return NULL;
         $data = array();
@@ -159,17 +169,16 @@ class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract {
     /*
      * Process order after
      */
-    public function processOrderAfter($orderId,&$order){
+    public function processOrderAfter($orderId,&$order)
+    {
         /*
          * save To App report
          */
         try {
-
             $newTransaction = Mage::getModel('simiconnector/appreport');
             $newTransaction->setOrderId($orderId);
             $newTransaction->save();
         } catch (Exception $exc) {
-
         }
 
         /*

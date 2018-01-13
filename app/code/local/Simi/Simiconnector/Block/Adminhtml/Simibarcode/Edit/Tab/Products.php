@@ -1,8 +1,10 @@
 <?php
 
-class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Products extends Mage_Adminhtml_Block_Widget_Grid {
+class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Products extends Mage_Adminhtml_Block_Widget_Grid
+{
 
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
         $this->setId('productGrid');
         $this->setDefaultSort('entity_id');
@@ -13,12 +15,14 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Products extends M
         }
     }
 
-    protected function _getStore() {
+    protected function _getStore() 
+    {
         $storeId = (int) $this->getRequest()->getParam('store', 0);
         return Mage::app()->getStore($storeId);
     }
 
-    protected function _addColumnFilterToCollection($column) {
+    protected function _addColumnFilterToCollection($column) 
+    {
         if ($column->getId() == 'in_products') {
             $productIds = $this->_getSelectedProducts();
             if (empty($productIds))
@@ -29,10 +33,12 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Products extends M
                 $this->getCollection()->addFieldToFilter('entity_id', array('nin' => $productIds));
             return $this;
         }
+
         return parent::_addColumnFilterToCollection($column);
     }
 
-    protected function _prepareCollection() {
+    protected function _prepareCollection() 
+    {
 
         // $collection = Mage::getModel('catalog/product')->getCollection()
         //         ->addAttributeToSelect('sku')
@@ -57,10 +63,10 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Products extends M
             $adminStore = Mage_Core_Model_App::ADMIN_STORE_ID;
             $collection->addStoreFilter($store);
             $collection->joinAttribute(
-                    'name', 'catalog_product/name', 'entity_id', null, 'inner', $adminStore
+                'name', 'catalog_product/name', 'entity_id', null, 'inner', $adminStore
             );
             $collection->joinAttribute(
-                    'visibility', 'catalog_product/visibility', 'entity_id', null, 'inner', $store->getId()
+                'visibility', 'catalog_product/visibility', 'entity_id', null, 'inner', $store->getId()
             );
         } else {
             $collection->addAttributeToSelect('price');
@@ -74,63 +80,78 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Products extends M
         if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
             $collection->addWebsiteFilter(array($websiteId));
         }
+
         parent::_prepareCollection();
         $this->getCollection()->addWebsiteNamesToResult();
         return $this;
     }
 
-    protected function _prepareColumns() {
-        $this->addColumn('in_products', array(
+    protected function _prepareColumns() 
+    {
+        $this->addColumn(
+            'in_products', array(
             'header_css_class' => 'a-center',
             'type' => 'checkbox',
             'name' => 'in_products',
             'values' => $this->_getSelectedProducts(),
             'align' => 'center',
             'index' => 'entity_id'
-        ));
+            )
+        );
 
-        $this->addColumn('entity_id', array(
+        $this->addColumn(
+            'entity_id', array(
             'header' => Mage::helper('simiconnector')->__('ID'),
             'sortable' => true,
             'width' => '50px',
             'type' => 'number',
             'index' => 'entity_id',
-        ));
+            )
+        );
 
-        $this->addColumn('product_name', array(
+        $this->addColumn(
+            'product_name', array(
             'header' => Mage::helper('simiconnector')->__('Name'),
             'align' => 'left',
             'index' => 'name'
-        ));
+            )
+        );
 
-        $this->addColumn('type', array(
+        $this->addColumn(
+            'type', array(
             'header' => Mage::helper('catalog')->__('Type'),
             'width' => '60px',
             'index' => 'type_id',
             'type' => 'options',
             'options' => Mage::getSingleton('catalog/product_type')->getOptionArray(),
-        ));
+            )
+        );
 
         $sets = Mage::getResourceModel('eav/entity_attribute_set_collection')
                 ->setEntityTypeFilter(Mage::getModel('catalog/product')->getResource()->getTypeId())
                 ->load()
                 ->toOptionHash();
 
-        $this->addColumn('set_name', array(
+        $this->addColumn(
+            'set_name', array(
             'header' => Mage::helper('catalog')->__('Attrib. Set Name'),
             'width' => '100px',
             'index' => 'attribute_set_id',
             'type' => 'options',
             'options' => $sets,
-        ));
+            )
+        );
 
-        $this->addColumn('product_sku', array(
+        $this->addColumn(
+            'product_sku', array(
             'header' => Mage::helper('simiconnector')->__('SKU'),
             'width' => '80px',
             'index' => 'sku'
-        ));
+            )
+        );
 
-        $this->addColumn('barcode', array(
+        $this->addColumn(
+            'barcode', array(
             'header' => Mage::helper('simiconnector')->__('Barcode'),
             'align' => 'left',
             'width' => '130px',
@@ -139,9 +160,11 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Products extends M
             'editable' => true,
             'edit_only' => true,
             'renderer' => 'simiconnector/adminhtml_simibarcode_edit_renderer_barcodecustom',
-        ));
+            )
+        );
 
-        $this->addColumn('qrcode', array(
+        $this->addColumn(
+            'qrcode', array(
             'header' => Mage::helper('simiconnector')->__('QR code'),
             'align' => 'left',
             'width' => '130px',
@@ -150,7 +173,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Products extends M
             'editable' => true,
             'edit_only' => true,
             'renderer' => 'simiconnector/adminhtml_simibarcode_edit_renderer_qrcodecustom',
-        ));
+            )
+        );
 
         $store = $this->_getStore();
         // $this->addColumn('price',
@@ -169,15 +193,18 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Products extends M
         //         'options' => Mage::getModel('catalog/product_visibility')->getOptionArray(),
         // ));
 
-        $this->addColumn('status', array(
+        $this->addColumn(
+            'status', array(
             'header' => Mage::helper('simiconnector')->__('Status'),
             'width' => '90px',
             'index' => 'status',
             'type' => 'options',
             'options' => Mage::getSingleton('catalog/product_status')->getOptionArray(),
-        ));
+            )
+        );
 
-        $this->addColumn('action', array(
+        $this->addColumn(
+            'action', array(
             'header' => Mage::helper('simiconnector')->__('Action'),
             'width' => '70px',
             'align' => 'center',
@@ -193,13 +220,15 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Products extends M
             'sortable' => false,
             'index' => 'stores',
             'is_system' => true,
-        ));
+            )
+        );
 
 
         return parent::_prepareColumns();
     }
 
-    public function _getSelectedProducts() {
+    public function _getSelectedProducts() 
+    {
         $productArrays = $this->getProducts();
         $products = '';
         $warehouseProducts = array();
@@ -214,6 +243,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Products extends M
                 }
             }
         }
+
         if (!is_array($products) || Mage::getModel('admin/session')->getData('barcode_product_import')) {
             $products = array_keys($this->getSelectedProducts());
         }
@@ -221,7 +251,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Products extends M
         return $products;
     }
 
-    public function getSelectedProducts() {
+    public function getSelectedProducts() 
+    {
 
         $products = array();
         if ($barcodeProducts = Mage::getModel('admin/session')->getData('barcode_product_import')) {
@@ -235,13 +266,17 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Products extends M
         return $products;
     }
 
-    public function getGridUrl() {
-        return $this->getUrl('*/*/productsGrid', array(
+    public function getGridUrl() 
+    {
+        return $this->getUrl(
+            '*/*/productsGrid', array(
                     '_current' => true
-        ));
+            )
+        );
     }
 
-    public function getRowUrl($row) {
+    public function getRowUrl($row) 
+    {
         return false;
     }
 

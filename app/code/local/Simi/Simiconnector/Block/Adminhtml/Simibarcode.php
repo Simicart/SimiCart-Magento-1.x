@@ -1,8 +1,10 @@
 <?php
 
-class Simi_Simiconnector_Block_Adminhtml_Simibarcode extends Mage_Adminhtml_Block_Widget_Grid_Container {
+class Simi_Simiconnector_Block_Adminhtml_Simibarcode extends Mage_Adminhtml_Block_Widget_Grid_Container
+{
 
-    public function __construct() {
+    public function __construct() 
+    {
         $this->_controller = 'adminhtml_simibarcode';
         $this->_blockGroup = 'simiconnector';
         $this->_headerText = Mage::helper('simiconnector')->__('Manage QR & Barcodes');

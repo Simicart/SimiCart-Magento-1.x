@@ -3,7 +3,8 @@
 $installer = $this;
 $installer->startSetup();
 
-$installer->run("
+$installer->run(
+    "
     DROP TABLE IF EXISTS {$installer->getTable('simiconnector_simicategory')};
     DROP TABLE IF EXISTS {$installer->getTable('simiconnector_banner')};
     DROP TABLE IF EXISTS {$installer->getTable('simiconnector_cms')};
@@ -251,6 +252,7 @@ $installer->run("
 	  
       PRIMARY KEY (`taskbar_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-");
+"
+);
 
 $installer->endSetup();

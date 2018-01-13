@@ -8,7 +8,8 @@
  */
 class Simi_Simiconnector_Helper_Options_Configurable extends Mage_Core_Helper_Abstract
 {
-    function getOptions($product){
+    function getOptions($product)
+    {
         $block = Mage::getBlockSingleton('catalog/product_view_type_configurable');
         $block->setProduct($product);
 
@@ -26,7 +27,8 @@ class Simi_Simiconnector_Helper_Options_Configurable extends Mage_Core_Helper_Ab
                    break;// break loop
                }
             }
-            $mediaFalback = json_decode($mediaFalback,true);
+
+            $mediaFalback = json_decode($mediaFalback, true);
 
             $_dimHelper = Mage::helper('configurableswatches/swatchdimensions');
             $_swatchInnerWidth = $_dimHelper->getInnerWidth(Mage_ConfigurableSwatches_Helper_Swatchdimensions::AREA_LISTING);
@@ -38,32 +40,37 @@ class Simi_Simiconnector_Helper_Options_Configurable extends Mage_Core_Helper_Ab
                     if(!empty($_swatchUrl)){
                         $option['option_image'] = $_swatchUrl;
                     }
-                    $option['base_image'] = $this->getBaseImage($product,$option,$mediaFalback);
+
+                    $option['base_image'] = $this->getBaseImage($product, $option, $mediaFalback);
                     $attribute['options'][$index] = $option;
                 }
+
                 $configurable_options['attributes'][$_index]= $attribute;
             }
         }
+
         $options['configurable_options'] = $configurable_options;
         if(!is_null($product->getOptions()) && count($product->getOptions())){
             $custom_options = Mage::helper('simiconnector/options_simple')->getOptions($product);
             $options['custom_options'] = $custom_options['custom_options'];
         }
+
         return $options;
     }
 
-    public function getBaseImage($product, $option,$mediaFallBack){
+    public function getBaseImage($product, $option,$mediaFallBack)
+    {
         $optionLabel = Mage_ConfigurableSwatches_Helper_Data::normalizeKey($option['label']);
         if(empty($mediaFallBack)){
             return "";
         }
+
         //Case 1: get from label
         $optionLabels = isset($mediaFallBack['option_labels']) ? $mediaFallBack['option_labels'] : false;
         if($optionLabels){
                 $currentLabel =$optionLabels[$optionLabel];
                 if($currentLabel && (isset($currentLabel['configurable_product']['base_image']) &&
                         $currentLabel['configurable_product']['base_image'])){
-
                     return $currentLabel['configurable_product']['base_image'];
                 }
         }
@@ -79,7 +86,7 @@ class Simi_Simiconnector_Helper_Options_Configurable extends Mage_Core_Helper_Ab
             $image = $value['configurable_product']['base_image'];
             $products = $value['products'];
             if($image){
-                $isCompatibleProduct = sizeof(array_intersect($product,$compatibleProducts)) > 0;
+                $isCompatibleProduct = sizeof(array_intersect($product, $compatibleProducts)) > 0;
                 if($isCompatibleProduct){
                     return $image;
                 }
@@ -99,9 +106,11 @@ class Simi_Simiconnector_Helper_Options_Configurable extends Mage_Core_Helper_Ab
         if ($childSwatchImage) {
             return $childSwatchImage;
         }
+
         if((isset($childProductImages[$product->getId()]) && $childProductImages[$product->getId()])){
             return $childProductImages[$product->getId()];
         }
+
         return "";
     }
 

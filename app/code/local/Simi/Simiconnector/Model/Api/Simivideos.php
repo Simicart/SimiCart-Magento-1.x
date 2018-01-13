@@ -1,10 +1,12 @@
 <?php
 
-class Simi_Simiconnector_Model_Api_Simivideos extends Simi_Simiconnector_Model_Api_Abstract {
+class Simi_Simiconnector_Model_Api_Simivideos extends Simi_Simiconnector_Model_Api_Abstract
+{
 
     protected $_DEFAULT_ORDER = 'video_id';
 
-    public function setBuilderQuery() {
+    public function setBuilderQuery() 
+    {
         $data = $this->getData();
         $productId = $data['params']['product_id'];
         if (!$productId)
@@ -17,6 +19,7 @@ class Simi_Simiconnector_Model_Api_Simivideos extends Simi_Simiconnector_Model_A
                 $videoArray[] = $video->getData('video_id');
             }
         }
+
         $this->builderQuery = Mage::getModel('simiconnector/simivideo')->getCollection()->addFieldToFilter('status', '1')->addFieldToFilter('video_id', array('in'=> $videoArray));
     }
 

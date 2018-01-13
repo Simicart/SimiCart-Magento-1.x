@@ -17,7 +17,8 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
         return Mage::helper($helper);
     }
 
-    public function getProductAttribute($attribute) {
+    public function getProductAttribute($attribute) 
+    {
         return $this->_product->getResource()->getAttribute($attribute);
     }
 
@@ -28,6 +29,7 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
             $product->getPriceModel()->getIsPricesCalculatedByIndex() !== false) {
             return false;
         }
+
         return $this->helper('tax')->displayBothPrices();
     }
 
@@ -62,12 +64,14 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                 $_attributes = $_weeeHelper->getProductWeeeAttributesForRenderer($_product, null, null, null, true);
                 $_weeeTaxAmountInclTaxes = $_weeeHelper->getAmountInclTaxes($_attributes);
             }
+
             if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, array(0, 1, 4))) {
                 $_minimalPriceTax     += $_weeeTaxAmount;
                 $_minimalPriceInclTax += $_weeeTaxAmountInclTaxes;
                 $_maximalPriceTax     += $_weeeTaxAmount;
                 $_maximalPriceInclTax += $_weeeTaxAmountInclTaxes;
             }
+
             if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 2)) {
                 $_minimalPriceInclTax += $_weeeTaxAmountInclTaxes;
                 $_maximalPriceInclTax += $_weeeTaxAmountInclTaxes;
@@ -77,6 +81,7 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                 $_weeeTaxAttributes = $_weeeHelper->getProductWeeeAttributesForRenderer($_product, null, null, null, true);
             }
         }
+
         if ($_product->getPriceView()){
             $priceV2['price_label'] = Mage::helper('catalog')->__('As low as');
             $priceV2['minimal_price'] = 1;
@@ -92,12 +97,14 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                         }else{
                             $amount = $_weeeTaxAttribute->getAmount();
                         }
+
                         $wee .= $_weeeTaxAttribute->getName();;
                         $wee .= ": ";
                         $wee .= $_coreHelper->currency($amount, true, false);
                         $wee .= " + ";
                         $priceV2["weee"] = $wee;
                     }
+
                     $this->setWeePrice($priceV2, $wee);
                     $priceV2['show_weee_price'] = 1;
                 }
@@ -108,6 +115,7 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                 }else{
                     $this->setTaxPrice($priceV2, $_minimalPriceTax);
                 }
+
                 if ($_weeeTaxAmount && $_product->getPriceType() == 1 && $_weeeHelper->typeOfDisplay($_product, array(2, 1, 4))){
                     $wee = '';
                     foreach ($_weeeTaxAttributes as $_weeeTaxAttribute){
@@ -116,15 +124,18 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                         }else{
                             $amount = $_weeeTaxAttribute->getAmount();
                         }
+
                         $wee .= $_weeeTaxAttribute->getName();;
                         $wee .= ": ";
                         $wee .= $_coreHelper->currency($amount, true, false);
                         $wee .= " + ";
                         $priceV2["weee"] = $wee;
                     }
+
                     $this->setWeePrice($priceV2, $wee);
                     $priceV2['show_weee_price'] = 1;
                 }
+
                 if ($_weeeHelper->typeOfDisplay($_product, 2) && $_weeeTaxAmount){
                     $this->setTaxPriceIn($priceV2, $_minimalPriceInclTax);
                 }
@@ -132,8 +143,8 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
         }else{
             $priceV2['minimal_price'] = 0;
             if ($_minimalPriceTax <> $_maximalPriceTax){
-                $priceV2['product_from_label'] = $this->helper('catalog')->__('From') ;
-                $priceV2['product_to_label'] = $this->helper('catalog')->__('To') ;
+                $priceV2['product_from_label'] = $this->helper('catalog')->__('From');
+                $priceV2['product_to_label'] = $this->helper('catalog')->__('To');
                 $priceV2['show_from_to_tax_price'] = 1;
                 if ($this->displayBothPrices()){
                     $priceV2['show_ex_in_price'] = 1;
@@ -148,6 +159,7 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                             }else{
                                 $amount = $_weeeTaxAttribute->getAmount();
                             }
+
                             $wee .= $_weeeTaxAttribute->getName();;
                             $wee .= ": ";
                             $wee .= $_coreHelper->currency($amount, true, false);
@@ -155,6 +167,7 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                             $priceV2["weee_from"] = $wee;
                             $priceV2["weee_to"] = $wee;
                         }
+
                         $this->setWeePrice($priceV2, $wee);
                         $priceV2['show_weee_price'] = 1;
                     }
@@ -176,28 +189,32 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                             }else{
                                 $amount = $_weeeTaxAttribute->getAmount();
                             }
+
                             $wee .= $_weeeTaxAttribute->getName();;
                             $wee .= ": ";
                             $wee .= $_coreHelper->currency($amount, true, false);
                             $wee .= " + ";
                             $priceV2["weee"] = $wee;
                         }
+
                         $this->setWeePrice($priceV2, $wee);
                         $priceV2['show_weee_price'] = 1;
                     }
+
                     if ($_weeeHelper->typeOfDisplay($_product, 2) && $_weeeTaxAmount){
                         $this->setTaxFromPrice($priceV2, $_minimalPriceInclTax);
                         $this->setTaxToPrice($priceV2, $_maximalPriceInclTax);
                     }
                 }
+
                 //to price
             }else{
                 //not show from and to with tax
                 $priceV2['show_from_to_tax_price'] = 0;
                 if ($this->displayBothPrices()){
                     $priceV2['show_ex_in_price'] = 1;
-                    $priceV2['product_from_label'] = $this->helper('catalog')->__('From') ;
-                    $priceV2['product_to_label'] = $this->helper('catalog')->__('To') ;
+                    $priceV2['product_from_label'] = $this->helper('catalog')->__('From');
+                    $priceV2['product_to_label'] = $this->helper('catalog')->__('To');
 
                     $this->setTaxFromPrice($priceV2, $_minimalPriceTax);
                     $this->setTaxToPrice($priceV2, $_minimalPriceInclTax);
@@ -210,12 +227,14 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                             }else{
                                 $amount = $_weeeTaxAttribute->getAmount();
                             }
+
                             $wee .= $_weeeTaxAttribute->getName();;
                             $wee .= ": ";
                             $wee .= $_coreHelper->currency($amount, true, false);
                             $wee .= " + ";
                             $priceV2["weee"] = $wee;
                         }
+
                         $this->setWeePrice($priceV2, $wee);
                         $priceV2['show_weee_price'] = 1;
                     }
@@ -229,15 +248,18 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                             }else{
                                 $amount = $_weeeTaxAttribute->getAmount();
                             }
+
                             $wee .= $_weeeTaxAttribute->getName();;
                             $wee .= ": ";
                             $wee .= $_coreHelper->currency($amount, true, false);
                             $wee .= " + ";
                             $priceV2["weee"] = $wee;
                         }
+
                         $this->setWeePrice($priceV2, $wee);
                         $priceV2['show_weee_price'] = 1;
                     }
+
                     if ($_weeeHelper->typeOfDisplay($_product, 2) && $_weeeTaxAmount){
                         if ($_taxHelper->displayPriceIncludingTax()){
                             $this->setTaxPrice($priceV2, $_minimalPriceInclTax);
@@ -248,11 +270,13 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                 }
             }
         }
+
         if($is_detail){
             $this->_minimalPriceInclTax = $_minimalPriceInclTax;
             $this->_minimalPriceTax = $_minimalPriceTax;
             $priceV2['configure'] = $this->formatPriceFromProductDetail($_product);
         }
+
         return $priceV2;
     }
 
@@ -352,7 +376,8 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
         $price['wee'] = $wee;
     }
 
-    public function formatPriceFromProductDetail($_product){
+    public function formatPriceFromProductDetail($_product)
+    {
         $priceV2 = array();
         $_weeeHelper = $this->helper('weee');
         $_finalPrice = $_product->getFinalPrice() > $this->_minimalPriceTax ? $this->_minimalPriceTax : $_product->getFinalPrice();
@@ -365,6 +390,7 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                 $_weeeTaxAttributes = Mage::helper('weee')->getProductWeeeAttributesForRenderer($_product, null, null, null, true);
             }
         }
+
      //   $isMAPTypeOnGesture = Mage::helper('catalog')->isShowPriceOnGesture($_product);
         $isMAPTypeOnGesture = true;
         $canApplyMAP  = Mage::helper('catalog')->canApplyMsrp($_product);
@@ -376,6 +402,7 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                     if (!$canApplyMAP){
                         $this->setBothTaxPrice($priceV2, $_finalPrice, $_finalPriceInclTax);
                     }
+
                     if ($_weeeTaxAmount && $_product->getPriceType() == 1 && $_weeeHelper->typeOfDisplay($_product, array(2, 1, 4))){
                         $wee = '';
                         foreach ($_weeeTaxAttributes as $_weeeTaxAttribute){
@@ -384,12 +411,14 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                             }else{
                                 $amount = $_weeeTaxAttribute->getAmount();
                             }
+
                             $wee .= $_weeeTaxAttribute->getName();;
                             $wee .= ": ";
                             $wee .= $this->helper('core')->currency($amount, true, false);
                             $wee .= " + ";
                             $priceV2["weee"] = $wee;
                         }
+
                         $this->setWeePrice($priceV2, $wee);
                         $priceV2['show_weee_price'] = 1;
                     }
@@ -406,18 +435,21 @@ class Simi_Simiconnector_Helper_Bundle_Price extends Mage_Core_Helper_Abstract
                             }else{
                                 $amount = $_weeeTaxAttribute->getAmount();
                             }
+
                             $wee .= $_weeeTaxAttribute->getName();;
                             $wee .= ": ";
                             $wee .= $this->helper('core')->currency($amount, true, false);
                             $wee .= " + ";
                             $priceV2["weee"] = $wee;
                         }
+
                         $this->setWeePrice($priceV2, $wee);
                         $priceV2['show_weee_price'] = 1;
                     }
                 }
             }
         }
+
         return $priceV2;
     }
 }

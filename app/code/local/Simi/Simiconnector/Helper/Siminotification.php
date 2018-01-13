@@ -1,11 +1,13 @@
 <?php
 
-class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstract {
+class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstract
+{
 
     protected $bad_device_id = array();
     protected $size_android_sent = 0;
 
-    public function sendNotice($data) {
+    public function sendNotice($data) 
+    {
         $trans = $this->send($data);
         // update notification history
         $history = Mage::getModel('simiconnector/history');
@@ -19,7 +21,8 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         return $trans;
     }
 
-    public function send(&$data) {
+    public function send(&$data) 
+    {
 
 
         if ($data['category_id']) {
@@ -37,11 +40,13 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
                 $data['has_child'] = '';
             }
         }
+
         if ($data['product_id']) {
             $productId = $data['product_id'];
             $productName = Mage::getModel('catalog/product')->load($productId)->getName();
             $data['product_name'] = $productName;
         }
+
         $deviceArray = explode(',', str_replace(' ', '', $data['devices_pushed']));
 
         $collectionDevice = Mage::getModel('simiconnector/device')->getCollection()->addFieldToFilter('device_id', array('in' => $deviceArray));
@@ -82,7 +87,8 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         }
     }
 
-    public function sendIOS($collectionDevice, $data) {
+    public function sendIOS($collectionDevice, $data) 
+    {
         $total = count($collectionDevice);
         if ($total == 0)
             return true;
@@ -126,11 +132,13 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
                 $i = 0;
                 $tokenArray = array();
             }
+
             if (strlen($item->getDeviceToken()) < 70)
                 $tokenArray[] = $item->getDeviceToken();
             $i++;
             $totalDevice++;
         }
+
         if ($i <= 100)
             $result = $this->repeatSendiOS($tokenArray, $payload, $ch, $dir);
         if (!$result)
@@ -141,7 +149,8 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         return true;
     }
 
-    public function repeatSendiOS($tokenArray, $payload, $ch, $dir) {
+    public function repeatSendiOS($tokenArray, $payload, $ch, $dir) 
+    {
         $ctx = stream_context_create();
         stream_context_set_option($ctx, 'ssl', 'local_cert', $ch);
         $fp = stream_socket_client('ssl://gateway.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT | STREAM_CLIENT_PERSISTENT, $ctx);
@@ -149,6 +158,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             Mage::getSingleton('adminhtml/session')->addError("Failed to connect:" . $err . $errstr . PHP_EOL . "(IOS)");
             return;
         }
+
         foreach ($tokenArray as $deviceToken) {
             $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
             // Send it to the server
@@ -158,6 +168,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
                 return false;
             }
         }
+
         fclose($fp);
         return true;
     }
@@ -166,7 +177,8 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
 
 
 
-    public function sendAndroid($collectionDevice, $data) {
+    public function sendAndroid($collectionDevice, $data) 
+    {
         unset($data['devices_pushed']);
         $total = count($collectionDevice);
         if ($total == 0)
@@ -177,13 +189,13 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         $this->repeatSendAnddroid($total, $collectionDevice->getData(), $message);
 
         if($this->bad_device_id && count($this->bad_device_id)){
-
             $notice_id = $data['notice_id'];
             $deviceArray = explode(',', str_replace(' ', '', $data['devices_pushed']));
             for($i = 0; $i < count($this->bad_device_id); $i++){
                 if(($key = array_search($deviceArray, $this->bad_device_id[$i])) !== false) {
                     unset($deviceArray[$key]);
                 }
+
                 $model = Mage::getModel('simiconnector/device');
                 $model->setId($this->bad_device_id[$i])->delete();
             }
@@ -201,11 +213,11 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         return true;
     }
 
-    public function repeatSendAnddroid($total, $collectionDevice, $message) {
+    public function repeatSendAnddroid($total, $collectionDevice, $message) 
+    {
 
         $from_user = 0;
         while (true) {
-
             $check = $total - 999;
             if ($check <= 0) {
                 //send to  (total+from_user) user from_user
@@ -214,6 +226,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
                     Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Message not delivered (Android)'));
                     return false;
                 }
+
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Message successfully delivered to %s devices (Android)', $this->size_android_sent));
                 return true;
             } else {
@@ -223,6 +236,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
                     Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Message not delivered (Android)'));
                     return false;
                 }
+
                 $total = $check;
                 $from_user += 999;
             }
@@ -231,7 +245,8 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
 
 
 
-    public function sendTurnAnroid($collectionDevice, $from, $to, $message) {
+    public function sendTurnAnroid($collectionDevice, $from, $to, $message) 
+    {
 
         $registrationIDs = array();
         $devices_id = array();
@@ -271,9 +286,9 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             curl_close($ch);
         } catch (Exception $e) {
             throw new Exception("Fail:".$e->getMessage(), 1);
-            
         }
-        $re = json_decode($result,true);
+
+        $re = json_decode($result, true);
 
         $this->size_android_sent = $this->size_android_sent + $re['success'];
 
@@ -283,52 +298,60 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             $size_errors = count($data_result);
 
             for($i = 0;  $i < $size_errors; $i++){
-
                 $error =  $data_result[$i]['error'];
 
                 if($error == 'InvalidRegistration' || $error == 'NotRegistered'){
-
                     $this->bad_device_id[] = $devices_id[$i];
                 }
             }
-
         }
+
         return true;
     }
 
 
 
-    public function checkIndex(&$data) {
+    public function checkIndex(&$data) 
+    {
         if (!isset($data['type'])) {
             $data['type'] = '';
         }
+
         if (!isset($data['product_id'])) {
             $data['product_id'] = '';
         }
+
         if (!isset($data['category_id'])) {
             $data['category_id'] = '';
         }
+
         if (!isset($data['category_name'])) {
             $data['category_name'] = '';
         }
+
         if (!isset($data['has_child'])) {
             $data['has_child'] = '';
         }
+
         if (!isset($data['image_url'])) {
             $data['image_url'] = '';
         }
+
         if (!isset($data['height'])) {
             $data['height'] = '';
         }
+
         if (!isset($data['width'])) {
             $data['width'] = '';
         }
+
         if (!isset($data['show_popup'])) {
             $data['show_popup'] = '';
         }
     }
 
-    public function getListCountry() {
+    public function getListCountry() 
+    {
         $listCountry = array();
 
         $collection = Mage::getResourceModel('directory/country_collection')
@@ -343,7 +366,8 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         return $listCountry;
     }
 
-    public function getDirPEMfile($data) {
+    public function getDirPEMfile($data) 
+    {
         switch ($data['notice_sanbox']) {
             case '1':
                 if (!Mage::getStoreConfig("simiconnector/notification/upload_pem_file_test", $data['storeview_id']))
@@ -358,11 +382,13 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         }
     }
 
-    public function getDirPEMPassfile() {
+    public function getDirPEMPassfile() 
+    {
         return Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'pem' . DS . 'ios' . DS . 'pass_pem.config';
     }
 
-    public function getConfig($nameConfig, $storeviewId = null) {
+    public function getConfig($nameConfig, $storeviewId = null) 
+    {
         if (!$storeviewId)
             $storeviewId = Mage::app()->getStore()->getId();
         return Mage::getStoreConfig($nameConfig, $storeviewId);

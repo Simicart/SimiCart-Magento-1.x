@@ -1,8 +1,10 @@
 <?php
 
-class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form {
+class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form
+{
 
-    protected function _prepareForm() {
+    protected function _prepareForm() 
+    {
         $form = new Varien_Data_Form();
         $this->setForm($form);
 
@@ -20,6 +22,7 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
             foreach ($visibleStoreViews as $visibilityItem) {
                 $storeIdArray[] = $visibilityItem->getData('store_view_id');
             }
+
             $data['storeview_id'] = implode(',', $storeIdArray);
         } else {
             $storeIdArray = array();
@@ -30,29 +33,36 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
 
         $fieldset = $form->addFieldset('simicategory_form', array('legend' => Mage::helper('simiconnector')->__('Item information')));
 
-        $field = $fieldset->addField('storeview_id', 'multiselect', array(
+        $field = $fieldset->addField(
+            'storeview_id', 'multiselect', array(
             'name' => 'storeview_id[]',
             'label' => Mage::helper('cms')->__('Store View'),
             'title' => Mage::helper('cms')->__('Store View'),
             'required' => true,
             'values' => Mage::getSingleton('adminhtml/system_store')->getStoreValuesForForm(false, false),
-        ));
+            )
+        );
         $renderer = $this->getLayout()->createBlock('adminhtml/store_switcher_form_renderer_fieldset_element');
         $field->setRenderer($renderer);
 
-        $fieldset->addField('simicategory_filename', 'image', array(
+        $fieldset->addField(
+            'simicategory_filename', 'image', array(
             'label' => Mage::helper('simiconnector')->__('Image'),
             'required' => true,
             'name' => 'simicategory_filename',
-        ));
+            )
+        );
 
-        $fieldset->addField('simicategory_filename_tablet', 'image', array(
+        $fieldset->addField(
+            'simicategory_filename_tablet', 'image', array(
             'label' => Mage::helper('simiconnector')->__('Tablet Image'),
             'required' => true,
             'name' => 'simicategory_filename_tablet',
-        ));
+            )
+        );
 
-        $fieldset->addField('category_id', 'text', array(
+        $fieldset->addField(
+            'category_id', 'text', array(
             'name' => 'category_id',
             'class' => 'required-entry',
             'required' => true,
@@ -92,22 +102,27 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
                 };
         </script>
             '
-        ));
+            )
+        );
 
         if (!isset($data['sort_order']))
             $data['sort_order'] = 1;
-        $fieldset->addField('sort_order', 'text', array(
+        $fieldset->addField(
+            'sort_order', 'text', array(
             'label' => Mage::helper('simiconnector')->__('Sort Order'),
             'required' => false,
             'class' => 'validate-not-negative-number',
             'name' => 'sort_order',
-        ));
+            )
+        );
 
-        $fieldset->addField('status', 'select', array(
+        $fieldset->addField(
+            'status', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Status'),
             'name' => 'status',
             'values' => Mage::getSingleton('simiconnector/status')->getOptionHash(),
-        ));
+            )
+        );
 
         if(Mage::helper('simiconnector/cloud')->getThemeLayout() == 'matrix'){
             $matrixfieldset = $form->addFieldset('simicategory_matrix', array('legend' => Mage::helper('simiconnector')->__('Matrix Layout Config')));
@@ -123,44 +138,54 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
             if (!isset($data['matrix_row']))
                 $data['matrix_row'] = 1;
 
-            $matrixfieldset->addField('matrix_width_percent', 'text', array(
+            $matrixfieldset->addField(
+                'matrix_width_percent', 'text', array(
                 'label' => Mage::helper('simiconnector')->__('Image Width/Screen Width Ratio'),
                 'required' => false,
                 'class' => 'required-entry validate-number',
                 'name' => 'matrix_width_percent',
                 'note' => Mage::helper('simiconnector')->__('With Screen Width is 100%'),
-            ));
+                )
+            );
 
-            $matrixfieldset->addField('matrix_height_percent', 'text', array(
+            $matrixfieldset->addField(
+                'matrix_height_percent', 'text', array(
                 'label' => Mage::helper('simiconnector')->__('Image Height/Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_height_percent',
                 'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('With Screen Width is 100%'),
-            ));
+                )
+            );
 
-            $matrixfieldset->addField('matrix_width_percent_tablet', 'text', array(
+            $matrixfieldset->addField(
+                'matrix_width_percent_tablet', 'text', array(
                 'label' => Mage::helper('simiconnector')->__('Tablet Image Width/Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_width_percent_tablet',
                 'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('Leave it empty if you want to use Phone Value'),
-            ));
+                )
+            );
 
-            $matrixfieldset->addField('matrix_height_percent_tablet', 'text', array(
+            $matrixfieldset->addField(
+                'matrix_height_percent_tablet', 'text', array(
                 'label' => Mage::helper('simiconnector')->__('Tablet Image Height/Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_height_percent_tablet',
                 'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('Leave it empty if you want to use Phone Value'),
-            ));
+                )
+            );
 
-            $matrixfieldset->addField('matrix_row', 'select', array(
+            $matrixfieldset->addField(
+                'matrix_row', 'select', array(
                 'label' => Mage::helper('simiconnector')->__('Row Number'),
                 'values' => Mage::helper('simiconnector/productlist')->getMatrixRowOptions(),
                 'onchange' => 'autoFillHeight(this.value)',
                 'name' => 'matrix_row',
-            ));
+                )
+            );
 
             $storeviewArray = array();
             if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
@@ -173,7 +198,6 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
                         $storeviewArray[$storeView->getId()] = $storeView->getName();
                     }
                 }
-
             }else{
                 foreach (Mage::getModel('core/store')->getCollection() as $storeView) {
                     if (!isset($data['storeview_scope']))
@@ -182,7 +206,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
                 }
             }
 
-            $matrixfieldset->addField('storeview_scope', 'select', array(
+            $matrixfieldset->addField(
+                'storeview_scope', 'select', array(
                 'label' => Mage::helper('simiconnector')->__('Storeview for Mockup Preview'),
                 'name' => 'storeview_scope',
                 'values' => $storeviewArray,
@@ -201,9 +226,10 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Edit_Tab_Form extends Mage
                 xhttp.send();
             }
             Event.observe(window, "load", function(){updateMockupPreview(\'' . $data['storeview_scope'] . '\');});</script>',
-            ));
-
+                )
+            );
         }
+
         $form->setValues($data);
         return parent::_prepareForm();
     }

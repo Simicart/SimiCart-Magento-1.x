@@ -32,9 +32,11 @@ class Simi_Simiconnector_RestController extends Simi_Simiconnector_Controller_Ac
                     'message' => $e->getMessage(),
                 );
             }
+
             $results['errors'] = $result;
             $this->_printData($results);
         }
+
         exit();
         ob_end_flush();
     }

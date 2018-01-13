@@ -6,11 +6,13 @@
  * Date: 5/3/16
  * Time: 9:37 PM
  */
-class Simi_Simiconnector_Model_Api_Stores extends Simi_Simiconnector_Model_Api_Abstract {
+class Simi_Simiconnector_Model_Api_Stores extends Simi_Simiconnector_Model_Api_Abstract
+{
 
     protected $_DEFAULT_ORDER = 'group_id';
 
-    public function setBuilderQuery() {
+    public function setBuilderQuery() 
+    {
         $data = $this->getData();
         if (isset($data['resourceid']) && $data['resourceid']) {
             $this->builderQuery = Mage::getModel('core/store_group')->load($data['resourceid']);
@@ -19,7 +21,8 @@ class Simi_Simiconnector_Model_Api_Stores extends Simi_Simiconnector_Model_Api_A
         }
     }
 
-    public function index() {
+    public function index() 
+    {
         $result = parent::index();
         foreach ($result['stores'] as $index => $store) {
             $storeViewAPIModel = Mage::getModel('simiconnector/api_storeviews');
@@ -28,6 +31,7 @@ class Simi_Simiconnector_Model_Api_Stores extends Simi_Simiconnector_Model_Api_A
             $storeViewAPIModel->pluralKey = 'storeviews';
             $result['stores'][$index]['storeviews'] = $storeViewAPIModel->index();
         }
+
         return $result;
     }
 

@@ -22,26 +22,32 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Renderer_Stor
         return $this->toHtml();
     }
 
-    public function getGroups(){
+    public function getGroups()
+    {
         if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
             return Mage::getModel('core/store_group')->getCollection()->addFieldToFilter('website_id', $websiteId);
         }
+
         return Mage::getModel('core/store_group')->getCollection();
     }
 
-    public function getStoreviews(){
+    public function getStoreviews()
+    {
         if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
             return Mage::getModel('core/store')->getCollection()->addFieldToFilter('website_id', $websiteId);
         }
+
         return Mage::getModel('core/store')->getCollection();
     }
 
-    public function getCurrentStorviews(){
+    public function getCurrentStorviews()
+    {
         if ($data = Mage::registry('siminotification_data')) {
             $data = $data->getData();
             if(is_array($data) && isset($data['storeview_id']))
                 return $data['storeview_id'];
         }
+
         return '';
     }
 }

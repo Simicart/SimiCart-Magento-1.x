@@ -5,13 +5,14 @@
  */
 class Simi_Simiconnector_Block_Adminhtml_History_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
-	public function __construct(){
-		parent::__construct();
-		
-		$this->_objectId = 'id';
-		$this->_blockGroup = 'simiconnector';
-		$this->_controller = 'adminhtml_history';
-		
+    public function __construct()
+    {
+        parent::__construct();
+        
+        $this->_objectId = 'id';
+        $this->_blockGroup = 'simiconnector';
+        $this->_controller = 'adminhtml_history';
+        
         $this->removeButton('reset');
         $this->removeButton('save');
       
@@ -63,16 +64,17 @@ class Simi_Simiconnector_Block_Adminhtml_History_Edit extends Mage_Adminhtml_Blo
 				}
 			}
 		";
-	}
-	
-	/**
-	 * get text to show in header when edit an notification
-	 *
-	 * @return string
-	 */
-	public function getHeaderText(){
-		if(Mage::registry('history_data') && Mage::registry('history_data')->getId())
-			return Mage::helper('simiconnector')->__("View Message '%s'", $this->htmlEscape(Mage::registry('history_data')->getNoticeTitle()));
-		return Mage::helper('simiconnector')->__('Add Message');
-	}
+    }
+    
+    /**
+     * get text to show in header when edit an notification
+     *
+     * @return string
+     */
+    public function getHeaderText()
+    {
+        if(Mage::registry('history_data') && Mage::registry('history_data')->getId())
+            return Mage::helper('simiconnector')->__("View Message '%s'", $this->htmlEscape(Mage::registry('history_data')->getNoticeTitle()));
+        return Mage::helper('simiconnector')->__('Add Message');
+    }
 }

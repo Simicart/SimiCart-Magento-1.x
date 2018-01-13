@@ -3,9 +3,11 @@
 /**
 
  */
-class Simi_Simiconnector_Block_Adminhtml_Device_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {
+class Simi_Simiconnector_Block_Adminhtml_Device_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
+{
 
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
 
         $this->_objectId = 'id';
@@ -33,7 +35,8 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Edit extends Mage_Adminhtml_Bloc
      *
      * @return string
      */
-    public function getHeaderText() {
+    public function getHeaderText() 
+    {
         if (Mage::registry('device_data') && Mage::registry('device_data')->getId())
             return Mage::helper('simiconnector')->__("View Device '%s'", $this->htmlEscape(Mage::registry('device_data')->getId()));
         return Mage::helper('simiconnector')->__('Add Device');

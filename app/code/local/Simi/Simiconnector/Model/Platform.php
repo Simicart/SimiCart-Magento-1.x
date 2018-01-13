@@ -20,14 +20,17 @@
  * @package     Siminotification
  * @author      Developer
  */
-class Simi_Simiconnector_Model_Platform extends Mage_Core_Model_Abstract {
+class Simi_Simiconnector_Model_Platform extends Mage_Core_Model_Abstract
+{
 
-    public function _construct() {
+    public function _construct() 
+    {
         parent::_construct();
         $this->_init('simiconnector/platform');
     }
 
-    public function toOptionArray() {
+    public function toOptionArray() 
+    {
         $platform = array(
             Mage::helper('simiconnector')->__('All'),
             Mage::helper('simiconnector')->__('IOS'),

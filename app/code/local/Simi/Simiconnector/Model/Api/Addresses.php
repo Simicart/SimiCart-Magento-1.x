@@ -3,16 +3,19 @@
 /**
  * 
  */
-class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Api_Abstract {
+class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Api_Abstract
+{
 
     protected $_DEFAULT_ORDER = 'entity_id';
 
-    public function setSingularKey($singularKey) {
+    public function setSingularKey($singularKey) 
+    {
         $this->singularKey = 'Address';
         return $this;
     }
 
-    public function setBuilderQuery() {
+    public function setBuilderQuery() 
+    {
         $data = $this->getData();
         if (isset($data['resourceid']) && $data['resourceid']) {
             $this->builderQuery = Mage::getModel('customer/address')->load($data['resourceid']);
@@ -26,13 +29,16 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
                 if ($billing) {
                     $addressArray[] = $billing->getId();
                 }
+
                 $shipping = $customer->getPrimaryShippingAddress();
                 if ($shipping) {
                     $addressArray[] = $shipping->getId();
                 }
+
                 foreach ($customer->getAddresses() as $index => $address) {
                     $addressArray[] = $index;
                 }
+
                 $this->builderQuery = Mage::getModel('customer/address')->getCollection()
                         ->addFieldToFilter('entity_id', array('in' => $addressArray));
             }
@@ -43,7 +49,8 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
      * Add Address
      */
 
-    public function store() {
+    public function store() 
+    {
         $data = $this->getData();
         $address = Mage::getModel('simiconnector/address')->saveAddress($data);
         $this->builderQuery = $address;
@@ -54,7 +61,8 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
      * Edit Address
      */
 
-    public function update() {
+    public function update() 
+    {
         $data = $this->getData();
         $address = Mage::getModel('simiconnector/address')->saveAddress($data);
         $this->builderQuery = $address;
@@ -65,13 +73,15 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
      * Remove Address
      */
 
-    public function destroy() {
+    public function destroy() 
+    {
         $data = $this->getData();
         if ($data['resourceid']) {
            $this->builderQuery = Mage::getModel('customer/address')->load($data['resourceid']);
            $this->builderQuery->delete();
            return $this->show();
         }
+
         throw new Exception($this->_helper->__('No Address ID sent'), 4);
     }
     
@@ -80,7 +90,8 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
      * View Address Detail
      */
 
-    public function index() {
+    public function index() 
+    {
         $result = parent::index();
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         $addresses = $result['addresses'];
@@ -88,6 +99,7 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
             $addressModel = Mage::getModel('customer/address')->load($address['entity_id']);
             $addresses[$index] = array_merge($address, Mage::helper('simiconnector/address')->getAddressDetail($addressModel, $customer));
         }
+
         $result['addresses'] = $addresses;
         return $result;
     }
@@ -96,7 +108,8 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
      * Geocoding
      */
 
-    public function show() {
+    public function show() 
+    {
         $data = $this->getData();
         if ($data['resourceid']) {
             if ($data['resourceid'] == 'geocoding') {
@@ -113,12 +126,15 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
                     if (in_array('street_number', $types)) {
                         $address .= $addressComponents->long_name;
                     }
+
                     if (in_array('route', $types)) {
                         $address .= ' ' . $addressComponents->long_name;
                     }
+
                     if (in_array('locality', $types)) {
                         $address .= ', ' . $addressComponents->long_name;
                     }
+
                     $addressDetail['street'] = $address;
                     if (in_array('postal_town', $types) || in_array('administrative_area_level_1', $types)) {
                         $addressDetail['region'] = $addressComponents->long_name;
@@ -133,18 +149,22 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
                         $addressDetail['country_name'] = $addressComponents->long_name;
                         $addressDetail['country_id'] = $addressComponents->short_name;
                     }
+
                     if (in_array('postal_code', $types)) {
                         $addressDetail['postcode'] = $addressComponents->long_name;
                     }
                 }
+
                 $result['address'] = $addressDetail;
                 return $result;
             }
         }
+
         $result = parent::show();
         if($result && is_array($result) && isset($result['Address'])) {
             $result['Address'] = array_merge($result['Address'], Mage::helper('simiconnector/address')->getAddressDetail($this->builderQuery));
         }
+
         return $result;
     }
 

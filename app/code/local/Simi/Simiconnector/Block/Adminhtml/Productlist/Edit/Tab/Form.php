@@ -20,13 +20,15 @@
  * @package     Madapter
  * @author      Developer
  */
-class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form {
+class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form
+{
 
     /**
      * prepare tab form's information
      *
      */
-    protected function _prepareForm() {
+    protected function _prepareForm() 
+    {
         $form = new Varien_Data_Form();
         $this->setForm($form);
 
@@ -45,6 +47,7 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
             foreach ($visibleStoreViews as $visibilityItem) {
                 $storeIdArray[] = $visibilityItem->getData('store_view_id');
             }
+
             $data['storeview_id'] = implode(',', $storeIdArray);
         } else {
             $storeIdArray = array();
@@ -52,60 +55,74 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
                 $storeIdArray[] = $storeModel->getId();
             $data['storeview_id'] = implode(',', $storeIdArray);
         }
+
         $fieldset = $form->addFieldset('simiconnector_form', array('legend' => Mage::helper('simiconnector')->__('Product List information')));
 
 
-        $field = $fieldset->addField('storeview_id', 'multiselect', array(
+        $field = $fieldset->addField(
+            'storeview_id', 'multiselect', array(
             'name' => 'storeview_id[]',
             'label' => Mage::helper('simiconnector')->__('Store View'),
             'title' => Mage::helper('simiconnector')->__('Store View'),
             'required' => true,
             'values' => Mage::getSingleton('adminhtml/system_store')->getStoreValuesForForm(false, false),
-        ));
+            )
+        );
 
         $renderer = $this->getLayout()->createBlock('adminhtml/store_switcher_form_renderer_fieldset_element');
         $field->setRenderer($renderer);
 
-        $fieldset->addField('list_title', 'text', array(
+        $fieldset->addField(
+            'list_title', 'text', array(
             'label' => Mage::helper('simiconnector')->__('Title'),
             'class' => 'required-entry',
             'required' => true,
             'name' => 'list_title',
-        ));
+            )
+        );
         if(Mage::helper('simiconnector/cloud')->getThemeLayout() == 'matrix'
             || Mage::helper('simiconnector/cloud')->getThemeLayout() == 'zara'){
-            $fieldset->addField('list_image', 'image', array(
+            $fieldset->addField(
+                'list_image', 'image', array(
                 'label' => Mage::helper('simiconnector')->__('Product List Image'),
                 'name' => 'productlist_image_o',
-            ));
+                )
+            );
 
-            $fieldset->addField('list_image_tablet', 'image', array(
+            $fieldset->addField(
+                'list_image_tablet', 'image', array(
                 'label' => Mage::helper('simiconnector')->__('Product List Tablet Image'),
                 'name' => 'productlist_image_tablet_o',
-            ));
+                )
+            );
         }
 
         if (!isset($data['sort_order']))
             $data['sort_order'] = 1;
-        $fieldset->addField('sort_order', 'text', array(
+        $fieldset->addField(
+            'sort_order', 'text', array(
             'label' => Mage::helper('simiconnector')->__('Sort Order'),
             'required' => false,
             'class' => 'validate-not-negative-number',
             'name' => 'sort_order',
-        ));
+            )
+        );
 
         if (!isset($data['list_type']))
             $data['list_type'] = 1;
-        $fieldset->addField('list_type', 'select', array(
+        $fieldset->addField(
+            'list_type', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Product List Type'),
             'name' => 'list_type',
             'values' => Mage::helper('simiconnector/productlist')->getTypeOption(),
             'onchange' => 'onchangeNoticeType(this.value)',
             'after_element_html' => '<script> Event.observe(window, "load", function(){onchangeNoticeType(\'' . $data['list_type'] . '\');});</script>',
-        ));
+            )
+        );
 
         $productIds = implode(", ", Mage::getResourceModel('catalog/product_collection')->getAllIds());
-        $fieldset->addField('list_products', 'text', array(
+        $fieldset->addField(
+            'list_products', 'text', array(
             'name' => 'list_products',
             'label' => Mage::helper('simiconnector')->__('Product ID'),
             'note' => Mage::helper('simiconnector')->__('Choose a product'),
@@ -199,17 +216,20 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
                         
                     }
                 </script>'
-        ));
+            )
+        );
 
 
-        $fieldset->addField('list_status', 'select', array(
+        $fieldset->addField(
+            'list_status', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Enable'),
             'name' => 'list_status',
             'values' => array(
                 array('value' => 1, 'label' => Mage::helper('simiconnector')->__('Yes')),
                 array('value' => 0, 'label' => Mage::helper('simiconnector')->__('No')),
             )
-        ));
+            )
+        );
         if(Mage::helper('simiconnector/cloud')->getThemeLayout() == 'matrix'){
             $matrixfieldset = $form->addFieldset('productlist_matrix', array('legend' => Mage::helper('simiconnector')->__('Matrix Layout Config')));
 
@@ -228,47 +248,57 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
             if (!isset($data['matrix_row']) || !$data['matrix_row'])
                 $data['matrix_row'] = 1;
 
-            $matrixfieldset->addField('matrix_width_percent', 'text', array(
+            $matrixfieldset->addField(
+                'matrix_width_percent', 'text', array(
                 'label' => Mage::helper('simiconnector')->__('Image Width/ Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_width_percent',
                 'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('With Screen Width is 100%'),
-            ));
+                )
+            );
 
-            $matrixfieldset->addField('matrix_height_percent', 'text', array(
+            $matrixfieldset->addField(
+                'matrix_height_percent', 'text', array(
                 'label' => Mage::helper('simiconnector')->__('Image Height/ Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_height_percent',
                 'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('With Screen Height is 100%'),
-            ));
+                )
+            );
 
 
 
-            $matrixfieldset->addField('matrix_width_percent_tablet', 'text', array(
+            $matrixfieldset->addField(
+                'matrix_width_percent_tablet', 'text', array(
                 'label' => Mage::helper('simiconnector')->__('Tablet Image Width/Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_width_percent_tablet',
                 'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('Leave it empty if you want to use Phone Value'),
-            ));
+                )
+            );
 
-            $matrixfieldset->addField('matrix_height_percent_tablet', 'text', array(
+            $matrixfieldset->addField(
+                'matrix_height_percent_tablet', 'text', array(
                 'label' => Mage::helper('simiconnector')->__('Tablet Image Height/Screen Width Ratio'),
                 'required' => false,
                 'name' => 'matrix_height_percent_tablet',
                 'class' => 'required-entry validate-number',
                 'note' => Mage::helper('simiconnector')->__('Leave it empty if you want to use Phone Value'),
-            ));
+                )
+            );
 
 
-            $matrixfieldset->addField('matrix_row', 'select', array(
+            $matrixfieldset->addField(
+                'matrix_row', 'select', array(
                 'label' => Mage::helper('simiconnector')->__('Row Number'),
                 'values' => Mage::helper('simiconnector/productlist')->getMatrixRowOptions(),
                 'onchange' => 'autoFillHeight(this.value)',
                 'name' => 'matrix_row',
-            ));
+                )
+            );
 
             $storeviewArray = array();
             if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
@@ -287,7 +317,8 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
                 $storeviewArray[$storeView->getId()] = $storeView->getName();
             }
 
-            $matrixfieldset->addField('storeview_scope', 'select', array(
+            $matrixfieldset->addField(
+                'storeview_scope', 'select', array(
                 'label' => Mage::helper('simiconnector')->__('Storeview for Mockup Preview'),
                 'name' => 'storeview_scope',
                 'values' => $storeviewArray,
@@ -306,7 +337,8 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Form extends Mage_
                 xhttp.send();
             }
             Event.observe(window, "load", function(){updateMockupPreview(\'' . $data['storeview_scope'] . '\');});</script>',
-            ));
+                )
+            );
         }
 
         $form->setValues($data);

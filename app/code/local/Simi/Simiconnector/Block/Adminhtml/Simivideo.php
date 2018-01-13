@@ -7,6 +7,6 @@ class Simi_Simiconnector_Block_Adminhtml_Simivideo extends Mage_Adminhtml_Block_
         $this->_controller = 'adminhtml_simivideo';
         $this->_blockGroup = 'simiconnector';
         $this->_headerText = Mage::helper('simiconnector')->__('Videos');                
-		parent::__construct();
+        parent::__construct();
     }
 }

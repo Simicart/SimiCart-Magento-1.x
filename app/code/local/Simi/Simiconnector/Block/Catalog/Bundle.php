@@ -57,28 +57,42 @@ class Simi_Simiconnector_Block_Catalog_Bundle extends Mage_Bundle_Block_Catalog_
                     $tierPriceInfo['website_price'] =
                         $bundlePriceModel->getLowestPrice($currentProduct, $tierPriceInfo['website_price']);
                     $tierPriceInfo['price'] = $coreHelper->currency($tierPriceInfo['price'], false, false);
-                    $tierPriceInfo['priceInclTax'] = $taxHelper->getPrice($_selection, $tierPriceInfo['price'], true,
-                        null, null, null, null, null, false);
-                    $tierPriceInfo['priceExclTax'] = $taxHelper->getPrice($_selection, $tierPriceInfo['price'], false,
-                        null, null, null, null, null, false);
+                    $tierPriceInfo['priceInclTax'] = $taxHelper->getPrice(
+                        $_selection, $tierPriceInfo['price'], true,
+                        null, null, null, null, null, false
+                    );
+                    $tierPriceInfo['priceExclTax'] = $taxHelper->getPrice(
+                        $_selection, $tierPriceInfo['price'], false,
+                        null, null, null, null, null, false
+                    );
                 }
+
                 unset($tierPriceInfo); // break the reference with the last element
 
-                $itemPrice = $bundlePriceModel->getSelectionFinalTotalPrice($currentProduct, $_selection,
+                $itemPrice = $bundlePriceModel->getSelectionFinalTotalPrice(
+                    $currentProduct, $_selection,
                     $currentProduct->getQty(), $_selection->getQty(), false, false
                 );
 
                 $canApplyMAP = false;
-                $_priceInclTax = $taxHelper->getPrice($_selection, $itemPrice, true,
-                    null, null, null, null, null, false);
-                $_priceExclTax = $taxHelper->getPrice($_selection, $itemPrice, false,
-                    null, null, null, null, null, false);
+                $_priceInclTax = $taxHelper->getPrice(
+                    $_selection, $itemPrice, true,
+                    null, null, null, null, null, false
+                );
+                $_priceExclTax = $taxHelper->getPrice(
+                    $_selection, $itemPrice, false,
+                    null, null, null, null, null, false
+                );
 
                 if ($currentProduct->getPriceType() == Mage_Bundle_Model_Product_Price::PRICE_TYPE_FIXED) {
-                    $_priceInclTax = $taxHelper->getPrice($currentProduct, $itemPrice, true,
-                        null, null, null, null, null, false);
-                    $_priceExclTax = $taxHelper->getPrice($currentProduct, $itemPrice, false,
-                        null, null, null, null, null, false);
+                    $_priceInclTax = $taxHelper->getPrice(
+                        $currentProduct, $itemPrice, true,
+                        null, null, null, null, null, false
+                    );
+                    $_priceExclTax = $taxHelper->getPrice(
+                        $currentProduct, $itemPrice, false,
+                        null, null, null, null, null, false
+                    );
                 }
 
                 $selection = array (
@@ -105,6 +119,7 @@ class Simi_Simiconnector_Block_Catalog_Bundle extends Mage_Bundle_Block_Catalog_
                         $selection[$o] = $v;
                     }
                 }
+
                 $option['selections'][$selectionId] = $selection;
 
                 if (($_selection->getIsDefault() || ($selectionCount == 1 && $_option->getRequired()))
@@ -113,6 +128,7 @@ class Simi_Simiconnector_Block_Catalog_Bundle extends Mage_Bundle_Block_Catalog_
                     $selected[$optionId][] = $selectionId;
                 }
             }
+
             $options[$optionId] = $option;
 
             // Add attribute default value (if set)

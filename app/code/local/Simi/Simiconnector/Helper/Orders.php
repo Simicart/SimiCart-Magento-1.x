@@ -40,6 +40,7 @@ class Simi_Simiconnector_Helper_Orders extends Mage_Core_Helper_Abstract
             $result['status_updated'] = 2;
             $result['message'] = $this->__('Order cannot be invoiced.');
         }
+
         return $result;
     }
 
@@ -59,11 +60,13 @@ class Simi_Simiconnector_Helper_Orders extends Mage_Core_Helper_Abstract
             if ($params->is_mail == 1) {
                 $shipment->sendInfo($shipmentId);
             }
+
             $result['message'] = $this->__('The shipment has been created.');
         } else {
             $result['status_updated'] = 2;
             $result['message'] = $this->__('The shipment cannot be created');
         }
+
         return $result;
     }
 
@@ -84,6 +87,7 @@ class Simi_Simiconnector_Helper_Orders extends Mage_Core_Helper_Abstract
             $result['status_updated'] = 2;
             $result['message'] = $this->__('The order cannot be canceled');
         }
+
         return $result;
     }
 
@@ -105,10 +109,12 @@ class Simi_Simiconnector_Helper_Orders extends Mage_Core_Helper_Abstract
             $result['status_updated'] = 2;
             $result['message'] = $this->__('The order cannot be holded');
         }
+
         return $result;
     }
 
-    public function unHoldOrder($order){
+    public function unHoldOrder($order)
+    {
         //1 success, 2 fail.
         $result = array(
             'status_updated' => 1,

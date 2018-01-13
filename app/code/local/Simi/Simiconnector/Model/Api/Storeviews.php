@@ -6,14 +6,16 @@
  * Date: 5/3/16
  * Time: 9:37 PM
  */
-class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_Api_Abstract {
+class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_Api_Abstract
+{
 
     public $storeviewInfo;
     protected $_DEFAULT_ORDER = 'store_id';
     protected $_method = 'callApi';
     protected $group_id;
 
-    public function setBuilderQuery() {
+    public function setBuilderQuery() 
+    {
         $data = $this->getData();
         if (isset($data['resourceid']) && $data['resourceid']) {
             $this->setStoreView($data);
@@ -24,15 +26,18 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         }
     }
 
-    public function index() {
+    public function index() 
+    {
         $result = parent::index();
         foreach ($result['storeviews'] as $index => $storeView) {
             $result['storeviews'][$index]['base_url'] = Mage::getStoreConfig('simiconnector/general/base_url', $storeView['store_id']);
         }
+
         return $result;
     }
 
-    public function show() {
+    public function show() 
+    {
         //$information = parent::show();
         $country_code = Mage::getStoreConfig('general/country/default');
         $country = Mage::getModel('directory/country')->loadByCode($country_code);
@@ -61,6 +66,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         if (Mage::getStoreConfig('web/url/use_store') && (!$base_url || $base_url=='')) {
             $base_url = Mage::getBaseUrl();
         }
+
         $additionInfo = array(
             'base' => array(
                 'country_code' => $country->getId(),
@@ -201,7 +207,8 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         return $this->getDetail($this->storeviewInfo);
     }
 
-    public function getAllowedCountries() {
+    public function getAllowedCountries() 
+    {
         $list = array();
         $country_default = Mage::getStoreConfig('general/country/default');
         $countries = Mage::getResourceModel('directory/country_collection')->loadByStore();
@@ -221,29 +228,33 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 );
             }
         }
+
         if ($cache) {
             array_unshift($list, $cache);
         }
+
         return $list;
     }
 
-    public function getCurrencyPosition() {
+    public function getCurrencyPosition() 
+    {
         $formated = Mage::app()->getStore()->getCurrentCurrency()->formatTxt(0);
         $number = Mage::app()->getStore()->getCurrentCurrency()->formatTxt(0, array('display' => Zend_Currency::NO_SYMBOL));
         $ar_curreny = explode($number, $formated);
         if ($ar_curreny['0'] != '') {
             return 'before';
         }
+
         return 'after';
     }
 
-    public function getCurrencies() {
+    public function getCurrencies() 
+    {
         $currencies = array();
         $codes = Mage::app()->getStore()->getAvailableCurrencyCodes(true);
         if (is_array($codes) && count($codes) > 1) {
-
             $rates = Mage::getModel('directory/currency')->getCurrencyRates(
-                    Mage::app()->getStore()->getBaseCurrency(), $codes
+                Mage::app()->getStore()->getBaseCurrency(), $codes
             );
             foreach ($codes as $code) {
                 if (isset($rates[$code])) {
@@ -261,10 +272,12 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'title' => Mage::app()->getLocale()->getTranslation($codes[0], 'nametocurrency'),
             );
         }
+
         return $currencies;
     }
 
-    public function setCurrency($data) {
+    public function setCurrency($data) 
+    {
         if (isset($data['params']['currency'])) {
             $currency = $data['params']['currency'];
             if ($currency) {
@@ -274,21 +287,24 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         }
     }
 
-    public function setStoreView($data) {
+    public function setStoreView($data) 
+    {
         if (($data['resourceid'] == 'default') || ($data['resourceid'] == Mage::app()->getStore()))
             return;
         Mage::app()->getCookie()->set(Mage_Core_Model_Store::COOKIE_NAME, Mage::app()->getStore($data['resourceid'])->getCode(), TRUE);
         Mage::app()->setCurrentStore(
-                Mage::app()->getStore($data['resourceid'])->getCode()
+            Mage::app()->getStore($data['resourceid'])->getCode()
         );
         Mage::getSingleton('core/locale')->emulate($data['resourceid']);
     }
 
-    public function getCurrentStoreId() {
+    public function getCurrentStoreId() 
+    {
         return Mage::app()->getStore()->getId();
     }
 
-    public function getStores() {
+    public function getStores() 
+    {
         $storeAPIModel = Mage::getModel('simiconnector/api_stores');
         $storeAPIModel->setData($this->getData());
         $storeAPIModel->builderQuery = Mage::getModel('core/store_group')->getCollection()->addFieldToFilter('website_id', Mage::app()->getStore()->getWebsiteId());

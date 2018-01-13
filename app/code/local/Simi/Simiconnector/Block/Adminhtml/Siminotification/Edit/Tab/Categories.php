@@ -45,10 +45,12 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Categories ex
         return $this->_selectedIds;
     }
 
-    public function is_Root(){
+    public function is_Root()
+    {
         if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
             return $this->_checkRoot;
         }
+
         return $this->getRoot()->getChecked();
     }
     public function setCategoryIds($ids)
@@ -59,6 +61,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Categories ex
         elseif (!is_array($ids)) {
             $ids = array((int)$ids);
         }
+
         $this->_selectedIds = $ids;
         return $this;
     }
@@ -78,6 +81,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Categories ex
         if ($this->_withProductCount) {
             $item['text'].= ' ('.$node->getProductCount().')';
         }
+
         $item['id']  = $node->getId();
         $item['path'] = $node->getData('path');
         $item['cls'] = 'folder ' . ($node->getIsActive() ? 'active-category' : 'no-active-category');
@@ -116,19 +120,21 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Categories ex
                 if(in_array($group->getData('root_category_id'), $this->getCategoryIds())){
                     $this->_checkRoot = true;
                 }
-                return parent::getRoot($category);
 
+                return parent::getRoot($category);
             }
         }
+
         return parent::getRoot();
     }
 
     protected function _getDefaultStoreId()
     {
         if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
-            return Mage::getModel('core/store')->getCollection()->addFieldToFilter('website_id',$webId)
+            return Mage::getModel('core/store')->getCollection()->addFieldToFilter('website_id', $webId)
                 ->getFirstItem()->getId();
         }
+
         return Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
     }
 }

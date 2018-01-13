@@ -38,8 +38,8 @@ class Simi_Simiconnector_Model_Api_Reviews extends Simi_Simiconnector_Model_Api_
         if ($this->_allow_filter_core) {
             $query = $this->builderQuery;
             $this->_whereFilter($query, $parameters);
-
         }
+
         if (isset($parameters['dir']) && isset($parameters['order']))
             $this->_order($parameters);
 
@@ -60,6 +60,7 @@ class Simi_Simiconnector_Model_Api_Reviews extends Simi_Simiconnector_Model_Api_
         if (isset($parameters['fields']) && $parameters['fields']) {
             $fields = explode(',', $parameters['fields']);
         }
+
         $info = $entity->toArray($fields);
         $detail = $this->getDetail($info);
         $detail['message'] = $review['message'];
@@ -112,6 +113,7 @@ class Simi_Simiconnector_Model_Api_Reviews extends Simi_Simiconnector_Model_Api_
         if (isset($parameters[self::OFFSET]) && $parameters[self::OFFSET]) {
             $offset = $parameters[self::OFFSET];
         }
+
         $collection->setPageSize($offset + $limit);
         $all_ids = $collection->getAllIds();
         $info = array();
@@ -124,6 +126,7 @@ class Simi_Simiconnector_Model_Api_Reviews extends Simi_Simiconnector_Model_Api_
         if (isset($parameters['fields']) && $parameters['fields']) {
             $fields = explode(',', $parameters['fields']);
         }
+
         $star = array();
         $count = null;
         $star[0] = 0;
@@ -139,6 +142,7 @@ class Simi_Simiconnector_Model_Api_Reviews extends Simi_Simiconnector_Model_Api_
             if (++$check_offset <= $offset) {
                 continue;
             }
+
             if (++$check_limit > $limit)
                 break;
             $star[5]++;
@@ -146,6 +150,7 @@ class Simi_Simiconnector_Model_Api_Reviews extends Simi_Simiconnector_Model_Api_
             foreach ($entity->getRatingVotes() as $vote) {
                 $y += ($vote->getPercent() / 20);
             }
+
             $x = (int) ($y / count($entity->getRatingVotes()));
             $info_detail = $entity->toArray($fields);
             $info_detail['rate_points'] = $x;
@@ -167,6 +172,7 @@ class Simi_Simiconnector_Model_Api_Reviews extends Simi_Simiconnector_Model_Api_
                 $star[5]--;
             }
         }
+
         $count = array(
             '1_star' => $star[0],
             '2_star' => $star[1],
@@ -190,6 +196,7 @@ class Simi_Simiconnector_Model_Api_Reviews extends Simi_Simiconnector_Model_Api_
         if (isset($parameters['fields']) && $parameters['fields']) {
             $fields = explode(',', $parameters['fields']);
         }
+
         $info = $entity->toArray($fields);
         return $this->getDetail($info);
     }

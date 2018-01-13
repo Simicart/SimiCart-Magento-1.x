@@ -3,18 +3,22 @@
 /**
 
  */
-class Simi_Simiconnector_Model_Device extends Mage_Core_Model_Abstract {
+class Simi_Simiconnector_Model_Device extends Mage_Core_Model_Abstract
+{
 
-    public function _construct() {
+    public function _construct() 
+    {
         parent::_construct();
         $this->_init('simiconnector/device');
     }
 
-    public function detectMobile() {
+    public function detectMobile() 
+    {
         $user_agent = '';
         if ($_SERVER["HTTP_USER_AGENT"]) {
             $user_agent = $_SERVER["HTTP_USER_AGENT"];
         }
+
         if (strstr($user_agent, 'iPhone') || strstr($user_agent, 'iPod')) {
             return 1;
         } elseif (strstr($user_agent, 'iPad')) {
@@ -26,7 +30,8 @@ class Simi_Simiconnector_Model_Device extends Mage_Core_Model_Abstract {
         }
     }
 
-    public function saveDevice($data) {
+    public function saveDevice($data) 
+    {
 
         $deviceData = $data['contents'];
         if (!$deviceData->device_token)
@@ -44,6 +49,7 @@ class Simi_Simiconnector_Model_Device extends Mage_Core_Model_Abstract {
             $this->setData('country', $addresses['country']);
             $this->setData('zipcode', $addresses['zipcode']);
         }
+
         $this->setData('device_token', $deviceData->device_token);
         $this->setData('plaform_id', $device_id);
         $this->setData('storeview_id', Mage::app()->getStore()->getStoreId());
@@ -63,6 +69,7 @@ class Simi_Simiconnector_Model_Device extends Mage_Core_Model_Abstract {
         if ($existed_device->getId()) {
             $this->setId($existed_device->getId());
         }
+
         $this->save();
     }
 

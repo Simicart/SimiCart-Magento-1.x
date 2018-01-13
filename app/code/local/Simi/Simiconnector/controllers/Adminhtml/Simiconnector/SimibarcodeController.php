@@ -1,13 +1,15 @@
 <?php
 
-class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends Mage_Adminhtml_Controller_Action {
+class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends Mage_Adminhtml_Controller_Action
+{
 
     /**
      * init layout and set active for current menu
      *
      * @return Simi_Simibarcode_Adminhtml_SimibarcodeController
      */
-    protected function _initAction() {
+    protected function _initAction() 
+    {
         $this->loadLayout()
                 ->_setActiveMenu('simiconnector/simibarcode')
                 ->_addBreadcrumb(Mage::helper('adminhtml')->__('Items Manager'), Mage::helper('adminhtml')->__('Item Manager'));
@@ -17,7 +19,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
     /**
      * index action
      */
-    public function indexAction() {
+    public function indexAction() 
+    {
         $this->_initAction()
                 ->renderLayout();
     }
@@ -25,7 +28,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
     /**
      * view and edit item action
      */
-    public function editAction() {
+    public function editAction() 
+    {
         $simibarcodeId = $this->getRequest()->getParam('id');
         $model = Mage::getModel('simiconnector/simibarcode')->load($simibarcodeId);
         $this->_title($this->__('Barcode'));
@@ -34,21 +38,23 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
         } else {
             $this->_title($this->__('Edit Barcode'));
         }
+
         if ($model->getId() || $simibarcodeId == 0) {
             $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
             if (!empty($data)) {
                 $model->setData($data);
             }
+
             Mage::register('simibarcode_data', $model);
 
             $this->loadLayout();
             $this->_setActiveMenu('simiconnector/simibarcode');
 
             $this->_addBreadcrumb(
-                    Mage::helper('adminhtml')->__('Manage Barcodes'), Mage::helper('adminhtml')->__('Manage Barcodes')
+                Mage::helper('adminhtml')->__('Manage Barcodes'), Mage::helper('adminhtml')->__('Manage Barcodes')
             );
             $this->_addBreadcrumb(
-                    Mage::helper('adminhtml')->__('Add New Custom Barcode'), Mage::helper('adminhtml')->__('Add New Custom Barcode')
+                Mage::helper('adminhtml')->__('Add New Custom Barcode'), Mage::helper('adminhtml')->__('Add New Custom Barcode')
             );
             if (!$simibarcodeId) {
                 $this->getLayout()->getBlock('head')
@@ -60,20 +66,24 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
 
             $this->renderLayout();
         } else {
-            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('simiconnector')
-                            ->__('Barcode does not exist'));
+            Mage::getSingleton('adminhtml/session')->addError(
+                Mage::helper('simiconnector')
+                ->__('Barcode does not exist')
+            );
             $this->_redirect('*/*/');
         }
     }
 
-    public function newAction() {
+    public function newAction() 
+    {
         $this->_forward('edit');
     }
 
     /**
      * products action
      */
-    public function productsAction() {
+    public function productsAction() 
+    {
         $this->loadLayout();
         $this->getLayout()->getBlock('barcode.edit.tab.products')
                 ->setProducts($this->getRequest()->getPost('barcode_products', null));
@@ -88,7 +98,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
     /**
      * products Grid action
      */
-    public function productsGridAction() {
+    public function productsGridAction() 
+    {
         $this->loadLayout();
         $this->getLayout()->getBlock('barcode.edit.tab.products')
                 ->setProducts($this->getRequest()->getPost('barcode_products', null));
@@ -98,29 +109,34 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
     /**
      * check barcode dupplicate
      */
-    public function checkDupplicate($barcode) {
+    public function checkDupplicate($barcode) 
+    {
         $code = Mage::helper('simiconnector/simibarcode')->generateCode(Mage::getStoreConfig('simiconnector/barcode/pattern'));
         if (in_array($code, $barcode)) {
             $code = $this->checkDupplicate($barcode);
         }
+
         return $code;
     }
 
     /**
      * check QRcode dupplicate
      */
-    public function checkDupplicateQrcode($qrcode) {
+    public function checkDupplicateQrcode($qrcode) 
+    {
         $code = Mage::helper('simiconnector/simibarcode')->generateCode(Mage::getStoreConfig('simiconnector/barcode/qrcode_pattern'));
         if (in_array($code, $qrcode)) {
             $code = $this->checkDupplicate($qrcode);
         }
+
         return $code;
     }
 
     /**
      * save item action
      */
-    public function saveAction() {
+    public function saveAction() 
+    {
         if ($post = $this->getRequest()->getPost()) {
             $model = Mage::getModel('simiconnector/simibarcode')->load($this->getRequest()->getParam('id'));
             try {
@@ -128,18 +144,19 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
                     $model->setData('barcode_status', $post['barcode_status'])
                             ->setData('barcode', $post['barcode'])
                             ->setData('qrcode', $post['qrcode'])
-                            ->save()
-                    ;
+                            ->save();
                     if ($this->getRequest()->getParam('back')) {
                         Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Barcode "%s" was successfully edited.', $model->getBarcode()));
                         $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
                         return;
                     }
+
                     Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Barcode "%s" was successfully edited.', $model->getBarcode()));
 
                     $this->_redirect('*/*');
                     return;
                 }
+
                 $resource = Mage::getSingleton('core/resource');
                 $writeConnection = $resource->getConnection('core_write');
 
@@ -165,9 +182,11 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
                         if ($id == 1) {
                             $string = $field;
                         }
+
                         if ($id > 1)
                             $string = $string . '_' . $field;
                     }
+
                     $columns[] = array($type => $string);
                     $string = '';
                     $type = '';
@@ -209,17 +228,18 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
                                     $checkBarcodeExist = Mage::getModel('simiconnector/simibarcode')->load($codeArr['barcode'], 'barcode');
                                     if ($checkBarcodeExist->getId()) {
                                         Mage::getSingleton('adminhtml/session')->addError(
-                                                Mage::helper('simiconnector')->__('The barcode "%s" was already exist!', $codeArr['barcode'])
+                                            Mage::helper('simiconnector')->__('The barcode "%s" was already exist!', $codeArr['barcode'])
                                         );
                                         Mage::getSingleton('adminhtml/session')->setFormData($post);
                                         $this->_redirect('*/*/edit', array('id' => $model->getId()));
                                         return;
                                     }
                                 }
+
                                 //check barcode dupplicate
                                 if (in_array($codeArr['barcode'], $barcode)) {
                                     Mage::getSingleton('adminhtml/session')->addError(
-                                            Mage::helper('simiconnector')->__('The barcode "%s" was already duplicate!', $codeArr['barcode'])
+                                        Mage::helper('simiconnector')->__('The barcode "%s" was already duplicate!', $codeArr['barcode'])
                                     );
                                     Mage::getSingleton('adminhtml/session')->setFormData($post);
                                     $this->_redirect('*/*/edit', array('id' => $model->getId()));
@@ -228,6 +248,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
                                     $barcode[] = $codeArr['barcode'];
                                 }
                             }
+
                             //auto generate QRcode
                             if ($codeArr['qrcode'] == '') {
                                 //check barcode dupplicate
@@ -240,17 +261,18 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
                                     $checkQrcodeExist = Mage::getModel('simiconnector/simibarcode')->load($codeArr['qrcode'], 'qrcode');
                                     if ($checkQrcodeExist->getId()) {
                                         Mage::getSingleton('adminhtml/session')->addError(
-                                                Mage::helper('simiconnector')->__('The QRcode "%s" was already exist!', $codeArr['qrcode'])
+                                            Mage::helper('simiconnector')->__('The QRcode "%s" was already exist!', $codeArr['qrcode'])
                                         );
                                         Mage::getSingleton('adminhtml/session')->setFormData($post);
                                         $this->_redirect('*/*/edit', array('id' => $model->getId()));
                                         return;
                                     }
                                 }
+
                                 //check QRcode dupplicate
                                 if (in_array($codeArr['qrcode'], $qrcode)) {
                                     Mage::getSingleton('adminhtml/session')->addError(
-                                            Mage::helper('simiconnector')->__('The QRcode "%s" was already duplicate!', $codeArr['qrcode'])
+                                        Mage::helper('simiconnector')->__('The QRcode "%s" was already duplicate!', $codeArr['qrcode'])
                                     );
                                     Mage::getSingleton('adminhtml/session')->setFormData($post);
                                     $this->_redirect('*/*/edit', array('id' => $model->getId()));
@@ -259,6 +281,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
                                     $qrcode[] = $codeArr['qrcode'];
                                 }
                             }
+
                             $sqlNews[$j] = array(
                                 'barcode' => $codeArr['barcode'],
                                 'qrcode' => $codeArr['qrcode'],
@@ -280,7 +303,6 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
                                 }
 
                                 if ($_id != 'custom') {
-
                                     $return = Mage::helper('simiconnector/simibarcode')->getValueForBarcode($_id, $key, $pId, $codeArr);
                                     if (is_array($return)) {
                                         foreach ($return as $_columns) {
@@ -300,6 +322,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
                                         $sqlNews[$j][$columnName] = $codeArr[$columnName];
                                 }
                             }
+
                             $sqlNews[$j]['created_date'] = now();
                             if (count($sqlNews) == 1000) {
                                 $writeConnection->insertMultiple($resource->getTableName('simiconnector/simibarcode'), $sqlNews);
@@ -322,6 +345,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
                     $this->_redirect('*/*/new');
                     return;
                 }
+
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Barcode was successfully saved.'));
 
                 $this->_redirect('*/*');
@@ -333,8 +357,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
                 return;
             }
         }
+
         Mage::getSingleton('adminhtml/session')->addError(
-                Mage::helper('simiconnector')->__('Unable to find barcode to save!')
+            Mage::helper('simiconnector')->__('Unable to find barcode to save!')
         );
         $this->_redirect('*/*/');
     }
@@ -342,7 +367,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
     /**
      * delete item action
      */
-    public function deleteAction() {
+    public function deleteAction() 
+    {
         if ($this->getRequest()->getParam('id') > 0) {
             try {
                 $model = Mage::getModel('simiconnector/simibarcode');
@@ -355,13 +381,15 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
                 $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
             }
         }
+
         $this->_redirect('*/*/');
     }
 
     /**
      * mass delete item(s) action
      */
-    public function massDeleteAction() {
+    public function massDeleteAction() 
+    {
         $simibarcodeIds = $this->getRequest()->getParam('simibarcode');
         if (!is_array($simibarcodeIds)) {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please select item(s)'));
@@ -371,18 +399,21 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
                     $simibarcode = Mage::getModel('simiconnector/simibarcode')->load($simibarcodeId);
                     $simibarcode->delete();
                 }
+
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Total of %d record(s) were successfully deleted', count($simibarcodeIds)));
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
             }
         }
+
         $this->_redirect('*/*/index');
     }
 
     /**
      * mass change status for item(s) action
      */
-    public function massStatusAction() {
+    public function massStatusAction() 
+    {
         $simibarcodeIds = $this->getRequest()->getParam('simibarcode');
         if (!is_array($simibarcodeIds)) {
             Mage::getSingleton('adminhtml/session')->addError($this->__('Please select item(s)'));
@@ -395,26 +426,29 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
                             ->setIsMassupdate(true)
                             ->save();
                 }
+
                 $this->_getSession()->addSuccess(
-                        $this->__('Total of %d record(s) were successfully updated', count($simibarcodeIds))
+                    $this->__('Total of %d record(s) were successfully updated', count($simibarcodeIds))
                 );
             } catch (Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
             }
         }
+
         $this->_redirect('*/*/index');
     }
 
-    protected function _isAllowed() {
+    protected function _isAllowed() 
+    {
         return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
     }
 
     /**
      * export grid item to XML type
      */
-    public function getImportCsvAction() {
+    public function getImportCsvAction() 
+    {
         if (isset($_FILES['fileToUpload']['name']) && $_FILES['fileToUpload']['name'] != '') {
-
             try {
                 $fileName = $_FILES['fileToUpload']['tmp_name'];
                 $Object = new Varien_File_Csv();
@@ -432,10 +466,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
                                 foreach ($row as $index => $cell)
                                     $fields[$index] = (string) $cell;
                         }elseif ($col > 0) {
-
                             if (count($row))
                                 foreach ($row as $index => $cell) {
-
                                     if (isset($fields[$index])) {
                                         $product[$fields[$index]] = $cell;
                                     }
@@ -452,12 +484,12 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimibarcodeController extends M
 
                 $helper->importProduct($products);
             } catch (Exception $e) {
-                
             }
         }
     }
     
-    public function barcodeAction(){
+    public function barcodeAction()
+    {
         $code = $this->getRequest()->getParam('code');
         Mage::helper('simiconnector/simibarcode')->createBarcode(null, $code, "100", "horizontal", "code128", false);
     }

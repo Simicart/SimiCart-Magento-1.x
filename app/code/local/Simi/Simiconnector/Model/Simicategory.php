@@ -1,13 +1,16 @@
 <?php
 
-class Simi_Simiconnector_Model_Simicategory extends Mage_Core_Model_Abstract {
+class Simi_Simiconnector_Model_Simicategory extends Mage_Core_Model_Abstract
+{
 
-    public function _construct() {
+    public function _construct() 
+    {
         parent::_construct();
         $this->_init('simiconnector/simicategory');
     }
 
-    public function getCategories() {
+    public function getCategories() 
+    {
         $data = array();
         try {
             $collection = $this->getCollection();
@@ -32,10 +35,12 @@ class Simi_Simiconnector_Model_Simicategory extends Mage_Core_Model_Abstract {
             if (is_array($message)) {
                 $information['message'] = $message;
             }
+
             return $information;
         }
     }
-    public function delete() {
+    public function delete() 
+    {
         $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('homecategory');
         $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
                 ->addFieldToFilter('content_type', $typeID)

@@ -1,8 +1,10 @@
 <?php
 
-class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form {
+class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form
+{
 
-    protected function _prepareForm() {
+    protected function _prepareForm() 
+    {
         $form = new Varien_Data_Form();
         $this->setForm($form);
         if (Mage::getSingleton('adminhtml/session')->getConnectorData()) {
@@ -13,66 +15,83 @@ class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Edit_Tab_Form extends 
 
         $fieldset = $form->addFieldset('simiproductlabel_form', array('legend' => Mage::helper('simiconnector')->__('Label information')));
 
-        $fieldset->addField('status', 'select', array(
+        $fieldset->addField(
+            'status', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Status'),
             'name' => 'status',
             'values' => Mage::getSingleton('simiconnector/status')->getOptionHash(),
-        ));
+            )
+        );
 
         $data['status'] = isset($data['status'])?$data['status']:'1';
 
-        $fieldset->addField('storeview_id', 'select', array(
+        $fieldset->addField(
+            'storeview_id', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Store View'),
             'name' => 'storeview_id',
-        ))->setRenderer($this->getLayout()->createBlock('simiconnector/adminhtml_simiproductlabel_edit_tab_renderer_storeviews'));
+            )
+        )->setRenderer($this->getLayout()->createBlock('simiconnector/adminhtml_simiproductlabel_edit_tab_renderer_storeviews'));
 
-        $fieldset->addField('name', 'text', array(
+        $fieldset->addField(
+            'name', 'text', array(
             'label' => Mage::helper('simiconnector')->__('Label Name'),
             'class' => 'required-entry',
             'required' => true,
             'name' => 'name',
-        ));
+            )
+        );
 
-        $fieldset->addField('description', 'textarea', array(
+        $fieldset->addField(
+            'description', 'textarea', array(
             'name' => 'description',
             'label' => Mage::helper('simiconnector')->__('Description'),
             'title' => Mage::helper('simiconnector')->__('Description'),
             'style' => 'height: 100px;',
             'wysiwyg' => false,
             'required' => false,
-        ));
+            )
+        );
 
-        $fieldset->addField('image', 'image', array(
+        $fieldset->addField(
+            'image', 'image', array(
             'label' => Mage::helper('simiconnector')->__('Image (width:340px, height:340px)'),
             'required' => FALSE,
             'name' => 'image_name_co',
-        ));
+            )
+        );
 
 
-        $fieldset->addField('position', 'select', array(
+        $fieldset->addField(
+            'position', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Position'),
             'name' => 'position',
             'required' => false,
             'values' => Mage::helper('simiconnector/productlabel')->getOptionHash()
-        ));
+            )
+        );
 
-        $fieldset->addField('priority', 'text', array(
+        $fieldset->addField(
+            'priority', 'text', array(
             'name' => 'priority',
             'class' => 'validate-number',
             'label' => Mage::helper('simiconnector')->__('Priority'),
             'note' => Mage::helper('simiconnector')->__('The higher the value, the higher the priority.'),
-        ));
+            )
+        );
 
 
-        $fieldset->addField('text', 'textarea', array(
+        $fieldset->addField(
+            'text', 'textarea', array(
             'label' => Mage::helper('simiconnector')->__('Text'),
             'required' => false,
             'name' => 'text',
-        ));
+            )
+        );
         $data['is_auto_fill'] = isset($data['is_auto_fill'])?$data['is_auto_fill']:1;
 
         $productIds = implode(", ", Mage::getResourceModel('catalog/product_collection')->getAllIds());
-        $fieldset->addField('product_ids', 'text', array(
+        $fieldset->addField(
+            'product_ids', 'text', array(
             'name' => 'product_ids',
             'class' => 'required-entry',
             'required' => true,
@@ -167,7 +186,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Edit_Tab_Form extends 
                         
                     }
                 </script>'
-        ));
+            )
+        );
 
         $form->setValues($data);
         return parent::_prepareForm();

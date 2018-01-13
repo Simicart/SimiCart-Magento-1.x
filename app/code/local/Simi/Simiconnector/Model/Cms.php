@@ -20,14 +20,17 @@
  * @package     Connector
  * @author      Developer
  */
-class Simi_Simiconnector_Model_Cms extends Mage_Core_Model_Abstract {
+class Simi_Simiconnector_Model_Cms extends Mage_Core_Model_Abstract
+{
 
-    public function _construct() {
+    public function _construct() 
+    {
         parent::_construct();
         $this->_init('simiconnector/cms');
     }
 
-    public function delete() {
+    public function delete() 
+    {
         $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('cms');
         $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
                 ->addFieldToFilter('content_type', $typeID)
@@ -37,7 +40,8 @@ class Simi_Simiconnector_Model_Cms extends Mage_Core_Model_Abstract {
         return parent::delete();
     }
 
-    public function toOptionArray() {
+    public function toOptionArray() 
+    {
         $platform = array(
             '1' => Mage::helper('simiconnector')->__('Left Menu'),
             '2' => Mage::helper('simiconnector')->__('Category In-app')
@@ -45,10 +49,11 @@ class Simi_Simiconnector_Model_Cms extends Mage_Core_Model_Abstract {
         return $platform;
     }
 
-    public function getCmsForCategory($catId) {
+    public function getCmsForCategory($catId) 
+    {
         $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('cms');
         $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
-        $cmsCollection = Mage::getModel('simiconnector/cms')->getCollection()->addFieldToFilter('type', '2')->setOrder('sort_order','ASC');
+        $cmsCollection = Mage::getModel('simiconnector/cms')->getCollection()->addFieldToFilter('type', '2')->setOrder('sort_order', 'ASC');
         $cmsCollection->getSelect()
                 ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.cms_id AND visibility.content_type = ' . $typeID . ' AND visibility.store_view_id =' . Mage::app()->getStore()->getId());
         foreach ($cmsCollection as $cms) {
@@ -58,16 +63,18 @@ class Simi_Simiconnector_Model_Cms extends Mage_Core_Model_Abstract {
             }
         }
     }
-    public function getCategoryCMSPages(){
+    public function getCategoryCMSPages()
+    {
         $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('cms');
         $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
-        $cmsCollection = Mage::getModel('simiconnector/cms')->getCollection()->addFieldToFilter('type', '2')->setOrder('sort_order','ASC');
+        $cmsCollection = Mage::getModel('simiconnector/cms')->getCollection()->addFieldToFilter('type', '2')->setOrder('sort_order', 'ASC');
         $cmsCollection->getSelect()
                 ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.cms_id AND visibility.content_type = ' . $typeID . ' AND visibility.store_view_id =' . Mage::app()->getStore()->getId());
         $cmsArray = array();
         foreach ($cmsCollection as $cms) {
             $cmsArray[] = $cms->toArray();
         }
+
         return $cmsArray;
     }
 

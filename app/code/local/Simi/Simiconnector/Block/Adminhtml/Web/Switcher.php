@@ -32,7 +32,8 @@
  * @package    Mage_Adminhtml
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Simi_Simiconnector_Block_Adminhtml_Web_Switcher extends Mage_Adminhtml_Block_Template {
+class Simi_Simiconnector_Block_Adminhtml_Web_Switcher extends Mage_Adminhtml_Block_Template
+{
     /**
      * Key in config for store switcher hint
      */
@@ -63,7 +64,8 @@ class Simi_Simiconnector_Block_Adminhtml_Web_Switcher extends Mage_Adminhtml_Blo
      */
     protected $_hasDefaultOption = true;
 
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
         $this->setTemplate('simiconnector/web/switcher.phtml');
         $this->setUseConfirm(true);
@@ -74,7 +76,8 @@ class Simi_Simiconnector_Block_Adminhtml_Web_Switcher extends Mage_Adminhtml_Blo
     /**
      * Deprecated
      */
-    public function getWebsiteCollection() {
+    public function getWebsiteCollection() 
+    {
         $collection = Mage::getModel('core/website')->getResourceCollection();
 
         $websiteIds = $this->getWebsiteIds();
@@ -90,7 +93,8 @@ class Simi_Simiconnector_Block_Adminhtml_Web_Switcher extends Mage_Adminhtml_Blo
      *
      * @return array
      */
-    public function getWebsites() {
+    public function getWebsites() 
+    {
         $websites = Mage::app()->getWebsites();
         if ($websiteIds = $this->getWebsiteIds()) {
             foreach ($websites as $websiteId => $website) {
@@ -98,17 +102,20 @@ class Simi_Simiconnector_Block_Adminhtml_Web_Switcher extends Mage_Adminhtml_Blo
                     unset($websites[$websiteId]);
                 }
             }
-        }		
+        }
+        
         return $websites;
     }
 
     /**
      * Deprecated
      */
-    public function getGroupCollection($website) {
+    public function getGroupCollection($website) 
+    {
         if (!$website instanceof Mage_Core_Model_Website) {
             $website = Mage::getModel('core/website')->load($website);
         }
+
         return $website->getGroupCollection();
     }
 
@@ -118,25 +125,30 @@ class Simi_Simiconnector_Block_Adminhtml_Web_Switcher extends Mage_Adminhtml_Blo
      * @param Mage_Core_Model_Website $website
      * @return array
      */
-    public function getStoreGroups($website) {
+    public function getStoreGroups($website) 
+    {
         if (!$website instanceof Mage_Core_Model_Website) {
             $website = Mage::app()->getWebsite($website);
         }
+
         return $website->getGroups();
     }
 
     /**
      * Deprecated
      */
-    public function getStoreCollection($group) {
+    public function getStoreCollection($group) 
+    {
         if (!$group instanceof Mage_Core_Model_Store_Group) {
             $group = Mage::getModel('core/store_group')->load($group);
         }
+
         $stores = $group->getStoreCollection();
         $_storeIds = $this->getStoreIds();
         if (!empty($_storeIds)) {
             $stores->addIdFilter($_storeIds);
         }
+
         return $stores;
     }
 
@@ -146,10 +158,12 @@ class Simi_Simiconnector_Block_Adminhtml_Web_Switcher extends Mage_Adminhtml_Blo
      * @param Mage_Core_Model_Store_Group $group
      * @return array
      */
-    public function getStores($group) {
+    public function getStores($group) 
+    {
         if (!$group instanceof Mage_Core_Model_Store_Group) {
             $group = Mage::app()->getGroup($group);
         }
+
         $stores = $group->getStores();
         if ($storeIds = $this->getStoreIds()) {
             foreach ($stores as $storeId => $store) {
@@ -158,42 +172,52 @@ class Simi_Simiconnector_Block_Adminhtml_Web_Switcher extends Mage_Adminhtml_Blo
                 }
             }
         }
+
         return $stores;
     }
 
-    public function getSwitchUrl() {        
+    public function getSwitchUrl() 
+    {        
         if ($url = $this->getData('switch_url')) {
             return $url;
         }
+
         return $this->getUrl('*/*/*', array('_current' => true, $this->_storeVarName => null));
     }
 
-    public function setStoreVarName($varName) {
+    public function setStoreVarName($varName) 
+    {
         $this->_storeVarName = $varName;
         return $this;
     }
 
-    public function getStoreId() {
+    public function getStoreId() 
+    {
         return $this->getRequest()->getParam($this->_storeVarName);
     }
 
-    public function setStoreIds($storeIds) {
+    public function setStoreIds($storeIds) 
+    {
         $this->_storeIds = $storeIds;
         return $this;
     }
 
-    public function getStoreIds() {
+    public function getStoreIds() 
+    {
         return $this->_storeIds;
     }
 
-    public function isShow() {
+    public function isShow() 
+    {
         return !Mage::app()->isSingleStoreMode();
     }
 
-    protected function _toHtml() {
+    protected function _toHtml() 
+    {
         if (!Mage::app()->isSingleStoreMode()) {
             return parent::_toHtml();
         }
+
         return '';
     }
 
@@ -203,10 +227,12 @@ class Simi_Simiconnector_Block_Adminhtml_Web_Switcher extends Mage_Adminhtml_Blo
      * @param bool $hasDefaultOption
      * @return bool
      */
-    public function hasDefaultOption($hasDefaultOption = null) {
+    public function hasDefaultOption($hasDefaultOption = null) 
+    {
         if (null !== $hasDefaultOption) {
             $this->_hasDefaultOption = $hasDefaultOption;
         }
+
         return $this->_hasDefaultOption;
     }
 
@@ -215,10 +241,12 @@ class Simi_Simiconnector_Block_Adminhtml_Web_Switcher extends Mage_Adminhtml_Blo
      *
      * @return string
      */
-    public function getHintUrl() {
+    public function getHintUrl() 
+    {
         if (null === $this->_hintUrl) {
             $this->_hintUrl = Mage::helper('core/hint')->getHintByCode(self::XPATH_HINT_KEY);
         }
+
         return $this->_hintUrl;
     }
 
@@ -227,7 +255,8 @@ class Simi_Simiconnector_Block_Adminhtml_Web_Switcher extends Mage_Adminhtml_Blo
      *
      * @return string
      */
-    public function getHintHtml() {
+    public function getHintHtml() 
+    {
         $html = '';
         $url = $this->getHintUrl();
         if ($url) {
@@ -239,19 +268,23 @@ class Simi_Simiconnector_Block_Adminhtml_Web_Switcher extends Mage_Adminhtml_Blo
                     . $this->__('What is this?')
                     . '</a>';
         }
+
         return $html;
     }
 
-    public function isSiteDefault() {
+    public function isSiteDefault() 
+    {
         $web = $this->getRequest()->getParam('website', 0);        
         return $web;
     }
 
-    public function getWebsiteId() {
+    public function getWebsiteId() 
+    {
         if(!$this->isSiteDefault()){
             $websites = $this->getWebsites();            
             return current($websites)->getId();
         }
+
         return $this->getRequest()->getParam('website');
     }
 

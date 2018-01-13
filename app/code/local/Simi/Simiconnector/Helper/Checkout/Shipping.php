@@ -1,28 +1,35 @@
 <?php
 
-class Simi_Simiconnector_Helper_Checkout_Shipping extends Mage_Core_Helper_Abstract {
+class Simi_Simiconnector_Helper_Checkout_Shipping extends Mage_Core_Helper_Abstract
+{
 
-    public function _getCheckoutSession() {
+    public function _getCheckoutSession() 
+    {
         return Mage::getSingleton('checkout/session');
     }
 
-    public function _getOnepage() {
+    public function _getOnepage() 
+    {
         return Mage::getSingleton('checkout/type_onepage');
     }
 
-    public function saveShippingMethod($method_code) {
+    public function saveShippingMethod($method_code) 
+    {
         $this->_getOnepage()->saveShippingMethod($method_code->method);
     }
 
-    public function getAddress() {
+    public function getAddress() 
+    {
         return $this->_getCheckoutSession()->getShippingAddress();
     }
 
-    public function getShippingPrice($price, $flag) {
+    public function getShippingPrice($price, $flag) 
+    {
         return $this->_getCheckoutSession()->getQuote()->getStore()->convertPrice(Mage::helper('tax')->getShippingPrice($price, $flag, $this->getAddress()), false);
     }
 
-    public function getMethods() {
+    public function getMethods() 
+    {
         $shipping = $this->_getCheckoutSession()->getQuote()->getShippingAddress();
         $shipping->collectShippingRates();
         $methods = $shipping->getGroupedAllShippingRates();
@@ -33,6 +40,7 @@ class Simi_Simiconnector_Helper_Checkout_Shipping extends Mage_Core_Helper_Abstr
                 if ($_rate->getData('error_message') != NULL) {
                     continue;
                 }
+
                 $select = false;
                 if ($shipping->getShippingMethod() != null && $shipping->getShippingMethod() == $_rate->getCode()) {
                     $select = true;
@@ -63,6 +71,7 @@ class Simi_Simiconnector_Helper_Checkout_Shipping extends Mage_Core_Helper_Abstr
                 }
             }
         }
+
         $this->_getCheckoutSession()->getQuote()->collectTotals()->save();
         return $list;
     }

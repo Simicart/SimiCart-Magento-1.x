@@ -2,9 +2,11 @@
 /**
 
  */
-class Simi_Simiconnector_Block_Adminhtml_Productlist extends Mage_Adminhtml_Block_Widget_Grid_Container {
+class Simi_Simiconnector_Block_Adminhtml_Productlist extends Mage_Adminhtml_Block_Widget_Grid_Container
+{
     protected $_theme;
-    public function __construct() {
+    public function __construct() 
+    {
         $this->_theme = Mage::helper('simiconnector/cloud')->getThemeLayout();
         $this->_controller = 'adminhtml_productlist';
         $this->_blockGroup = 'simiconnector';
@@ -13,7 +15,8 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist extends Mage_Adminhtml_Bloc
         parent::__construct();
     }
 
-    public function getTheme(){
+    public function getTheme()
+    {
         return $this->_theme;
     }
 }

@@ -20,14 +20,16 @@
  * @package     Connector
  * @author      Developer
  */
-class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form {
+class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form
+{
 
     /**
      * prepare tab form's information
      *
      * @return Simi_Connector_Block_Adminhtml_Banner_Edit_Tab_Form
      */
-    protected function _prepareForm() {
+    protected function _prepareForm() 
+    {
         $form = new Varien_Data_Form();
         $this->setForm($form);
 
@@ -45,6 +47,7 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
             foreach ($visibleStoreViews as $visibilityItem) {
                 $storeIdArray[] = $visibilityItem->getData('store_view_id');
             }
+
             $data['storeview_id'] = implode(',', $storeIdArray);
         }
         else {
@@ -63,38 +66,47 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
           ));
          */
 
-        $field = $fieldset->addField('storeview_id', 'multiselect', array(
+        $field = $fieldset->addField(
+            'storeview_id', 'multiselect', array(
             'name' => 'storeview_id[]',
             'label' => Mage::helper('simiconnector')->__('Store View'),
             'title' => Mage::helper('simiconnector')->__('Store View'),
             'required' => true,
             'values' => Mage::getSingleton('adminhtml/system_store')->getStoreValuesForForm(false, false),
-        ));
+            )
+        );
         $renderer = $this->getLayout()->createBlock('adminhtml/store_switcher_form_renderer_fieldset_element');
         $field->setRenderer($renderer);
 
 
-        $fieldset->addField('banner_title', 'text', array(
+        $fieldset->addField(
+            'banner_title', 'text', array(
             'label' => Mage::helper('simiconnector')->__('Title'),
             'class' => 'required-entry',
             'required' => true,
             'name' => 'banner_title',
-        ));
+            )
+        );
 
-        $fieldset->addField('banner_name', 'image', array(
+        $fieldset->addField(
+            'banner_name', 'image', array(
             'label' => Mage::helper('simiconnector')->__('Image (width:640px, height:320px)'),
             'required' => FALSE,
             'name' => 'banner_name_co',
-        ));        
+            )
+        );        
         
-        $fieldset->addField('banner_name_tablet', 'image', array(
+        $fieldset->addField(
+            'banner_name_tablet', 'image', array(
             'label' => Mage::helper('simiconnector')->__('Tablet Image (width:640px, height:320px)'),
             'required' => FALSE,
             'name' => 'banner_name_tablet_co',
-        ));
+            )
+        );
 
         $data['type'] = isset($data['type'])?$data['type']:'1';
-        $fieldset->addField('type', 'select', array(
+        $fieldset->addField(
+            'type', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Direct viewers to'),
             'class' => 'required-entry',
             'required' => true,
@@ -102,14 +114,17 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
             'values' => Mage::getModel('simiconnector/banner')->toOptionArray(),
             'onchange' => 'onchangeNoticeType(this.value)',
             'after_element_html' => '<script> Event.observe(window, "load", function(){onchangeNoticeType(\'' . $data['type'] . '\');});</script>',
-        ));
+            )
+        );
         $productIds = null;
         if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
             $productIds = implode(", ", Mage::getResourceModel('catalog/product_collection')->addWebsiteFilter(array($webId))->getAllIds());
         }else{
             $productIds = implode(", ", Mage::getResourceModel('catalog/product_collection')->getAllIds());
         }
-        $fieldset->addField('product_id', 'text', array(
+
+        $fieldset->addField(
+            'product_id', 'text', array(
             'name' => 'product_id',
             'class' => 'required-entry',
             'required' => true,
@@ -203,9 +218,11 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
                         
                     }
                 </script>'
-        ));
+            )
+        );
 
-        $fieldset->addField('category_id', 'text', array(
+        $fieldset->addField(
+            'category_id', 'text', array(
             'name' => 'category_id',
             'class' => 'required-entry',
             'required' => true,
@@ -245,29 +262,36 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Form extends Mage_Admin
                 };
         </script>
             '
-        ));
+            )
+        );
 
-        $fieldset->addField('banner_url', 'editor', array(
+        $fieldset->addField(
+            'banner_url', 'editor', array(
             'name' => 'banner_url',
             'label' => Mage::helper('simiconnector')->__('Url'),
             'title' => Mage::helper('simiconnector')->__('Url'),
             'required' => false,
-        ));
+            )
+        );
         
         if (!isset($data['sort_order']))
             $data['sort_order'] = 1;
-        $fieldset->addField('sort_order', 'text', array(
+        $fieldset->addField(
+            'sort_order', 'text', array(
             'label' => Mage::helper('simiconnector')->__('Sort Order'),
             'required' => false,
             'class' => 'validate-not-negative-number',
             'name' => 'sort_order',
-        ));
+            )
+        );
 
-        $fieldset->addField('status', 'select', array(
+        $fieldset->addField(
+            'status', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Status'),
             'name' => 'status',
             'values' => Mage::getSingleton('simiconnector/status')->getOptionHash(),
-        ));
+            )
+        );
 
         $form->setValues($data);
         return parent::_prepareForm();

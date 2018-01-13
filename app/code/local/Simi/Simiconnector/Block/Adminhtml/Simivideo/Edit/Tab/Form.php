@@ -1,8 +1,10 @@
 <?php
 
-class Simi_Simiconnector_Block_Adminhtml_Simivideo_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form {
+class Simi_Simiconnector_Block_Adminhtml_Simivideo_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form
+{
 
-    protected function _prepareForm() {
+    protected function _prepareForm() 
+    {
         $form = new Varien_Data_Form();
         $this->setForm($form);
         if (Mage::getSingleton('adminhtml/session')->getConnectorData()) {
@@ -13,34 +15,43 @@ class Simi_Simiconnector_Block_Adminhtml_Simivideo_Edit_Tab_Form extends Mage_Ad
 
         $fieldset = $form->addFieldset('simivideo_form', array('legend' => Mage::helper('simiconnector')->__('Video information')));
 
-        $fieldset->addField('storeview_id', 'select', array(
+        $fieldset->addField(
+            'storeview_id', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Store View'),
             'name' => 'storeview_id',
-        ))->setRenderer($this->getLayout()->createBlock('simiconnector/adminhtml_simivideo_edit_tab_renderer_storeviews'));
+            )
+        )->setRenderer($this->getLayout()->createBlock('simiconnector/adminhtml_simivideo_edit_tab_renderer_storeviews'));
 
-        $fieldset->addField('status', 'select', array(
+        $fieldset->addField(
+            'status', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Status'),
             'name' => 'status',
             'values' => Mage::getSingleton('simiconnector/status')->getOptionHash(),
-        ));
+            )
+        );
 
-        $fieldset->addField('video_title', 'text', array(
+        $fieldset->addField(
+            'video_title', 'text', array(
             'label' => Mage::helper('simiconnector')->__('Title'),
             'class' => 'required-entry',
             'required' => true,
             'name' => 'video_title',
-        ));
+            )
+        );
 
 
-        $fieldset->addField('video_url', 'text', array(
+        $fieldset->addField(
+            'video_url', 'text', array(
             'name' => 'video_url',
             'required' => true,
             'label' => Mage::helper('simiconnector')->__('Youtube Video URL'),
             'note' => Mage::helper('simiconnector')->__('Example: https://www.youtube.com/watch?v=AfgX7GB_Rkc'),
-        ));
+            )
+        );
 
         $productIds = implode(", ", Mage::getResourceModel('catalog/product_collection')->getAllIds());
-        $fieldset->addField('product_ids', 'text', array(
+        $fieldset->addField(
+            'product_ids', 'text', array(
             'name' => 'product_ids',
             'class' => 'required-entry',
             'required' => true,
@@ -135,7 +146,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simivideo_Edit_Tab_Form extends Mage_Ad
                         
                     }
                 </script>'
-        ));
+            )
+        );
 
 
         $form->setValues($data);

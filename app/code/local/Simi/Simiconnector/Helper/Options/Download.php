@@ -46,10 +46,13 @@ class Simi_Simiconnector_Helper_Options_Download extends Mage_Core_Helper_Abstra
                 } else {
                     Mage::helper('simiconnector/price')->setTaxPrice($value, $_priceInclTax);
                 }
+
                 $item['value'][] = $value;
             }
+
             $info[] = $item;
         }
+
         $options = array();
         $options['download_sample'] = $this->getSampleData($product);
         $options['download_options'] = $info;
@@ -57,6 +60,7 @@ class Simi_Simiconnector_Helper_Options_Download extends Mage_Core_Helper_Abstra
             $custom_options = Mage::helper('simiconnector/options_simple')->getOptions($product);
             $options['custom_options'] = $custom_options['custom_options'];
         }
+
         return $options;
     }
 
@@ -67,10 +71,12 @@ class Simi_Simiconnector_Helper_Options_Download extends Mage_Core_Helper_Abstra
         } else {
             $price = Mage::helper('tax')->getPrice($product, $price);
         }
+
         return $price;
     }
 
-    public function getSampleData($product){
+    public function getSampleData($product)
+    {
         $info = array();
         $block = Mage::getBlockSingleton('downloadable/catalog_product_samples');
         $block->setProduct($product);
@@ -88,6 +94,7 @@ class Simi_Simiconnector_Helper_Options_Download extends Mage_Core_Helper_Abstra
                 $info[] = $item;
             }
         }
+
         return $info;
     }
 }

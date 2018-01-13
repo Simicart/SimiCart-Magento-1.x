@@ -16,7 +16,6 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         $key = $this->getRequest()->getParam('key');
         if ($key == null || $key == '') {
             $arr["website_key"] = "0";
-
         } else {
             $keySecret = md5(Mage::getStoreConfig('simiconnector/general/secret_key'));
             if (strcmp($key, $keySecret) == 0)
@@ -24,6 +23,7 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
             else
                 $arr["website_key"] = "0";
         }
+
         echo json_encode($arr);
         exit();
     }
@@ -39,6 +39,7 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
                 $result['message'] = 'Missing key';
                 return $this->getResponse()->setBody(json_encode($result));
             }
+
             try {
                 $secretKey = Mage::helper('core')->encrypt($secretKey);
                 $publicKey = Mage::helper('core')->encrypt($publicKey);
@@ -57,6 +58,7 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
             $result['status'] = '0';
             $result['message'] = 'Already Filled';
         }
+
         return $this->getResponse()->setBody(json_encode($result));
     }
 
@@ -66,9 +68,11 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
         $installer = $setup;
         $installer->startSetup();
 
-        $installer->run("
+        $installer->run(
+            "
     
-        ");
+        "
+        );
         $installer->endSetup();
         echo 'success';
     }
@@ -92,6 +96,7 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
                 }
             }
         }
+
         exit();
     }
 }

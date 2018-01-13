@@ -16,13 +16,15 @@
 /**
  * Connector Grid Block
  * 
- * @category 	
- * @package 	Connector
- * @author  	Developer
+ * @category     
+ * @package     Connector
+ * @author      Developer
  */
-class Simi_Simiconnector_Block_Adminhtml_Banner_Grid extends Mage_Adminhtml_Block_Widget_Grid {
+class Simi_Simiconnector_Block_Adminhtml_Banner_Grid extends Mage_Adminhtml_Block_Widget_Grid
+{
 
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
         $this->setId('bannerGrid');
         $this->setDefaultSort('banner_id');
@@ -35,7 +37,8 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Grid extends Mage_Adminhtml_Bloc
      *
      * @return Simi_Connector_Block_Adminhtml_Banner_Grid
      */
-    protected function _prepareCollection() {
+    protected function _prepareCollection() 
+    {
         $webId = 0;
         $collection = Mage::getModel('simiconnector/banner')->getCollection();
         if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
@@ -63,19 +66,24 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Grid extends Mage_Adminhtml_Bloc
      *
      * @return Simi_Connector_Block_Adminhtml_Banner_Grid
      */
-    protected function _prepareColumns() {
-        $this->addColumn('banner_id', array(
+    protected function _prepareColumns() 
+    {
+        $this->addColumn(
+            'banner_id', array(
             'header' => Mage::helper('simiconnector')->__('ID'),
             'align' => 'right',
             'width' => '50px',
             'index' => 'banner_id',
-        ));
+            )
+        );
 
-        $this->addColumn('banner_title', array(
+        $this->addColumn(
+            'banner_title', array(
             'header' => Mage::helper('simiconnector')->__('Title'),
             'align' => 'left',
             'index' => 'banner_title',
-        ));
+            )
+        );
 
         // $this->addColumn('banner_url', array(
         //     'header' => Mage::helper('simiconnector')->__('URL'),
@@ -83,7 +91,8 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Grid extends Mage_Adminhtml_Bloc
         //     'index' => 'banner_url',
         // ));
 
-        $this->addColumn('type', array(
+        $this->addColumn(
+            'type', array(
             'header' => Mage::helper('simiconnector')->__('Direct viewers to'),
             'width' => '150px',
             'index' => 'type',
@@ -93,18 +102,22 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Grid extends Mage_Adminhtml_Bloc
                 2 => Mage::helper('simiconnector')->__('Category In-app'),
                 3 => Mage::helper('simiconnector')->__('Website Page'),
             ),
-        ));
+            )
+        );
 
-        $this->addColumn('sort_order', array(
+        $this->addColumn(
+            'sort_order', array(
             'header' => Mage::helper('simiconnector')->__('Sort Order'),
             'align' => 'left',
             'width' => '50px',
             'index' => 'sort_order',
             'filter' => false
-        ));
+            )
+        );
 
 
-        $this->addColumn('status', array(
+        $this->addColumn(
+            'status', array(
             'header' => Mage::helper('simiconnector')->__('Status'),
             'align' => 'left',
             'width' => '80px',
@@ -114,9 +127,11 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Grid extends Mage_Adminhtml_Bloc
                 1 => 'Enabled',
                 2 => 'Disabled',
             ),
-        ));
+            )
+        );
 
-        $this->addColumn('action', array(
+        $this->addColumn(
+            'action', array(
             'header' => Mage::helper('simiconnector')->__('Action'),
             'width' => '100',
             'type' => 'action',
@@ -131,7 +146,8 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Grid extends Mage_Adminhtml_Bloc
             'sortable' => false,
             'index' => 'stores',
             'is_system' => true,
-        ));
+            )
+        );
 
         $this->addExportType('*/*/exportCsv', Mage::helper('simiconnector')->__('CSV'));
         $this->addExportType('*/*/exportXml', Mage::helper('simiconnector')->__('XML'));
@@ -144,20 +160,24 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Grid extends Mage_Adminhtml_Bloc
      *
      * @return Magestore_Madapter_Block_Adminhtml_Madapter_Grid
      */
-    protected function _prepareMassaction() {
+    protected function _prepareMassaction() 
+    {
         $this->setMassactionIdField('banner_id');
         $this->getMassactionBlock()->setFormFieldName('simiconnector');
 
-        $this->getMassactionBlock()->addItem('delete', array(
+        $this->getMassactionBlock()->addItem(
+            'delete', array(
             'label' => Mage::helper('simiconnector')->__('Delete'),
             'url' => $this->getUrl('*/*/massDelete'),
             'confirm' => Mage::helper('simiconnector')->__('Are you sure?')
-        ));
+            )
+        );
 
         $statuses = Mage::getSingleton('simiconnector/status')->getOptionArray();
 
         array_unshift($statuses, array('label' => '', 'value' => ''));
-        $this->getMassactionBlock()->addItem('status', array(
+        $this->getMassactionBlock()->addItem(
+            'status', array(
             'label' => Mage::helper('simiconnector')->__('Change status'),
             'url' => $this->getUrl('*/*/massStatus', array('_current' => true)),
             'additional' => array(
@@ -168,7 +188,8 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Grid extends Mage_Adminhtml_Bloc
                     'label' => Mage::helper('simiconnector')->__('Status'),
                     'values' => $statuses
                 ))
-        ));
+            )
+        );
         return $this;
     }
 
@@ -177,7 +198,8 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Grid extends Mage_Adminhtml_Bloc
      *
      * @return string
      */
-    public function getRowUrl($row) {
+    public function getRowUrl($row) 
+    {
         $webId = Mage::getBlockSingleton('simiconnector/adminhtml_web_switcher')->getWebsiteId();
         return $this->getUrl('*/*/edit', array('id' => $row->getId()));
     }

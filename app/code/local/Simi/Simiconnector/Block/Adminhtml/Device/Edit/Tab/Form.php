@@ -3,9 +3,11 @@
 /**
 
  */
-class Simi_Simiconnector_Block_Adminhtml_Device_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form {
+class Simi_Simiconnector_Block_Adminhtml_Device_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form
+{
 
-    protected function _prepareForm() {
+    protected function _prepareForm() 
+    {
         $form = new Varien_Data_Form();
         $this->setForm($form);
         
@@ -24,6 +26,7 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Edit_Tab_Form extends Mage_Admin
         if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
             $stores->addFieldToFilter('website_id', $websiteId);
         }
+
         $list_store = array();
         foreach ($stores as $store) {
             $list_store[] = array(
@@ -31,15 +34,19 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Edit_Tab_Form extends Mage_Admin
                 'label' => $store->getName(),
             );
         }
-        $fieldset->addField('storeview_id', 'select', array(
+
+        $fieldset->addField(
+            'storeview_id', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Store View'),
             'name' => 'storeview_id',
             'values' => $list_store,
             'disabled' => true,
             'onchange' => 'clearDevices()'
-        ));
+            )
+        );
         
-        $fieldset->addField('plaform_id', 'select', array(
+        $fieldset->addField(
+            'plaform_id', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Device Type'),
             'name' => 'plaform_id',
             'values' => array(
@@ -48,35 +55,47 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Edit_Tab_Form extends Mage_Admin
                 array('value' => 3, 'label' => Mage::helper('simiconnector')->__('Android')),
             ),
             'disabled' => true,
-        ));
+            )
+        );
 
-        $fieldset->addField('country', 'selectname', array(
+        $fieldset->addField(
+            'country', 'selectname', array(
             'label' => Mage::helper('simiconnector')->__('Country'),
             'bold' => true,
             'name' => 'country',
-        ));
+            )
+        );
 
-        $fieldset->addField('state', 'label', array(
+        $fieldset->addField(
+            'state', 'label', array(
             'label' => Mage::helper('simiconnector')->__('State/Province'),
                 // 'bold'  => true,
-        ));
+            )
+        );
 
-        $fieldset->addField('city', 'label', array(
+        $fieldset->addField(
+            'city', 'label', array(
             'label' => Mage::helper('simiconnector')->__('City'),
                 // 'bold'  => true,
-        ));
+            )
+        );
 
-        $fieldset->addField('device_token', 'label', array(
+        $fieldset->addField(
+            'device_token', 'label', array(
             'label' => Mage::helper('simiconnector')->__('Device Token'),
-        ));
+            )
+        );
 
-        $fieldset->addField('created_time', 'datetime', array(
+        $fieldset->addField(
+            'created_time', 'datetime', array(
             'label' => Mage::helper('simiconnector')->__('Create Date'),
             'bold' => true,
             'name' => 'created_date',
-        ));
+            )
+        );
 
-        $fieldset->addField('is_demo', 'select', array(
+        $fieldset->addField(
+            'is_demo', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Is Demo'),
             'bold' => true,
             'values' => array(
@@ -86,7 +105,8 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Edit_Tab_Form extends Mage_Admin
             ),
             'name' => 'is_demo',
             'disabled' => true,
-        ));
+            )
+        );
         $form->setValues($data);
         return parent::_prepareForm();
     }

@@ -20,14 +20,16 @@
  * @package     Connector
  * @author      Developer
  */
-class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Adminhtml_Controller_Action {
+class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Adminhtml_Controller_Action
+{
 
     /**
      * init layout and set active for current menu
      *
      * @return Simi_Connector_Adminhtml_BannerController
      */
-    protected function _initAction() {
+    protected function _initAction() 
+    {
         $this->loadLayout()
                 ->_setActiveMenu('simiconnector/cms')
                 ->_addBreadcrumb(Mage::helper('adminhtml')->__('CMS Manager'), Mage::helper('adminhtml')->__('CMS Manager'));
@@ -37,7 +39,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
     /**
      * index action
      */
-    public function indexAction() {
+    public function indexAction() 
+    {
         $this->_initAction()
                 ->renderLayout();
     }
@@ -45,7 +48,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
     /**
      * view and edit item action
      */
-    public function editAction() {
+    public function editAction() 
+    {
         $id = $this->getRequest()->getParam('id');
         $model = Mage::getModel('simiconnector/cms')->load($id);
 
@@ -62,8 +66,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                     Mage::getSingleton('adminhtml/session')->addError(Mage::helper('simiconnector')->__('Banner does not exist'));
                     $this->_redirect('*/*/');
                 }
-
             }
+
             $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
             if (!empty($data))
                 $model->setData($data);
@@ -87,14 +91,16 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
         }
     }
 
-    public function newAction() {
+    public function newAction() 
+    {
         $this->_forward('edit');
     }
 
     /**
      * save item action
      */
-    public function saveAction() {
+    public function saveAction() 
+    {
         if ($data = $this->getRequest()->getPost()) {
             if (isset($_FILES['cms_image_o']['name']) && $_FILES['cms_image_o']['name'] != '') {
                 try {
@@ -119,18 +125,17 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                         try {
                             mkdir($path, 0777, TRUE);
                         } catch (Exception $e) {
-                            
                         }
                     }
 
-                    $nameTemp = explode('.',$_FILES['cms_image_o']['name']);
+                    $nameTemp = explode('.', $_FILES['cms_image_o']['name']);
                     $fileName = md5($nameTemp[0].uniqid()).'.'.$nameTemp[1];
                     $result = $uploader->save($path, $fileName);
                     try {
                         chmod($path.'/'.$result['file'], 0777);
                     } catch (Exception $e) {
-
                     }
+
                     $data['cms_image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/cms/' . $result['file'];
                 } catch (Exception $e) {
                     $data['cms_image'] = Mage::getBaseUrl('media') . 'simi/simiconnector/cms/' . $_FILES['cms_image_o']['name'];
@@ -160,9 +165,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                         $visibilityItem->delete();
                     foreach ($data['storeview_id'] as $storeViewId){
                         $visibilityItem = Mage::getModel('simiconnector/visibility');
-                        $visibilityItem->setData('content_type',$typeID);                        
-                        $visibilityItem->setData('item_id',$model->getId());
-                        $visibilityItem->setData('store_view_id',$storeViewId);
+                        $visibilityItem->setData('content_type', $typeID);                        
+                        $visibilityItem->setData('item_id', $model->getId());
+                        $visibilityItem->setData('store_view_id', $storeViewId);
                         $visibilityItem->save();
                     }                        
                 }
@@ -171,6 +176,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                     $this->_redirect('*/*/edit', array('id' => $model->getId()));
                     return;
                 }
+
                 $this->_redirect('*/*/');
                 return;
             } catch (Exception $e) {
@@ -180,6 +186,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                 return;
             }
         }
+
         Mage::getSingleton('adminhtml/session')->addError(Mage::helper('simiconnector')->__('Unable to find item to save'));
         $this->_redirect('*/*/');
     }
@@ -187,7 +194,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
     /**
      * delete item action
      */
-    public function deleteAction() {
+    public function deleteAction() 
+    {
         if ($this->getRequest()->getParam('id') > 0) {
             try {
                 $model = Mage::getModel('simiconnector/cms');
@@ -200,13 +208,15 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                 $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
             }
         }
+
         $this->_redirect('*/*/');
     }
 
     /**
      * mass delete item(s) action
      */
-    public function massDeleteAction() {
+    public function massDeleteAction() 
+    {
         $bannerIds = $this->getRequest()->getParam('simiconnector');
 
         if (!is_array($bannerIds)) {
@@ -217,15 +227,18 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_CmsController extends Mage_Admi
                     $notice = Mage::getModel('simiconnector/cms')->load($bannerId);
                     $notice->delete();
                 }
+
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Total of %d record(s) were successfully deleted', count($bannerIds)));
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
             }
         }
+
         $this->_redirect('*/*/index');
     }
 
-    protected function _isAllowed() {
+    protected function _isAllowed() 
+    {
         return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
     }
 

@@ -3,15 +3,18 @@
 /**
 
  */
-class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
+class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract
+{
 
     public $data;
 
-    protected function _getCart() {
+    protected function _getCart() 
+    {
         return Mage::getSingleton('checkout/cart');
     }
 
-    protected function _getQuote() {
+    protected function _getQuote() 
+    {
         return $this->_getCart()->getQuote();
     }
 
@@ -19,7 +22,8 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
      * Get Quote Price
      */
 
-    public function getTotal() {
+    public function getTotal() 
+    {
         $orderTotal = array();
         $total = $this->_getQuote()->getTotals();
         $this->setTotal($total, $orderTotal);
@@ -30,7 +34,8 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
      * For Cart and OnePage Order
      */
 
-    public function setTotal($total, &$data) {
+    public function setTotal($total, &$data) 
+    {
         if (isset($total['shipping'])) {
             /*
              * tax_cart_display_shipping
@@ -38,6 +43,7 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
             $data['shipping_hand_incl_tax'] = $this->getShippingIncludeTax($total['shipping']);
             $data['shipping_hand_excl_tax'] = $this->getShippingExcludeTax($total['shipping']);
         }
+
         /*
          * tax_cart_display_zero_tax
          */
@@ -54,6 +60,7 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
                     if (!is_null($rate['percent'])) {
                         $title.= ' (' . $rate['percent'] . '%)';
                     }
+
                     $taxSumarry[] = array('title' => $title,
                         'amount' => $amount,
                     );
@@ -63,6 +70,7 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
                     break;
                 }
             }
+
             if (count($taxSumarry))
                 $data['tax_summary'] = $taxSumarry;
         }
@@ -70,6 +78,7 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
         if (isset($total['discount'])) {
             $data['discount'] = abs($total['discount']->getValue());
         }
+
         /*
          * tax_cart_display_subtotal
          */
@@ -111,7 +120,8 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
         $data = $this->data;
     }
 
-    public function displayTypeSubOrder() {
+    public function displayTypeSubOrder() 
+    {
         return Mage::getStoreConfig("tax/cart_display/subtotal");
     }
 
@@ -119,13 +129,15 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
      * For Order History
      */
 
-    public function showTotalOrder($order) {
+    public function showTotalOrder($order) 
+    {
         $data = array();
         $data['subtotal_excl_tax'] = $order->getSubtotal();
         $data['subtotal_incl_tax'] = $order->getSubtotalInclTax();
         if ($data['subtotal_incl_tax'] == null) {
             $data['subtotal_incl_tax'] = $order->getSubtotal() + $order->getTaxAmount();
         }
+
         $data['shipping_hand_excl_tax'] = $order->getShippingAmount();
         $data['shipping_hand_incl_tax'] = $order->getShippingInclTax();
         $data['tax'] = $order->getTaxAmount();
@@ -138,10 +150,12 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
         } else {
             $data['currency_symbol'] = $order->getOrderCurrency()->getCurrencyCode();
         }
+
         return $data;
     }
 
-    public function addCustomRow($title, $sortOrder, $value, $valueString = null) {
+    public function addCustomRow($title, $sortOrder, $value, $valueString = null) 
+    {
         if (isset($this->data['custom_rows']))
             $customRows = $this->data['custom_rows'];
         else
@@ -153,36 +167,44 @@ class Simi_Simiconnector_Helper_Total extends Mage_Core_Helper_Abstract {
         $this->data['custom_rows'] = $customRows;
     }
 
-    public function displayBothTaxSub() {
+    public function displayBothTaxSub() 
+    {
         return Mage::getSingleton('tax/config')->displayCartSubtotalBoth(Mage::app()->getStore());
     }
 
-    public function includeTaxGrand($total) {
+    public function includeTaxGrand($total) 
+    {
         if ($total->getAddress()->getGrandTotal()) {
             return Mage::getSingleton('tax/config')->displayCartTaxWithGrandTotal(Mage::app()->getStore());
         }
+
         return false;
     }
 
-    public function getTotalExclTaxGrand($total) {
+    public function getTotalExclTaxGrand($total) 
+    {
         $excl = $total->getAddress()->getGrandTotal() - $total->getAddress()->getTaxAmount();
         $excl = max($excl, 0);
         return $excl;
     }
 
-    public function displayBothTaxShipping() {
+    public function displayBothTaxShipping() 
+    {
         return Mage::getSingleton('tax/config')->displayCartShippingBoth(Mage::app()->getStore());
     }
 
-    public function displayIncludeTaxShipping() {
+    public function displayIncludeTaxShipping() 
+    {
         return Mage::getSingleton('tax/config')->displayCartShippingInclTax(Mage::app()->getStore());
     }
 
-    public function getShippingIncludeTax($total) {
+    public function getShippingIncludeTax($total) 
+    {
         return $total->getAddress()->getShippingInclTax();
     }
 
-    public function getShippingExcludeTax($total) {
+    public function getShippingExcludeTax($total) 
+    {
         return $total->getAddress()->getShippingAmount();
     }
 

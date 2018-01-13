@@ -1,6 +1,7 @@
 <?php
 
-class Simi_Simiconnector_Block_Adminhtml_System_Config_Form_Field_Separator extends Mage_Adminhtml_Block_System_Config_Form_Field {
+class Simi_Simiconnector_Block_Adminhtml_System_Config_Form_Field_Separator extends Mage_Adminhtml_Block_System_Config_Form_Field
+{
 
     /**
      * render separator config row
@@ -8,7 +9,8 @@ class Simi_Simiconnector_Block_Adminhtml_System_Config_Form_Field_Separator exte
      * @param Varien_Data_Form_Element_Abstract $element
      * @return string
      */
-    public function render(Varien_Data_Form_Element_Abstract $element) {
+    public function render(Varien_Data_Form_Element_Abstract $element) 
+    {
         $fieldConfig = $element->getFieldConfig();
         $htmlId = $element->getHtmlId();
         $html = '<tr id="row_' . $htmlId . '">'

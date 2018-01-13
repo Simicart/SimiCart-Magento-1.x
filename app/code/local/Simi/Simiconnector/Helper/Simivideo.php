@@ -21,6 +21,7 @@ class Simi_Simiconnector_Helper_Simivideo extends Mage_Core_Helper_Abstract
                 $returnArray[] = $video->toArray();
             }
         }
+
         return $returnArray;
     }
 

@@ -20,16 +20,19 @@
  * @package     Connector
  * @author      Developer
  */
-class Simi_Simiconnector_Model_Banner extends Mage_Core_Model_Abstract {
+class Simi_Simiconnector_Model_Banner extends Mage_Core_Model_Abstract
+{
 
     protected $_website_id = null;
 
-    public function _construct() {
+    public function _construct() 
+    {
         parent::_construct();
         $this->_init('simiconnector/banner');
     }
 
-    public function getBannerList() {
+    public function getBannerList() 
+    {
         $website_id = Mage::app()->getStore()->getWebsiteId();
         $list = array();
         $collection = $this->getCollection()
@@ -49,6 +52,7 @@ class Simi_Simiconnector_Model_Banner extends Mage_Core_Model_Abstract {
                 else
                     $categoryChildrenCount = 0;
             }
+
             $list[] = array(
                 'image_path' => $path,
                 'url' => $item->getBannerUrl(),
@@ -59,10 +63,12 @@ class Simi_Simiconnector_Model_Banner extends Mage_Core_Model_Abstract {
                 'has_child' => $categoryChildrenCount,
             );
         }
+
         return $list;
     }
 
-    public function toOptionArray() {
+    public function toOptionArray() 
+    {
         $platform = array(
             '1' => Mage::helper('simiconnector')->__('Product In-app'),
             '2' => Mage::helper('simiconnector')->__('Category In-app'),
@@ -71,7 +77,8 @@ class Simi_Simiconnector_Model_Banner extends Mage_Core_Model_Abstract {
         return $platform;
     }
 
-    public function delete() {
+    public function delete() 
+    {
         $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('banner');
         $visibleStoreViews = Mage::getModel('simiconnector/visibility')->getCollection()
                 ->addFieldToFilter('content_type', $typeID)

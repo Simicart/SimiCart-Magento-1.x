@@ -15,10 +15,12 @@ class Simi_Simiconnector_Helper_Options_Grouped extends Mage_Core_Helper_Abstrac
         } else {
             $price = Mage::helper('tax')->getPrice($product, $price);
         }
+
         return $price;
     }
 
-    function getOptions($product){
+    function getOptions($product)
+    {
         $info = array();
         $taxHelper = Mage::helper('tax');
         //Mage_Catalog_Block_Product_View_Type_Grouped
@@ -48,7 +50,6 @@ class Simi_Simiconnector_Helper_Options_Grouped extends Mage_Core_Helper_Abstrac
                     $op['has_special_price'] = 0;
                     $_priceInclTax = Mage::helper('core')->currency($this->getPrice($product, $price, true), false, false);
                     $_priceExclTax = Mage::helper('core')->currency($this->getPrice($product, $price), false, false);
-
                 }
 
                 $op['show_ex_in_price'] = 0;
@@ -62,9 +63,11 @@ class Simi_Simiconnector_Helper_Options_Grouped extends Mage_Core_Helper_Abstrac
                 } else {
                     Mage::helper('simiconnector/price')->setTaxPrice($op, $_priceInclTax);
                 }
+
                 $info[] = $op;
             }
         }
+
         $options = array();
         $options['grouped_options'] = $info;
         return $options;

@@ -1,7 +1,9 @@
 <?php
 
-class Simi_Simiconnector_Model_Api_Migrate_Packages extends Simi_Simiconnector_Model_Api_Migrate_Abstract {
-    public function setBuilderQuery() {
+class Simi_Simiconnector_Model_Api_Migrate_Packages extends Simi_Simiconnector_Model_Api_Migrate_Abstract
+{
+    public function setBuilderQuery() 
+    {
         $data = $this->getData();
         if (!$data['resourceid']) {
             throw new Exception($this->_helper->__('No Package Sent'), 4);
@@ -10,12 +12,14 @@ class Simi_Simiconnector_Model_Api_Migrate_Packages extends Simi_Simiconnector_M
             if ($data['resourceid'] == 'all') {
                 return;
             }
+
             throw new Exception($this->_helper->__('Package Invalid'), 4);
         }
     }
     
     
-    public function show() {
+    public function show() 
+    {
         $result = array();
         
         $storetModel = Mage::getSingleton('simiconnector/api_migrate_stores');

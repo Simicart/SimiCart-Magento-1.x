@@ -1,7 +1,9 @@
 <?php
 
-class Simi_Simiconnector_Model_Api_Migrate_Categories extends Simi_Simiconnector_Model_Api_Migrate_Abstract {
-    public function setBuilderQuery() {
+class Simi_Simiconnector_Model_Api_Migrate_Categories extends Simi_Simiconnector_Model_Api_Migrate_Abstract
+{
+    public function setBuilderQuery() 
+    {
         $data = $this->getData();
         if (!$data['resourceid']) {
             $this->builderQuery = Mage::getModel('catalog/category')
@@ -26,10 +28,12 @@ class Simi_Simiconnector_Model_Api_Migrate_Categories extends Simi_Simiconnector
                     $nameArray[] = array($storeId, $nameByStore);
                 }
             }
+
             if (count($nameArray)) {
                 $result['migrate_categories'][$index]['json_name'] = json_encode($nameArray);
             }
         }
+
         return $result;
     }
 

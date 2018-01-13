@@ -3,20 +3,24 @@
 /**
  * 
  */
-class Simi_Simiconnector_Model_Address extends Mage_Core_Model_Abstract {
+class Simi_Simiconnector_Model_Address extends Mage_Core_Model_Abstract
+{
 
-    protected function _getSession() {
+    protected function _getSession() 
+    {
         return Mage::getSingleton('customer/session');
     }
 
-    protected function _helperAddress() {
+    protected function _helperAddress() 
+    {
         return Mage::helper('simiconnector/address');
     }
 
     /*
      * Save Customer Address
      */
-    public function saveAddress($data) {
+    public function saveAddress($data) 
+    {
         $data = $data['contents'];        
         $address = Mage::helper('simiconnector/address')->convertDataAddress($data);
         $address['id'] = isset($data->entity_id) == true ? $data->entity_id : null;
@@ -24,7 +28,8 @@ class Simi_Simiconnector_Model_Address extends Mage_Core_Model_Abstract {
         
     }
 
-    public function saveAddressCustomer($data) {
+    public function saveAddressCustomer($data) 
+    {
         $errors = false;
         $customer = $this->_getSession()->getCustomer();
         $address = Mage::getModel('customer/address');
@@ -46,22 +51,25 @@ class Simi_Simiconnector_Model_Address extends Mage_Core_Model_Abstract {
                     ->setEntity($address);
             $addressForm->compactData($data);
         }
+
         $address->setCustomerId($customer->getId());
         $addressErrors = $address->validate();
         if ($addressErrors !== true) {
             $errors = true;
         }
+
         if (!$errors) {
             $address->save();
             return $address;
         } else {
             if (is_array($addressErrors))
-                throw new Exception($addressErrors[0],7);
-            throw new Exception($this->_helperAddress()->__('Can not save address customer'),7);
+                throw new Exception($addressErrors[0], 7);
+            throw new Exception($this->_helperAddress()->__('Can not save address customer'), 7);
         }
     }
 
-    public function getStates($code) {
+    public function getStates($code) 
+    {
         $list = array();
         if ($code) {
             $states = Mage::getModel('directory/country')->loadByCode($code)->getRegions();
@@ -73,6 +81,7 @@ class Simi_Simiconnector_Model_Address extends Mage_Core_Model_Abstract {
                 );
             }
         }
+
         return $list;
     }
 

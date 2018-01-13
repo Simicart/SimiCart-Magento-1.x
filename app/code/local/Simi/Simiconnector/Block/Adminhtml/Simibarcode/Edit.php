@@ -20,9 +20,11 @@
  * @package     Simibarcode
  * @author      Developer
  */
-class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {
+class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
+{
 
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
 
         $this->_objectId = 'id';
@@ -34,11 +36,13 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit extends Mage_Adminhtml
         if ($this->getRequest()->getParam('id')) {
             $this->_removeButton('reset');
 
-            $this->_addButton('saveandcontinue', array(
+            $this->_addButton(
+                'saveandcontinue', array(
                 'label' => Mage::helper('adminhtml')->__('Save And Continue Edit'),
                 'onclick' => 'saveAndContinueEdit()',
                 'class' => 'save',
-                    ), -100);
+                ), -100
+            );
         }
     }
 
@@ -47,12 +51,15 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit extends Mage_Adminhtml
      *
      * @return string
      */
-    public function getHeaderText() {
+    public function getHeaderText() 
+    {
         if (Mage::registry('simibarcode_data') && Mage::registry('simibarcode_data')->getId()
         ) {
-            return Mage::helper('simiconnector')->__("Edit Code '%s'", $this->htmlEscape(Mage::registry('simibarcode_data')->getBarcode())
+            return Mage::helper('simiconnector')->__(
+                "Edit Code '%s'", $this->htmlEscape(Mage::registry('simibarcode_data')->getBarcode())
             );
         }
+
         return Mage::helper('simiconnector')->__('Add QR & Barcode ');
     }
 

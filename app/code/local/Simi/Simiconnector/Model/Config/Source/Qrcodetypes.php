@@ -1,14 +1,16 @@
 <?php
 
 
-class Simi_Simiconnector_Model_Config_Source_Qrcodetypes extends Varien_Object {
+class Simi_Simiconnector_Model_Config_Source_Qrcodetypes extends Varien_Object
+{
 
     /**
      * get model option as array
      *
      * @return array
      */
-    public function toOptionArray() {
+    public function toOptionArray() 
+    {
         return array(
             array('value' => '1', 'label' => Mage::helper('simibarcode')->__('L - smallest')),
             array('value' => '0', 'label' => Mage::helper('simibarcode')->__('M')),
@@ -22,7 +24,8 @@ class Simi_Simiconnector_Model_Config_Source_Qrcodetypes extends Varien_Object {
      *
      * @return array
      */
-    public function getSizes() {
+    public function getSizes() 
+    {
         return array(
             array('value' => '50', 'label' => Mage::helper('simibarcode')->__('1')),
             array('value' => '100', 'label' => Mage::helper('simibarcode')->__('2')),

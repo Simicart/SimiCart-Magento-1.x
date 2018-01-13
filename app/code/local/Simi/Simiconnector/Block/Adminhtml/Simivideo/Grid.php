@@ -1,8 +1,10 @@
 <?php
 
-class Simi_Simiconnector_Block_Adminhtml_Simivideo_Grid extends Mage_Adminhtml_Block_Widget_Grid {
+class Simi_Simiconnector_Block_Adminhtml_Simivideo_Grid extends Mage_Adminhtml_Block_Widget_Grid
+{
 
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
         $this->setId('videoGrid');
         $this->setDefaultSort('video_id');
@@ -10,38 +12,48 @@ class Simi_Simiconnector_Block_Adminhtml_Simivideo_Grid extends Mage_Adminhtml_B
         $this->setSaveParametersInSession(true);
     }
 
-    protected function _prepareCollection() {
+    protected function _prepareCollection() 
+    {
         $webId = 0;
         $collection = Mage::getModel('simiconnector/simivideo')->getCollection();
         if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
             $storeIds = Mage::app()->getWebsite($websiteId)->getStoreIds();
-            $collection->addFieldToFilter('storeview_id',array('in'=>$storeIds));
+            $collection->addFieldToFilter('storeview_id', array('in'=>$storeIds));
         }
+
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
 
-    protected function _prepareColumns() {
-        $this->addColumn('video_id', array(
+    protected function _prepareColumns() 
+    {
+        $this->addColumn(
+            'video_id', array(
             'header' => Mage::helper('simiconnector')->__('ID'),
             'align' => 'right',
             'width' => '50px',
             'index' => 'video_id',
-        ));
+            )
+        );
 
-        $this->addColumn('video_title', array(
+        $this->addColumn(
+            'video_title', array(
             'header' => Mage::helper('simiconnector')->__('Title'),
             'align' => 'left',
             'index' => 'video_title',
-        ));
+            )
+        );
 
-        $this->addColumn('video_url', array(
+        $this->addColumn(
+            'video_url', array(
             'header' => Mage::helper('simiconnector')->__('Video Key'),
             'width' => '550px',
             'index' => 'video_url',
-        ));
+            )
+        );
 
-        $this->addColumn('status', array(
+        $this->addColumn(
+            'status', array(
             'header' => Mage::helper('simiconnector')->__('Status'),
             'align' => 'left',
             'width' => '80px',
@@ -51,9 +63,11 @@ class Simi_Simiconnector_Block_Adminhtml_Simivideo_Grid extends Mage_Adminhtml_B
                 1 => 'Enabled',
                 2 => 'Disabled',
             ),
-        ));
+            )
+        );
 
-        $this->addColumn('action', array(
+        $this->addColumn(
+            'action', array(
             'header' => Mage::helper('simiconnector')->__('Action'),
             'width' => '100',
             'type' => 'action',
@@ -68,7 +82,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simivideo_Grid extends Mage_Adminhtml_B
             'sortable' => false,
             'index' => 'stores',
             'is_system' => true,
-        ));
+            )
+        );
 
         return parent::_prepareColumns();
     }
@@ -78,20 +93,24 @@ class Simi_Simiconnector_Block_Adminhtml_Simivideo_Grid extends Mage_Adminhtml_B
      *
      * @return Magestore_Madapter_Block_Adminhtml_Madapter_Grid
      */
-    protected function _prepareMassaction() {
+    protected function _prepareMassaction() 
+    {
         $this->setMassactionIdField('video_id');
         $this->getMassactionBlock()->setFormFieldName('video_id');
 
-        $this->getMassactionBlock()->addItem('delete', array(
+        $this->getMassactionBlock()->addItem(
+            'delete', array(
             'label' => Mage::helper('simiconnector')->__('Delete'),
             'url' => $this->getUrl('*/*/massDelete'),
             'confirm' => Mage::helper('simiconnector')->__('Are you sure?')
-        ));
+            )
+        );
 
         $statuses = Mage::getSingleton('simiconnector/status')->getOptionArray();
 
         array_unshift($statuses, array('label' => '', 'value' => ''));
-        $this->getMassactionBlock()->addItem('status', array(
+        $this->getMassactionBlock()->addItem(
+            'status', array(
             'label' => Mage::helper('simiconnector')->__('Change status'),
             'url' => $this->getUrl('*/*/massStatus', array('_current' => true)),
             'additional' => array(
@@ -102,7 +121,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simivideo_Grid extends Mage_Adminhtml_B
                     'label' => Mage::helper('simiconnector')->__('Status'),
                     'values' => $statuses
                 ))
-        ));
+            )
+        );
         return $this;
     }
 
@@ -111,7 +131,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simivideo_Grid extends Mage_Adminhtml_B
      *
      * @return string
      */
-    public function getRowUrl($row) {
+    public function getRowUrl($row) 
+    {
         $webId = Mage::getBlockSingleton('simiconnector/adminhtml_web_switcher')->getWebsiteId();
         return $this->getUrl('*/*/edit', array('video_id' => $row->getId()));
     }

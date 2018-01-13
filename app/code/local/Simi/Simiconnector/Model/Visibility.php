@@ -19,9 +19,11 @@
  * @package     Connector
  * @author      Developer
  */
-class Simi_Simiconnector_Model_Visibility extends Mage_Core_Model_Abstract {
+class Simi_Simiconnector_Model_Visibility extends Mage_Core_Model_Abstract
+{
 
-    public function _construct() {
+    public function _construct() 
+    {
         parent::_construct();
         $this->_init('simiconnector/visibility');
     }

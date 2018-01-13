@@ -6,16 +6,19 @@
  * Date: 5/19/2016
  * Time: 4:47 PM
  */
-class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_Api_Abstract {
+class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_Api_Abstract
+{
 
     protected $_DEFAULT_ORDER = 'position';
     protected $_visible_array;
 
-    public function setBuilderQuery() {
+    public function setBuilderQuery() 
+    {
         $data = $this->getData();
         if (!$data['resourceid']) {
             $data['resourceid'] = Mage::app()->getStore()->getRootCategoryId();
         }
+
         if (Mage::getStoreConfig('simiconnector/general/categories_in_app'))
             $this->_visible_array = explode(',', Mage::getStoreConfig('simiconnector/general/categories_in_app'));
 
@@ -30,7 +33,8 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
         }
     }
 
-    public function index() {
+    public function index() 
+    {
         $data = $this->getData();
         $result = parent::index();
         foreach ($result['categories'] as $index => $catData) {
@@ -44,20 +48,23 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
             else
                 $result['categories'][$index]['has_children'] = FALSE;
         }
+
         return $result;
     }
 
-    public function show() {
+    public function show() 
+    {
         return $this->index();
     }
 
-    public function _getChildrenCategories($category){
+    public function _getChildrenCategories($category)
+    {
         $idFilter = $category->getChildren();
 
         if($this->_visible_array){
             $ids = explode(',', $idFilter);
             $idFilter = array_intersect($ids, $this->_visible_array);
-            $idFilter = implode(',',$idFilter);
+            $idFilter = implode(',', $idFilter);
         }
 
         $collection = $this->_getChildrenCategoriesBase($category);

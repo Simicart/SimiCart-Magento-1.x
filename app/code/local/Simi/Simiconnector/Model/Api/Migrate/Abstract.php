@@ -6,7 +6,8 @@
  * Date: 5/3/16
  * Time: 2:59 PM
  */
-abstract class Simi_Simiconnector_Model_Api_Migrate_Abstract extends Simi_Simiconnector_Model_Api_Abstract {
+abstract class Simi_Simiconnector_Model_Api_Migrate_Abstract extends Simi_Simiconnector_Model_Api_Abstract
+{
     
     public $FILTER_RESULT = false;
     const DEFAULT_LIMIT = PHP_INT_MAX;
@@ -31,9 +32,11 @@ abstract class Simi_Simiconnector_Model_Api_Migrate_Abstract extends Simi_Simico
         if (isset($parameters[self::OFFSET]) && $parameters[self::OFFSET]) {
             $offset = $parameters[self::OFFSET];
         }
+
         if ($limit) {
             $collection->setPageSize($offset + $limit);
         }
+
         //$all_ids = array();
         $info = array();
         $total = $collection->getSize();
@@ -54,12 +57,15 @@ abstract class Simi_Simiconnector_Model_Api_Migrate_Abstract extends Simi_Simico
                 if (++$check_offset <= $offset) {
                     continue;
                 }
+
                 if (++$check_limit > $limit)
                     break;
             }
+
             $info[] = $entity->toArray($fields);
             //$all_ids[] = $entity->getId();
         }
+
         return $this->getList($info, $all_ids, $total, $limit, $offset);
     }
     
@@ -75,7 +81,8 @@ abstract class Simi_Simiconnector_Model_Api_Migrate_Abstract extends Simi_Simico
     }
 
     
-    protected  function renewCustomerSesssion($data){
+    protected  function renewCustomerSesssion($data)
+    {
         return;
     }
 }

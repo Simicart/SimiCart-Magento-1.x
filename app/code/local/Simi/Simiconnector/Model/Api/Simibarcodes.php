@@ -1,10 +1,12 @@
 <?php
 
-class Simi_Simiconnector_Model_Api_Simibarcodes extends Simi_Simiconnector_Model_Api_Abstract {
+class Simi_Simiconnector_Model_Api_Simibarcodes extends Simi_Simiconnector_Model_Api_Abstract
+{
 
     protected $_DEFAULT_ORDER = 'barcode_id';
 
-    public function setBuilderQuery() {
+    public function setBuilderQuery() 
+    {
         $data = $this->getData();
         if (isset($data['resourceid']) && $data['resourceid']) {
             $this->builderQuery = Mage::getModel('simiconnector/simibarcode')->getCollection()->addFieldToFilter('barcode_status', '1')->addFieldToFilter('barcode', $data['resourceid'])->getFirstItem();

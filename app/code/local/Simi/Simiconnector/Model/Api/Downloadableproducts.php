@@ -1,21 +1,23 @@
 <?php
 
 
-class Simi_Simiconnector_Model_Api_Downloadableproducts extends Simi_Simiconnector_Model_Api_Abstract {
+class Simi_Simiconnector_Model_Api_Downloadableproducts extends Simi_Simiconnector_Model_Api_Abstract
+{
 
     protected $_DEFAULT_ORDER = 'item_id';
     protected $_purchased = '';
 
-    public function setBuilderQuery() {
+    public function setBuilderQuery() 
+    {
         $data = $this->getData();
         if (isset($data['resourceid']) && $data['resourceid']) {
-            
         } else {
             $this->builderQuery = $this->getCollectionItems();
         }
     }
 
-    public function index() {
+    public function index() 
+    {
         $result = parent::index();
         foreach ($result['downloadableproducts'] as $index => $item) {
             $_item = $this->getCollectionItems()->addFieldToFilter('item_id', $item['item_id'])->getFirstItem();
@@ -25,6 +27,7 @@ class Simi_Simiconnector_Model_Api_Downloadableproducts extends Simi_Simiconnect
                 $fileName = explode('/', $fileName);
                 $fileName = end($fileName);
             }
+
             $itDe = $this->getPurchased()->getItemById($_item->getPurchasedId());
             $data = array(
                 'order_id' => $itDe->getOrderIncrementId(),
@@ -38,10 +41,12 @@ class Simi_Simiconnector_Model_Api_Downloadableproducts extends Simi_Simiconnect
             $item = array_merge($item, $data);
             $result['downloadableproducts'][$index] = $item;
         }
+
         return $result;
     }
 
-    public function getCollectionItems() {
+    public function getCollectionItems() 
+    {
         $session = Mage::getSingleton('customer/session');
         $purchased = Mage::getResourceModel('downloadable/link_purchased_collection')
                 ->addFieldToFilter('customer_id', $session->getCustomerId())
@@ -52,13 +57,15 @@ class Simi_Simiconnector_Model_Api_Downloadableproducts extends Simi_Simiconnect
         foreach ($purchased as $_item) {
             $purchasedIds[] = $_item->getId();
         }
+
         if (empty($purchasedIds)) {
             $purchasedIds = array(null);
         }
 
         $purchasedItems = Mage::getResourceModel('downloadable/link_purchased_item_collection')
                 ->addFieldToFilter('purchased_id', array('in' => $purchasedIds))
-                ->addFieldToFilter('status', array(
+                ->addFieldToFilter(
+                    'status', array(
                     'nin' => array(
                         Mage_Downloadable_Model_Link_Purchased_Item::LINK_STATUS_PENDING_PAYMENT,
                         Mage_Downloadable_Model_Link_Purchased_Item::LINK_STATUS_PAYMENT_REVIEW
@@ -69,23 +76,28 @@ class Simi_Simiconnector_Model_Api_Downloadableproducts extends Simi_Simiconnect
         return $purchasedItems;
     }
 
-    public function getDownloadUrl($item) {
+    public function getDownloadUrl($item) 
+    {
         return Mage::getUrl('downloadable/download/link', array('id' => $item->getLinkHash(), '_secure' => true));
     }
 
-    public function getRemainingDownloads($item) {
+    public function getRemainingDownloads($item) 
+    {
         if ($item->getNumberOfDownloadsBought()) {
             $downloads = $item->getNumberOfDownloadsBought() - $item->getNumberOfDownloadsUsed();
             return $downloads;
         }
+
         return Mage::helper('downloadable')->__('Unlimited');
     }
     
-    public function getPurchased() {
+    public function getPurchased() 
+    {
         return $this->_purchased;
     }
     
-    public function setPurchased($value) {
+    public function setPurchased($value) 
+    {
         $this->_purchased = $value;
     }
 

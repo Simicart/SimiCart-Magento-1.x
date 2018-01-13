@@ -1,8 +1,10 @@
 <?php
 
-class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Grid extends Mage_Adminhtml_Block_Widget_Grid {
+class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Grid extends Mage_Adminhtml_Block_Widget_Grid
+{
 
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
         $this->setId('labelGrid');
         $this->setDefaultSort('label_id');
@@ -10,31 +12,39 @@ class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Grid extends Mage_Admi
         $this->setSaveParametersInSession(true);
     }
 
-    protected function _prepareCollection() {
+    protected function _prepareCollection() 
+    {
         $webId = 0;
         $collection = Mage::getModel('simiconnector/simiproductlabel')->getCollection();
         if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
             $storeIds = Mage::app()->getWebsite($websiteId)->getStoreIds();
-            $collection->addFieldToFilter('storeview_id',array('in'=>$storeIds));
+            $collection->addFieldToFilter('storeview_id', array('in'=>$storeIds));
         }
+
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
 
-    protected function _prepareColumns() {
-        $this->addColumn('label_id', array(
+    protected function _prepareColumns() 
+    {
+        $this->addColumn(
+            'label_id', array(
             'header' => Mage::helper('simiconnector')->__('ID'),
             'align' => 'right',
             'width' => '50px',
             'index' => 'label_id',
-        ));
-        $this->addColumn('name', array(
+            )
+        );
+        $this->addColumn(
+            'name', array(
             'header' => Mage::helper('simiconnector')->__('Label Name'),
             'align' => 'left',
             'index' => 'name',
-        ));
+            )
+        );
       
-        $this->addColumn('status', array(
+        $this->addColumn(
+            'status', array(
             'header' => Mage::helper('simiconnector')->__('Status'),
             'align' => 'left',
             'width' => '80px',
@@ -44,8 +54,10 @@ class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Grid extends Mage_Admi
                 1 => Mage::helper('simiconnector')->__('Active'),
                 2 => Mage::helper('simiconnector')->__('Inactive'),
             ),
-        ));
-        $this->addColumn('action', array(
+            )
+        );
+        $this->addColumn(
+            'action', array(
             'header' => Mage::helper('simiconnector')->__('Action'),
             'width' => '100',
             'type' => 'action',
@@ -60,7 +72,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Grid extends Mage_Admi
             'sortable' => false,
             'index' => 'stores',
             'is_system' => true,
-        ));
+            )
+        );
 
         return parent::_prepareColumns();
     }
@@ -70,20 +83,24 @@ class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Grid extends Mage_Admi
      *
      * @return Magestore_Madapter_Block_Adminhtml_Madapter_Grid
      */
-    protected function _prepareMassaction() {
+    protected function _prepareMassaction() 
+    {
         $this->setMassactionIdField('label_id');
         $this->getMassactionBlock()->setFormFieldName('label_id');
 
-        $this->getMassactionBlock()->addItem('delete', array(
+        $this->getMassactionBlock()->addItem(
+            'delete', array(
             'label' => Mage::helper('simiconnector')->__('Delete'),
             'url' => $this->getUrl('*/*/massDelete'),
             'confirm' => Mage::helper('simiconnector')->__('Are you sure?')
-        ));
+            )
+        );
 
         $statuses = Mage::getSingleton('simiconnector/status')->getOptionArray();
 
         array_unshift($statuses, array('label' => '', 'value' => ''));
-        $this->getMassactionBlock()->addItem('status', array(
+        $this->getMassactionBlock()->addItem(
+            'status', array(
             'label' => Mage::helper('simiconnector')->__('Change status'),
             'url' => $this->getUrl('*/*/massStatus', array('_current' => true)),
             'additional' => array(
@@ -94,7 +111,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Grid extends Mage_Admi
                     'label' => Mage::helper('simiconnector')->__('Status'),
                     'values' => $statuses
                 ))
-        ));
+            )
+        );
         return $this;
     }
 
@@ -103,7 +121,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simiproductlabel_Grid extends Mage_Admi
      *
      * @return string
      */
-    public function getRowUrl($row) {
+    public function getRowUrl($row) 
+    {
         $webId = Mage::getBlockSingleton('simiconnector/adminhtml_web_switcher')->getWebsiteId();
         return $this->getUrl('*/*/edit', array('label_id' => $row->getId()));
     }

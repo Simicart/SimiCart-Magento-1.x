@@ -1,8 +1,10 @@
 <?php
 
-class Simi_Simiconnector_Model_Config_Source_Addressrequiretype {
+class Simi_Simiconnector_Model_Config_Source_Addressrequiretype
+{
 
-    public function toOptionArray() {
+    public function toOptionArray() 
+    {
         return array(
             array('value' => 1, 'label' => Mage::helper('adminhtml')->__('Required')),
             array('value' => 2, 'label' => Mage::helper('adminhtml')->__('Optional')),
@@ -10,7 +12,8 @@ class Simi_Simiconnector_Model_Config_Source_Addressrequiretype {
         );
     }
 
-    public function toArray() {
+    public function toArray() 
+    {
         return array(
             1 => Mage::helper('adminhtml')->__('Required'),
             2 => Mage::helper('adminhtml')->__('Optional'),

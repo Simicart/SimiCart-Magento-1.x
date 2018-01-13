@@ -1,13 +1,15 @@
 <?php
 
-class Simi_Simiconnector_Helper_Data extends Mage_Core_Helper_Abstract {
+class Simi_Simiconnector_Helper_Data extends Mage_Core_Helper_Abstract
+{
 
     public $_iphone = 'ios';
     public $_ipad = 'ipad';
     public $_android = 'android';
 
 
-    public function getDevice() {
+    public function getDevice() 
+    {
         return array(
             1 => 'Iphone',
             2 => 'Ipad',
@@ -16,7 +18,8 @@ class Simi_Simiconnector_Helper_Data extends Mage_Core_Helper_Abstract {
     }
 
 
-    public function getNameDeviceById($id) {
+    public function getNameDeviceById($id) 
+    {
         $name = '';
         switch ($id) {
             case 1:
@@ -32,10 +35,12 @@ class Simi_Simiconnector_Helper_Data extends Mage_Core_Helper_Abstract {
                 $name = $this->_iphone;
                 break;
         }
+
         return $name;
     }
 
-    public function deleteFile($path) {
+    public function deleteFile($path) 
+    {
         try {
             unlink($path);
         } catch (Exception $e) {
@@ -43,12 +48,14 @@ class Simi_Simiconnector_Helper_Data extends Mage_Core_Helper_Abstract {
         }
     }
 
-    public function getWebsites() {
+    public function getWebsites() 
+    {
         $websites = Mage::getModel('core/website')->getCollection();
         return $websites;
     }
 
-    public function deleteBanner($value) {
+    public function deleteBanner($value) 
+    {
         try {
             unlink($value);
         } catch (Exception $e) {
@@ -56,7 +63,8 @@ class Simi_Simiconnector_Helper_Data extends Mage_Core_Helper_Abstract {
         }
     }
 
-    public function getVisibilityTypeId($contentTypeName) {
+    public function getVisibilityTypeId($contentTypeName) 
+    {
         switch ($contentTypeName) {
             case 'cms':
                 $typeId = 1;
@@ -77,6 +85,7 @@ class Simi_Simiconnector_Helper_Data extends Mage_Core_Helper_Abstract {
                 $typeId = 0;
                 break;
         }
+
         return $typeId;
     }
 

@@ -3,9 +3,11 @@
 /**
 
  */
-class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Renderer_Sku extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract {
+class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Renderer_Sku extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
+{
 
-    public function render(Varien_Object $row) {
+    public function render(Varien_Object $row) 
+    {
         $checked = '';
         if (in_array($row->getId(), $this->_getSelectedProducts()))
             $checked = 'checked';
@@ -13,7 +15,8 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Renderer_Sku 
         return sprintf('%s', $html);
     }
 
-    protected function _getSelectedProducts() {
+    protected function _getSelectedProducts() 
+    {
         $products = $this->getRequest()->getPost('selected', array());
         return $products;
     }

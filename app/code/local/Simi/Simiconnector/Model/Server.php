@@ -65,6 +65,7 @@ class Simi_Simiconnector_Model_Server
         if (is_callable(array(&$model, $this->_method))) {
             return call_user_func_array(array(&$model, $this->_method), array($data));
         }
+
         throw new Exception($this->_helper->__('Resource cannot callable.'), 6);
     }
 
@@ -107,6 +108,7 @@ class Simi_Simiconnector_Model_Server
         } elseif ($controller->getRequest()->isDelete()) {
             $is_method = 4;
         }
+
         $this->_data = array(
             'resource' => $resource,
             'resourceid' => $resourceid,

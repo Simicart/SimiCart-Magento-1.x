@@ -1,25 +1,31 @@
 <?php
 
-class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstract {
+class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstract
+{
 
-    public function _construct() {
+    public function _construct() 
+    {
         $this->_setListPayment();
         $this->setListCase();
     }
 
-    public function _getOnepage() {
+    public function _getOnepage() 
+    {
         return Mage::getSingleton('checkout/type_onepage');
     }
 
-    protected function _getCart() {
+    protected function _getCart() 
+    {
         return Mage::getSingleton('checkout/cart');
     }
 
-    protected function _getQuote() {
+    protected function _getQuote() 
+    {
         return $this->_getCart()->getQuote();
     }
 
-    protected function _getConfig() {
+    protected function _getConfig() 
+    {
         return Mage::getSingleton('payment/config');
     }
 
@@ -27,7 +33,8 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
     protected $_listPayment = array();
     protected $_listCase;
 
-    public function savePaymentMethod($data) {
+    public function savePaymentMethod($data) 
+    {
         $method = array('method' => strtolower($data->method));
         if (isset($data->cc_type) && $data->cc_type) {
             $method = array('method' => strtolower($data->method),
@@ -38,6 +45,7 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
                 'cc_cid' => $data->cc_cid,
             );
         }
+
         $this->_getOnepage()->savePayment($method);
     }
 
@@ -46,13 +54,15 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
      * @param $method_code
      * @param $type
      */
-    public function addPaymentMethod($method_code, $type) {
+    public function addPaymentMethod($method_code, $type) 
+    {
         $this->_listPayment[] = $method_code;
         $this->_listPayment = array_unique($this->_listPayment);
         $this->_listCase[$method_code] = $type;
     }
 
-    public function getMethods() {
+    public function getMethods() 
+    {
         $this->_construct();
         /*
          * Dispatch event simiconnector_add_payment_method
@@ -71,10 +81,12 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
                 unset($methods[$key]);
             }
         }
+
         return $methods;
     }
 
-    protected function _canUseMethod($method, $quote) {
+    protected function _canUseMethod($method, $quote) 
+    {
         if (!$method->canUseForCountry($quote->getBillingAddress()->getCountry())) {
             return false;
         }
@@ -93,34 +105,40 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
         if ((!empty($minTotal) && ($total < $minTotal)) || (!empty($maxTotal) && ($total > $maxTotal))) {
             return false;
         }
+
         return true;
     }
 
-    protected function _getListPaymentNoUse() {
+    protected function _getListPaymentNoUse() 
+    {
         return array(
             'authorizenet_directpost'
         );
     }
 
-    protected function _setListPayment() {
+    protected function _setListPayment() 
+    {
         $this->_listPayment[] = 'transfer_mobile';
         $this->_listPayment[] = 'cashondelivery';
-		$this->_listPayment[] = 'banktransfer';
+        $this->_listPayment[] = 'banktransfer';
         $this->_listPayment[] = 'checkmo';
         $this->_listPayment[] = 'free';
         $this->_listPayment[] = 'phoenix_cashondelivery';
     }
 
-    protected function _getListPayment() {
+    protected function _getListPayment() 
+    {
         return $this->_listPayment;
     }
 
-    protected function _assignMethod($method, $quote) {
+    protected function _assignMethod($method, $quote) 
+    {
         $method->setInfoInstance($quote->getPayment());
         return $this;
     }
 
-    public function setListCase() {
+    public function setListCase() 
+    {
         $this->_listCase = array(
             'banktransfer' => 0,
             'transfer_mobile' => 0,
@@ -131,7 +149,8 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
         );
     }
 
-    public function getDetailsPayment($method) {
+    public function getDetailsPayment($method) 
+    {
         $code = $method->getCode();
         $list = $this->getListCase();
 
@@ -180,20 +199,24 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
             $detail['title'] = $method->getConfigData('title');
             $detail['show_type'] = 3;
         }
+
         $detail['p_method_selected'] = false;
         if ((Mage::getSingleton('checkout/type_onepage')->getQuote()->getPayment()->getMethod()) && (Mage::getSingleton('checkout/type_onepage')->getQuote()->getPayment()->getMethodInstance()->getCode() == $method->getCode())) {
             $detail['p_method_selected'] = true;
         }
+
         $this->detail = $detail;
         Mage::dispatchEvent('simiconnector_change_payment_detail', array('object' => $this));
         return $this->detail;
     }
 
-    public function getListCase() {
+    public function getListCase() 
+    {
         return $this->_listCase;
     }
 
-    public function getCcAvailableTypes($method) {
+    public function getCcAvailableTypes($method) 
+    {
         $types = $this->_getConfig()->getCcTypes();
         $availableTypes = $method->getConfigData('cctypes');
         $cc_types = array();
@@ -210,6 +233,7 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
                 }
             }
         }
+
         return $cc_types;
     }
 

@@ -10,7 +10,8 @@ class Simi_Simiconnector_Helper_Customer extends Mage_Core_Helper_Abstract
         return Mage::getSingleton('customer/session');
     }
 
-     public function renewCustomerSesssion($data) {
+     public function renewCustomerSesssion($data) 
+     {
         if (isset($data['params']['quote_id']) && $data['params']['quote_id']) {
             if (($quote = Mage::getModel('sales/quote')->load($data['params']['quote_id'])) && $quote->getId()) {
                 if (Mage::app()->getStore()->getId() == $quote->getData('store_id')) {
@@ -28,6 +29,7 @@ class Simi_Simiconnector_Helper_Customer extends Mage_Core_Helper_Abstract
             $data['params']['email'] = $data['contents_array']['email'];
             $data['params']['password'] = $data['contents_array']['password'];
         }
+
         if ((!isset($data['params']['email'])) || (!isset($data['params']['password'])))
             return;
         
@@ -37,9 +39,8 @@ class Simi_Simiconnector_Helper_Customer extends Mage_Core_Helper_Abstract
         try {
             $this->loginByEmailAndPass($data['params']['email'], $data['params']['password']);
         } catch (Exception $e) {
-            
         }
-    }
+     }
 
     public function loginByEmailAndPass($username, $password)
     {
@@ -56,6 +57,7 @@ class Simi_Simiconnector_Helper_Customer extends Mage_Core_Helper_Abstract
             $this->loginByCustomer($customer);
             return true;
         }
+
         return false;
     }
 
@@ -76,6 +78,7 @@ class Simi_Simiconnector_Helper_Customer extends Mage_Core_Helper_Abstract
         if ($password == md5(Mage::getStoreConfig('simiconnector/general/secret_key') . $username)) {
             return true;
         }
+
         return false;
     }
 }

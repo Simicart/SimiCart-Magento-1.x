@@ -1,8 +1,10 @@
 <?php
 
-class Simi_Simiconnector_Block_Adminhtml_Simicategory_Grid extends Mage_Adminhtml_Block_Widget_Grid {
+class Simi_Simiconnector_Block_Adminhtml_Simicategory_Grid extends Mage_Adminhtml_Block_Widget_Grid
+{
 
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
         $this->setId('simicategoryGrid');
         $this->setDefaultSort('simicategory_id');
@@ -10,7 +12,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Grid extends Mage_Adminhtm
         $this->setSaveParametersInSession(true);
     }
 
-    protected function _prepareCollection() {
+    protected function _prepareCollection() 
+    {
         $collection = Mage::getModel('simiconnector/simicategory')->getCollection();
         if($webId=Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
             $website = Mage::getModel('core/website')->load($webId);
@@ -18,37 +21,46 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Grid extends Mage_Adminhtm
             $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('homecategory');
             $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
             $collection->getSelect()
-                ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.simicategory_id AND visibility.content_type = ' . $typeID );
+                ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.simicategory_id AND visibility.content_type = ' . $typeID);
             $collection->addFieldToFilter('store_view_id', array('in' => $storeIds));
             $collection->getSelect()->group('simicategory_id');
         }
+
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
 
-    protected function _prepareColumns() {
-        $this->addColumn('simicategory_id', array(
+    protected function _prepareColumns() 
+    {
+        $this->addColumn(
+            'simicategory_id', array(
             'header' => Mage::helper('simiconnector')->__('ID'),
             'align' => 'right',
             'width' => '50px',
             'index' => 'simicategory_id',
-        ));
+            )
+        );
 
-        $this->addColumn('simicategory_name', array(
+        $this->addColumn(
+            'simicategory_name', array(
             'header' => Mage::helper('simiconnector')->__('Category Name'),
             'align' => 'left',
             'index' => 'simicategory_name',
-        ));
+            )
+        );
 
-        $this->addColumn('sort_order', array(
+        $this->addColumn(
+            'sort_order', array(
             'header' => Mage::helper('simiconnector')->__('Sort Order'),
             'align' => 'left',
             'width' => '50px',
             'index' => 'sort_order',
             'filter' => false
-        ));
+            )
+        );
 
-        $this->addColumn('status', array(
+        $this->addColumn(
+            'status', array(
             'header' => Mage::helper('simiconnector')->__('Status'),
             'align' => 'left',
             'width' => '80px',
@@ -58,9 +70,11 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Grid extends Mage_Adminhtm
                 1 => 'Enabled',
                 2 => 'Disabled',
             ),
-        ));
+            )
+        );
 
-        $this->addColumn('action', array(
+        $this->addColumn(
+            'action', array(
             'header' => Mage::helper('simiconnector')->__('Action'),
             'width' => '100',
             'type' => 'action',
@@ -75,7 +89,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Grid extends Mage_Adminhtm
             'sortable' => false,
             'index' => 'stores',
             'is_system' => true,
-        ));
+            )
+        );
 
         $this->addExportType('*/*/exportCsv', Mage::helper('simiconnector')->__('CSV'));
         $this->addExportType('*/*/exportXml', Mage::helper('simiconnector')->__('XML'));
@@ -83,20 +98,24 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Grid extends Mage_Adminhtm
         return parent::_prepareColumns();
     }
 
-    protected function _prepareMassaction() {
+    protected function _prepareMassaction() 
+    {
         $this->setMassactionIdField('simicategory_id');
         $this->getMassactionBlock()->setFormFieldName('simicategory');
 
-        $this->getMassactionBlock()->addItem('delete', array(
+        $this->getMassactionBlock()->addItem(
+            'delete', array(
             'label' => Mage::helper('simiconnector')->__('Delete'),
             'url' => $this->getUrl('*/*/massDelete'),
             'confirm' => Mage::helper('simiconnector')->__('Are you sure?')
-        ));
+            )
+        );
 
         $statuses = Mage::getSingleton('simiconnector/status')->getOptionArray();
 
         array_unshift($statuses, array('label' => '', 'value' => ''));
-        $this->getMassactionBlock()->addItem('status', array(
+        $this->getMassactionBlock()->addItem(
+            'status', array(
             'label' => Mage::helper('simiconnector')->__('Change status'),
             'url' => $this->getUrl('*/*/massStatus', array('_current' => true)),
             'additional' => array(
@@ -107,11 +126,13 @@ class Simi_Simiconnector_Block_Adminhtml_Simicategory_Grid extends Mage_Adminhtm
                     'label' => Mage::helper('simiconnector')->__('Status'),
                     'values' => $statuses
                 ))
-        ));
+            )
+        );
         return $this;
     }
 
-    public function getRowUrl($row) {
+    public function getRowUrl($row) 
+    {
         return $this->getUrl('*/*/edit', array('id' => $row->getId()));
     }
 

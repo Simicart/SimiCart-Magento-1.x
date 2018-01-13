@@ -1,17 +1,20 @@
 <?php
 
-class Simi_Simiconnector_Block_Adminhtml_System_Config_Category_Categories extends Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Categories {
+class Simi_Simiconnector_Block_Adminhtml_System_Config_Category_Categories extends Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Categories
+{
 
     protected $_categoryIds;
     protected $_selectedNodes = null;
 
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
         $this->_withProductCount = false;
         $this->setTemplate('simiconnector/categories.phtml');
     }
 
-    public function getCategoryCollection() {
+    public function getCategoryCollection() 
+    {
         $storeId = $this->getRequest()->getParam('store', $this->_getDefaultStoreId());
         if (!is_null($storeId) && !is_numeric($storeId)) {
             $store = Mage::getModel('core/store')->getCollection()->addFieldToFilter('code', $storeId)->getFirstItem();
@@ -20,6 +23,7 @@ class Simi_Simiconnector_Block_Adminhtml_System_Config_Category_Categories exten
                 $this->getRequest()->setParam('store', $storeId);
             }
         }
+
         $collection = $this->getData('category_collection');
         if (is_null($collection)) {
             $collection = Mage::getModel('catalog/category')->getCollection();
@@ -33,6 +37,7 @@ class Simi_Simiconnector_Block_Adminhtml_System_Config_Category_Categories exten
 
             $this->setData('category_collection', $collection);
         }
+
         return $collection;
     }
 
@@ -41,11 +46,13 @@ class Simi_Simiconnector_Block_Adminhtml_System_Config_Category_Categories exten
      *
      * @return boolean
      */
-    public function isReadonly() {
+    public function isReadonly() 
+    {
         return false; //$this->getProduct()->getCategoriesReadonly();
     }
 
-    protected function getCategoryIds() {
+    protected function getCategoryIds() 
+    {
         return explode(',', $this->getIdsString()); //$this->getProduct()->getCategoryIds();
     }
 
@@ -56,22 +63,27 @@ class Simi_Simiconnector_Block_Adminhtml_System_Config_Category_Categories exten
             if (!$storeviewModel->getId()) {
                 $storeviewModel = Mage::getModel('core/store')->getCollection()->addFieldToFilter('code', $storecode)->getFirstItem();
             }
+
             return Mage::getStoreConfig("simiconnector/general/categories_in_app", $storeviewModel->getId());
         }
+
         if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()) {
-            $storecode = Mage::app()->getRequest()->getParam('store','');
+            $storecode = Mage::app()->getRequest()->getParam('store', '');
             if(!$storecode){
                 return Mage::app()->getWebsite($websiteId)->getConfig('simiconnector/general/categories_in_app');
             }
         }
+
         return Mage::getStoreConfig("simiconnector/general/categories_in_app");
     }
 
-    public function getLoadTreeUrl($expanded = null) {
+    public function getLoadTreeUrl($expanded = null) 
+    {
         $params = array('_current' => true, 'id' => null, 'store' => null);
         if ((is_null($expanded) && Mage::getSingleton('admin/session')->getIsTreeWasExpanded()) || $expanded == true) {
             $params['expand_all'] = true;
         }
+
         return $this->getUrl('adminhtml/simiconnector_config/categoriesJson', $params);
     }
 
@@ -80,9 +92,9 @@ class Simi_Simiconnector_Block_Adminhtml_System_Config_Category_Categories exten
         if (!is_null($parentNodeCategory) && $parentNodeCategory->getId()) {
             return $this->getNode($parentNodeCategory, $recursionLevel);
         }
+
         $root = Mage::registry('root');
         if (is_null($root)) {
-
             if($storeCode = $this->getRequest()->getParam('store')){
                 $storeviewModel = Mage::getModel('core/store')->getCollection()
                     ->addFieldToFilter('code', $storeCode)

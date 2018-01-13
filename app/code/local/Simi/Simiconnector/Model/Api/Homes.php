@@ -6,19 +6,23 @@
  * Date: 5/3/16
  * Time: 9:37 PM
  */
-class Simi_Simiconnector_Model_Api_Homes extends Simi_Simiconnector_Model_Api_Abstract {
+class Simi_Simiconnector_Model_Api_Homes extends Simi_Simiconnector_Model_Api_Abstract
+{
 
     protected $_DEFAULT_ORDER = 'sort_order';
 
-    public function setBuilderQuery() {
+    public function setBuilderQuery() 
+    {
         
     }
 
-    public function index() {
+    public function index() 
+    {
         return $this->show();
     }
 
-    public function show() {
+    public function show() 
+    {
         $data = $this->getData();
         /*
          * Get Banners
@@ -45,6 +49,7 @@ class Simi_Simiconnector_Model_Api_Homes extends Simi_Simiconnector_Model_Api_Ab
         if ($data['resourceid'] == 'lite') {
             $productlists->SHOW_PRODUCT_ARRAY = FALSE;
         }
+
         $productlists->setPluralKey('homeproductlists');
         $productlists->setData($this->getData());
         $productlists = $productlists->index();

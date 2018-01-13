@@ -1,8 +1,10 @@
 <?php
 
-class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Grid extends Mage_Adminhtml_Block_Widget_Grid {
+class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Grid extends Mage_Adminhtml_Block_Widget_Grid
+{
 
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
         $this->setId('simibarcodeGrid');
         $this->setDefaultSort('barcode_id');
@@ -11,7 +13,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Grid extends Mage_Adminhtml
     }
 
 
-    protected function _prepareCollection() {
+    protected function _prepareCollection() 
+    {
         $collection = Mage::getModel('simiconnector/simibarcode')->getCollection();
         if ($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()) {
             $productWebsiteTable = Mage::getSingleton('core/resource')->getTableName('catalog/product_website');
@@ -20,51 +23,66 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Grid extends Mage_Adminhtml
                 'main_table.product_entity_id = product_website.product_id AND product_website.website_id='.$websiteId
             );
         }
+
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
 
 
-    protected function _prepareColumns() {
-        $this->addColumn('barcode_id', array(
+    protected function _prepareColumns() 
+    {
+        $this->addColumn(
+            'barcode_id', array(
             'header' => Mage::helper('simiconnector')->__('ID'),
             'align' => 'right',
             'width' => '50px',
             'index' => 'barcode_id',
-        ));
+            )
+        );
 
-        $this->addColumn('barcode', array(
+        $this->addColumn(
+            'barcode', array(
             'header' => Mage::helper('simiconnector')->__('Barcode'),
             'align' => 'left',
             'index' => 'barcode',
-        ));
+            )
+        );
 
-        $this->addColumn('qrcode', array(
+        $this->addColumn(
+            'qrcode', array(
             'header' => Mage::helper('simiconnector')->__('QRcode'),
             'align' => 'left',
             'index' => 'qrcode',
-        ));
+            )
+        );
 
-        $this->addColumn('product_name', array(
+        $this->addColumn(
+            'product_name', array(
             'header' => Mage::helper('simiconnector')->__('Product Name'),
             'align' => 'left',
             'index' => 'product_name',
-        ));
+            )
+        );
 
-        $this->addColumn('product_sku', array(
+        $this->addColumn(
+            'product_sku', array(
             'header' => Mage::helper('simiconnector')->__('Product Sku'),
             'align' => 'left',
             'index' => 'product_sku',
-        ));
+            )
+        );
 
-        $this->addColumn('created_date', array(
+        $this->addColumn(
+            'created_date', array(
             'header' => Mage::helper('simiconnector')->__('Created Date'),
             'align' => 'left',
             'index' => 'created_date',
             'type' => 'datetime'
-        ));
+            )
+        );
 
-        $this->addColumn('barcode_status', array(
+        $this->addColumn(
+            'barcode_status', array(
             'header' => Mage::helper('simiconnector')->__('Status'),
             'align' => 'left',
             'width' => '80px',
@@ -74,9 +92,11 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Grid extends Mage_Adminhtml
                 1 => 'Enabled',
                 2 => 'Disabled',
             ),
-        ));
+            )
+        );
 
-        $this->addColumn('action', array(
+        $this->addColumn(
+            'action', array(
             'header' => Mage::helper('simiconnector')->__('Action'),
             'width' => '100',
             'type' => 'action',
@@ -91,7 +111,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Grid extends Mage_Adminhtml
             'sortable' => false,
             'index' => 'stores',
             'is_system' => true,
-        ));
+            )
+        );
 
         $this->addExportType('*/*/exportCsv', Mage::helper('simiconnector')->__('CSV'));
         $this->addExportType('*/*/exportXml', Mage::helper('simiconnector')->__('XML'));
@@ -100,20 +121,24 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Grid extends Mage_Adminhtml
     }
 
 
-    protected function _prepareMassaction() {
+    protected function _prepareMassaction() 
+    {
         $this->setMassactionIdField('barcode_id');
         $this->getMassactionBlock()->setFormFieldName('simibarcode');
 
-        $this->getMassactionBlock()->addItem('delete', array(
+        $this->getMassactionBlock()->addItem(
+            'delete', array(
             'label' => Mage::helper('simiconnector')->__('Delete'),
             'url' => $this->getUrl('*/*/massDelete'),
             'confirm' => Mage::helper('simiconnector')->__('Are you sure?')
-        ));
+            )
+        );
 
         $statuses = Mage::getSingleton('simiconnector/status')->getOptionArray();
 
         array_unshift($statuses, array('label' => '', 'value' => ''));
-        $this->getMassactionBlock()->addItem('status', array(
+        $this->getMassactionBlock()->addItem(
+            'status', array(
             'label' => Mage::helper('simiconnector')->__('Change status'),
             'url' => $this->getUrl('*/*/massStatus', array('_current' => true)),
             'additional' => array(
@@ -124,11 +149,13 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Grid extends Mage_Adminhtml
                     'label' => Mage::helper('simiconnector')->__('Status'),
                     'values' => $statuses
                 ))
-        ));
+            )
+        );
         return $this;
     }
 
-    public function getRowUrl($row) {
+    public function getRowUrl($row) 
+    {
         return $this->getUrl('*/*/edit', array('id' => $row->getId()));
     }
 

@@ -1,8 +1,10 @@
 <?php
 
-class Simi_Simiconnector_Helper_Productlabel extends Mage_Core_Helper_Abstract {
+class Simi_Simiconnector_Helper_Productlabel extends Mage_Core_Helper_Abstract
+{
 
-    static public function getOptionArray() {
+    static public function getOptionArray() 
+    {
         return array(
             1 => Mage::helper('simiconnector')->__('Top-left'),
             2 => Mage::helper('simiconnector')->__('Top-center'),
@@ -21,7 +23,8 @@ class Simi_Simiconnector_Helper_Productlabel extends Mage_Core_Helper_Abstract {
      *
      * @return array
      */
-    static public function getOptionHash() {
+    static public function getOptionHash() 
+    {
         $options = array();
         foreach (self::getOptionArray() as $value => $label) {
             $options[] = array(
@@ -29,20 +32,23 @@ class Simi_Simiconnector_Helper_Productlabel extends Mage_Core_Helper_Abstract {
                 'label' => $label
             );
         }
+
         return $options;
     }
     
-    public function getProductLabel($product) {
+    public function getProductLabel($product) 
+    {
         if (!Mage::getStoreConfig("simiconnector/productlabel/enable"))
             return;
-        $collection = Mage::getModel('simiconnector/simiproductlabel')->getCollection()->setOrder('priority','DESC');
+        $collection = Mage::getModel('simiconnector/simiproductlabel')->getCollection()->setOrder('priority', 'DESC');
         if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
             $storeIds = Mage::app()->getWebsite($websiteId)->getStoreIds();
             $collection = Mage::getModel('simiconnector/simiproductlabel')->getCollection()
-                ->addFieldToFilter('storeview_id',array('in'=>$storeIds))
-                ->setOrder('priority','DESC');
+                ->addFieldToFilter('storeview_id', array('in'=>$storeIds))
+                ->setOrder('priority', 'DESC');
         }
-        foreach ( $collection as $productLabel) {
+
+        foreach ($collection as $productLabel) {
             if($productLabel->getData('status') == Simi_Simiconnector_Model_Status::STATUS_DISABLED)
                 continue;
             if($productLabel->getData('storeview_id') != Mage::app()->getStore()->getId())
@@ -60,20 +66,21 @@ class Simi_Simiconnector_Helper_Productlabel extends Mage_Core_Helper_Abstract {
                         );                    
                 }
             }
-            
         }
     }
 
-    public function getProductLabels($product) {
+    public function getProductLabels($product) 
+    {
         $labels = array();
-        $collection = Mage::getModel('simiconnector/simiproductlabel')->getCollection()->setOrder('priority','DESC');
+        $collection = Mage::getModel('simiconnector/simiproductlabel')->getCollection()->setOrder('priority', 'DESC');
         if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
             $storeIds = Mage::app()->getWebsite($websiteId)->getStoreIds();
             $collection = Mage::getModel('simiconnector/simiproductlabel')->getCollection()
-                ->addFieldToFilter('storeview_id',array('in'=>$storeIds))
-                ->setOrder('priority','DESC');
+                ->addFieldToFilter('storeview_id', array('in'=>$storeIds))
+                ->setOrder('priority', 'DESC');
         }
-        foreach ( $collection as $productLabel) {
+
+        foreach ($collection as $productLabel) {
             if($productLabel->getData('status') == Simi_Simiconnector_Model_Status::STATUS_DISABLED)
                 continue;
             if($productLabel->getData('storeview_id') != Mage::app()->getStore()->getId())
@@ -93,6 +100,7 @@ class Simi_Simiconnector_Helper_Productlabel extends Mage_Core_Helper_Abstract {
                 }
             }
         }
+
         return $labels;
     }
 }

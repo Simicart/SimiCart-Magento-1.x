@@ -77,14 +77,13 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
      */
     protected function filter()
     {        
-		if (!$this->FILTER_RESULT)
+        if (!$this->FILTER_RESULT)
             return;
         $data = $this->_data;
         $parameters = $data['params'];
         if ($this->_allow_filter_core) {
             $query = $this->builderQuery;
             $this->_whereFilter($query, $parameters);
-
         }
 
         if (isset($parameters['dir']) && isset($parameters['order']))
@@ -118,6 +117,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         if (isset($parameters[self::OFFSET]) && $parameters[self::OFFSET]) {
             $offset = $parameters[self::OFFSET];
         }
+
         $collection->setPageSize($offset + $limit);
 
         $all_ids = array();
@@ -147,6 +147,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
             if (++$check_offset <= $offset) {
                 continue;
             }
+
             if (++$check_limit > $limit)
                 break;
             $info_detail = $entity->toArray($fields);
@@ -181,6 +182,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
             $info_detail['configurable_swatches'] = $this->_helperProduct->getSwatchesListProduct($entity);
             $info[] = $info_detail;
         }
+
         return $this->getList($info, $all_ids, $total, $limit, $offset);
     }
 
@@ -197,6 +199,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         if (isset($parameters['fields']) && $parameters['fields']) {
             $fields = explode(',', $parameters['fields']);
         }
+
         $info = $entity->toArray($fields);
         $media_gallery = $entity->getMediaGallery();
         $images = array();
@@ -222,6 +225,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
                 );
             }
         }
+
         if (count($images) == 0) {
             $imagelink = $this->_helperProduct->getImageProduct($entity, null, $image_width, $image_height);
             //$sizes = getimagesize($imagelink);
@@ -232,6 +236,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
 //                'image_height' => $sizes[1],
             );
         }
+
         if (!Mage::registry('product') && $entity->getId()) {
             Mage::register('product', $entity);
         }
@@ -268,6 +273,7 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
                 $info['product_labels'] = Mage::helper('simiconnector/productlabel')->getProductLabels($entity);
             }
         }
+
         $info['product_video'] = Mage::helper('simiconnector/simivideo')->getProductVideo($entity);
         $this->detail_info = $this->getDetail($info);
         Mage::dispatchEvent('simi_simiconnector_model_api_products_show_after', array('object' => $this, 'data' => $this->detail_info));

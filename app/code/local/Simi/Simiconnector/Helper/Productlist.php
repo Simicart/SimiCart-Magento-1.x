@@ -30,11 +30,14 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
         return $this->getProductCollectionByType($listModel->getData('list_type'), $listModel->getData('list_products'));
     }
 
-    public function getProductCollectionByType($type, $listProduct = ''){
+    public function getProductCollectionByType($type, $listProduct = '')
+    {
         $storeId = Mage::app()->getStore()->getId();
         $collection = Mage::getResourceModel('catalog/product_collection')
-            ->addAttributeToSelect(Mage::getSingleton('catalog/config')
-                ->getProductAttributes())
+            ->addAttributeToSelect(
+                Mage::getSingleton('catalog/config')
+                ->getProductAttributes()
+            )
             ->addMinimalPrice()
             ->addFinalPrice()
             ->addTaxPercents()
@@ -105,13 +108,13 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
             $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('homecategory');
             $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
             $categoryCollection->getSelect()
-                ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.simicategory_id AND visibility.content_type = ' . $typeID );
+                ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.simicategory_id AND visibility.content_type = ' . $typeID);
             $categoryCollection->addFieldToFilter('store_view_id', array('in' => $storeIds));
             $categoryCollection->getSelect()->group('simicategory_id');
 
             $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('productlist');
             $productlistCollection->getSelect()
-                ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.productlist_id AND visibility.content_type = ' . $typeID );
+                ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.productlist_id AND visibility.content_type = ' . $typeID);
             $productlistCollection->addFieldToFilter('store_view_id', array('in' => $storeIds));
             $productlistCollection->getSelect()->group('productlist_id');
         }
@@ -124,6 +127,7 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
                 $highestRow = $currentIndex + 1;
             $rows[$currentIndex][] = $simicat->getData('simicategory_name');
         }
+
         foreach ($productlistCollection as $productlist) {
             $currentIndex = $productlist->getData('matrix_row');
             if (!isset($rows[$currentIndex]) || !$rows[$currentIndex])
@@ -132,6 +136,7 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
                 $highestRow = $currentIndex + 1;
             $rows[$currentIndex][] = $productlist->getData('list_title');
         }
+
         ksort($rows);
         $returnArray = array(array('value' => $highestRow, 'label' => 'Create New Row'));
         foreach ($rows as $index => $row)
@@ -192,17 +197,20 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
                 'sort_order' => $productlist->getData('sort_order')
             );
         }
+
         ksort($rows);
         try {
             foreach ($rows as $index => $row) {
-                usort($row, function ($a, $b) {
+                usort(
+                    $row, function ($a, $b) {
                     return $a['sort_order'] - $b['sort_order'];
-                });
+                    }
+                );
                 $rows[$index] = $row;
             }
         } catch (Exception $e) {
-
         }
+
         $html = '</br> <b> Matrix Theme Mockup Preview: </b></br>(Save Item to update your Changes)</br></br>';
         $html .= '<table><tr><td style="text-align:center">Phone Screen Mockup Preview: </br>';
         $html .= $this->drawMatrixMockupTable(170, 320, false, $rows);
@@ -224,6 +232,7 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
             $topmargin = 10;
             $bottommargin = 50;
         }
+
         //phone shape
         $html = '<div style="background-color:black; width:' . ($bannerWidth + $margin * 2) . 'px; height:' . ($screenHeight + $topmargin + $bottommargin) . 'px; border-radius: 30px;"><br>';
         //screen
@@ -237,7 +246,6 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
             $totalWidth = 0;
             $cells = '';
             foreach ($row as $rowItem) {
-
                 if ($is_tablet) {
                     if ($rowItem['image_tablet'] != null)
                         $rowItem['image'] = $rowItem['image_tablet'];
@@ -255,6 +263,7 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
                 overflow:hidden; background-image:url(' . $rowItem['image'] . '); background-repeat:no-repeat;
                 background-size: ' . $rowWidth . 'px ' . $rowHeight . 'px;">' . $rowItem['title'] . '</span>';
             }
+
             if ($totalWidth > $rowWidth)
                 $style = 'overflow-x: scroll; overflow-y: hidden;';
             else
@@ -262,6 +271,7 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
             $html .= '<div style="' . $style . 'width: ' . $bannerWidth . 'px"> <div style="width:' . $totalWidth . 'px; height:' . $rowHeight . 'px">' . $cells;
             $html .= '</div></div>';
         }
+
         $html .= '</span></div></div>';
         return $html;
     }
@@ -274,11 +284,13 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
             if (!isset($rows[$currentIndex]) || !$rows[$currentIndex])
                 $rows[$currentIndex] = array('phone' => $simicat->getData('matrix_height_percent'), 'tablet' => $simicat->getData('matrix_height_percent_tablet'));
         }
+
         foreach (Mage::getModel('simiconnector/productlist')->getCollection() as $productlist) {
             $currentIndex = $productlist->getData('matrix_row');
             if (!isset($rows[$currentIndex]) || !$rows[$currentIndex])
                 $rows[$currentIndex] = array('phone' => $productlist->getData('matrix_height_percent'), 'tablet' => $productlist->getData('matrix_height_percent_tablet'));
         }
+
         ksort($rows);
         $script = '
             function autoFillHeight(row){
@@ -290,6 +302,7 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
                         $("matrix_height_percent_tablet").value = "' . $row['tablet'] . '";
                         break; ';
         }
+
         $script .= '}}
         ';
         return $script;
@@ -304,6 +317,7 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
                 $productList->save();
             }
         }
+
         foreach (Mage::getModel('simiconnector/simicategory')->getCollection() as $homecategory) {
             if (($homecategory->getData('matrix_row') == $matrix_row) && (($homecategory->getData('matrix_height_percent') != $matrix_height_percent) || ($homecategory->getData('matrix_height_percent_tablet') != $matrix_height_percent_tablet))) {
                 $homecategory->setData('matrix_height_percent', $matrix_height_percent);

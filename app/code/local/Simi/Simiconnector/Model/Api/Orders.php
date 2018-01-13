@@ -46,12 +46,12 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         $data = $this->getData();
         if (isset($data['resourceid']) && $data['resourceid']) {
             if ($data['resourceid'] == 'onepage') {
-
             } else {
                 $this->builderQuery = Mage::getModel('sales/order')->load($data['resourceid']);
                 if (!$this->builderQuery->getId()) {
                     $this->builderQuery = Mage::getModel('sales/order')->loadByIncrementId($data['resourceid']);
                 }
+
                 if (!$this->builderQuery->getId()) {
                     throw new Exception(Mage::helper('simiconnector')->__('Cannot find the Order'), 6);
                 }
@@ -92,11 +92,13 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
                 $order->setState($param->status, true);
                 $order->save();
             }
+
             if (null != $result) {
                 $return_data = $this->show();
                 $return_data[$this->getSingularKey()]['message'] = $result['message'];
                 return $return_data;
             }
+
             return $this->show();
         }
     }
@@ -112,6 +114,7 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             if (!isset($parameters['s_address']))
                 $parameters['s_address'] = $parameters['b_address'];
         }
+
         if (isset($parameters['s_address'])) {
             $this->_initCheckout();
             Mage::helper('simiconnector/address')->saveShippingAddress($parameters['s_address']);
@@ -120,12 +123,15 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         if (isset($parameters['coupon_code'])) {
             $this->_RETURN_MESSAGE = Mage::helper('simiconnector/coupon')->setCoupon($parameters['coupon_code']);
         }
+
         if (isset($parameters['s_method'])) {
             Mage::helper('simiconnector/checkout_shipping')->saveShippingMethod($parameters['s_method']);
         }
+
         if (isset($parameters['p_method'])) {
             Mage::helper('simiconnector/checkout_payment')->savePaymentMethod($parameters['p_method']);
         }
+
         $this->_getOnepage()->getQuote()->collectTotals()->save();
     }
 
@@ -157,6 +163,7 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         if (!$quote->validateMinimumAmount()) {
             throw new Exception(Mage::getStoreConfig('sales/minimum_order/error_message'), 4);
         }
+
         $this->_getOnepage()->saveOrder();
         $this->_getOnepage()->getQuote()->save();
         $order = array('invoice_number' => $this->_getCheckoutSession()->getLastRealOrderId(),
@@ -202,6 +209,7 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             if ($this->_RETURN_MESSAGE) {
                 $detail_onepage['message'] = array($this->_RETURN_MESSAGE);
             }
+
             $this->detail_onepage = $detail_onepage;
             Mage::dispatchEvent('simi_simiconnector_model_api_orders_onepage_show_after', array('object' => $this, 'data' => $this->detail_onepage));
             return $this->detail_onepage;
@@ -214,9 +222,11 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
                 foreach ($items as $item) {
                     $cart->addOrderItem($item);
                 }
+
                 $cart->save();
                 $result['message'] = Mage::helper('simiconnector')->__('Reorder Succeeded');
             }
+
             $order = $result['order'];
             $customer = Mage::getSingleton('customer/session')->getCustomer();
             $this->_updateOrderInformation($order, $customer);
@@ -237,6 +247,7 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             $this->_updateOrderInformation($order, $customer);
             $result['orders'][$index] = $order;
         }
+
         return $result;
     }
 
@@ -263,12 +274,15 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             if ($item->getProductOptions()) {
                 $options = $this->_getOptions($item->getProductType(), $item->getProductOptions());
             }
+
             $product_id = $item->getProductId();
             $product = $item->getProduct();
             if (version_compare(Mage::getVersion(), '1.7.0.0', '<') === true) {
                 $product = Mage::getModel('catalog/product')->load($product_id);
             }
-            $productInfo[] = array_merge(array('option' => $options), $item->toArray(), array('image' => Mage::helper('simiconnector/products')->getImageProduct($item->getProduct()))
+
+            $productInfo[] = array_merge(
+                array('option' => $options), $item->toArray(), array('image' => Mage::helper('simiconnector/products')->getImageProduct($item->getProduct()))
             );
         }
 
@@ -298,6 +312,7 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             } elseif (isset($options['options'])) {
                 $optionsList = $options['options'];
             }
+
             foreach ($optionsList as $option) {
                 $list[] = array(
                     'option_title' => $option['label'],
@@ -306,6 +321,7 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
                 );
             }
         }
+
         return $list;
     }
 

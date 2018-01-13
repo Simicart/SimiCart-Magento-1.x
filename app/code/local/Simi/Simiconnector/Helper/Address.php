@@ -3,9 +3,11 @@
 /**
 
  */
-class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
+class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract
+{
 
-    public function _getOnepage() {
+    public function _getOnepage() 
+    {
         return Mage::getSingleton('checkout/type_onepage');
     }
 
@@ -13,13 +15,15 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
      * Convert Address before Saving
      */
 
-    public function convertDataAddress($data) {
-		$listState = array();
-		$check_state = false;
-		if (isset($data->country_id)) {
-			$country = $data->country_id;
-			$listState = Mage::helper('simiconnector/address')->getStates($country);
-		}
+    public function convertDataAddress($data) 
+    {
+        $listState = array();
+        $check_state = false;
+        if (isset($data->country_id)) {
+            $country = $data->country_id;
+            $listState = Mage::helper('simiconnector/address')->getStates($country);
+        }
+
         $state_id = Mage::getStoreConfig('simiconnector/hideaddress/region_id_default');
         if (count($listState) == 0) {
             $check_state = true;
@@ -32,10 +36,12 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
                 break;
             }
         }
+
         if (!$check_state) {
             if (!$state_id)
                 throw new Exception($this->__('State invalid'), 4);
         }
+
         if (!isset($data->country_id) && !isset($data->country_name))
             $data->country_id = Mage::getStoreConfig('simiconnector/hideaddress/country_id_default');
 
@@ -56,12 +62,14 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
         foreach ((array) $data as $index => $info) {
             $address[$index] = $info;
         }
+
         $address['street'] = array($data->street, '', $latlng, '');
         $address['region_id'] = $state_id;
         return $address;
     }
 
-    public function getStates($code) {
+    public function getStates($code) 
+    {
         $list = array();
         if ($code) {
             $states = Mage::getModel('directory/country')->loadByCode($code)->getRegions();
@@ -73,6 +81,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
                 );
             }
         }
+
         return $list;
     }
 
@@ -80,7 +89,8 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
      * Get Address to be Shown
      */
 
-    public function getAddressDetail($data, $customer = null) {
+    public function getAddressDetail($data, $customer = null) 
+    {
         if(!$data) return array();
         $street = $data->getStreet();
         if (!($email = $data->getData('email')) && $customer && $customer->getEmail())
@@ -111,8 +121,9 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
      * Save Billing Address To Quote
      */
 
-    public function saveBillingAddress($billingAddress) {
-		$is_register_mode = false;
+    public function saveBillingAddress($billingAddress) 
+    {
+        $is_register_mode = false;
         if (isset($billingAddress->customer_password) && $billingAddress->customer_password) {
             $is_register_mode = true;
             $this->_getOnepage()->saveCheckoutMethod('register');
@@ -131,6 +142,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
                 throw new Exception($this->__('There is already a customer registered using this email address. Please login using this email address or enter a different email address to register your account.'), 7);
             }
         }
+
         $address = $this->convertDataAddress($billingAddress);
         $address['save_in_address_book'] = '1';
         $saveBilling = $this->_getOnepage()->saveBilling($address, $billingAddress->entity_id);
@@ -153,7 +165,8 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
      * Save Shipping Address To quote
      */
 
-    public function saveShippingAddress($shippingAddress) {
+    public function saveShippingAddress($shippingAddress) 
+    {
         $address = $this->convertDataAddress($shippingAddress);
         $address['save_in_address_book'] = '0';
         $address['same_as_billing'] = '1';
@@ -177,7 +190,8 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
      * Add Hidden Address Fields on Storeview Config Result
      */
 
-    public function getCheckoutAddressSetting() {
+    public function getCheckoutAddressSetting() 
+    {
         if (!Mage::getStoreConfig('simiconnector/hideaddress/hideaddress_enable'))
             return NULL;
         $addresss = array('company', 'street', 'country_id', 'region_id', 'city', 'zipcode',
@@ -195,6 +209,7 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
             else if ($value == 3)
                 $data[$address] = "";
         }
+
         /*
           //sample add custom address fields
           $data['custom_fields'] = array();
@@ -237,7 +252,8 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
      * Get Geocode result from Lat and Long
      */
 
-    public function getLocationInfo($lat, $lng) {
+    public function getLocationInfo($lat, $lng) 
+    {
         $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng=' . trim($lat) . ',' . trim($lng) . '&sensor=false';
         $json = @file_get_contents($url);
         $data = json_decode($json);
@@ -251,25 +267,32 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract {
                 if (in_array('street_number', $types)) {
                     $address .= $addressComponents->long_name;
                 }
+
                 if (in_array('route', $types)) {
                     $address .= ' ' . $addressComponents->long_name;
                 }
+
                 if (in_array('locality', $types)) {
                     $address .= ', ' . $addressComponents->long_name;
                 }
+
                 if (in_array('postal_town', $types) || in_array('administrative_area_level_1', $types)) {
                     $city = $addressComponents->long_name;
                 }
+
                 if (in_array('administrative_area_level_2', $types)) {
                     $state = $addressComponents->long_name;
                 }
+
                 if (in_array('country', $types)) {
                     $country = $addressComponents->short_name;
                 }
+
                 if (in_array('postal_code', $types)) {
                     $zipcode = $addressComponents->long_name;
                 }
             }
+
             $addresses['address'] = $address;
             $addresses['city'] = isset($city)?$city:'';
             $addresses['state'] = isset($state)?$state:'';

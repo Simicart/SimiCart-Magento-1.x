@@ -19,14 +19,16 @@
  * @package     Connector
  * @author      Developer
  */
-class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_Adminhtml_Controller_Action {
+class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_Adminhtml_Controller_Action
+{
 
     /**
      * init layout and set active for current menu
      *
      * @return Simi_Connector_Adminhtml_BannerController
      */
-    protected function _initAction() {
+    protected function _initAction() 
+    {
         $this->loadLayout()
                 ->_setActiveMenu('simiconnector/banner')
                 ->_addBreadcrumb(Mage::helper('adminhtml')->__('Banners Manager'), Mage::helper('adminhtml')->__('Banner Manager'));
@@ -36,7 +38,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
     /**
      * index action
      */
-    public function indexAction() {
+    public function indexAction() 
+    {
         $this->_initAction()
                 ->renderLayout();
     }
@@ -44,7 +47,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
     /**
      * view and edit item action
      */
-    public function editAction() {
+    public function editAction() 
+    {
         $id = $this->getRequest()->getParam('id');
         $model = Mage::getModel('simiconnector/banner')->load($id);
         if ($model->getId() || $id == 0) {
@@ -60,7 +64,6 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                     Mage::getSingleton('adminhtml/session')->addError(Mage::helper('simiconnector')->__('Banner does not exist'));
                     $this->_redirect('*/*/');
                 }
-
             }
 
             $data = Mage::getSingleton('adminhtml/session')->getFormData(true);
@@ -86,14 +89,16 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
         }
     }
 
-    public function newAction() {
+    public function newAction() 
+    {
         $this->_forward('edit');
     }
 
     /**
      * save item action
      */
-    public function saveAction() {
+    public function saveAction() 
+    {
         if ($data = $this->getRequest()->getPost()) {      
             /*
              * Banner Image
@@ -111,22 +116,23 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                         try {
                             mkdir($path, 0777, TRUE);
                         } catch (Exception $e) {
-                            
                         }
                     }
-                    $nameTemp = explode('.',$_FILES['banner_name_co']['name']);
+
+                    $nameTemp = explode('.', $_FILES['banner_name_co']['name']);
                     $fileName = md5($nameTemp[0].uniqid()).'.'.$nameTemp[1];
                     $result = $uploader->save($path, $fileName);
                     try {
                         chmod($path.'/'.$result['file'], 0777); 
                     } catch (Exception $e) {
-
                     }
+
                     $data['banner_name'] = Mage::getBaseUrl('media') . 'simi/simiconnector/banner/' . $result['file'];
                 } catch (Exception $e) {
                     $data['banner_name'] = Mage::getBaseUrl('media') . 'simi/simiconnector/banner/' . $_FILES['banner_name_co']['name'];
                 }
-            } 
+            }
+ 
             if (isset($data['banner_name_co']['delete']) && $data['banner_name_co']['delete'] == 1) {                
                 Mage::helper('simiconnector')->deleteBanner($data['banner_name_co']['value']);
                 $data['banner_name'] = '';
@@ -150,22 +156,23 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                         try {
                             mkdir($path, 0777, TRUE);
                         } catch (Exception $e) {
-                            
                         }
                     }
-                    $nameTemp = explode('.',$_FILES['banner_name_tablet_co']['name']);
+
+                    $nameTemp = explode('.', $_FILES['banner_name_tablet_co']['name']);
                     $fileName = md5($nameTemp[0].uniqid()).'.'.$nameTemp[1];
                     $result = $uploader->save($path, $fileName);
                     try {
                         chmod($path.'/'.$result['file'], 0777); 
                     } catch (Exception $e) {
-
                     }
+
                     $data['banner_name_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/banner/' . $result['file'];
                 } catch (Exception $e) {
                     $data['banner_name_tablet'] = Mage::getBaseUrl('media') . 'simi/simiconnector/banner/' . $_FILES['banner_name_tablet_co']['name'];
                 }
-            } 
+            }
+ 
             if (isset($data['banner_name_tablet_co']['delete']) && $data['banner_name_tablet_co']['delete'] == 1) {                
                 Mage::helper('simiconnector')->deleteBanner($data['banner_name_tablet_co']['value']);
                 $data['banner_name_tablet'] = '';
@@ -174,7 +181,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
             
             if(isset($data['type']) && $data['type'] != 2 && $data['type'] != 3){
                 $data['type'] = 1;
-            }   
+            }
+   
             $model = Mage::getModel('simiconnector/banner');
             $model->setData($data)
                     ->setId($this->getRequest()->getParam('id'));
@@ -192,9 +200,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                         $visibilityItem->delete();
                     foreach ($data['storeview_id'] as $storeViewId){
                         $visibilityItem = Mage::getModel('simiconnector/visibility');
-                        $visibilityItem->setData('content_type',$typeID);                        
-                        $visibilityItem->setData('item_id',$model->getId());
-                        $visibilityItem->setData('store_view_id',$storeViewId);
+                        $visibilityItem->setData('content_type', $typeID);                        
+                        $visibilityItem->setData('item_id', $model->getId());
+                        $visibilityItem->setData('store_view_id', $storeViewId);
                         $visibilityItem->save();
                     }                        
                 }
@@ -203,6 +211,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                     $this->_redirect('*/*/edit', array('id' => $model->getId()));
                     return;
                 }
+
                 $this->_redirect('*/*/');
                 return;
             } catch (Exception $e) {
@@ -212,6 +221,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                 return;
             }
         }
+
         Mage::getSingleton('adminhtml/session')->addError(Mage::helper('simiconnector')->__('Unable to find item to save'));
         $this->_redirect('*/*/');
     }
@@ -219,7 +229,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
     /**
      * delete item action
      */
-    public function deleteAction() {
+    public function deleteAction() 
+    {
         if ($this->getRequest()->getParam('id') > 0) {
             try {
                 $model = Mage::getModel('simiconnector/banner');
@@ -232,13 +243,15 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                 $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
             }
         }
+
         $this->_redirect('*/*/');
     }
 
     /**
      * mass delete item(s) action
      */
-    public function massDeleteAction() {
+    public function massDeleteAction() 
+    {
         $bannerIds = $this->getRequest()->getParam('simiconnector');
         if (!is_array($bannerIds)) {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please select item(s)'));
@@ -248,18 +261,21 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                     $madapter = Mage::getModel('simiconnector/banner')->load($bannerId);
                     $madapter->delete();
                 }
+
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Total of %d record(s) were successfully deleted', count($bannerIds)));
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
             }
         }
+
         $this->_redirect('*/*/index');
     }
 
     /**
      * mass change status for item(s) action
      */
-    public function massStatusAction() {
+    public function massStatusAction() 
+    {
         $bannerIds = $this->getRequest()->getParam('simiconnector');
         if (!is_array($bannerIds)) {
             Mage::getSingleton('adminhtml/session')->addError($this->__('Please select item(s)'));
@@ -272,20 +288,23 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                             ->setIsMassupdate(true)
                             ->save();
                 }
+
                 $this->_getSession()->addSuccess(
-                        $this->__('Total of %d record(s) were successfully updated', count($bannerIds))
+                    $this->__('Total of %d record(s) were successfully updated', count($bannerIds))
                 );
             } catch (Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
             }
         }
+
         $this->_redirect('*/*/index');
     }
 
     /**
      * export grid item to CSV type
      */
-    public function exportCsvAction() {
+    public function exportCsvAction() 
+    {
         $fileName = 'banner.csv';
         $content = $this->getLayout()->createBlock('simiconnector/adminhtml_banner_grid')->getCsv();
         $this->_prepareDownloadResponse($fileName, $content);
@@ -294,31 +313,36 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
     /**
      * export grid item to XML type
      */
-    public function exportXmlAction() {
+    public function exportXmlAction() 
+    {
         $fileName = 'banner.xml';
         $content = $this->getLayout()->createBlock('simiconnector/adminhtml_banner_grid')->getXml();
         $this->_prepareDownloadResponse($fileName, $content);
     }
 
-    protected function _isAllowed() {
+    protected function _isAllowed() 
+    {
         return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
     }
 
-    public function chooserMainCategoriesAction(){
+    public function chooserMainCategoriesAction()
+    {
         $request = $this->getRequest();
         $id = $request->getParam('selected', array());
-        $block = $this->getLayout()->createBlock('simiconnector/adminhtml_banner_edit_tab_categories','maincontent_category', array('js_form_object' => $request->getParam('form')))
+        $block = $this->getLayout()->createBlock('simiconnector/adminhtml_banner_edit_tab_categories', 'maincontent_category', array('js_form_object' => $request->getParam('form')))
                 ->setCategoryIds($id);
         if ($block) {
             $this->getResponse()->setBody($block->toHtml());
         }
     }
 
-    public function chooserMainProductsAction() {
+    public function chooserMainProductsAction() 
+    {
         $request = $this->getRequest();
         $block = $this->getLayout()->createBlock(
-                'simiconnector/adminhtml_banner_edit_tab_products', 'promo_widget_chooser_sku', array('js_form_object' => $request->getParam('form'),
-                ));
+            'simiconnector/adminhtml_banner_edit_tab_products', 'promo_widget_chooser_sku', array('js_form_object' => $request->getParam('form'),
+            )
+        );
         if ($block) {
             $this->getResponse()->setBody($block->toHtml());
         }
@@ -327,15 +351,17 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
      /**
      * Get tree node (Ajax version)
      */
-    public function categoriesJsonAction() {
+    public function categoriesJsonAction() 
+    {
         if ($categoryId = (int) $this->getRequest()->getPost('id')) {
             $this->getRequest()->setParam('id', $categoryId);
 
             if (!$category = $this->_initCategory()) {
                 return;
             }
+
             $this->getResponse()->setBody(
-                    $this->getLayout()->createBlock('adminhtml/catalog_category_tree')
+                $this->getLayout()->createBlock('adminhtml/catalog_category_tree')
                             ->getTreeJson($category)
             );
         }
@@ -346,7 +372,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
      *
      * @return Mage_Catalog_Model_Category
      */
-    protected function _initCategory() {
+    protected function _initCategory() 
+    {
         $categoryId = (int) $this->getRequest()->getParam('id', false);
         $storeId = (int) $this->getRequest()->getParam('store');
 

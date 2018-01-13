@@ -1,8 +1,10 @@
 <?php
 
-class Simi_Simiconnector_Adminhtml_Simiconnector_DeviceController extends Mage_Adminhtml_Controller_Action {
+class Simi_Simiconnector_Adminhtml_Simiconnector_DeviceController extends Mage_Adminhtml_Controller_Action
+{
 
-    protected function _initAction() {
+    protected function _initAction() 
+    {
         $this->loadLayout()
                 ->_setActiveMenu('simiconnector/device')
                 ->_addBreadcrumb(Mage::helper('adminhtml')->__('Devices Manager'), Mage::helper('adminhtml')->__('Devices Manager'));
@@ -12,7 +14,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_DeviceController extends Mage_A
     /**
      * index action
      */
-    public function indexAction() {
+    public function indexAction() 
+    {
         $this->_initAction()
                 ->renderLayout();
     }
@@ -20,7 +23,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_DeviceController extends Mage_A
     /**
      * view and edit item action
      */
-    public function editAction() {
+    public function editAction() 
+    {
         $id = $this->getRequest()->getParam('id');
         $model = Mage::getModel('simiconnector/device')->load($id);
 
@@ -48,14 +52,16 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_DeviceController extends Mage_A
         }
     }
 
-    public function newAction() {
+    public function newAction() 
+    {
         $this->_forward('edit');
     }
 
     /**
      * delete item action
      */
-    public function deleteAction() {
+    public function deleteAction() 
+    {
         if ($this->getRequest()->getParam('id') > 0) {
             try {
                 $model = Mage::getModel('simiconnector/device');
@@ -68,13 +74,15 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_DeviceController extends Mage_A
                 $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
             }
         }
+
         $this->_redirect('*/*/');
     }
 
     /**
      * mass delete item(s) action
      */
-    public function massDeleteAction() {
+    public function massDeleteAction() 
+    {
         $deviceIds = $this->getRequest()->getParam('siminotification');
 
         if (!is_array($deviceIds)) {
@@ -85,15 +93,18 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_DeviceController extends Mage_A
                     $device = Mage::getModel('simiconnector/device')->load($deviceId);
                     $device->delete();
                 }
+
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Total of %d device(s) were successfully deleted', count($bannerIds)));
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
             }
         }
+
         $this->_redirect('*/*/index');
     }
 
-    protected function _isAllowed() {
+    protected function _isAllowed() 
+    {
         return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
     }
 

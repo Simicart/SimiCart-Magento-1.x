@@ -35,13 +35,13 @@ class Simi_Simiconnector_Block_Adminhtml_Productlist_Edit_Tab_Renderer_Sku exten
 {
 
     public function render(Varien_Object $row) 
-	{
+    {
         $checked = '';
         if(in_array($row->getId(), $this->_getSelectedProducts()))
                 $checked = 'checked';
         $html = '<input type="checkbox" '.$checked.' name="selected" value="'.$row->getId().'" class="checkbox" onclick="selectProduct(this)">';
         return sprintf('%s', $html);
-	}
+    }
     
     protected function _getSelectedProducts()
     {

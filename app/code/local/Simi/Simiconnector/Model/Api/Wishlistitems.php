@@ -6,14 +6,16 @@
  * Date: 5/3/16
  * Time: 9:37 PM
  */
-class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Model_Api_Abstract {
+class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Model_Api_Abstract
+{
 
     protected $_DEFAULT_ORDER = 'wishlist_item_id';
     protected $_RETURN_MESSAGE;
     protected $_RETURN_URL;
     protected $_WISHLIST;
 
-    public function setBuilderQuery() {
+    public function setBuilderQuery() 
+    {
         $data = $this->getData();
         $customer = Mage::getSingleton('customer/session')->getCustomer();
         if ($customer->getId() && ($customer->getId() != '')) {
@@ -23,6 +25,7 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
                 $this->_WISHLIST->setShared('1');
                 $this->_WISHLIST->save();
             }
+
             $sharingUrl = $this->_WISHLIST->getSharingCode();
             $this->_RETURN_MESSAGE = Mage::getStoreConfig('appwishlist/general/sharing_message') . ' ' . Mage::getUrl('wishlist/shared/index/code/' . $sharingUrl);
             $this->_RETURN_URL = Mage::getUrl('wishlist/shared/index/code/' . $sharingUrl);
@@ -40,7 +43,8 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
         }
     }
 
-    public function index() {
+    public function index() 
+    {
         $result = parent::index();
         $addition_info = array();
         foreach ($this->builderQuery as $itemModel) {
@@ -74,9 +78,11 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
                 'app_prices' => Mage::helper('simiconnector/price')->formatPriceFromProduct($product),
             );
         }
+
         foreach ($result['wishlistitems'] as $index => $item) {
             $result['wishlistitems'][$index] = array_merge($item, $addition_info[$item['wishlist_item_id']]);
         }
+
         return $result;
     }
 
@@ -84,16 +90,18 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
      * Add To Wishlist
      */
 
-    public function store() {
+    public function store() 
+    {
         $data = $this->getData();
         $params = Mage::getModel('simiconnector/api_quoteitems')->convertParams((array) $data['contents']);
         $product = Mage::getModel('catalog/product')->load(($params['product']));
         if (isset($params['qty'])) {
             $filter = new Zend_Filter_LocalizedToNormalized(
-                    array('locale' => Mage::app()->getLocale()->getLocaleCode())
+                array('locale' => Mage::app()->getLocale()->getLocaleCode())
             );
             $params['qty'] = $filter->filter($params['qty']);
         }
+
         $buyRequest = new Varien_Object($params);
         $this->builderQuery = $this->_WISHLIST->addNewItem($product, $buyRequest);
         return $this->show();
@@ -103,7 +111,8 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
      * Remove From Wishlist
      */
 
-    public function destroy() {
+    public function destroy() 
+    {
         $data = $this->getData();
         $item = Mage::getModel('wishlist/item')->load($data['resourceid']);
         if ($item->getId()) {
@@ -111,6 +120,7 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
             $this->_WISHLIST->save();
             Mage::helper('wishlist')->calculate();
         }
+
         $this->builderQuery = $this->_WISHLIST->getItemCollection();
         return $this->index();
     }
@@ -119,11 +129,13 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
      * Add From Wishlist To Cart
      */
 
-    public function addWishlistItemToCart($itemId) {
+    public function addWishlistItemToCart($itemId) 
+    {
         foreach ($this->_WISHLIST->getItemCollection() as $wishlistItem) {
             if ($wishlistItem->getData('wishlist_item_id') == $itemId)
                 $item = $wishlistItem;
         }
+
         $product = $item->getProduct();
         $options = Mage::helper('simiconnector/wishlist')->getOptionsSelectedFromItem($item, $product);
         if ($item && (Mage::helper('simiconnector/wishlist')->checkIfSelectedAllRequiredOptions($item, $options))) {
@@ -138,6 +150,7 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
                 if ($item->addToCart($cart, true)) {
                     $cart->save()->getQuote()->collectTotals();
                 }
+
                 $this->_WISHLIST->save();
                 Mage::helper('wishlist')->calculate();
             }
@@ -148,12 +161,14 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
      * Show An Item
      */
 
-    public function show() {
+    public function show() 
+    {
         $data = $this->getData();
         if (isset($data['params']) && isset($data['params']['add_to_cart']) && $data['params']['add_to_cart']) {
             $this->builderQuery = $this->_WISHLIST->getItemCollection();
             return $this->index();
         }
+
         return parent::show();
     }
 
@@ -161,14 +176,17 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
      * Add Message
      */
 
-    public function getList($info, $all_ids, $total, $page_size, $from) {
+    public function getList($info, $all_ids, $total, $page_size, $from) 
+    {
         $result = parent::getList($info, $all_ids, $total, $page_size, $from);
         if ($this->_RETURN_MESSAGE) {
             $result['message'] = array($this->_RETURN_MESSAGE);
         }
+
         if ($this->_RETURN_URL) {
             $result['sharing_url'] = array($this->_RETURN_URL);
         }
+
         return $result;
     }
 

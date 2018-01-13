@@ -22,27 +22,33 @@ class Simi_Simiconnector_Block_Adminhtml_Simivideo_Edit_Tab_Renderer_Storeviews
         return $this->toHtml();
     }
 
-    public function getGroups(){
+    public function getGroups()
+    {
         $collection = Mage::getModel('core/store_group')->getCollection();
         if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
             $collection->addWebsiteFilter($websiteId);
         }
+
         return $collection;
     }
 
-    public function getStoreviews(){
+    public function getStoreviews()
+    {
         $collection = Mage::getModel('core/store')->getCollection();
         if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
             $collection->addWebsiteFilter($websiteId);
         }
+
         return $collection;
     }
 
-    public function getCurrentStorviews(){
+    public function getCurrentStorviews()
+    {
         if ($data = Mage::registry('simivideo_data')) {
             $data = $data->getData();
             return isset($data['storeview_id'])?$data['storeview_id']:'';
         }
+
         return '';
     }
 }

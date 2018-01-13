@@ -3,9 +3,11 @@
 /**
 
  */
-class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form {
+class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form
+{
 
-    protected function _prepareForm() {
+    protected function _prepareForm() 
+    {
         $form = new Varien_Data_Form();
         $this->setForm($form);
 
@@ -17,25 +19,31 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
 
         $fieldset = $form->addFieldset('siminotification_form', array('legend' => Mage::helper('simiconnector')->__('Notification Content')));
         $fieldset->addType('datetime', 'Simi_Simiconnector_Block_Adminhtml_Device_Edit_Renderer_Datetime');
-        $fieldset->addField('storeview_id', 'select', array(
+        $fieldset->addField(
+            'storeview_id', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Store View'),
             'name' => 'storeview_id',
             'note' => Mage::helper('simiconnector')->__('After changed this setting, you would need to re-select the devices to be sent'),
-        ))->setRenderer($this->getLayout()->createBlock('simiconnector/adminhtml_siminotification_edit_tab_renderer_storeviews'));
+            )
+        )->setRenderer($this->getLayout()->createBlock('simiconnector/adminhtml_siminotification_edit_tab_renderer_storeviews'));
         
-        $fieldset->addField('notice_sanbox', 'select', array(
+        $fieldset->addField(
+            'notice_sanbox', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Send To'),
             'name' => 'notice_sanbox',
-            'values' => array(			
+            'values' => array(            
                 array('value' => 1, 'label' => Mage::helper('simiconnector')->__('Test App')),
                 array('value' => 2, 'label' => Mage::helper('simiconnector')->__('Live App')),
             ),
             'note' => '',
-        ));
+            )
+        );
         if(isset($data['device_id'])){
             $data['device_type'] = $data['device_id'];
-        }		
-        $fieldset->addField('device_type', 'select', array(
+        }
+        
+        $fieldset->addField(
+            'device_type', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Device Type'),
             'name' => 'device_type',
             'values' => array(
@@ -43,9 +51,11 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                 array('value' => 1, 'label' => Mage::helper('simiconnector')->__('IOS')),
                 array('value' => 2, 'label' => Mage::helper('simiconnector')->__('Android')),
             ),
-        ));
+            )
+        );
 
-        $fieldset->addField('show_popup', 'select', array(
+        $fieldset->addField(
+            'show_popup', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Show Popup'),
             'name' => 'show_popup',
             'values' => array(
@@ -53,34 +63,43 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                 array('value' => 0, 'label' => Mage::helper('simiconnector')->__('No')),
             ),
             'note' => 'If you choose Yes, there will be a popup shown on mobile screen when notification comes',
-        ));
+            )
+        );
 
-        $fieldset->addField('notice_title', 'text', array(
+        $fieldset->addField(
+            'notice_title', 'text', array(
             'label' => Mage::helper('simiconnector')->__('Title'),
             'class' => 'required-entry',
             'required' => true,
             'name' => 'notice_title',
-        ));
+            )
+        );
 
-        $fieldset->addField('image_url', 'image', array(
+        $fieldset->addField(
+            'image_url', 'image', array(
             'label' => Mage::helper('simiconnector')->__('Image'),
             'name' => 'image_url',
             'note' => Mage::helper('simiconnector')->__('Size max: 1000 x 1000 (PX)'),
-        ));
+            )
+        );
 
-        $fieldset->addField('notice_content', 'editor', array(
+        $fieldset->addField(
+            'notice_content', 'editor', array(
             'name' => 'notice_content',
             // 'class' => 'required-entry',
             // 'required' => true,
             'label' => Mage::helper('simiconnector')->__('Message'),
             'title' => Mage::helper('simiconnector')->__('Message'),
             'note' => Mage::helper('simiconnector')->__('Characters recommended: < 250'),
-        ));
+            )
+        );
 
         if(!isset($data['type'])){
             $data['type'] = 0;
         }
-        $fieldset->addField('type', 'select', array(
+
+        $fieldset->addField(
+            'type', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Direct viewers to'),
             'class' => 'required-entry',
             'required' => true,
@@ -88,10 +107,12 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
             'values' => Mage::getModel('simiconnector/siminotification')->toOptionArray(),
             'onchange' => 'onchangeNoticeType(this.value)',
             'after_element_html' => '<script> Event.observe(window, "load", function(){onchangeNoticeType(\'' . $data['type'] . '\');});</script>',
-        ));
+            )
+        );
 
         $productIds = implode(", ", Mage::getResourceModel('catalog/product_collection')->getAllIds());
-        $fieldset->addField('product_id', 'text', array(
+        $fieldset->addField(
+            'product_id', 'text', array(
             'name' => 'product_id',
             'class' => 'required-entry',
             'required' => true,
@@ -185,9 +206,11 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                         
                     }
                 </script>'
-        ));
+            )
+        );
 
-        $fieldset->addField('category_id', 'text', array(
+        $fieldset->addField(
+            'category_id', 'text', array(
             'name' => 'category_id',
             'class' => 'required-entry',
             'required' => true,
@@ -227,28 +250,36 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                 };
         </script>
             '
-        ));
+            )
+        );
 
-        $fieldset->addField('notice_url', 'text', array(
+        $fieldset->addField(
+            'notice_url', 'text', array(
             'name' => 'notice_url',
             'class' => 'required-entry',
             'required' => true,
             'label' => Mage::helper('simiconnector')->__('URL'),
-        ));
+            )
+        );
 
-        $fieldset->addField('created_time', 'datetime', array(
+        $fieldset->addField(
+            'created_time', 'datetime', array(
             'label' => Mage::helper('simiconnector')->__('Created Date'),
             'bold' => true,
             'name' => 'created_date',
-        ));
+            )
+        );
 
-        $fieldsetFilter = $form->addFieldset('filter_form', array(
+        $fieldsetFilter = $form->addFieldset(
+            'filter_form', array(
             'legend' => Mage::helper('simiconnector')->__('Notification Devices Select')
-        ));
+            )
+        );
         $deviceIds = Mage::getModel('simiconnector/device')->getCollection()->getAllIds();
         $deviceIds = implode(",", $deviceIds);
 
-        $fieldsetFilter->addField('devices_pushed', 'textarea', array(
+        $fieldsetFilter->addField(
+            'devices_pushed', 'textarea', array(
             'name' => 'devices_pushed',
             'class' => 'required-entry',
             'required' => true,
@@ -372,7 +403,8 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                     }
             </script>
             '
-        ));
+            )
+        );
 
         $form->setValues($data);
         return parent::_prepareForm();

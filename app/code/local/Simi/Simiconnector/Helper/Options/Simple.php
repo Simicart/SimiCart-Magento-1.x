@@ -23,6 +23,7 @@ class Simi_Simiconnector_Helper_Options_Simple extends Mage_Core_Helper_Abstract
             if($option->getType() == "file"){
                 $item['file_extension'] = $option->getFileExtension();
             }
+
             if ($option->getGroupByType() == Mage_Catalog_Model_Product_Option::OPTION_GROUP_SELECT) {
                 foreach ($option->getValues() as $value) {
                     /* @var $value Mage_Catalog_Model_Product_Option_Value */
@@ -61,11 +62,13 @@ class Simi_Simiconnector_Helper_Options_Simple extends Mage_Core_Helper_Abstract
                 } else {
                     Mage::helper('simiconnector/price')->setTaxPrice($item_value, $_priceInclTax);
                 }
+
                 $item['values'][] = $item_value;
             }
 
             $info[] = $item;
         }
+
         $options = array();
         $options['custom_options'] = $info;
         return $options;
@@ -78,6 +81,7 @@ class Simi_Simiconnector_Helper_Options_Simple extends Mage_Core_Helper_Abstract
         } else {
             $price = Mage::helper('tax')->getPrice($product, $price);
         }
+
         return $price;
     }
 

@@ -3,12 +3,14 @@
 /**
  * 
  */
-class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Api_Abstract {
+class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Api_Abstract
+{
 
     protected $_DEFAULT_ORDER = 'entity_id';
     protected $_RETURN_MESSAGE;
 
-    public function setBuilderQuery() {
+    public function setBuilderQuery() 
+    {
         $data = $this->getData();
         if (isset($data['resourceid']) && $data['resourceid']) {
             switch ($data['resourceid']) {
@@ -46,6 +48,7 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
             if (Mage::getSingleton('customer/session')->isLoggedIn()) {
                 $currentCustomerId = Mage::getSingleton('customer/session')->getId();
             }
+
             $this->builderQuery = Mage::getModel('customer/customer')->getCollection()
                     ->addFieldToFilter('entity_id', $currentCustomerId);
         }
@@ -55,7 +58,8 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
      * Register
      */
 
-    public function store() {
+    public function store() 
+    {
         $data = $this->getData();
         $customer = Mage::getModel('simiconnector/customer')->register($data);
         $this->builderQuery = $customer;
@@ -67,7 +71,8 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
      * Update Profile
      */
 
-    public function update() {
+    public function update() 
+    {
         $data = $this->getData();
         $customer = Mage::getModel('simiconnector/customer')->updateProfile($data);
         $this->builderQuery = $customer;
@@ -79,13 +84,15 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
      * Add Message
      */
 
-    public function getDetail($info) {
+    public function getDetail($info) 
+    {
         //$info['dob'] = date("Y-m-d H:i:s", strtotime($info['dob']));
         if ($this->_RETURN_MESSAGE) {
             $resultArray = parent::getDetail($info);
             $resultArray['message'] = array($this->_RETURN_MESSAGE);
             return $resultArray;
         }
+
         return parent::getDetail($info);
     }
 

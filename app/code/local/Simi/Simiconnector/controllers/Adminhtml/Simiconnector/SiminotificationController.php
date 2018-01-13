@@ -1,8 +1,10 @@
 <?php
 
-class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController extends Mage_Adminhtml_Controller_Action {
+class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController extends Mage_Adminhtml_Controller_Action
+{
 
-    protected function _initAction() {
+    protected function _initAction() 
+    {
         $this->loadLayout()
                 ->_setActiveMenu('simiconnector/siminotification')
                 ->_addBreadcrumb(Mage::helper('adminhtml')->__('Items Manager'), Mage::helper('adminhtml')->__('Item Manager'));
@@ -12,7 +14,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     /**
      * index action
      */
-    public function indexAction() {
+    public function indexAction() 
+    {
         $this->_initAction()
                 ->renderLayout();
     }
@@ -20,7 +23,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     /**
      * view and edit item action
      */
-    public function editAction() {
+    public function editAction() 
+    {
         $id = $this->getRequest()->getParam('id');
         $model = Mage::getModel('simiconnector/siminotification')->load($id);
 
@@ -48,14 +52,16 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
         }
     }
 
-    public function newAction() {
+    public function newAction() 
+    {
         $this->_forward('edit');
     }
 
     /**
      * save item action
      */
-    public function saveAction() {
+    public function saveAction() 
+    {
         if ($data = $this->getRequest()->getPost()) {
             // Zend_debug::dump($_FILES['image_url']['name']);die();
             $imageUrl = "";
@@ -83,11 +89,12 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                     $imageUrl = 'simi/simiconnector/notification/images/' . md5(time()) . '.png';
                 }
             }
+
             // Zend_debug::dump($data);die();
 
             $data['created_time'] = now();
             $model = Mage::getModel('simiconnector/siminotification');
-			$data['device_id'] = $data['device_type'];
+            $data['device_id'] = $data['device_type'];
             $model->setData($data)
                     ->setId($this->getRequest()->getParam('id'));
             if (!$imageUrl && isset($data['image_url']) && is_array($data['image_url'])) {
@@ -101,10 +108,12 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                 $data['image_url'] = null;
                 $imageUrl = null;
             }
+
             if ($imageUrl) {
                 $data['image_url'] = $imageUrl;
                 $model->setImageUrl($imageUrl);
             }
+
             try {
                 $model->save();
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Message was successfully saved'));
@@ -115,6 +124,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                 $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
                 return;
             }
+
             if ($this->getRequest()->getParam('back')) {
                 $this->_redirect('*/*/edit', array('id' => $model->getId()));
                 return;
@@ -129,13 +139,16 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                 $data['height'] = $list[1];
                 $resultSend = Mage::helper('simiconnector/siminotification')->sendNotice($data);
             }
+
             if (!$resultSend) {
                 $this->_redirect('*/*/');
                 return;
             }
+
             $this->_redirect('*/*/');
             return;
         }
+
         Mage::getSingleton('adminhtml/session')->addError(Mage::helper('simiconnector')->__('Unable to find item to send'));
         $this->_redirect('*/*/');
     }
@@ -143,7 +156,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     /**
      * delete item action
      */
-    public function deleteAction() {
+    public function deleteAction() 
+    {
         if ($this->getRequest()->getParam('id') > 0) {
             try {
                 $model = Mage::getModel('simiconnector/siminotification');
@@ -156,13 +170,15 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                 $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
             }
         }
+
         $this->_redirect('*/*/');
     }
 
     /**
      * mass delete item(s) action
      */
-    public function massDeleteAction() {
+    public function massDeleteAction() 
+    {
         $messageIds = $this->getRequest()->getParam('simiconnector');
 
         if (!is_array($messageIds)) {
@@ -173,32 +189,36 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                     $notice = Mage::getModel('simiconnector/siminotification')->load($messageId);
                     $notice->delete();
                 }
+
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Total of %d record(s) were successfully deleted', count($bannerIds)));
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
             }
         }
+
         $this->_redirect('*/*/index');
     }
 
     
-    protected function _isAllowed() {
+    protected function _isAllowed() 
+    {
         return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
     }
 
 
-    public function guideAction() {
+    public function guideAction() 
+    {
         $this->loadLayout();
         $this->getLayout()->getBlock('head')->setTitle($this->__('Google Application Guide'));
         $this->renderLayout();
     }
 
-    public function chooserMainCategoriesAction() {
+    public function chooserMainCategoriesAction() 
+    {
         $request = $this->getRequest();
         $id = $request->getParam('selected', array());
         $block = $this->getLayout()->createBlock('simiconnector/adminhtml_siminotification_edit_tab_categories', 'maincontent_category', array('js_form_object' => $request->getParam('form')))
-                ->setCategoryIds($id)
-        ;
+                ->setCategoryIds($id);
 
         if ($block) {
             $this->getResponse()->setBody($block->toHtml());
@@ -208,15 +228,17 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     /**
      * Get tree node (Ajax version)
      */
-    public function categoriesJsonAction() {
+    public function categoriesJsonAction() 
+    {
         if ($categoryId = (int) $this->getRequest()->getPost('id')) {
             $this->getRequest()->setParam('id', $categoryId);
 
             if (!$category = $this->_initCategory()) {
                 return;
             }
+
             $this->getResponse()->setBody(
-                    $this->getLayout()->createBlock('adminhtml/catalog_category_tree')
+                $this->getLayout()->createBlock('adminhtml/catalog_category_tree')
                             ->getTreeJson($category)
             );
         }
@@ -227,7 +249,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
      *
      * @return Mage_Catalog_Model_Category
      */
-    protected function _initCategory() {
+    protected function _initCategory() 
+    {
         $categoryId = (int) $this->getRequest()->getParam('id', false);
         $storeId = (int) $this->getRequest()->getParam('store');
 
@@ -251,19 +274,22 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
         return $category;
     }
 
-    public function categoriesJson2Action() {
+    public function categoriesJson2Action() 
+    {
         $this->_initItem();
         $this->getResponse()->setBody(
-                $this->getLayout()->createBlock('simiconnector/adminhtml_siminotification_edit_tab_categories')
+            $this->getLayout()->createBlock('simiconnector/adminhtml_siminotification_edit_tab_categories')
                         ->getCategoryChildrenJson($this->getRequest()->getParam('category'))
         );
     }
 
-    public function chooserMainProductsAction() {
+    public function chooserMainProductsAction() 
+    {
         $request = $this->getRequest();
         $block = $this->getLayout()->createBlock(
-                'simiconnector/adminhtml_siminotification_edit_tab_products', 'promo_widget_chooser_sku', array('js_form_object' => $request->getParam('form'),
-        ));
+            'simiconnector/adminhtml_siminotification_edit_tab_products', 'promo_widget_chooser_sku', array('js_form_object' => $request->getParam('form'),
+            )
+        );
         if ($block) {
             $this->getResponse()->setBody($block->toHtml());
         }
@@ -274,12 +300,14 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
      * Get Device to Push Notification
      */
 
-    public function chooseDevicesAction() {
+    public function chooseDevicesAction() 
+    {
         $request = $this->getRequest();
         echo '<p class="note"><span id="note_devices_pushed_number"> </span> <span> '.Mage::helper('simiconnector')->__('Device(s) Selected').'</span></p>';
         $block = $this->getLayout()->createBlock(
-                'simiconnector/adminhtml_siminotification_edit_tab_devices', 'promo_widget_chooser_device_id', array('js_form_object' => $request->getParam('form'),
-        ));
+            'simiconnector/adminhtml_siminotification_edit_tab_devices', 'promo_widget_chooser_device_id', array('js_form_object' => $request->getParam('form'),
+            )
+        );
         if ($block) {
             $block->storeview_id = $this->getRequest()->getParam('storeview_id');
             $this->getResponse()->setBody($block->toHtml());
