@@ -252,6 +252,10 @@
             <mixpanel>
                 <token></token>
             </mixpanel>
+            <methods_support>
+                <put>1</put>
+                <delete>1</delete>
+            </methods_support>
         </simiconnector>  
     </default>
 </config>

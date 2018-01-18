@@ -1129,6 +1129,32 @@
                         </token>
                     </fields>
                 </mixpanel>
+                <methods_support translate="label">
+                    <label>Supported methods</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1099</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <put translate="label">
+                            <label>Support PUT method</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+
+                        </put>
+                        <delete translate="label">
+                            <label>Support DELETE method</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+
+                        </delete>
+                    </fields>
+                </methods_support>
             </groups>
         </simiconnector>
     </sections>

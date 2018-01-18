@@ -92,6 +92,8 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'cust_group' => Mage::getSingleton('customer/session')->getCustomerGroupId(),
                 'customer_identity' => Mage::getSingleton('core/session')->getEncryptedSessionId(),
                 'customer_ip'=>$_SERVER["REMOTE_ADDR"],
+                'is_support_put' => Mage::getStoreConfig('simiconnector/methods_support/put'),
+                'is_support_delete' =>Mage::getStoreConfig('simiconnector/methods_support/delete'),
             ),
             'sales' => array(
                 'sales_reorder_allow' => Mage::getStoreConfig('sales/reorder/allow'),

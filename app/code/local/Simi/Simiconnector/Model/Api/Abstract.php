@@ -204,6 +204,14 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
                 return $this->index();
             }
         } elseif ($data['is_method'] == 2) {
+            if(isset($data['params']['is_put']) && $data['params']['is_put'] == '1' && !Mage::getStoreConfig('simiconnector/methods_support/put'))
+            {
+                return $this->update($data['resourceid']);
+            }
+            else  if(isset($data['params']['is_delete']) && $data['params']['is_delete'] == '1' && !Mage::getStoreConfig('simiconnector/methods_support/delete'))
+            {
+                return $this->destroy($data['resourceid']);
+            }
             return $this->store();
         } elseif ($data['is_method'] == 3) {
             return $this->update($data['resourceid']);
