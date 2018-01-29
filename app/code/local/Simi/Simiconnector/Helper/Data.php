@@ -88,5 +88,29 @@ class Simi_Simiconnector_Helper_Data extends Mage_Core_Helper_Abstract
 
         return $typeId;
     }
+    
+    public function flushStaticCache() {
+        $path = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . "cache";
+        if (is_dir($path)) {
+            $this->_removeFolder($path);
+        }
+    }
 
+    private function _removeFolder($folder){
+        if (is_dir($folder))
+            $dir_handle = opendir($folder);
+        if (!$dir_handle)
+            return false;
+        while($file = readdir($dir_handle)) {
+            if ($file != "." && $file != "..") {
+                if (!is_dir($folder."/".$file))
+                    unlink($folder."/".$file);
+                else
+                    $this->_removeFolder($folder.'/'.$file);
+            }
+        }
+        closedir($dir_handle);
+        rmdir($folder);
+        return true;
+    }
 }

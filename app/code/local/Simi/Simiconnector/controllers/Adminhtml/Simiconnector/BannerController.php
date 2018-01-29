@@ -207,6 +207,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                     }                        
                 }
                 
+                Mage::helper('simiconnector')->flushStaticCache();
+                
                 if ($this->getRequest()->getParam('back')) {
                     $this->_redirect('*/*/edit', array('id' => $model->getId()));
                     return;
@@ -237,6 +239,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                 $model->setId($this->getRequest()->getParam('id'))
                         ->delete();
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Banner was successfully deleted'));
+                Mage::helper('simiconnector')->flushStaticCache();
                 $this->_redirect('*/*/');
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
