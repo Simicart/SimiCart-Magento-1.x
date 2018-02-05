@@ -264,6 +264,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_BannerController extends Mage_A
                     $madapter = Mage::getModel('simiconnector/banner')->load($bannerId);
                     $madapter->delete();
                 }
+                Mage::helper('simiconnector')->flushStaticCache();
 
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Total of %d record(s) were successfully deleted', count($bannerIds)));
             } catch (Exception $e) {

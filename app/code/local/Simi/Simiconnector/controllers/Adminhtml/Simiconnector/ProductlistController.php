@@ -258,6 +258,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_ProductlistController extends M
                     $notice = Mage::getModel('simiconnector/productlist')->load($bannerId);
                     $notice->delete();
                 }
+                Mage::helper('simiconnector')->flushStaticCache();
 
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Total of %d record(s) were successfully deleted', count($bannerIds)));
             } catch (Exception $e) {

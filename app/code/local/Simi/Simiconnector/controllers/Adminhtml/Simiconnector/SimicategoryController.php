@@ -246,6 +246,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SimicategoryController extends 
                     $simicategory = Mage::getModel('simiconnector/simicategory')->load($simicategoryId);
                     $simicategory->delete();
                 }
+                Mage::helper('simiconnector')->flushStaticCache();
 
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('adminhtml')->__('Total of %d record(s) were successfully deleted', count($simicategoryIds)));
             } catch (Exception $e) {
