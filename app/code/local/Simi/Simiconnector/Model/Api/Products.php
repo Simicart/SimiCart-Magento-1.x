@@ -153,16 +153,34 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
             $all_ids[] = $entity->getId();
             $images = array();
 
-            if (!$entity->getData('small_image'))
+            if (!$entity->getData('small_image')) {
                 $entity = Mage::getModel('catalog/product')->load($entity->getId());
-            $imagelink = $this->_helperProduct->getImageProduct($entity, null, $image_width, $image_height);
-            //$sizes = getimagesize($imagelink);
-            $images[] = array(
-                'url' => $imagelink,
-                'position' => 1,
-//                'image_width' => $sizes[0],
-//                'image_height' => $sizes[1],
-            );
+                $media_gallery = $entity->getMediaGallery();
+
+                foreach ($media_gallery['images'] as $image) {
+                    if ($image['disabled'] == 0) {
+                        $imagelink = $this->_helperProduct->getImageProduct($entity, $image['file'], $image_width, $image_height);
+                        $images[] = array(
+                            'url' => $imagelink,
+                            'position' => $image['position'],
+                        );
+                        break;
+                    }
+                }
+                if (!$imagelink) {
+                    $imagelink = $this->_helperProduct->getImageProduct($entity, null, $image_width, $image_height);
+                    $images[] = array(
+                        'url' => $imagelink,
+                        'position' => 1,
+                    );
+                }
+            } else {
+                $imagelink = $this->_helperProduct->getImageProduct($entity, null, $image_width, $image_height);
+                $images[] = array(
+                    'url' => $imagelink,
+                    'position' => 1,
+                );
+            }
             $ratings = Mage::helper('simiconnector/review')->getRatingStar($entity->getId());
             $total_rating = Mage::helper('simiconnector/review')->getTotalRate($ratings);
             $avg = Mage::helper('simiconnector/review')->getAvgRate($ratings, $total_rating);
