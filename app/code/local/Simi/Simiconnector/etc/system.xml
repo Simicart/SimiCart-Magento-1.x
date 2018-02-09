@@ -1155,7 +1155,6 @@
                         </delete>
                     </fields>
                 </methods_support>
-
                     <config_price translate="label">
                     <label> Price configuration </label>
                     <frontend_type>text</frontend_type>
@@ -1170,7 +1169,8 @@
                             <sort_order>1</sort_order>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <show_in_default>1</show_in_default>
-
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
                         </price_one_row>
                     </fields>
                 </config_price>
