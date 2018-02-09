@@ -256,6 +256,9 @@
                 <put>1</put>
                 <delete>1</delete>
             </methods_support>
+            <config_price>
+                <price_one_row>0</price_one_row>
+            </config_price>
         </simiconnector>  
     </default>
 </config>
