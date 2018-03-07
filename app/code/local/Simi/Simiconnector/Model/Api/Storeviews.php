@@ -95,6 +95,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'is_support_put' => Mage::getStoreConfig('simiconnector/methods_support/put'),
                 'is_support_delete' =>Mage::getStoreConfig('simiconnector/methods_support/delete'),
                 'is_show_in_row_price' =>Mage::getStoreConfig('simiconnector/config_price/price_one_row'),
+                'is_show_price_for_guest' =>Mage::getStoreConfig('simiconnector/config_price/is_show_price_for_guest'),
                 'open_url_in_app' =>Mage::getStoreConfig('simiconnector/general/open_url_in_app')
             ),
             'sales' => array(

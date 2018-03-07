@@ -1181,6 +1181,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </price_one_row>
+                        <is_show_price_for_guest translate="label">
+                            <label>Show price for guest</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </is_show_price_for_guest>
                     </fields>
                 </config_price>
 
