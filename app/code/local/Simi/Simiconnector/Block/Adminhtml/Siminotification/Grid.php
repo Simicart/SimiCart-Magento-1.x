@@ -20,7 +20,8 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Grid extends Mage_Admi
      */
     protected function _prepareCollection() 
     {
-        $collection = Mage::getModel('simiconnector/siminotification')->getCollection();if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
+        $collection = Mage::getModel('simiconnector/siminotification')->getCollection();
+        if($websiteId = Mage::helper('simiconnector/cloud')->getWebsiteIdSimiUser()){
             $storeIds = Mage::getModel('core/store')->getCollection()->addFieldToFilter('website_id', $websiteId)->getAllIds();
             $collection->addFieldToFilter('storeview_id', array('in'=>$storeIds));
         }
