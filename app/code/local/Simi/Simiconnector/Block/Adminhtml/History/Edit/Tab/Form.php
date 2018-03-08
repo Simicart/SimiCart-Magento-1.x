@@ -91,9 +91,18 @@ class Simi_Simiconnector_Block_Adminhtml_History_Edit_Tab_Form extends Mage_Admi
             ));
             $click = $data['click'];
             $device_pushed = $data['devices_pushed'];
+            $device_pushed_array = explode(',',$device_pushed);
+            $count_device_pushed = count($device_pushed_array);
 
-            $click_rate = ($click / $device_pushed) * 100;
-            $data['click_rate'] = $click_rate;
+            if($count_device_pushed >= 0) {
+                $click_rate = ((int)$click / (int)$count_device_pushed) * 100;
+            }
+            else{
+                $click_rate = 0;
+            }
+
+            $click_rate = round($click_rate,2);
+            $data['click_rate'] = $click_rate.'%';
 
             $fieldset->addField('click_rate', 'text', array(
                 'label' => Mage::helper('simiconnector')->__('Rate Click'),
