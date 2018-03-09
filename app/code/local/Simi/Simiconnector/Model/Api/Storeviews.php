@@ -64,7 +64,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         $cmsPageList = call_user_func_array(array(&$model, $this->_method), array($cmsData));
         $base_url = Mage::getStoreConfig('simiconnector/general/base_url');
         if (Mage::getStoreConfig('web/url/use_store') && (!$base_url || $base_url=='')) {
-            $base_url = Mage::getBaseUrl();
+            $base_url = Mage::getUrl('',array('_secure'=>true));
         }
 
         $additionInfo = array(
