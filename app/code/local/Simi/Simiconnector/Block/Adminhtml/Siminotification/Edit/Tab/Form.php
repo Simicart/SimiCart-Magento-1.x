@@ -21,6 +21,8 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
             $data['time_to_send'] = '';
         }
 
+        //Zend_Debug::dump($data);die('Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form');
+
         $fieldset = $form->addFieldset('siminotification_form', array('legend' => Mage::helper('simiconnector')->__('Notification Content')));
         $fieldset->addType('datetime', 'Simi_Simiconnector_Block_Adminhtml_Device_Edit_Renderer_Datetime');
 
@@ -93,6 +95,8 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
 
         $fieldset->addField('notice_content', 'editor', array(
             'name' => 'notice_content',
+            // 'class' => 'required-entry',
+            // 'required' => true,
             'label' => Mage::helper('simiconnector')->__('Message'),
             'title' => Mage::helper('simiconnector')->__('Message'),
             'note' => Mage::helper('simiconnector')->__('Characters recommended: < 250'),
@@ -255,6 +259,27 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
             'label' => Mage::helper('simiconnector')->__('URL'),
         ));
 
+//        if (isset($data['click']) && $data['click']) {
+//
+//            $fieldset->addField('click', 'text', array(
+//                'label' => Mage::helper('simiconnector')->__('Clicked'),
+//                'bold' => true,
+//                'name' => 'click',
+//                'readonly' => true,
+//            ));
+//            $click = $data['click'];
+//            $device_pushed = $data['devices_pushed'];
+//
+//            $click_rate = ($click / $device_pushed) * 100;
+//            $data['click_rate'] = $click_rate;
+//
+//            $fieldset->addField('click_rate', 'text', array(
+//                'label' => Mage::helper('simiconnector')->__('Rate Click'),
+//                'bold' => true,
+//                'name' => 'click_rate',
+//                'readonly' => true,
+//            ));
+//        }
 
         $canifa_icon = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . DS . 'simi' . DS . 'simiconnector' . DS . 'notification' . DS . 'images' . DS . 'canifa_icon.png';
         $fieldset->addField('preview_notification', 'select', array(
@@ -400,6 +425,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
             'format'       => $dateFormatIso,
             'time' => true
         ));
+
 
         $fieldset->addField('created_time', 'datetime', array(
             'label' => Mage::helper('simiconnector')->__('Created Date'),

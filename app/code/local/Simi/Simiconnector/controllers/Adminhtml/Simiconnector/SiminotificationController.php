@@ -103,6 +103,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                 }
             }
 
+
+
             $data['created_time'] = now();
             $model = Mage::getModel('simiconnector/siminotification');
             $data['device_id'] = $data['device_type'];

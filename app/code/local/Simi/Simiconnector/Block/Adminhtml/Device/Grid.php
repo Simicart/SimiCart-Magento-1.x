@@ -72,6 +72,24 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Grid extends Mage_Adminhtml_Bloc
         );
 
         $this->addColumn(
+            'country', array(
+                'header' => Mage::helper('simiconnector')->__('Country'),
+                'width' => '150px',
+                'index' => 'country',
+                'type' => 'options',
+                'options' => Mage::helper('simiconnector/siminotification')->getListCountry(),
+            )
+        );
+
+        $this->addColumn(
+            'state', array(
+                'header' => Mage::helper('simiconnector')->__('State/Province'),
+                'width' => '150px',
+                'index' => 'state',
+            )
+        );
+
+        $this->addColumn(
             'city', array(
             'header' => Mage::helper('simiconnector')->__('City'),
             'width' => '150px',
@@ -79,23 +97,9 @@ class Simi_Simiconnector_Block_Adminhtml_Device_Grid extends Mage_Adminhtml_Bloc
             )
         );
 
-        $this->addColumn(
-            'state', array(
-            'header' => Mage::helper('simiconnector')->__('State/Province'),
-            'width' => '150px',
-            'index' => 'state',
-            )
-        );
 
-        $this->addColumn(
-            'country', array(
-            'header' => Mage::helper('simiconnector')->__('Country'),
-            'width' => '150px',
-            'index' => 'country',
-            'type' => 'options',
-            'options' => Mage::helper('simiconnector/siminotification')->getListCountry(),
-            )
-        );
+
+
 
 
         $this->addColumn(

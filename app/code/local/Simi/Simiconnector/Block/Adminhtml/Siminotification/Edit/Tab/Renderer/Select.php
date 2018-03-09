@@ -9,8 +9,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Renderer_Sele
 {
     protected function _renderOption($option, $value)
     {
-
-        $selected = (( $this->compareVNString($option['label'], $value)  && (!is_null($value))) ? ' selected="selected"' : '' );
+        $selected = (( $this->compareString($option['label'], $value)  && (!is_null($value))) ? ' selected="selected"' : '' );
         return '<option value="'. $this->escapeHtml($option['value']).'"'.$selected.'>'.$this->escapeHtml($option['label']).'</option>';
     }
 
@@ -33,11 +32,11 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Renderer_Sele
         return $html;
     }
 
-    protected function compareVNString($str1,$str2){
-        setLocale(LC_ALL, 'vn_VN');
-        $str1 = preg_replace('#[^\w\s]+#', '', iconv('UTF-8', 'ASCII//TRANSLIT', $str1));
-
-        $str2 = preg_replace('#[^\w\s]+#', '', iconv('UTF-8', 'ASCII//TRANSLIT', $str2));
+    protected function compareString($str1,$str2){
+//        setLocale(LC_ALL, 'vn_VN');
+//        $str1 = preg_replace('#[^\w\s]+#', '', iconv('UTF-8', 'ASCII//TRANSLIT', $str1));
+//
+//        $str2 = preg_replace('#[^\w\s]+#', '', iconv('UTF-8', 'ASCII//TRANSLIT', $str2));
 
         if( strpos($str1,$str2) !== false){
             return true;

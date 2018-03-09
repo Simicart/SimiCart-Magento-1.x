@@ -74,20 +74,31 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
 
             if (is_string($filter)) {
                 $data = $this->helper('adminhtml')->prepareFilterString($filter);
+
+                //Zend_Debug::dump($data);die();
+
                 if (isset($data['count_purchase']) && $data['count_purchase']) {
                     $from_count_purchase = $data['count_purchase']['from'];
                     $to_count_purchase = $data['count_purchase']['to'];
                 }
+                //unset($data['count_purchase']);
+
                 if (isset($data['city']) && $data['city']) {
                     $array = explode('_', $data['city']);
                     if (count($array) > 1) {
                         $data['city'] = $array[1];
                     }
                     $city = $data['city'];
+                    // unset($data['city']);
                 }
 
                 if (isset($data['state']) && $data['state']) {
+                    $array_state = explode('_',$data['state']);
+                    if(count($array_state) > 1){
+                        $data['state'] = $array[1];
+                    }
                     $state = $data['state'];
+                    //unset($data['state']);
                 }
 
                 $this->_setFilterValues($data);
@@ -99,13 +110,6 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
                 }
                 //unset($filter['count_purchase']);
 
-                if (isset($filter['city']) && $filter['city']) {
-                    $array = explode('_', $filter['city']);
-                    if (count($array) > 1) {
-                        $filter['city'] = $array[1];
-                    }
-                    $city = $filter['city'];
-                }
 
                 if (isset($filter['state']) && $filter['state']) {
                     $state = $filter['state'];
@@ -132,6 +136,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
 
         $new_collection = new Varien_Data_Collection();
 
+
         foreach ($collection as $device) {
             $item = new Varien_Object();
             $item->setData($device->toArray());
@@ -149,18 +154,19 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
                 continue;
             }
 
-            if (!$this->filterCity($city, $item)) {
-                continue;
-            }
-
+//            $item_test = array();
+//            $item_test['item_state'] = $item->getState();
+//            $item_test['state'] = $state;
+//            $test_data[] = $item_test;
             if (!$this->filterState($state, $item)) {
                 continue;
             }
 
 
-
             $new_collection->addItem($item);
         }
+
+       //echo json_encode($test_data);die('--- Frank');
 
         $this->setCollection($new_collection);
 
@@ -172,7 +178,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
     {
         foreach ($this->getColumns() as $columnId => $column) {
 
-            if ($columnId == 'state' || $columnId == 'city' || $columnId == 'count_purchase') {
+            if ($columnId == 'state'  || $columnId == 'count_purchase') {
                 $column->getFilter()->setValue($data[$columnId]);
                 continue;
             }
@@ -230,27 +236,6 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
 
     }
 
-    protected function filterCity($city, $item)
-    {
-
-        if (!$city) {
-            return true;
-        }
-
-        $item_city = $item->getCity();
-
-        setLocale(LC_ALL, 'vn_VN');
-        $city = preg_replace('#[^\w\s]+#', '', iconv('UTF-8', 'ASCII//TRANSLIT', $city));
-
-        $item_city = preg_replace('#[^\w\s]+#', '', iconv('UTF-8', 'ASCII//TRANSLIT', $item_city));
-
-
-        if ($item_city && strpos($item_city, $city) !== false) {
-            return true;
-        }
-
-        return false;
-    }
 
     protected function filterState($state, $item)
     {
@@ -261,10 +246,11 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
 
         $item_state = $item->getState();
 
-        setLocale(LC_ALL, 'vn_VN');
-        $state = preg_replace('#[^\w\s]+#', '', iconv('UTF-8', 'ASCII//TRANSLIT', $state));
+//        setLocale(LC_ALL, Mage::app()->getLocale()->getLocaleCode());
+//        $state = preg_replace('#[^\w\s]+#', '', iconv('UTF-8', 'ASCII//TRANSLIT', $state));
+//
+//        $item_state = preg_replace('#[^\w\s]+#', '', iconv('UTF-8', 'ASCII//TRANSLIT', $item_state));
 
-        $item_state = preg_replace('#[^\w\s]+#', '', iconv('UTF-8', 'ASCII//TRANSLIT', $item_state));
 
         if ($item_state && strpos($item_state, $state) !== false) {
             return true;
@@ -316,33 +302,30 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
             ),
         ));
 
+        $country_default = Mage::getStoreConfig('general/country/default');
         $this->addColumn('country', array(
             'header' => Mage::helper('simiconnector')->__('Country'),
             'width' => '150px',
             'index' => 'country',
             'type' => 'options',
             'options' => Mage::helper('simiconnector/siminotification')->getListCountry(),
-
+            'value' => $country_default
         ));
 
-
         $this->addColumn('state', array(
-            'header' => Mage::helper('simiconnector')->__('State'),
+            'header' => Mage::helper('simiconnector')->__('State/Province'),
             'width' => '150px',
             'index' => 'state',
             'type' => 'customoptions',
-            'options' => $this->getCityByCountryCode('VN')
+            'options' => $this->getCityByCountryCode($country_default)
         ));
-
 
         $this->addColumn('city', array(
             'header' => Mage::helper('simiconnector')->__('City'),
             'width' => '150px',
             'index' => 'city',
             'type' => 'text',
-
         ));
-
 
         $this->addColumn('count_purchase', array(
             'header' => Mage::helper('simiconnector')->__('Order quantity'),
@@ -438,6 +421,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
         if (count($states) > 0) {
             foreach ($states as $key => $state) {
                 $data[$key . '_' . $state] = $state;
+//                $states_response .= "<option value='" . $key . '_' . $state . "'>" . $state . " </option>";
             }
         }
 
