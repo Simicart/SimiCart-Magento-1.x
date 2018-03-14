@@ -21,7 +21,8 @@ class Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Tab_Form extends Mage_
 
         $width = $height = 200;
         $sampleQR = '<img src="http://chart.googleapis.com/chart?chs='.$width.'x'.$height.'&cht=qr&chl='.$data['qrcode'].'" />';
-        $sampleBar = '</br></br><img src="'.Mage::helper("adminhtml")->getUrl('*/*/barcode').'?code='.$data['barcode'].'" />';
+        //$sampleBar = '</br></br><img src="'.Mage::helper("adminhtml")->getUrl('*/*/barcode').'?code='.$data['barcode'].'" />';
+        $sampleBar = '</br></br><img src="https://www.barcodesinc.com/generator/image.php?code='.$data['barcode'].'&style=197&type=C128B&width=300&height=150&xres=1&font=3" />';
         $fieldset = $form->addFieldset('simibarcode_form', array('legend' => Mage::helper('simiconnector')->__('Barcode Information')));
         $fieldset->addType('datetime', 'Simi_Simiconnector_Block_Adminhtml_Simibarcode_Edit_Renderer_Datetime');
 
