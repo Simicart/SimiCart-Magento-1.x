@@ -51,212 +51,15 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
         return $this;
     }
 
-    /**
-     * Prepare Catalog Product Collection for attribute SKU in Promo Conditions SKU chooser
-     *
-     * @return Mage_Adminhtml_Block_Promo_Widget_Chooser_Sku
-     */
-    protected function _prepareCollection() {
-        $collection = Mage::getModel('simiconnector/device')->getCollection()->addFieldToFilter('storeview_id',$this->storeview_id);
+    protected function _prepareCollection()
+    {
+        $collection = Mage::getModel('simiconnector/device')->getCollection()->addFieldToFilter('storeview_id', $this->storeview_id);
         $this->setCollection($collection);
 
-        if ($this->getCollection()) {
-
-            $this->_preparePage();
-
-            $columnId = $this->getParam($this->getVarNameSort(), $this->_defaultSort);
-            $dir = $this->getParam($this->getVarNameDir(), $this->_defaultDir);
-            $filter = $this->getParam($this->getVarNameFilter(), null);
-
-            if (is_null($filter)) {
-                $filter = $this->_defaultFilter;
-            }
-
-            if (is_string($filter)) {
-                $data = $this->helper('adminhtml')->prepareFilterString($filter);
-
-                //Zend_Debug::dump($data);die();
-
-                if (isset($data['count_purchase']) && $data['count_purchase']) {
-                    $from_count_purchase = $data['count_purchase']['from'];
-                    $to_count_purchase = $data['count_purchase']['to'];
-                }
-                //unset($data['count_purchase']);
-
-                if (isset($data['city']) && $data['city']) {
-                    $array = explode('_', $data['city']);
-                    if (count($array) > 1) {
-                        $data['city'] = $array[1];
-                    }
-                    $city = $data['city'];
-                    // unset($data['city']);
-                }
-
-                if (isset($data['state']) && $data['state']) {
-                    $array_state = explode('_',$data['state']);
-                    if(count($array_state) > 1){
-                        $data['state'] = $array[1];
-                    }
-                    $state = $data['state'];
-                    //unset($data['state']);
-                }
-
-                $this->_setFilterValues($data);
-            } else if ($filter && is_array($filter)) {
-
-                if (isset($filter['count_purchase']) && $filter['count_purchase']) {
-                    $from_count_purchase = $filter['count_purchase']['from'];
-                    $to_count_purchase = $filter['count_purchase']['to'];
-                }
-                //unset($filter['count_purchase']);
-
-
-                if (isset($filter['state']) && $filter['state']) {
-                    $state = $filter['state'];
-                    unset($filter['state']);
-                }
-
-                $this->_setFilterValues($filter);
-            } else if (0 !== sizeof($this->_defaultFilter)) {
-                $this->_setFilterValues($this->_defaultFilter);
-            }
-
-            if (isset($this->_columns[$columnId]) && $this->_columns[$columnId]->getIndex()) {
-                $dir = (strtolower($dir) == 'desc') ? 'desc' : 'asc';
-                $this->_columns[$columnId]->setDir($dir);
-                $this->_setCollectionOrder($this->_columns[$columnId]);
-            }
-
-            if (!$this->_isExport) {
-                $this->getCollection()->load();
-                $this->_afterLoadCollection();
-            }
-        }
-
-
-        $new_collection = new Varien_Data_Collection();
-
-
-        foreach ($collection as $device) {
-            $item = new Varien_Object();
-            $item->setData($device->toArray());
-
-            $customer_email = $device['user_email'];
-            $size = 0;
-            if ($customer_email) {
-                $orders = Mage::getModel('sales/order')->getCollection()
-                    ->addAttributeToFilter('customer_email', $customer_email);
-                $size = $orders->getSize();
-
-            }
-            $item->setData('count_purchase', $size);
-            if (!$this->filterCountPurchase($from_count_purchase, $to_count_purchase, $size)) {
-                continue;
-            }
-
-//            $item_test = array();
-//            $item_test['item_state'] = $item->getState();
-//            $item_test['state'] = $state;
-//            $test_data[] = $item_test;
-            if (!$this->filterState($state, $item)) {
-                continue;
-            }
-
-
-            $new_collection->addItem($item);
-        }
-
-       //echo json_encode($test_data);die('--- Frank');
-
-        $this->setCollection($new_collection);
-
-        return $this;
-
-    }
-
-    protected function _setFilterValues($data)
-    {
-        foreach ($this->getColumns() as $columnId => $column) {
-
-            if ($columnId == 'state'  || $columnId == 'count_purchase') {
-                $column->getFilter()->setValue($data[$columnId]);
-                continue;
-            }
-
-            if (isset($data[$columnId])
-                && (!empty($data[$columnId]) || strlen($data[$columnId]) > 0)
-                && $column->getFilter()
-            ) {
-                $column->getFilter()->setValue($data[$columnId]);
-
-                $this->_addColumnFilterToCollection($column);
-            }
-        }
-        return $this;
-    }
-
-    protected function filterCountPurchase($from_count_purchase, $to_count_purchase, $size)
-    {
-        if ($from_count_purchase && $to_count_purchase) {
-            if (!$size) {
-                return false;
-            }
-
-            $size = floatval($size);
-            $from_count_purchase = floatval($from_count_purchase);
-            $to_count_purchase = floatval($to_count_purchase);
-
-            if ($from_count_purchase <= $size && $to_count_purchase >= $size) {
-                return true;
-            }
-            return false;
-        } else if ($from_count_purchase) {
-
-            if (!$size) {
-                return false;
-            }
-
-            if ($size >= $from_count_purchase) {
-                return true;
-            }
-            return false;
-        } else if ($to_count_purchase) {
-
-            if (!$size) {
-                return false;
-            }
-
-            if ($size <= $to_count_purchase) {
-                return true;
-            }
-            return false;
-        }
-        // no filter for count_purchase
-        return true;
-
+        return parent::_prepareCollection();
     }
 
 
-    protected function filterState($state, $item)
-    {
-
-        if (!$state) {
-            return true;
-        }
-
-        $item_state = $item->getState();
-
-//        setLocale(LC_ALL, Mage::app()->getLocale()->getLocaleCode());
-//        $state = preg_replace('#[^\w\s]+#', '', iconv('UTF-8', 'ASCII//TRANSLIT', $state));
-//
-//        $item_state = preg_replace('#[^\w\s]+#', '', iconv('UTF-8', 'ASCII//TRANSLIT', $item_state));
-
-
-        if ($item_state && strpos($item_state, $state) !== false) {
-            return true;
-        }
-        return false;
-    }
 
     /**
      * Define Cooser Grid Columns and filters
@@ -317,7 +120,8 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
             'width' => '150px',
             'index' => 'state',
             'type' => 'customoptions',
-            'options' => $this->getCityByCountryCode($country_default)
+            'options' => $this->getCityByCountryCode($country_default),
+            'filter_condition_callback' => array($this, '_stateFilter'),
         ));
 
         $this->addColumn('city', array(
@@ -380,6 +184,29 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
 
         return parent::_prepareColumns();
     }
+
+
+    protected function _stateFilter($collection, $column)
+    {
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+        $field = ($column->getFilterIndex()) ? $column->getFilterIndex() : $column->getIndex();
+
+
+
+        $array = explode('_', $value);
+
+        if (count($array) > 1) {
+            $value_state = $array[1];
+        } else {
+            $value_state = $value;
+        }
+
+        $collection->addFieldToFilter($field, array('eq' => $value_state));
+        return $this;
+    }
+
 
     public function addColumn($columnId, $column)
     {

@@ -9,7 +9,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Renderer_Sele
 {
     protected function _renderOption($option, $value)
     {
-        $selected = (( $this->compareString($option['label'], $value)  && (!is_null($value))) ? ' selected="selected"' : '' );
+        $selected = (( $this->compareString($option['value'], $value)  && (!is_null($value))) ? ' selected="selected"' : '' );
         return '<option value="'. $this->escapeHtml($option['value']).'"'.$selected.'>'.$this->escapeHtml($option['label']).'</option>';
     }
 

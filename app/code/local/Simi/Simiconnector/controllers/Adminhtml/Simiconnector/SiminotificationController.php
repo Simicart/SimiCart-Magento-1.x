@@ -319,7 +319,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
         $is_state = $this->getRequest()->getParam('is_state');
         $country_code = $this->getRequest()->getParam('country_code');
         $city_code = $this->getRequest()->getParam('city_code');
-        if($is_state ) {
+        if($is_state == 1) {
             if($country_code) {
                 $states = Mage::helper('simiconnector/siminotification')->getListState($country_code);
                 if (count($states) > 0) {
