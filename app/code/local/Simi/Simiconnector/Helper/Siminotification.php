@@ -6,18 +6,38 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
     protected $bad_device_id = array();
     protected $size_android_sent = 0;
 
-    public function sendNotice($data) 
+    public function sendNotice($data)
     {
+        $history = Mage::getModel('simiconnector/history');
+        $data['status'] = 1;
+        $history->setData($data);
+        $history->save();
+        $history_id = $history->getId();
+        $data['notice_history_id'] = $history_id;
+
         $trans = $this->send($data);
         // update notification history
-        $history = Mage::getModel('simiconnector/history');
+
         if (!$trans)
             $data['status'] = 0;
         else
             $data['status'] = 1;
 
-        $history->setData($data);
+
+        $history->setData($data)->setId($history_id);
         $history->save();
+
+        // save status for notification
+        try {
+            $model = Mage::getModel('simiconnector/siminotification')->load($data['notice_id']);
+            if ($model->getId() == $data['notice_id']) {
+                $model->setData('status_send', '0');
+                $model->save();
+            }
+        } catch (Exception $e) {
+
+        }
+
         return $trans;
     }
 
@@ -100,6 +120,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             'sound' => 'default',
             'badge' => 1,
             'title' => $data['notice_title'],
+            'body' => $message,
             'message' => $message,
             'url' => $data['notice_url'],
             'type' => $data['type'],
@@ -111,6 +132,8 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             'height' => $data['height'],
             'width' => $data['width'],
             'show_popup' => $data['show_popup'],
+            'notice_id' => $data['notice_id'], // frank customize click and rate click
+            'notice_history_id' => $data['notice_history_id'],// frank customize click and rate click
         );
         
         $payload = json_encode($body);
@@ -357,6 +380,21 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         }
 
         return $listCountry;
+    }
+
+    public function getListState($country_code){
+        $states = Mage::getModel('directory/region')->getCollection()
+            ->addCountryFilter($country_code)->load();
+
+        $listStates = array();
+
+        if(count($states)){
+            foreach ($states as $state){
+
+                $listStates[$state->getData('region_id')] = $state->getDefaultName();
+            }
+        }
+        return $listStates;
     }
 
     public function getDirPEMfile($data) 

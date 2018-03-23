@@ -23,6 +23,26 @@
 class Simi_Simiconnector_Model_Observer
 {
 
+    public function saleOrderPlaceAfter($observer){
+        $order = $observer->getEvent()->getOrder();
+        $customer_email = $order->getCustomerEmail();
+
+        if($customer_email){
+            $collection = Mage::getModel('simiconnector/device')->getCollection()->addFieldToFilter('user_email',$customer_email);
+            foreach ($collection as $device) {
+                $id = $device->getId();
+                $deviceModel = Mage::getModel('simiconnector/device')->load($id);
+                if ($deviceModel->getId()) {
+                    $count_purchase = $deviceModel->getCountPurchase() + 1;
+
+                    $deviceModel->setCountPurchase($count_purchase);
+                    $deviceModel->save();
+                }
+            }
+        }
+    }
+
+
     /**
      * process catalog_product_save_after event
      *

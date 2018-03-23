@@ -137,6 +137,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </app_dedicated_coupon>
+                        <open_url_in_app translate="label">
+                            <label>Open url in app</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1199</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </open_url_in_app>
                     </fields>
                 </general>
                 <currency translate="label">
@@ -231,6 +240,29 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </android_secret_key>
+
+                        <app_logo translate="label tooltip comment">
+                            <label>App Logo </label>
+                            <comment></comment>
+                            <frontend_type>image</frontend_type>
+                            <sort_order>40</sort_order>
+                            <backend_model>adminhtml/system_config_backend_image</backend_model>
+                            <upload_dir config="system/filesystem/media" scope_info="1">simi/simiconnector/applogo</upload_dir>
+                            <base_url type="media" scope_info="1">simi/simiconnector/applogo</base_url>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </app_logo>
+
+                        <app_name translate="label tooltip comment">
+                            <label>App name</label>
+                            <comment></comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </app_name>
 
                         <noti_price_separator translate="label">
                             <label>Send Notification when Price Updated</label>
@@ -1172,8 +1204,18 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </price_one_row>
+                        <is_show_price_for_guest translate="label">
+                            <label>Show price for guest</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </is_show_price_for_guest>
                     </fields>
                 </config_price>
+
 
             </groups>
         </simiconnector>

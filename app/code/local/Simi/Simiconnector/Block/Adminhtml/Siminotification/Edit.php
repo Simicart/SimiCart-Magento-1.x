@@ -36,60 +36,15 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit extends Mage_Admi
 				editForm.submit($('edit_form').action+'back/edit/');
 			}
 			
-			function onchangeNoticeType(type){
-				switch (type) {
-					case '1':
-						$('product_id').up('tr').show(); 						
-						$('product_id').className = 'required-entry input-text'; 
-						$('category_id').up('tr').hide();
-						$('category_id').className = 'input-text'; 
-						$('notice_url').up('tr').hide(); 
-						$('notice_url').className = 'input-text'; 
-						break;
-					case '2':
-						$('category_id').up('tr').show(); 
-						$('category_id').className = 'required-entry input-text'; 
-						$('product_id').up('tr').hide(); 
-						$('product_id').className = 'input-text'; 
-						$('notice_url').up('tr').hide(); 
-						$('notice_url').className = 'input-text'; 
-						break;
-					case '3':
-						$('notice_url').up('tr').show(); 
-						$('notice_url').className = 'required-entry input-text'; 
-						$('product_id').up('tr').hide(); 
-						$('product_id').className = 'input-text'; 
-						$('category_id').up('tr').hide();
-						$('category_id').className = 'input-text'; 
-						break;
-					default:
-						$('product_id').up('tr').show(); 
-						$('product_id').className = 'required-entry input-text'; 
-						$('category_id').up('tr').hide(); 
-						$('category_id').className = 'input-text'; 
-						$('notice_url').up('tr').hide();
-						$('notice_url').className = 'input-text'; 
-				}
-			}
-
-			// function previewNoti(){
-			// 	alert('Developing...');
-			// }
-
-			// var autocompleteBilling = new google.maps.places.Autocomplete(document.getElementById('location'), {});
-		 //    if (document.getElementById('country')) {
-		 //        google.maps.event.addListener(autocompleteBilling, 'place_changed', function () {
-		 //            var place = autocompleteBilling.getPlace();
-		 //            for (var i = 0; i < place.address_components.length; i++) {
-		 //                if (place.address_components[i].types[0] == 'country') {
-		 //                    document.getElementById('country').value = place.address_components[i]['short_name'];
-		 //                    break;
-		 //                }
-		 //            }
-
-		 //        });
-		 //    }
 		";
+    }
+
+    protected function _prepareLayout()
+    {
+        $this->getLayout()->getBlock('head')->addJs('simi/siminotification/jquery-3.2.1.min.js');
+        $this->getLayout()->getBlock('head')->addJs('simi/siminotification/simidevices.js');
+        $this->getLayout()->getBlock('head')->addJs('simi/siminotification/siminotifications.js');
+        return parent::_prepareLayout();
     }
 
     /**

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Simi_Simiconnector>
-            <version>0.1.0</version>
+            <version>0.1.2</version>
         </Simi_Simiconnector>
     </modules>
     <frontend>
@@ -187,6 +187,7 @@
                 <is_rtl>0</is_rtl>
                 <secret_key backend_model="adminhtml/system_config_backend_encrypted"></secret_key>
                 <token_key backend_model="adminhtml/system_config_backend_encrypted"></token_key>
+                <open_url_in_app>1</open_url_in_app>
             </general>  
             <currency>                                           
                 <thousand_separator>,</thousand_separator>
@@ -200,6 +201,7 @@
                 <noti_price_enable>0</noti_price_enable>
                 <new_product_enable>0</new_product_enable>
                 <noti_purchase_enable>0</noti_purchase_enable>
+                <app_name>Simicart</app_name>
             </notification> 
             <hideaddress>
                 <hideaddress_enable>0</hideaddress_enable>
@@ -258,6 +260,7 @@
             </methods_support>
             <config_price>
                 <price_one_row>0</price_one_row>
+                <is_show_price_for_guest>1</is_show_price_for_guest>
             </config_price>
         </simiconnector>  
     </default>

@@ -3,6 +3,39 @@
 class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Action
 {
 
+    public function updateCountPurchaseForDeviceAction()
+    {
+        $collection = Mage::getModel('simiconnector/device')->getCollection();
+        $test_data = array();
+        foreach ($collection as $device) {
+
+            $id = $device->getId();
+
+            $customer_email = $device['user_email'];
+
+            if ($customer_email) {
+                $orders = Mage::getModel('sales/order')->getCollection()
+                    ->addAttributeToFilter('customer_email', $customer_email);
+                $size = $orders->getSize();
+
+                $deviceModel = Mage::getModel('simiconnector/device')->load($id);
+                if ($deviceModel->getId()) {
+                    $item_data = array();
+                    $item_data['email'] = $customer_email;
+                    $item_data['size'] = $size;
+                    $test_data[] = $item_data;
+
+                    $deviceModel->setCountPurchase($size);
+                    $deviceModel->save();
+
+                }
+            }
+        }
+
+        echo json_encode($test_data);
+
+    }
+
     public function indexAction()
     {
         $this->loadLayout();

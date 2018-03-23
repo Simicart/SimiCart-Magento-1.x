@@ -276,12 +276,13 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract
                     $address .= ', ' . $addressComponents->long_name;
                 }
 
-                if (in_array('postal_town', $types) || in_array('administrative_area_level_1', $types)) {
-                    $city = $addressComponents->long_name;
+                if ( in_array('administrative_area_level_1', $types)) {
+
+                    $state = $addressComponents->long_name;
                 }
 
                 if (in_array('administrative_area_level_2', $types)) {
-                    $state = $addressComponents->long_name;
+                    $city = $addressComponents->long_name;
                 }
 
                 if (in_array('country', $types)) {
