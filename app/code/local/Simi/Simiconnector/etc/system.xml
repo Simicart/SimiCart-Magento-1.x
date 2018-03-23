@@ -241,6 +241,29 @@
                             <show_in_store>1</show_in_store>
                         </android_secret_key>
 
+                        <app_logo translate="label tooltip comment">
+                            <label>App Logo </label>
+                            <comment></comment>
+                            <frontend_type>image</frontend_type>
+                            <sort_order>40</sort_order>
+                            <backend_model>adminhtml/system_config_backend_image</backend_model>
+                            <upload_dir config="system/filesystem/media" scope_info="1">simi/simiconnector/applogo</upload_dir>
+                            <base_url type="media" scope_info="1">simi/simiconnector/applogo</base_url>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </app_logo>
+
+                        <app_name translate="label tooltip comment">
+                            <label>App name</label>
+                            <comment></comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </app_name>
+
                         <noti_price_separator translate="label">
                             <label>Send Notification when Price Updated</label>
                             <sort_order>99</sort_order>
@@ -1192,6 +1215,7 @@
                         </is_show_price_for_guest>
                     </fields>
                 </config_price>
+
 
             </groups>
         </simiconnector>

@@ -201,6 +201,7 @@
                 <noti_price_enable>0</noti_price_enable>
                 <new_product_enable>0</new_product_enable>
                 <noti_purchase_enable>0</noti_purchase_enable>
+                <app_name>Simicart</app_name>
             </notification> 
             <hideaddress>
                 <hideaddress_enable>0</hideaddress_enable>
