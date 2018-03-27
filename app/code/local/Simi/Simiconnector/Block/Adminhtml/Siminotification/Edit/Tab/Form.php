@@ -404,6 +404,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
             'input_format' => $dateFormatIso,
             'format'       => $dateFormatIso,
             'time' => true,
+              'readonly' => true,
             'note' => 'Sever time : '. date("m/d/Y h:i:s a", Mage::getModel('core/date')->timestamp(time())),
         ));
 

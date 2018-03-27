@@ -105,7 +105,7 @@ class Simi_Simiconnector_Block_Adminhtml_History_Edit_Tab_Form extends Mage_Admi
             $data['click_rate'] = $click_rate.'%';
 
             $fieldset->addField('click_rate', 'text', array(
-                'label' => Mage::helper('simiconnector')->__('Rate Click'),
+                'label' => Mage::helper('simiconnector')->__('Click rate'),
                 'bold' => true,
                 'name' => 'click_rate',
                 'readonly' => true,
