@@ -38,6 +38,14 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
         $data = $this->getData();
         $result = parent::index();
         foreach ($result['categories'] as $index => $catData) {
+            $categoryModel = Mage::getModel('catalog/category')->load($catData['entity_id']);
+            if ($image_url = $categoryModel->getImageUrl()) {
+                $result['categories'][$index]['image_url'] = $image_url;
+            }
+            if ($image = $categoryModel->getThumbnail()) {
+                $result['categories'][$index]['thumbnail_url'] = Mage::getBaseUrl('media').'catalog/category/'.$image;
+            }
+            
             $childCollection = Mage::getModel('catalog/category')->getCollection()
                 ->addFieldToFilter('parent_id', $catData['entity_id'])
                 ->addAttributeToFilter('is_active', 1);

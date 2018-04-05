@@ -66,6 +66,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         if (Mage::getStoreConfig('web/url/use_store') && (!$base_url || $base_url=='')) {
             $base_url = Mage::getUrl('',array('_secure'=>true));
         }
+        $connectorVersion = (string)Mage::getConfig()->getNode()->modules->Simi_Simiconnector->version;
 
         $additionInfo = array(
             'base' => array(
@@ -96,7 +97,8 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'is_support_delete' =>Mage::getStoreConfig('simiconnector/methods_support/delete'),
                 'is_show_in_row_price' =>Mage::getStoreConfig('simiconnector/config_price/price_one_row'),
                 'is_show_price_for_guest' =>Mage::getStoreConfig('simiconnector/config_price/is_show_price_for_guest'),
-                'open_url_in_app' =>Mage::getStoreConfig('simiconnector/general/open_url_in_app')
+                'open_url_in_app' =>Mage::getStoreConfig('simiconnector/general/open_url_in_app'),
+                'connector_version' => $connectorVersion
             ),
             'sales' => array(
                 'sales_reorder_allow' => Mage::getStoreConfig('sales/reorder/allow'),

@@ -22,15 +22,20 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
                     break;
                 case 'profile':
                     $this->builderQuery = Mage::getSingleton('customer/session')->getCustomer();
+                    $this->builderQuery->setData('wishlist_count', $this->getWishlistCount());
                     break;
                 case 'login':
-                    if (Mage::getModel('simiconnector/customer')->login($data))
+                    if (Mage::getModel('simiconnector/customer')->login($data)) {
                         $this->builderQuery = Mage::getSingleton('customer/session')->getCustomer();
+                        $this->builderQuery->setData('wishlist_count', $this->getWishlistCount());
+                    }
                     else
                         throw new Exception($this->_helper->__('Login Failed'), 4);
                     break;
                 case 'sociallogin':
                     $this->builderQuery = Mage::getModel('simiconnector/customer')->socialLogin($data);
+                    $this->builderQuery->setData('wishlist_count', $this->getWishlistCount());
+                    break;
                 case 'logout':
                     if (Mage::getModel('simiconnector/customer')->logout($data))
                         $this->builderQuery = Mage::getSingleton('customer/session')->getCustomer();
@@ -86,7 +91,6 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
 
     public function getDetail($info) 
     {
-        //$info['dob'] = date("Y-m-d H:i:s", strtotime($info['dob']));
         if ($this->_RETURN_MESSAGE) {
             $resultArray = parent::getDetail($info);
             $resultArray['message'] = array($this->_RETURN_MESSAGE);
@@ -95,5 +99,16 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
 
         return parent::getDetail($info);
     }
-
+    
+    /*
+     * Get Wishlist count
+     */
+    
+    public function getWishlistCount() 
+    {
+        $customer = Mage::getSingleton('customer/session')->getCustomer();
+        if ($customer && $customer->getId())
+            return (int)Mage::getModel('wishlist/wishlist')->loadByCustomer($customer)->getItemCollection()->getSize();
+        return 0;
+    }
 }

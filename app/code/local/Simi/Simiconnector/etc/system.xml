@@ -1162,7 +1162,7 @@
                     </fields>
                 </mixpanel>
                 <methods_support translate="label">
-                    <label>Supported methods</label>
+                    <label>Supported Methods</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>1099</sort_order>
                     <show_in_default>1</show_in_default>
@@ -1188,7 +1188,7 @@
                     </fields>
                 </methods_support>
                     <config_price translate="label">
-                    <label> Price configuration </label>
+                    <label> Price Configuration </label>
                     <frontend_type>text</frontend_type>
                     <sort_order>1199</sort_order>
                     <show_in_default>1</show_in_default>
