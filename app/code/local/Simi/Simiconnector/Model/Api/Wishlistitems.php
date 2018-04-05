@@ -33,6 +33,12 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
             throw new Exception(Mage::helper('customer')->__('Please login First.'), 4);
         
         if (isset($data['resourceid']) && $data['resourceid']) {
+            if ($data['resourceid'] == 'add_all_tocart') {
+                $this->addAllWishlistItemsToCart();
+                $this->builderQuery = $this->_WISHLIST->getItemCollection();
+                return;
+            }
+            
             $this->builderQuery = Mage::getModel('wishlist/item')->load($data['resourceid']);
             if (isset($data['params']['add_to_cart']) && $data['params']['add_to_cart']) {
                 $this->addWishlistItemToCart($data['resourceid']);
@@ -164,7 +170,13 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
     public function show() 
     {
         $data = $this->getData();
-        if (isset($data['params']) && isset($data['params']['add_to_cart']) && $data['params']['add_to_cart']) {
+        $useIndex= false;
+        if (isset($data['params']) && isset($data['params']['add_to_cart']) && $data['params']['add_to_cart'])
+            $useIndex = true;
+        if (isset($data['resourceid']) && isset($data['resourceid']) && ($data['resourceid'] == 'add_all_tocart'))
+            $useIndex = true;
+        
+        if ($useIndex) {
             $this->builderQuery = $this->_WISHLIST->getItemCollection();
             return $this->index();
         }
@@ -172,6 +184,80 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
         return parent::show();
     }
 
+    /*
+     * Add All wishlist to cart
+     */
+    public function addAllWishlistItemsToCart()
+    {
+        $wishlist   = $this->_WISHLIST;
+        $this->_RETURN_MESSAGE = '';
+        
+        $addedItems = array();
+        $notSalable = array();
+        $hasOptions = array();
+
+        $cart       = Mage::getSingleton('checkout/cart');
+        $collection = $wishlist->getItemCollection()
+            ->setVisibilityFilter();
+
+        foreach ($collection as $item) {
+            try {
+                $disableAddToCart = $item->getProduct()->getDisableAddToCart();
+                $item->unsProduct();
+                
+                $item->getProduct()->setDisableAddToCart($disableAddToCart);
+                if ($item->addToCart($cart, true)) {
+                    $addedItems[] = $item->getProduct();
+                }
+
+            } catch (Mage_Core_Exception $e) {
+                if ($e->getCode() == Mage_Wishlist_Model_Item::EXCEPTION_CODE_NOT_SALABLE) {
+                    $notSalable[] = $item;
+                } else if ($e->getCode() == Mage_Wishlist_Model_Item::EXCEPTION_CODE_HAS_REQUIRED_OPTIONS) {
+                    $hasOptions[] = $item;
+                } else {
+                    $this->_RETURN_MESSAGE .= ', '.Mage::helper('wishlist')->__('%s for "%s".', trim($e->getMessage(), '.'), $item->getProduct()->getName());
+                }
+                $cartItem = $cart->getQuote()->getItemByProduct($item->getProduct());
+                if ($cartItem) {
+                    $cart->getQuote()->deleteItem($cartItem);
+                }
+            } catch (Exception $e) {
+                Mage::logException($e);
+                $this->_RETURN_MESSAGE .= ', '.Mage::helper('wishlist')->__('Cannot add the item to shopping cart.');
+            }
+        }
+
+        if ($notSalable) {
+            $products = array();
+            foreach ($notSalable as $item) {
+                $products[] = '"' . $item->getProduct()->getName() . '"';
+            }
+            $this->_RETURN_MESSAGE .= ', '.Mage::helper('wishlist')->__('Unable to add the following product(s) to shopping cart: %s.', join(', ', $products));
+        }
+
+        if ($hasOptions) {
+            $products = array();
+            foreach ($hasOptions as $item) {
+                $products[] = '"' . $item->getProduct()->getName() . '"';
+            }
+            $this->_RETURN_MESSAGE .= ', '.Mage::helper('wishlist')->__('Product(s) %s have required options. Each of them can be added to cart separately only.', join(', ', $products));
+        }
+
+        if ($addedItems) {
+            $wishlist->save();
+            $products = array();
+            foreach ($addedItems as $product) {
+                $products[] = '"' . $product->getName() . '"';
+            }
+            $this->_RETURN_MESSAGE = 
+                Mage::helper('wishlist')
+                    ->__('%d product(s) have been added to shopping cart: %s.', count($addedItems), join(', ', $products));
+            $cart->save()->getQuote()->collectTotals();
+        }
+        Mage::helper('wishlist')->calculate();
+    }
+    
     /*
      * Add Message
      */

@@ -26,7 +26,16 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
 
     public function setBuilderQuery()
     {
+        $data = $this->getData();
         $quote = $this->_getQuote();
+        if (isset($data['resourceid']) &&
+            $data['resourceid'] && isset($data['params']) &&
+            isset($data['params']['move_to_wishlist']) &&
+            $data['params']['move_to_wishlist'] &&
+            Mage::getSingleton('customer/session')->isLoggedIn()) {
+            $this->moveToWishlist($data['resourceid']);
+            $this->_RETURN_MESSAGE = Mage::helper('simiconnector')->__('Item has been moved to Wishlist');
+        }
         $this->builderQuery = $quote->getItemsCollection();
     }
 
@@ -299,6 +308,41 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
         return $this->detail_list;
     }
 
+    /*
+     * Move to Wishlist
+     */
+    public function moveToWishlist($itemId) {
+        $customer = Mage::getSingleton('customer/session')->getCustomer();
+        if ($customer->getId() && ($customer->getId() != '')) {
+            $wishlist = Mage::getModel('wishlist/wishlist')->loadByCustomer($customer, true);
+        } else {
+            Mage::throwException(
+                Mage::helper('wishlist')->__("Please login first")
+            );
+        }
+
+        $cart = $this->_getCart();
+
+        $item = $cart->getQuote()->getItemById($itemId);
+        if (!$item) {
+            Mage::throwException(
+                Mage::helper('wishlist')->__("Requested cart item doesn't exist")
+            );
+        }
+        $productId  = $item->getProductId();
+        $buyRequest = $item->getBuyRequest();
+        $wishlist->addNewItem($productId, $buyRequest);
+        $productIds[] = $productId;
+        $cart->getQuote()->removeItem($itemId);
+        $cart->save();
+        Mage::helper('wishlist')->calculate();
+        $productName = Mage::helper('core')->escapeHtml($item->getProduct()->getName());
+        $wishlistName = Mage::helper('core')->escapeHtml($wishlist->getName());
+        $this->_RETURN_MESSAGE =
+            Mage::helper('wishlist')->__("%s has been moved to wishlist %s", $productName, $wishlistName);
+        $wishlist->save();
+    }
+    
     /*
      * Add Message
      */
