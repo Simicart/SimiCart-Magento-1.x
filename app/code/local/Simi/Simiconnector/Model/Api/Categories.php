@@ -39,22 +39,37 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
         $result = parent::index();
         foreach ($result['categories'] as $index => $catData) {
             $categoryModel = Mage::getModel('catalog/category')->load($catData['entity_id']);
+            $catData = array_merge($catData, $categoryModel->getData());
             if ($image_url = $categoryModel->getImageUrl()) {
-                $result['categories'][$index]['image_url'] = $image_url;
+                $catData['image_url'] = $image_url;
             }
             if ($image = $categoryModel->getThumbnail()) {
-                $result['categories'][$index]['thumbnail_url'] = Mage::getBaseUrl('media').'catalog/category/'.$image;
+                $catData['thumbnail_url'] = Mage::getBaseUrl('media').'catalog/category/'.$image;
             }
             
+            if (isset($catData['landing_page']) && $catData['landing_page']) {
+                $layout = Mage::app()->getLayout();
+                $catData['landing_page'] = $layout->createBlock('cms/block')
+                     ->setBlockId($catData['landing_page'])
+                     ->toHtml();
+            }
+            
+            if ($categoryModel->getData('description'))
+                $catData['description'] = Mage::helper('cms')
+                    ->getPageTemplateProcessor()
+                    ->filter($catData['description']);
+
             $childCollection = Mage::getModel('catalog/category')->getCollection()
                 ->addFieldToFilter('parent_id', $catData['entity_id'])
                 ->addAttributeToFilter('is_active', 1);
             if ($this->_visible_array)
                 $childCollection->addFieldToFilter('entity_id', array('in' => $this->_visible_array));
             if ($childCollection->count() > 0)
-                $result['categories'][$index]['has_children'] = TRUE;
+                $catData['has_children'] = TRUE;
             else
-                $result['categories'][$index]['has_children'] = FALSE;
+                $catData['has_children'] = FALSE;
+            
+            $result['categories'][$index] = $catData;
         }
 
         return $result;
