@@ -169,7 +169,19 @@
                     </simi_connector_sales_quote_collect_totals_before>
                 </observers>
             </sales_quote_collect_totals_before>
-        </events> 
+
+            <sales_order_place_after>
+                <observers>
+                    <simi_connector_sales_order_place_after>
+                        <class>simiconnector/observer</class>
+                        <method>saleOrderPlaceAfter</method>
+                    </simi_connector_sales_order_place_after>
+
+                </observers>
+            </sales_order_place_after>
+
+        </events>
+
     </global>
     <default>
         <simiconnector>

@@ -36,6 +36,15 @@ class Simi_Simiconnector_IndexController extends Mage_Core_Controller_Front_Acti
 
     }
 
+    public function updateDBAction(){
+        $setup = new Mage_Core_Model_Resource_Setup('core_setup');
+        $installer = $setup;
+        $installer->startSetup();
+        $installer->getConnection()->addColumn($installer->getTable('simiconnector_device'), 'count_purchase', 'int(11)');
+        $installer->endSetup();
+        echo 'OK ADD COLUMN';
+    }
+
     public function indexAction()
     {
         $this->loadLayout();
