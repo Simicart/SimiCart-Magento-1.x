@@ -98,6 +98,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'is_show_in_row_price' =>Mage::getStoreConfig('simiconnector/config_price/price_one_row'),
                 'is_show_price_for_guest' =>Mage::getStoreConfig('simiconnector/config_price/is_show_price_for_guest'),
                 'open_url_in_app' =>Mage::getStoreConfig('simiconnector/general/open_url_in_app'),
+                'image_aspect_ratio' => Mage::getStoreConfig('simiconnector/general/image_aspect_ratio'),
                 'connector_version' => $connectorVersion
             ),
             'sales' => array(

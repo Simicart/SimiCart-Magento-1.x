@@ -129,6 +129,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </is_show_home_title>
+                        <image_aspect_ratio translate="label">
+                            <label>Banner Aspect Ratio</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1049</sort_order>
+                            <source_model>simiconnector/config_source_aspectratio</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </image_aspect_ratio>
                         <app_dedicated_coupon translate="label">
                             <label>Mobile App Dedicated Coupon</label>
                             <frontend_type>text</frontend_type>

@@ -68,6 +68,7 @@ class Simi_Simiconnector_Model_Api_Categorytrees extends Simi_Simiconnector_Mode
             }
             if (($parent_id == 0) || (($parent_id!=0) && ($category['parent_id'] == $parent_id))) {
                 $categoryModel = Mage::getModel('catalog/category')->load($category['entity_id']);
+                $category = array_merge($category, $categoryModel->getData());
                 if ($image_url = $categoryModel->getImageUrl()) {
                     $category['image_url'] = $image_url;
                 }
