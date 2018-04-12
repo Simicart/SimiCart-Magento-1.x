@@ -188,6 +188,7 @@
                 <secret_key backend_model="adminhtml/system_config_backend_encrypted"></secret_key>
                 <token_key backend_model="adminhtml/system_config_backend_encrypted"></token_key>
                 <open_url_in_app>1</open_url_in_app>
+                <image_aspect_ratio>1</image_aspect_ratio>
             </general>  
             <currency>                                           
                 <thousand_separator>,</thousand_separator>
