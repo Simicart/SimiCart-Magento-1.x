@@ -42,6 +42,41 @@ class Simi_Simiconnector_Model_Observer
         }
     }
 
+    public function sendNotificationShedule()
+    {
+
+        Mage::log('Called sendNotificationShedule ' . now(), null, 'similog.log');
+
+        $collection = Mage::getModel('simiconnector/siminotification')->getCollection()->addFieldToFilter('status_send', '1');
+
+
+        if ($collection->getSize() > 0) {
+
+            foreach ($collection as $notification) {
+                if ($notification['server_time_to_send'] && $notification['server_time_to_send']) {
+
+                    $shedule_time = ($notification['server_time_to_send']);
+
+                    if ($shedule_time <= now()) {
+                        if($notification['status_send'] == 1){
+                            Mage::helper('simiconnector/siminotification')->sendNotice($notification->toArray());
+                        }
+                        Mage::log('Send notification ' . json_encode($notification->toArray()), null, 'similog.log');
+                    } else {
+                        Mage::log('Send notification fail ' . json_encode($notification->toArray()), null, 'similog.log');
+
+                    }
+
+
+                }
+
+            }
+
+        }
+
+    }
+
+
 
     /**
      * process catalog_product_save_after event

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Simi_Simiconnector>
-            <version>0.1.2</version>
+            <version>0.1.3</version>
         </Simi_Simiconnector>
     </modules>
     <frontend>
@@ -276,4 +276,16 @@
             </config_price>
         </simiconnector>  
     </default>
+     <crontab>
+        <jobs>
+            <simiconnector_notification>
+                <schedule>
+                    <cron_expr>* * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>simiconnector/observer::sendNotificationShedule</model>
+                </run>
+            </simiconnector_notification>
+        </jobs>
+    </crontab>
 </config>

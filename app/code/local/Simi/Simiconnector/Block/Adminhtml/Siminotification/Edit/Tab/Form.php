@@ -13,6 +13,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
 
         if (Mage::getSingleton('adminhtml/session')->getSiminotificationData()) {
             $data = Mage::getSingleton('adminhtml/session')->getSiminotificationData();
+
             Mage::getSingleton('adminhtml/session')->setSiminotificationData(null);
         } elseif (Mage::registry('siminotification_data'))
             $data = Mage::registry('siminotification_data')->getData();
@@ -395,19 +396,17 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
 </div>'
         ));
 
-        $dateFormatIso = Mage::app()->getLocale()->getDateTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+    //    $dateFormatIso = Mage::app()->getLocale()->getDateTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
         $fieldset->addField('time_to_send', 'date', array(
             'label' => Mage::helper('simiconnector')->__('Time to send'),
             'bold' => true,
             'name' => 'time_to_send',
-            'image'  => $this->getSkinUrl('images/grid-cal.gif'),
-            'input_format' => $dateFormatIso,
-            'format'       => $dateFormatIso,
+            'image' => $this->getSkinUrl('images/grid-cal.gif'),
+            'input_format' => Varien_Date::DATETIME_INTERNAL_FORMAT,
+            'format' => Varien_Date::DATETIME_INTERNAL_FORMAT,
             'time' => true,
-              'readonly' => true,
-            'note' => 'Sever time : '. date("m/d/Y h:i:s a", Mage::getModel('core/date')->timestamp(time())),
+            'readonly' => true,
         ));
-
 
         $fieldset->addField('created_time', 'datetime', array(
             'label' => Mage::helper('simiconnector')->__('Created Date'),

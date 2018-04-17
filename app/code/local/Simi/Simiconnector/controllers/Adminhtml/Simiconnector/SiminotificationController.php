@@ -55,10 +55,14 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     /**
      * save item action
      */
-    public function saveAction() {
+     public function saveAction()
+    {
         if ($data = $this->getRequest()->getPost()) {
             unset($data['click']);
             unset($data['click_rate']);
+
+            $client_timezone = $data['client_timezone'];
+            unset($data['client_timezone']);
 
             if (isset($_FILES['image_url']['name']) && $_FILES['image_url']['name'] != '') {
                 try {
@@ -85,29 +89,27 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                 }
             }
 
-            if(isset($data['time_to_send']) && $data['time_to_send']){
+            if (isset($data['time_to_send']) && $data['time_to_send']) {
 
-                $data['time_to_send'] = str_replace('/','-',$data['time_to_send']);
+                $time_to_send = new Zend_Date($data['time_to_send'], Varien_Date::DATETIME_INTERNAL_FORMAT);
+                $server_time_to_send = $time_to_send->subTime($client_timezone);
+                $nowDate = new Zend_Date(now(), Varien_Date::DATETIME_INTERNAL_FORMAT);
 
-                $shedule_time =  strtotime($data['time_to_send']);
 
-                if($shedule_time > now()){
+                if ($server_time_to_send->compare($nowDate) === 1) {
                     // greater now
                     $data['status_send'] = '1'; // pending status
-
-                    $this->activeShedule(now(),$shedule_time);
-
-                }
-                else{
+                    $data['server_time_to_send'] = $server_time_to_send->toString(Varien_Date::DATETIME_INTERNAL_FORMAT);
+                    $this->activeShedule(now(), $server_time_to_send);
+                } else {
                     $data['status_send'] = '0'; // sent
                 }
             }
 
-
-
             $data['created_time'] = now();
             $model = Mage::getModel('simiconnector/siminotification');
             $data['device_id'] = $data['device_type'];
+
             $model->setData($data)
                 ->setId($this->getRequest()->getParam('id'));
             if (!$imageUrl && is_array($data['image_url'])) {
@@ -126,11 +128,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                 $model->setImageUrl($imageUrl);
             }
             try {
-                $test_data['before_save'] = $data;
                 $model->save();
-                $test_data['after_save'] = $model->getData();
                 Mage::unregister('siminotification_data');
-                //Zend_Debug::dump($test_data);die('saveAction');
 
                 Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('simiconnector')->__('Message was successfully saved'));
                 Mage::getSingleton('adminhtml/session')->setFormData(false);
@@ -142,6 +141,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
             }
             if ($this->getRequest()->getParam('back')) {
                 $this->_redirect('*/*/edit', array('id' => $model->getId()));
+                return;
+            } else if ($this->getRequest()->getParam('simi_back')) {
+                $this->_redirect('*/*/');
                 return;
             } else {
                 if ($data['image_url'])
@@ -177,8 +179,6 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                 ->setScheduledAt($timescheduled)
                 ->setStatus(Mage_Cron_Model_Schedule::STATUS_PENDING)
                 ->save();
-
-            echo json_encode($schedule->getData());
 
         } catch (Exception $e) {
             throw new Exception(Mage::helper('cron')->__('Unable to save Cron expression'));

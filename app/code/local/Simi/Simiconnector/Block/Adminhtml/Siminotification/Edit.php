@@ -24,19 +24,31 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit extends Mage_Admi
             ), -100
         );
 
-        $this->_formScripts[] = "
-			function toggleEditor() {
-				if (tinyMCE.getInstanceById('siminotification_content') == null)
-					tinyMCE.execCommand('mceAddControl', false, 'siminotification_content');
-				else
-					tinyMCE.execCommand('mceRemoveControl', false, 'siminotification_content');
-			}
+        $this->_addButton(
+            'saveandsendlater', array(
+            'label' => Mage::helper('adminhtml')->__('Save And Send Later'),
+            'onclick' => 'saveAndSendLater()',
+            'class' => 'save',
+        ), -100
+        );
 
-			function saveAndContinueEdit(){
-				editForm.submit($('edit_form').action+'back/edit/');
-			}
-			
-		";
+        $this->_formScripts[] = "
+            function toggleEditor() {
+                if (tinyMCE.getInstanceById('siminotification_content') == null)
+                    tinyMCE.execCommand('mceAddControl', false, 'siminotification_content');
+                else
+                    tinyMCE.execCommand('mceRemoveControl', false, 'siminotification_content');
+            }
+
+            function saveAndContinueEdit(){
+                editForm.submit($('edit_form').action+'back/edit/');
+            }
+            
+            function saveAndSendLater(){
+                editForm.submit($('edit_form').action+'simi_back/edit/');
+            }
+            
+        ";
     }
 
     protected function _prepareLayout()
