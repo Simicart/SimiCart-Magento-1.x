@@ -172,7 +172,8 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
 
         $incrementId = $this->_getCheckoutSession()->getLastRealOrderId();
         $orderId = Mage::getModel('sales/order')->loadByIncrementId($incrementId)->getId();
-        Mage::helper('simiconnector/checkout')->processOrderAfter($orderId, $order);
+        $data = $this->getData();
+        Mage::helper('simiconnector/checkout')->processOrderAfter($orderId, $order, $data);
         $this->order_placed_info = $order;
         Mage::dispatchEvent('simi_simiconnector_model_api_orders_onepage_store_after', array('object' => $this, 'data' => $order));
         $result = array('order' => $this->order_placed_info);

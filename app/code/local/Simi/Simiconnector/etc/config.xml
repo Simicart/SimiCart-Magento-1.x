@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Simi_Simiconnector>
-            <version>0.1.3</version>
+            <version>0.1.4</version>
         </Simi_Simiconnector>
     </modules>
     <frontend>

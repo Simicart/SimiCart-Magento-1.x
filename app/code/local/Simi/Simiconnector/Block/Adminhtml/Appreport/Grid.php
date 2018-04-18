@@ -45,6 +45,19 @@ class Simi_Simiconnector_Block_Adminhtml_Appreport_Grid extends Mage_Adminhtml_B
             )
         );
 
+        $this->addColumn(
+            'platform', array(
+                'header' => Mage::helper('sales')->__('Platform'),
+                'width' => '80px',
+                'type' => 'options',
+                'index' => 'platform',
+                'options' => [
+                    '0' => __('Native App'),
+                    '1' => __('PWA')
+                ]
+            )
+        );
+
         if (!Mage::app()->isSingleStoreMode()) {
             $this->addColumn(
                 'store_id', array(
