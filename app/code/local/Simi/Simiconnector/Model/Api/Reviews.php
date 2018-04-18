@@ -150,13 +150,13 @@ class Simi_Simiconnector_Model_Api_Reviews extends Simi_Simiconnector_Model_Api_
             $votes = array();
             foreach ($entity->getRatingVotes() as $vote) {
                 $y += ($vote->getPercent() / 20);
-                $votes[$vote->getRatingId()] = $vote->getOptionId();
+                $votes[$vote->getRatingId()] = $vote->getValue();
             }
 
             $x = (int) ($y / count($entity->getRatingVotes()));
             $info_detail = $entity->toArray($fields);
             $info_detail['rate_points'] = $x;
-            $info_detail['votes'] = (object)$votes;
+            $info_detail['votes'] = $votes;
             $info[] = $info_detail;
 
             $z = $y % 3;
