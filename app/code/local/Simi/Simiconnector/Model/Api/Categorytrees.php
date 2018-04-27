@@ -63,7 +63,7 @@ class Simi_Simiconnector_Model_Api_Categorytrees extends Simi_Simiconnector_Mode
         }
         $level+=1;
         foreach ($this->categoryArray as $category) {
-            if (($category['level'] != $level)|| (($this->_rootlevel + 4) <= $category['level'])) {
+            if ($category['level'] != $level) {
                 continue;
             }
             if (($parent_id == 0) || (($parent_id!=0) && ($category['parent_id'] == $parent_id))) {
