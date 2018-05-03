@@ -26,6 +26,9 @@ class Simi_Simiconnector_Model_Api_Urldicts extends Simi_Simiconnector_Model_Api
             $result['urldict']['simi_product_data'] = $apiModel->show();
         } else if(isset($result['urldict']['category_id']) && $result['urldict']['category_id']) {
             $apiModel = Mage::getModel('simiconnector/api_categories');
+            $result['urldict']['simi_catetory_name'] = Mage::getModel('catalog/category')
+                ->load($result['urldict']['category_id'])
+                ->getName();
             $data['resourceid'] = $result['urldict']['category_id'];
             $apiModel->pluralKey = 'categories';
             $apiModel->singularKey = 'category';
