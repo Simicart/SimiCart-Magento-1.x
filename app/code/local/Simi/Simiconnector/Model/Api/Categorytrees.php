@@ -46,12 +46,14 @@ class Simi_Simiconnector_Model_Api_Categorytrees extends Simi_Simiconnector_Mode
                 $this->categoryArray = Mage::getModel('catalog/category')
                     ->getCollection()
                     ->addFieldToFilter('entity_id', ['in' => $this->visible_array])
+                    ->addFieldToFilter('is_active', 1)
                     ->addAttributeToSelect('*')
                     ->setOrder('position', 'asc')
                     ->getData();
             } else {
                 $this->categoryArray = Mage::getModel('catalog/category')
                     ->getCollection()
+                    ->addFieldToFilter('is_active', 1)
                     ->addAttributeToSelect('*')
                     ->setOrder('position', 'asc')
                     ->getData();
