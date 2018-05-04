@@ -13,12 +13,11 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
 
         if (Mage::getSingleton('adminhtml/session')->getSiminotificationData()) {
             $data = Mage::getSingleton('adminhtml/session')->getSiminotificationData();
-
             Mage::getSingleton('adminhtml/session')->setSiminotificationData(null);
         } elseif (Mage::registry('siminotification_data'))
             $data = Mage::registry('siminotification_data')->getData();
 
-        if(isset($data['time_to_send']) && $data['time_to_send'] && $data['time_to_send'] == '0000-00-00 00:00:00'){
+        if (isset($data['time_to_send']) && $data['time_to_send'] && $data['time_to_send'] == '0000-00-00 00:00:00') {
             $data['time_to_send'] = '';
         }
 
@@ -259,9 +258,9 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
             'required' => true,
             'label' => Mage::helper('simiconnector')->__('URL'),
         ));
-        $app_icon = Mage::getBaseUrl('media'). DS . 'simi' . DS . 'simiconnector' . DS . 'applogo'.DS. Mage::getStoreConfig("simiconnector/notification/app_logo",Mage::app()->getStore()->getId());
+        $app_icon = Mage::getBaseUrl('media') . DS . 'simi' . DS . 'simiconnector' . DS . 'applogo' . DS . Mage::getStoreConfig("simiconnector/notification/app_logo", Mage::app()->getStore()->getId());
 
-        $app_name = Mage::getStoreConfig("simiconnector/notification/app_name",Mage::app()->getStore()->getId());
+        $app_name = Mage::getStoreConfig("simiconnector/notification/app_name", Mage::app()->getStore()->getId());
 
         $fieldset->addField('preview_notification', 'select', array(
             'label' => Mage::helper('simiconnector')->__('Show preview'),
@@ -293,7 +292,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                <div id="top_andorid_preview" class="top_preview android"
      style=" border-radius: 8px;background:whitesmoke;width: 400px; padding:10px 10px 45px 10px;">
 
-    <img class="img_icon" src="'.$app_icon.'" style="border-radius: 4px;width: 10%;height: 40px;float:left;">
+    <img class="img_icon" src="' . $app_icon . '" style="border-radius: 4px;width: 10%;height: 40px;float:left;">
 
     <span id="title_android_top" style="float: left; font-family: sans-serif;white-space: nowrap ;overflow: hidden;text-overflow: ellipsis; width:70%;font-size: 16px; margin: 0 2px 0 5px;">
 
@@ -313,9 +312,9 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                 <div id="top_ios_preview" class="top_preview ios"
      style="font-family: sans-serif;background:whitesmoke; border-radius: 8px;width: 400px;padding: 10px;">
 
-    <img class="img_icon" src="'.$app_icon.'" width="24px" height="24px" style=" border-radius: 4px;">
+    <img class="img_icon" src="' . $app_icon . '" width="24px" height="24px" style=" border-radius: 4px;">
 
-    <span id="company_name_ios_top" style="font-family: sans-serif; font-size: 14px;">'.$app_name.'</span>
+    <span id="company_name_ios_top" style="font-family: sans-serif; font-size: 14px;">' . $app_name . '</span>
     <span id="time_ios_top" style="font-family: sans-serif;margin: 10px 0 0 0; font-size: 12px; float: right;">Today,9:42PM</span>
 
     <p id="title_ios_top" style="font-family: sans-serif;white-space: nowrap ;overflow: hidden;text-overflow: ellipsis;margin: 5px 0 0 0; font-size: 14px; font-weight: bold;"></p>
@@ -338,7 +337,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
     </p>
 
 
-    <img class="img_popup" id="img_popup" style="padding: 10px; display: block; margin:  auto auto;" width="60%" height="auto" src="'.$app_icon.'">
+    <img class="img_popup" id="img_popup" style="padding: 10px; display: block; margin:  auto auto;" width="60%" height="auto" src="' . $app_icon . '">
 
     <p id="message_android_popup"
        style="font-family: sans-serif;display: block; margin:  auto auto;text-align: center;width: 80%;font-size: 16px; ">
@@ -367,7 +366,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
 
     </p>
 
-    <img class="img_popup" id="img_popup" style="font-family: sans-serif;padding: 10px; display: block; margin:  auto auto;" width="60%" height="auto" src="'.$app_icon.'">
+    <img class="img_popup" id="img_popup" style="font-family: sans-serif;padding: 10px; display: block; margin:  auto auto;" width="60%" height="auto" src="' . $app_icon . '">
 
     <p id="message_ios_popup" style="font-family: sans-serif;display: block; margin:  auto auto;text-align: center;width: 80%;font-size: 16px;">
 
@@ -396,7 +395,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
 </div>'
         ));
 
-    //    $dateFormatIso = Mage::app()->getLocale()->getDateTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
+        // $dateFormatIso = Mage::app()->getLocale()->getDateTimeFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
         $fieldset->addField('time_to_send', 'date', array(
             'label' => Mage::helper('simiconnector')->__('Time to send'),
             'bold' => true,
@@ -407,6 +406,13 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
             'time' => true,
             'readonly' => true,
         ));
+
+        $fieldset->addField('client_timezone','hidden',array(
+            'label' => 'Client timezone',
+            'name' => 'client_timezone',
+            'after_element_html' => '<script type="text/javascript" >var offset = new Date().getTimezoneOffset();$("client_timezone").value = (offset/60) </script>'
+        ));
+
 
         $fieldset->addField('created_time', 'datetime', array(
             'label' => Mage::helper('simiconnector')->__('Created Date'),
