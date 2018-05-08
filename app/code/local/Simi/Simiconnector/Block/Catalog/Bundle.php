@@ -38,6 +38,7 @@ class Simi_Simiconnector_Block_Catalog_Bundle extends Mage_Bundle_Block_Catalog_
             $option = array (
                 'selections' => array(),
                 'title'      => $_option->getTitle(),
+                'type'       => $_option->getType(),
                 'isMulti'    => in_array($_option->getType(), array('multi', 'checkbox')),
                 'position'   => $position++,
                 'isRequired' => $_option->getRequired(),
