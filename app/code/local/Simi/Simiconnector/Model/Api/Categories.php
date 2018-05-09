@@ -12,7 +12,7 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
     protected $_DEFAULT_ORDER = 'position';
     protected $_visible_array;
 
-    public function setBuilderQuery() 
+    public function setBuilderQuery()
     {
         $data = $this->getData();
         if (!$data['resourceid']) {
@@ -33,49 +33,89 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
         }
     }
 
-    public function index() 
+    public function index()
     {
         $data = $this->getData();
         $result = parent::index();
         foreach ($result['categories'] as $index => $catData) {
-            $categoryModel = Mage::getModel('catalog/category')->load($catData['entity_id']);
-            $catData = array_merge($catData, $categoryModel->getData());
-            if ($image_url = $categoryModel->getImageUrl()) {
-                $catData['image_url'] = $image_url;
-            }
-            if ($image = $categoryModel->getThumbnail()) {
-                $catData['thumbnail_url'] = Mage::getBaseUrl('media').'catalog/category/'.$image;
-            }
-            
-            if (isset($catData['landing_page']) && $catData['landing_page']) {
-                $layout = Mage::app()->getLayout();
-                $catData['landing_page'] = $layout->createBlock('cms/block')
-                     ->setBlockId($catData['landing_page'])
-                     ->toHtml();
-            }
-            
-            if ($categoryModel->getData('description'))
-                $catData['description'] = Mage::helper('cms')
-                    ->getPageTemplateProcessor()
-                    ->filter($catData['description']);
-
             $childCollection = Mage::getModel('catalog/category')->getCollection()
                 ->addFieldToFilter('parent_id', $catData['entity_id'])
                 ->addAttributeToFilter('is_active', 1);
+
+            if (isset($data['params']['get_child_cat']) && $data['params']['get_child_cat']) {
+                $childCollection->addAttributeToSelect('*');
+                $cateModel = Mage::getModel('catalog/category')->load($catData['entity_id']);
+                $cate_image_url = $cateModel->getImageUrl();
+                if(!$cate_image_url){
+                    $cate_image_url = Mage::getBaseUrl('media').'catalog/category/'.$cateModel->getThumbnail();
+                }
+                $result['categories'][$index]['thumbnail'] = $cate_image_url;
+            }
+
             if ($this->_visible_array)
                 $childCollection->addFieldToFilter('entity_id', array('in' => $this->_visible_array));
             if ($childCollection->count() > 0)
-                $catData['has_children'] = TRUE;
+            {
+                $result['categories'][$index]['has_children'] = TRUE;
+                if (isset($data['params']['get_child_cat']) && $data['params']['get_child_cat']) {
+
+                    $get_child_cat_level = $data['params']['get_child_cat'];
+
+                    $childArray = array();
+                    foreach ($childCollection as $childCat) {
+                        $childInfo = $childCat->toArray();
+                        $grandchildCollection = $this->getVisibleChildren($childCat->getId());
+                        if ($grandchildCollection->count() > 0){
+
+                            if($get_child_cat_level == 2){
+                                $grandChildInfo = array();
+                                foreach ($grandchildCollection as $grandChildCat){
+                                    $grandChildInfo[] = $grandChildCat->toArray();
+                                }
+                                $childInfo['children'] = $grandChildInfo;
+                            }
+
+                            $childInfo['has_children'] = TRUE;
+                        }
+                        else{
+                            $childInfo['has_children'] = FALSE;
+                        }
+
+                        $childArray[] = $childInfo;
+                    }
+
+                    $result['categories'][$index]['children'] = $childArray;
+
+                }
+
+            }
             else
-                $catData['has_children'] = FALSE;
-            
-            $result['categories'][$index] = $catData;
+            {
+                $result['categories'][$index]['has_children'] = FALSE;
+            }
+
         }
 
         return $result;
     }
 
-    public function show() 
+    public function getVisibleChildren($catId)
+    {
+        $category = Mage::getModel('catalog/category')->load($catId);
+        if (is_array($category->getChildrenCategories())) {
+            $childArray = $category->getChildrenCategories();
+            $idArray = array();
+            foreach ($childArray as $childArrayItem) {
+                $idArray[] = $childArrayItem->getId();
+            }
+
+            return Mage::getModel('catalog/category')->getCollection()->addAttributeToSelect('*')->addFieldToFilter('entity_id', array('in' => $idArray));
+        }
+
+        return $category->getChildrenCategories()->addAttributeToSelect('*');
+    }
+
+    public function show()
     {
         return $this->index();
     }
