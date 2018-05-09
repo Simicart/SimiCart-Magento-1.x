@@ -12,13 +12,13 @@ class Simi_Simiconnector_Model_Api_Homecategories extends Simi_Simiconnector_Mod
     protected $_DEFAULT_ORDER = 'sort_order';
     protected $_visible_array;
 
-    public function setSingularKey($singularKey) 
+    public function setSingularKey($singularKey)
     {
         $this->singularKey = 'Homecategory';
         return $this;
     }
 
-    public function setBuilderQuery() 
+    public function setBuilderQuery()
     {
         $data = $this->getData();
         if (isset($data['resourceid']) && $data['resourceid']) {
@@ -28,17 +28,17 @@ class Simi_Simiconnector_Model_Api_Homecategories extends Simi_Simiconnector_Mod
         }
     }
 
-    public function getCollection() 
+    public function getCollection()
     {
         $typeID = Mage::helper('simiconnector')->getVisibilityTypeId('homecategory');
         $visibilityTable = Mage::getSingleton('core/resource')->getTableName('simiconnector/visibility');
         $simicategoryCollection = Mage::getModel('simiconnector/simicategory')->getCollection()->addFieldToFilter('status', '1');
         $simicategoryCollection->getSelect()
-                ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.simicategory_id AND visibility.content_type = ' . $typeID . ' AND visibility.store_view_id =' . Mage::app()->getStore()->getId());
+            ->join(array('visibility' => $visibilityTable), 'visibility.item_id = main_table.simicategory_id AND visibility.content_type = ' . $typeID . ' AND visibility.store_view_id =' . Mage::app()->getStore()->getId());
         return $simicategoryCollection;
     }
 
-    public function index() 
+    public function index()
     {
         $result = parent::index();
         $data = $this->getData();
@@ -63,14 +63,29 @@ class Simi_Simiconnector_Model_Api_Homecategories extends Simi_Simiconnector_Mod
             if ($childCollection->count() > 0) {
                 $item['has_children'] = TRUE;
                 if (isset($data['params']['get_child_cat']) && $data['params']['get_child_cat']) {
+
+                    $get_child_cat_level = $data['params']['get_child_cat'];
+
                     $childArray = array();
                     foreach ($childCollection as $childCat) {
                         $childInfo = $childCat->toArray();
                         $grandchildCollection = $this->getVisibleChildren($childCat->getId());
-                        if ($grandchildCollection->count() > 0)
+                        if ($grandchildCollection->count() > 0){
+
+                            if($get_child_cat_level == 2){
+                                $grandChildInfo = array();
+                                foreach ($grandchildCollection as $grandChildCat){
+                                    $grandChildInfo[] = $grandChildCat->toArray();
+                                }
+                                $childInfo['children'] = $grandChildInfo;
+                            }
+
                             $childInfo['has_children'] = TRUE;
-                        else
+                        }
+                        else{
                             $childInfo['has_children'] = FALSE;
+                        }
+
                         $childArray[] = $childInfo;
                     }
 
@@ -91,7 +106,7 @@ class Simi_Simiconnector_Model_Api_Homecategories extends Simi_Simiconnector_Mod
      * Return Child Cat collection
      */
 
-    public function getVisibleChildren($catId) 
+    public function getVisibleChildren($catId)
     {
         $category = Mage::getModel('catalog/category')->load($catId);
         if (is_array($category->getChildrenCategories())) {
