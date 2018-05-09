@@ -195,6 +195,7 @@ function changeImage(input) {
         var reader = new FileReader();
 
         reader.onload = function(e) {
+            image_url_uploaded = e.target.result;
             $$(".img_popup").each( function(img){ img.src=e.target.result } );
 
         }
