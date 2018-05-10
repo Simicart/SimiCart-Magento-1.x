@@ -80,7 +80,7 @@ class Simi_Simiconnector_Model_Api_Categorytrees extends Simi_Simiconnector_Mode
 
                 if (isset($catData['landing_page']) && $catData['landing_page']) {
                     $layout = Mage::app()->getLayout();
-                    $catData['landing_page'] = $layout->createBlock('cms/block')
+                    $catData['landing_page_cms'] = $layout->createBlock('cms/block')
                         ->setBlockId($catData['landing_page'])
                         ->toHtml();
                 }
