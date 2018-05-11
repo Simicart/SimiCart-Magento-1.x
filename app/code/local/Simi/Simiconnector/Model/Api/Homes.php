@@ -28,7 +28,11 @@ class Simi_Simiconnector_Model_Api_Homes extends Simi_Simiconnector_Model_Api_Ab
         
         //get cache
         if (isset($data['resourceid']) && ($data['resourceid']=='lite')) {
-            $filePath = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . "cache" . DS . $storeId . DS . "home_cached.json";
+            if(isset($data['params']['get_child_cat']) && $data['params']['get_child_cat'] == '1') {
+                $filePath = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . "cache" . DS . $storeId . DS . "home_child_cat_cached.json";
+            } else {
+                $filePath = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . "cache" . DS . $storeId . DS . "home_cached.json";
+            }
             if (file_exists($filePath)) {
                 $homeJson = file_get_contents($filePath);
                 if ($homeJson) {
@@ -83,7 +87,11 @@ class Simi_Simiconnector_Model_Api_Homes extends Simi_Simiconnector_Model_Api_Ab
 
                 }
             }
-            $filePath = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . "cache" . DS . $storeId . DS . "home_cached.json";
+            if(isset($data['params']['get_child_cat']) && $data['params']['get_child_cat'] == '1') {
+                $filePath = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . "cache" . DS . $storeId . DS . "home_child_cat_cached.json";
+            } else {
+                $filePath = Mage::getBaseDir('media') . DS . 'simi' . DS . 'simiconnector' . DS . "cache" . DS . $storeId . DS . "home_cached.json";
+            }
             
             if (!file_exists($filePath)) {
                 $file = @fopen($filePath, 'w+');
