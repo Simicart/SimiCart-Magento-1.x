@@ -201,6 +201,7 @@
                 <token_key backend_model="adminhtml/system_config_backend_encrypted"></token_key>
                 <open_url_in_app>1</open_url_in_app>
                 <image_aspect_ratio>1</image_aspect_ratio>
+                <show_newsletter>0</show_newsletter>
             </general>  
             <currency>                                           
                 <thousand_separator>,</thousand_separator>

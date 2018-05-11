@@ -165,6 +165,11 @@ class Simi_Simiconnector_Model_Customer extends Mage_Core_Model_Abstract
             $customer->setSuffix($data->suffix);
         }
 
+        if (isset($data->news_letter) && ($data->news_letter == '1'))
+            Mage::getModel('newsletter/subscriber')->subscribe($data->email);
+        else
+            Mage::getModel('newsletter/subscriber')->loadByEmail($data->email)->unsubscribe();
+
         $customerErrors = $customer->validate();
         if (is_array($customerErrors))
             throw new Exception($this->_helperCustomer()->__('Invalid profile information'), 4);

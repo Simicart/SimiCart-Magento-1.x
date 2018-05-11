@@ -155,6 +155,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </open_url_in_app>
+                        <show_newsletter translate="label">
+                            <label>Show newsletter for app</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1299</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_newsletter>
                     </fields>
                 </general>
                 <currency translate="label">

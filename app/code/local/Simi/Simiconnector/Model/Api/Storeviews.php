@@ -150,6 +150,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 ),
                 'account_option' => array(
                     'taxvat_show' => Mage::getStoreConfig('customer/create_account/vat_frontend_visibility'),
+                    'show_newsletter' =>Mage::getStoreConfig('simiconnector/general/show_newsletter'),
                 ),
             ),
             'wishlist' => array(

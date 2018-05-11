@@ -91,13 +91,20 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
 
     public function getDetail($info) 
     {
+        $resultArray = parent::getDetail($info);
+
         if ($this->_RETURN_MESSAGE) {
-            $resultArray = parent::getDetail($info);
             $resultArray['message'] = array($this->_RETURN_MESSAGE);
-            return $resultArray;
         }
 
-        return parent::getDetail($info);
+        if(isset($resultArray['customer']) && isset($resultArray['customer']['email'])
+            && Mage::getModel('newsletter/subscriber')->loadByEmail($resultArray['customer']['email'])->isSubscribed()) {
+            $resultArray['customer']['news_letter'] = '1';
+        } else {
+            $resultArray['customer']['news_letter'] = '0';
+        }
+
+        return $resultArray;
     }
     
     /*
