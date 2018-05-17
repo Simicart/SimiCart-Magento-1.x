@@ -15,6 +15,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     public function indexAction() {
         $this->_initAction()
             ->renderLayout();
+        Mage::getSingleton('admin/session')->setSelectedDevie(null);
     }
 
     /**
@@ -359,6 +360,15 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
 
     public function chooseDevicesAction() {
         $request = $this->getRequest();
+
+        $selected_params  = $request->getParam('selected');
+
+        $array_selected_params = explode(',',$selected_params);
+        Mage::getSingleton('admin/session')->setSelectedDevie(null);
+        Mage::getSingleton('admin/session')->setSelectedDevie($array_selected_params);
+
+        $request->setPost('selected',null);
+
         echo '<p class="note"><span id="note_devices_pushed_number"> </span> <span> '.Mage::helper('simiconnector')->__('Device(s) Selected').'</span></p>';
 
         $block = $this->getLayout()->createBlock(

@@ -432,7 +432,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
             'label' => Mage::helper('simiconnector')->__('Device IDs'),
             'note' => Mage::helper('simiconnector')->__('Select your Devices'),
             'after_element_html' => '
-                <a id="product_link" href="javascript:void(0)" onclick="toggleMainDevices()"><img src="' . $this->getSkinUrl('images/rule_chooser_trigger.gif') . '" alt="" class="v-middle rule-chooser-trigger" title="Select Device"></a>
+                 <a id="product_link" href="javascript:void(0)" onclick="toggleMainDevices()"><img src="' . $this->getSkinUrl('images/rule_chooser_trigger.gif') . '" alt="" class="v-middle rule-chooser-trigger" title="Select Device"></a>
                 <input type="hidden" value="' . $deviceIds . '" id="device_all_ids"/>
                 <div id="main_devices_select" style="display:none"></div>  
                 <script type="text/javascript">
@@ -452,8 +452,9 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                             }else if(check == 2){
                                 $("devices_pushed").value = "";
                             }
-                            var params = $("devices_pushed").value.split(", ");
-                            var parameters = {"form_key": FORM_KEY,"selected[]":params };
+                            
+                            var params = $("devices_pushed").value;
+                            var parameters = {"form_key": FORM_KEY,"selected":params };
                             var request = new Ajax.Request(url,
                                 {
                                     evalScripts: true,
@@ -480,7 +481,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                     griddevice = window[div.id+"JsObject"];
                     if(!griddevice.reloadParams){
                         griddevice.reloadParams = {};
-                        griddevice.reloadParams["selected[]"] = $("devices_pushed").value.split(", ");
+                        griddevice.reloadParams["selected"] = $("devices_pushed").value;
                     }
                 }
                 function toogleCheckAllDevices(el){
@@ -493,7 +494,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                                     else
                                         $("devices_pushed").value = $("devices_pushed").value + ", "+e.value;
                                     e.checked = true;
-                                    griddevice.reloadParams["selected[]"] = $("devices_pushed").value.split(", ");
+                                    griddevice.reloadParams["selected"] = $("devices_pushed").value;
                                 }
                             }
                         });
@@ -509,7 +510,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                                         $("devices_pushed").value = $("devices_pushed").value.replace(", "+ vl,"");
                                     }
                                     e.checked = false;
-                                    griddevice.reloadParams["selected[]"] = $("devices_pushed").value.split(", ");
+                                    griddevice.reloadParams["selected"] = $("devices_pushed").value;
                                 }
                             }
                         });
@@ -526,7 +527,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                                 else
                                     $("devices_pushed").value = $("devices_pushed").value + ", "+e.value;
                                 e.checked == false;
-                                griddevice.reloadParams["selected[]"] = $("devices_pushed").value.split(", ");
+                                griddevice.reloadParams["selected"] = $("devices_pushed").value;
                             }
                         }else{
                              if(e.id == "main_on"){
@@ -542,7 +543,7 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                                     $("devices_pushed").value = $("devices_pushed").value.replace(", "+ vl,"");
                                 }
                                 e.checked == false;
-                                griddevice.reloadParams["selected[]"] = $("devices_pushed").value.split(", ");
+                                griddevice.reloadParams["selected"] = $("devices_pushed").value;
                             }
                         }
                         updateNumberSeleced();

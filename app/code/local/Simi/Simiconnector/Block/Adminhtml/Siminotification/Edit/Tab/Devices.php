@@ -285,12 +285,13 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
     }
 
     protected function _getSelectedDevices() {
-        $devices = $this->getRequest()->getPost('selected', array());
-        if (!$devices) {
-            if ($this->getRequest()->getParam('selected_ids')) {
-                $devices = explode(',', $this->getRequest()->getParam('selected_ids'));
-            }
-        }
+        $devices =  Mage::getSingleton('admin/session')->getSelectedDevie();
+//        $devices = $this->getRequest()->getPost('selected', array());
+//        if (!$devices) {
+//            if ($this->getRequest()->getParam('selected_ids')) {
+//                $devices = explode(',', $this->getRequest()->getParam('selected_ids'));
+//            }
+//        }
         return $devices;
     }
 
