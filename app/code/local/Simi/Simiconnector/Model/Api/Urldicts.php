@@ -6,6 +6,8 @@ class Simi_Simiconnector_Model_Api_Urldicts extends Simi_Simiconnector_Model_Api
         $data = $this->getData();
         if (isset($data['resourceid']) && $data['resourceid']) {
             $requestPath = $data['params']['url'];
+            $requestPath = explode('?', $requestPath);
+            $requestPath = $requestPath[0];
             $urlModel = Mage::getResourceModel('catalog/url');
             $this->builderQuery = $urlModel->getRewriteByRequestPath($requestPath, Mage::app()->getStore()->getId());
             if (!$this->builderQuery)
