@@ -42,6 +42,9 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
                     else
                         throw new Exception($this->_helper->__('Logout Failed'), 4);
                     break;
+                case 'checkexisting':
+                    $this->builderQuery = Mage::getModel('simiconnector/customer')->getCustomerByEmail($data['params']['customer_email']);
+                    break;
                 default:
                     $this->builderQuery = Mage::getModel('customer/customer')->setWebsiteId(Mage::app()->getStore()->getWebsiteId())->load($data['resourceid']);
                     if (!$this->builderQuery->getId())
