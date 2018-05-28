@@ -486,34 +486,22 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                 }
                 function toogleCheckAllDevices(el){
                     if(el == true){
-                        $$("#main_devices_select input[type=checkbox][class=checkbox]").each(function(e){
-                            if(e.name != "check_all"){
-                                if(!e.checked){
-                                    if($("devices_pushed").value == "")
-                                        $("devices_pushed").value = e.value;
-                                    else
-                                        $("devices_pushed").value = $("devices_pushed").value + ", "+e.value;
-                                    e.checked = true;
-                                    griddevice.reloadParams["selected"] = $("devices_pushed").value;
+                        var url = "' . Mage::helper('adminhtml')->getUrl('adminhtml/simiconnector_siminotification/selectAllDevices') . '?storeview_id="+$("storeview_id").value;
+                        
+                        var parameters = {"form_key": FORM_KEY,"is_all_ids":"1"};
+                        var request = new Ajax.Request(url,
+                            {
+                                method: "POST",
+                                evalScripts: true,
+                                parameters: parameters,
+                                onComplete:function(transport){
+                                     $("devices_pushed").value  = transport.responseText;
+                                 $("main_devices_select").style.display = "none";   
                                 }
-                            }
-                        });
+                            });
                     }else{
-                        $$("#main_devices_select input[type=checkbox][class=checkbox]").each(function(e){
-                            if(e.name != "check_all"){
-                                if(e.checked){
-                                    var vl = e.value;
-                                    if($("devices_pushed").value.search(vl) == 0){
-                                        if($("devices_pushed").value == vl) $("devices_pushed").value = "";
-                                        $("devices_pushed").value = $("devices_pushed").value.replace(vl+", ","");
-                                    }else{
-                                        $("devices_pushed").value = $("devices_pushed").value.replace(", "+ vl,"");
-                                    }
-                                    e.checked = false;
-                                    griddevice.reloadParams["selected"] = $("devices_pushed").value;
-                                }
-                            }
-                        });
+                        $("devices_pushed").value = "";
+                        $("main_devices_select").style.display = "none";
                     }
                     updateNumberSeleced();
                 }

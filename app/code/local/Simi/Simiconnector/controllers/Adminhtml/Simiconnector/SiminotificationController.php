@@ -1,8 +1,10 @@
 <?php
 
-class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController extends Mage_Adminhtml_Controller_Action {
+class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController extends Mage_Adminhtml_Controller_Action
+{
 
-    protected function _initAction() {
+    protected function _initAction()
+    {
         $this->loadLayout()
             ->_setActiveMenu('simiconnector/siminotification')
             ->_addBreadcrumb(Mage::helper('adminhtml')->__('Items Manager'), Mage::helper('adminhtml')->__('Item Manager'));
@@ -12,7 +14,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     /**
      * index action
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->_initAction()
             ->renderLayout();
         Mage::getSingleton('admin/session')->setSelectedDevie(null);
@@ -21,7 +24,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     /**
      * view and edit item action
      */
-    public function editAction() {
+    public function editAction()
+    {
         $id = $this->getRequest()->getParam('id');
         $model = Mage::getModel('simiconnector/siminotification')->load($id);
 
@@ -49,14 +53,15 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
         }
     }
 
-    public function newAction() {
+    public function newAction()
+    {
         $this->_forward('edit');
     }
 
     /**
      * save item action
      */
-     public function saveAction()
+    public function saveAction()
     {
         if ($data = $this->getRequest()->getPost()) {
             unset($data['click']);
@@ -169,7 +174,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     }
 
 
-    public function activeShedule($timecreated,$timescheduled)
+    public function activeShedule($timecreated, $timescheduled)
     {
 
         $jobCode = 'simiconnector_notification';
@@ -190,7 +195,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     /**
      * delete item action
      */
-    public function deleteAction() {
+    public function deleteAction()
+    {
         if ($this->getRequest()->getParam('id') > 0) {
             try {
                 $model = Mage::getModel('simiconnector/siminotification');
@@ -209,7 +215,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     /**
      * mass delete item(s) action
      */
-    public function massDeleteAction() {
+    public function massDeleteAction()
+    {
         $messageIds = $this->getRequest()->getParam('simiconnector');
 
         if (!is_array($messageIds)) {
@@ -229,23 +236,25 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     }
 
 
-    protected function _isAllowed() {
+    protected function _isAllowed()
+    {
         return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
     }
 
 
-    public function guideAction() {
+    public function guideAction()
+    {
         $this->loadLayout();
         $this->getLayout()->getBlock('head')->setTitle($this->__('Google Application Guide'));
         $this->renderLayout();
     }
 
-    public function chooserMainCategoriesAction() {
+    public function chooserMainCategoriesAction()
+    {
         $request = $this->getRequest();
         $id = $request->getParam('selected', array());
         $block = $this->getLayout()->createBlock('simiconnector/adminhtml_siminotification_edit_tab_categories', 'maincontent_category', array('js_form_object' => $request->getParam('form')))
-            ->setCategoryIds($id)
-        ;
+            ->setCategoryIds($id);
 
         if ($block) {
             $this->getResponse()->setBody($block->toHtml());
@@ -255,8 +264,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     /**
      * Get tree node (Ajax version)
      */
-    public function categoriesJsonAction() {
-        if ($categoryId = (int) $this->getRequest()->getPost('id')) {
+    public function categoriesJsonAction()
+    {
+        if ($categoryId = (int)$this->getRequest()->getPost('id')) {
             $this->getRequest()->setParam('id', $categoryId);
 
             if (!$category = $this->_initCategory()) {
@@ -274,9 +284,10 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
      *
      * @return Mage_Catalog_Model_Category
      */
-    protected function _initCategory() {
-        $categoryId = (int) $this->getRequest()->getParam('id', false);
-        $storeId = (int) $this->getRequest()->getParam('store');
+    protected function _initCategory()
+    {
+        $categoryId = (int)$this->getRequest()->getParam('id', false);
+        $storeId = (int)$this->getRequest()->getParam('store');
 
         $category = Mage::getModel('catalog/category');
         $category->setStoreId($storeId);
@@ -298,7 +309,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
         return $category;
     }
 
-    public function categoriesJson2Action() {
+    public function categoriesJson2Action()
+    {
         $this->_initItem();
         $this->getResponse()->setBody(
             $this->getLayout()->createBlock('simiconnector/adminhtml_siminotification_edit_tab_categories')
@@ -306,7 +318,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
         );
     }
 
-    public function chooserMainProductsAction() {
+    public function chooserMainProductsAction()
+    {
         $request = $this->getRequest();
         $block = $this->getLayout()->createBlock(
             'simiconnector/adminhtml_siminotification_edit_tab_products', 'promo_widget_chooser_sku', array('js_form_object' => $request->getParam('form'),
@@ -316,12 +329,13 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
         }
     }
 
-    public function filterStateCityAction(){
+    public function filterStateCityAction()
+    {
         $is_state = $this->getRequest()->getParam('is_state');
         $country_code = $this->getRequest()->getParam('country_code');
         $city_code = $this->getRequest()->getParam('city_code');
-        if($is_state == 1) {
-            if($country_code) {
+        if ($is_state == 1) {
+            if ($country_code) {
                 $states = Mage::helper('simiconnector/siminotification')->getListState($country_code);
                 if (count($states) > 0) {
                     $states_response = "<option value=''> </option>";
@@ -332,20 +346,19 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                 }
             }
             echo '';
-        }
-        else {
-            $array = explode('_',$city_code);
-            if(count($array)){
+        } else {
+            $array = explode('_', $city_code);
+            if (count($array)) {
                 $city_code = $array[0];
             }
-            $counties =Mage::getModel('romcity/romcity')->getCollection()->addFieldToFilter('country_id', $country_code)
+            $counties = Mage::getModel('romcity/romcity')->getCollection()->addFieldToFilter('country_id', $country_code)
                 ->addFieldToFilter('region_id', $city_code);
-            if(count($counties) > 0){
+            if (count($counties) > 0) {
                 $counties_response = "<option value=''></option>";
-                foreach ($counties as $county){
+                foreach ($counties as $county) {
                     $full_city_name = $county->getData('cityname');
-                    $city_name = trim( str_replace('Quận','',$full_city_name));
-                    $counties_response  .= "<option value='".$city_name."'>".$full_city_name." </option>";
+                    $city_name = trim(str_replace('Quận', '', $full_city_name));
+                    $counties_response .= "<option value='" . $city_name . "'>" . $full_city_name . " </option>";
                 }
                 echo $counties_response;
             }
@@ -358,23 +371,23 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
      * Get Device to Push Notification
      */
 
-    public function chooseDevicesAction() {
+    public function chooseDevicesAction()
+    {
         $request = $this->getRequest();
 
-        $selected_params  = $request->getParam('selected');
+        $selected_params = $request->getParam('selected');
 
-        $array_selected_params = explode(',',$selected_params);
+        $array_selected_params = explode(',', $selected_params);
         Mage::getSingleton('admin/session')->setSelectedDevie(null);
         Mage::getSingleton('admin/session')->setSelectedDevie($array_selected_params);
 
-        $request->setPost('selected',null);
+        $request->setPost('selected', null);
 
-        echo '<p class="note"><span id="note_devices_pushed_number"> </span> <span> '.Mage::helper('simiconnector')->__('Device(s) Selected').'</span></p>';
+        echo '<p class="note"><span id="note_devices_pushed_number"> </span> <span> ' . Mage::helper('simiconnector')->__('Device(s) Selected') . '</span></p>';
 
         $block = $this->getLayout()->createBlock(
             'simiconnector/adminhtml_siminotification_edit_tab_devices', 'promo_widget_chooser_device_id', array('js_form_object' => $request->getParam('form'),
         ));
-
 
 
         if ($block) {
@@ -423,8 +436,103 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
     }
 </script>';
 
-            $this->getResponse()->setBody($block->toHtml().$script);
+            $this->getResponse()->setBody($block->toHtml() . $script);
         }
     }
+
+    public function selectAllDevicesAction()
+    {
+        $storeview_id = (int)$this->getRequest()->getParam('storeview_id', false);
+        $collection = Mage::getModel('simiconnector/device')->getCollection()->addFieldToFilter('storeview_id', $storeview_id);
+
+            $grid_url_string = $this->getRequest()->getParam('grid_url');
+
+            $grid_url_array = explode('/', $grid_url_string);
+
+            $is_find_filter = false;
+            $filter_value = null;
+            $test_data = array();
+            $i = 0;
+            foreach ($grid_url_array as $key => $value) {
+                $test_data[$i]['key'] = $key;
+                $test_data[$i]['value'] = $value;
+                $i++;
+
+                if ($is_find_filter) {
+                    $filter_value = $value;
+                    break;
+                }
+                if (strpos($value, 'filter') !== false) {
+                    $is_find_filter = true;
+                }
+            }
+
+            if ($is_find_filter && $filter_value) {
+                $filter_value_array = Mage::helper('adminhtml')->prepareFilterString($filter_value);
+                //{"user_email":"wilkydoo@me.com","plaform_id":"1","country":"US","city":"Utah","count_purchase":{"from":"0","to":"203"},"is_demo":"1","created_time":{"from":"02\/1\/2018","to":"05\/23\/2018","locale":"en_US"},"app_id":"com.simicart.enterprise","build_version":"0.1.0"}
+
+                foreach ($filter_value_array as $key => $value) {
+                    if ($key && $value) {
+
+                        if (strpos($key, 'count_purchase') !== false) {
+                            $from_value = $value['from'];
+                            $to_value = $value['to'];
+
+                            $collection->addFieldToFilter('count_purchase', array('gteq'=>$from_value));
+                            $collection->addFieldToFilter('count_purchase', array('lteq'=>$to_value));
+
+                        } else if (strpos($key, 'created_time') !== false) {
+//                            $from_value = $value['from'];
+//                            $to_value = $value['to'];
+//                            $locale = $value['locale'];
+//
+//                            $from_date = $this->_convertDate($from_value,$locale);
+//                            $to_date = $this->_convertDate($to_value,$locale);
+//
+//                            $collection->addFieldToFilter('created_time', array('gteq'=>$from_date));
+//                            $collection->addFieldToFilter('created_time', array('lteq'=>$to_date));
+
+                        } else {
+                            $collection->addFieldToFilter($key, $value);
+                        }
+                    }
+                }
+            }
+
+        $ids = array();
+        foreach ($collection as $device) {
+            $ids[] = $device->getId();
+        }
+
+        $this->getResponse()->setBody(implode(', ', $ids));
+    }
+
+//    protected function _convertDate($date, $locale)
+//    {
+//        try {
+//            $dateObj = Mage::app()->getLocale()->date(null, null, $locale, false);
+//
+//            //set default timezone for store (admin)
+//            $dateObj->setTimezone(
+//                Mage::app()->getStore()->getConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE)
+//            );
+//
+//            //set begining of day
+//            $dateObj->setHour(00);
+//            $dateObj->setMinute(00);
+//            $dateObj->setSecond(00);
+//
+//            //set date with applying timezone of store
+//            $dateObj->set($date, Zend_Date::DATE_SHORT, $locale);
+//
+//            //convert store date to default date in UTC timezone without DST
+//            $dateObj->setTimezone(Mage_Core_Model_Locale::DEFAULT_TIMEZONE);
+//
+//            return $dateObj;
+//        }
+//        catch (Exception $e) {
+//            return null;
+//        }
+//    }
 
 }

@@ -278,7 +278,6 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
         return $this->getUrl('*/*/chooseDevices', array(
             '_current' => true,
             'current_grid_id' => $this->getId(),
-            'selected_ids' => implode(',', $this->_getSelectedDevices()),
             'storeview_id' => $this->storeview_id,
             'collapse' => null
         ));
@@ -286,12 +285,6 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Devices exten
 
     protected function _getSelectedDevices() {
         $devices =  Mage::getSingleton('admin/session')->getSelectedDevie();
-//        $devices = $this->getRequest()->getPost('selected', array());
-//        if (!$devices) {
-//            if ($this->getRequest()->getParam('selected_ids')) {
-//                $devices = explode(',', $this->getRequest()->getParam('selected_ids'));
-//            }
-//        }
         return $devices;
     }
 
