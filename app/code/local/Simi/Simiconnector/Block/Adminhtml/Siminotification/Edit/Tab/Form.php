@@ -486,9 +486,10 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
                 }
                 function toogleCheckAllDevices(el){
                     if(el == true){
+                    
                         var url = "' . Mage::helper('adminhtml')->getUrl('adminhtml/simiconnector_siminotification/selectAllDevices') . '?storeview_id="+$("storeview_id").value;
                         
-                        var parameters = {"form_key": FORM_KEY,"is_all_ids":"1"};
+                        var parameters = {"form_key": FORM_KEY,"is_all_ids":"1","grid_url":griddevice.url};
                         var request = new Ajax.Request(url,
                             {
                                 method: "POST",

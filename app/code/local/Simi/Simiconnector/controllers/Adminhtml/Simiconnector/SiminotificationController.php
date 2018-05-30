@@ -445,6 +445,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
         $storeview_id = (int)$this->getRequest()->getParam('storeview_id', false);
         $collection = Mage::getModel('simiconnector/device')->getCollection()->addFieldToFilter('storeview_id', $storeview_id);
 
+           
 
         $grid_url_string = $this->getRequest()->getParam('grid_url');
 
@@ -452,12 +453,8 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
 
         $is_find_filter = false;
         $filter_value = null;
-        $test_data = array();
-        $i = 0;
+        
         foreach ($grid_url_array as $key => $value) {
-            $test_data[$i]['key'] = $key;
-            $test_data[$i]['value'] = $value;
-            $i++;
 
             if ($is_find_filter) {
                 $filter_value = $value;
