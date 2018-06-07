@@ -42,10 +42,13 @@ class Simi_Simiconnector_Model_Observer
         }
     }
 
-    public function sendNotificationShedule()
+     public function sendNotificationShedule()
     {
+        $server_timezone = date('Z')/3600;
+        $nowDate = new Zend_Date(now(), Varien_Date::DATETIME_INTERNAL_FORMAT);
 
-        Mage::log('Called sendNotificationShedule ' . now(), null, 'similog.log');
+        $normal_server_time = $nowDate->subTime($server_timezone);
+        Mage::log('Called sendNotificationShedule '.$nowDate.' server timezone  '.$server_timezone.' normal server time  '.$normal_server_time, null, 'similog.log');
 
         $collection = Mage::getModel('simiconnector/siminotification')->getCollection()->addFieldToFilter('status_send', '1');
 
@@ -56,14 +59,15 @@ class Simi_Simiconnector_Model_Observer
                 if ($notification['server_time_to_send'] && $notification['server_time_to_send']) {
 
                     $shedule_time = ($notification['server_time_to_send']);
+                    $server_time_to_send = new Zend_Date($shedule_time, Varien_Date::DATETIME_INTERNAL_FORMAT);
 
-                    if ($shedule_time <= now()) {
-                        if($notification['status_send'] == 1){
-                            Mage::helper('simiconnector/siminotification')->sendNotice($notification->toArray());
-                        }
+                    if ($server_time_to_send->compare($normal_server_time) === 1) {
+                    //if ($shedule_time <= now()) {
+                        Mage::helper('simiconnector/siminotification')->sendNotice($notification->toArray());
+
                         Mage::log('Send notification ' . json_encode($notification->toArray()), null, 'similog.log');
                     } else {
-                        Mage::log('Send notification fail ' . json_encode($notification->toArray()), null, 'similog.log');
+                        Mage::log('Checked  ' . $server_time_to_send, null, 'similog.log');
 
                     }
 

@@ -96,18 +96,24 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
             }
 
             if (isset($data['time_to_send']) && $data['time_to_send']) {
-
                 $time_to_send = new Zend_Date($data['time_to_send'], Varien_Date::DATETIME_INTERNAL_FORMAT);
+
                 $server_time_to_send = $time_to_send->subTime($client_timezone);
+
                 $nowDate = new Zend_Date(now(), Varien_Date::DATETIME_INTERNAL_FORMAT);
 
+                $server_timezone = date('Z')/3600;
 
-                if ($server_time_to_send->compare($nowDate) === 1) {
+                $normal_server_time = $nowDate->subTime($server_timezone);
+
+
+                if ($server_time_to_send->compare($normal_server_time) === 1) {
                     // greater now
                     $data['status_send'] = '1'; // pending status
                     $data['server_time_to_send'] = $server_time_to_send->toString(Varien_Date::DATETIME_INTERNAL_FORMAT);
                     $this->activeShedule(now(), $server_time_to_send);
                 } else {
+
                     $data['status_send'] = '0'; // sent
                 }
             }
