@@ -95,7 +95,8 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract
         $street = $data->getStreet();
         if (!($email = $data->getData('email')) && $customer && $customer->getEmail())
             $email = $customer->getEmail();
-        return array(
+
+        $detail = array(
             'firstname' => $data->getFirstname(),
             'lastname' => $data->getLastname(),
             'prefix' => $data->getPrefix(),
@@ -115,7 +116,13 @@ class Simi_Simiconnector_Helper_Address extends Mage_Core_Helper_Abstract
             'fax' => $data->getFax(),
             'latlng' => isset($street[2]) ? $street[2] : "",
         );
+        if($customer != null){
+            $detail['is_default_billing'] = $customer->getDefaultBilling()  == $data->getId();
+            $detail['is_default_shipping'] = $customer->getDefaultShipping()  == $data->getId();
+        }
+        return $detail;
     }
+
 
     /*
      * Save Billing Address To Quote

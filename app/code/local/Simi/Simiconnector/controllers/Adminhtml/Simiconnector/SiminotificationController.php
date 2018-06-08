@@ -96,18 +96,24 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
             }
 
             if (isset($data['time_to_send']) && $data['time_to_send']) {
-
                 $time_to_send = new Zend_Date($data['time_to_send'], Varien_Date::DATETIME_INTERNAL_FORMAT);
+
                 $server_time_to_send = $time_to_send->subTime($client_timezone);
+
                 $nowDate = new Zend_Date(now(), Varien_Date::DATETIME_INTERNAL_FORMAT);
 
+                $server_timezone = date('Z')/3600;
 
-                if ($server_time_to_send->compare($nowDate) === 1) {
+                $normal_server_time = $nowDate->subTime($server_timezone);
+
+
+                if ($server_time_to_send->compare($normal_server_time) === 1) {
                     // greater now
                     $data['status_send'] = '1'; // pending status
                     $data['server_time_to_send'] = $server_time_to_send->toString(Varien_Date::DATETIME_INTERNAL_FORMAT);
                     $this->activeShedule(now(), $server_time_to_send);
                 } else {
+
                     $data['status_send'] = '0'; // sent
                 }
             }
@@ -445,59 +451,55 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
         $storeview_id = (int)$this->getRequest()->getParam('storeview_id', false);
         $collection = Mage::getModel('simiconnector/device')->getCollection()->addFieldToFilter('storeview_id', $storeview_id);
 
-            $grid_url_string = $this->getRequest()->getParam('grid_url');
+           
 
-            $grid_url_array = explode('/', $grid_url_string);
+        $grid_url_string = $this->getRequest()->getParam('grid_url');
 
-            $is_find_filter = false;
-            $filter_value = null;
-            $test_data = array();
-            $i = 0;
-            foreach ($grid_url_array as $key => $value) {
-                $test_data[$i]['key'] = $key;
-                $test_data[$i]['value'] = $value;
-                $i++;
+        $grid_url_array = explode('/', $grid_url_string);
 
-                if ($is_find_filter) {
-                    $filter_value = $value;
-                    break;
-                }
-                if (strpos($value, 'filter') !== false) {
-                    $is_find_filter = true;
-                }
+        $is_find_filter = false;
+        $filter_value = null;
+        
+        foreach ($grid_url_array as $key => $value) {
+
+            if ($is_find_filter) {
+                $filter_value = $value;
+                break;
             }
+            if (strpos($value, 'filter') !== false) {
+                $is_find_filter = true;
+            }
+        }
 
-            if ($is_find_filter && $filter_value) {
-                $filter_value_array = Mage::helper('adminhtml')->prepareFilterString($filter_value);
-                //{"user_email":"wilkydoo@me.com","plaform_id":"1","country":"US","city":"Utah","count_purchase":{"from":"0","to":"203"},"is_demo":"1","created_time":{"from":"02\/1\/2018","to":"05\/23\/2018","locale":"en_US"},"app_id":"com.simicart.enterprise","build_version":"0.1.0"}
+        if ($is_find_filter && $filter_value) {
+            $filter_value_array = Mage::helper('adminhtml')->prepareFilterString($filter_value);
+            //{"user_email":"wilkydoo@me.com","plaform_id":"1","country":"US","city":"Utah","count_purchase":{"from":"0","to":"203"},"is_demo":"1","created_time":{"from":"02\/1\/2018","to":"05\/23\/2018","locale":"en_US"},"app_id":"com.simicart.enterprise","build_version":"0.1.0"}
 
-                foreach ($filter_value_array as $key => $value) {
-                    if ($key && $value) {
+            foreach ($filter_value_array as $key => $value) {
+                if ($key) {
+                    if (strpos($key, 'count_purchase') !== false) {
+                        $from_value = $value['from'];
+                        $to_value = $value['to'];
 
-                        if (strpos($key, 'count_purchase') !== false) {
-                            $from_value = $value['from'];
-                            $to_value = $value['to'];
-
-                            $collection->addFieldToFilter('count_purchase', array('gteq'=>$from_value));
-                            $collection->addFieldToFilter('count_purchase', array('lteq'=>$to_value));
-
-                        } else if (strpos($key, 'created_time') !== false) {
+                        $collection->addFieldToFilter('count_purchase', array('gteq' => $from_value));
+                        $collection->addFieldToFilter('count_purchase', array('lteq' => $to_value));
+                    } else if (strpos($key, 'created_time') !== false) {
 //                            $from_value = $value['from'];
 //                            $to_value = $value['to'];
 //                            $locale = $value['locale'];
-//
 //                            $from_date = $this->_convertDate($from_value,$locale);
 //                            $to_date = $this->_convertDate($to_value,$locale);
 //
 //                            $collection->addFieldToFilter('created_time', array('gteq'=>$from_date));
 //                            $collection->addFieldToFilter('created_time', array('lteq'=>$to_date));
-
-                        } else {
-                            $collection->addFieldToFilter($key, $value);
-                        }
+                    } else {
+                        $collection->addFieldToFilter($key, $value);
                     }
                 }
             }
+
+        }
+
 
         $ids = array();
         foreach ($collection as $device) {
