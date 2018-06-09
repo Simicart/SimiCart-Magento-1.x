@@ -106,10 +106,10 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_DeviceController extends Mage_A
                     foreach ($states as $key => $state) {
                         $states_response .= "<option value='" . $key . '_' . $state . "'>" . $state . " </option>";
                     }
-                    echo $states_response;
+                    //echo $states_response;
                 }
             }
-            echo '';
+            //echo '';
         }
         else {
             $array = explode('_',$city_code);
@@ -125,10 +125,14 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_DeviceController extends Mage_A
                     $city_name = trim( str_replace('Quận','',$full_city_name));
                     $counties_response  .= "<option value='".$city_name."'>".$full_city_name." </option>";
                 }
-                echo $counties_response;
+                //echo $counties_response;
             }
-            echo '';
+            //echo '';
         }
     }
-
+    
+    protected function _isAllowed()
+    {
+        return Mage::getSingleton('admin/session')->isAllowed('simiconnector');
+    }
 }
