@@ -119,10 +119,11 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
                 $latitude = $data['params']['latitude'];
                 $dataresult = Mage::helper('simiconnector/address')->getLocationInfo($latitude, $longitude);
                 $dataresult = $dataresult['geocoding'];
+
+                $address = '';
                 for ($j = 0; $j < count($dataresult->results[0]->address_components); $j++) {
                     $addressComponents = $dataresult->results[0]->address_components[$j];
                     $types = $addressComponents->types;
-                    $address = '';
                     if (in_array('street_number', $types)) {
                         $address .= $addressComponents->long_name;
                     }
