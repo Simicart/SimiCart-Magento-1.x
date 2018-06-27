@@ -77,7 +77,7 @@ class Simi_Simiconnector_Model_Api_Categorytrees extends Simi_Simiconnector_Mode
                 if ($image = $categoryModel->getThumbnail()) {
                     $category['thumbnail_url'] = Mage::getBaseUrl('media').'catalog/category/'.$image;
                 }
-
+                /*
                 if (isset($category['landing_page']) && $category['landing_page']) {
                     $layout = Mage::app()->getLayout();
                     $category['landing_page_cms'] = $layout->createBlock('cms/block')
@@ -89,7 +89,7 @@ class Simi_Simiconnector_Model_Api_Categorytrees extends Simi_Simiconnector_Mode
                     $category['description'] = Mage::helper('cms')
                         ->getPageTemplateProcessor()
                         ->filter($category['description']);
-
+                */
                 $category['name'] = $categoryModel->getData('name');
                 $this->getChildCatArray($level, $category['child_cats'], $category['entity_id']);
                 $optionArray[] = $category;
