@@ -231,16 +231,10 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
         }
 
         foreach ($media_gallery['images'] as $image) {
-            // Zend_debug::dump($image['disabled']);
             if ($image['disabled'] == 0) {
                 $imagelink = $this->_helperProduct->getImageProduct($entity, $image['file'], $image_width, $image_height);
-                //$sizes = getimagesize($imagelink);
-                $images[] = array(
-                    'url' => $imagelink,
-                    'position' => $image['position'],
-//                    'image_width' => $sizes[0],
-//                    'image_height' => $sizes[1],
-                );
+                $image['url'] = $imagelink;
+                $images[] = $image;
             }
         }
         if (count($images) == 0) {
