@@ -137,4 +137,15 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Categories extends Mage
 
         return Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
     }
+
+    public function getCategoryCollection()
+    {
+        $collection = parent::getCategoryCollection();
+
+        if (Mage::getStoreConfig('simiconnector/general/categories_in_app'))
+            $_visible_array = explode(',', Mage::getStoreConfig('simiconnector/general/categories_in_app'));
+        $collection->addFieldToFilter('entity_id', array('nin' => $_visible_array));
+
+        return $collection;
+    }
 }
