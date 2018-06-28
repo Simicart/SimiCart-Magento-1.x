@@ -53,9 +53,9 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
                 $ids = $entity->getCategoryIds();
                 if ($ids) {
                     if (Mage::getStoreConfig('simiconnector/general/categories_in_app'))
-                        $this->_visible_array = explode(',', Mage::getStoreConfig('simiconnector/general/categories_in_app'));
-                    $idArray = array_intersect($ids, $this->_visible_array);
-                    if (count($idArray) != count($ids)) {
+                        $_visible_array = explode(',', Mage::getStoreConfig('simiconnector/general/categories_in_app'));
+                    $idArray = array_intersect($ids, $_visible_array);
+                    if (count($idArray) > 0) {
                         $newCollection->addItem($entity);
                     }
                 }
