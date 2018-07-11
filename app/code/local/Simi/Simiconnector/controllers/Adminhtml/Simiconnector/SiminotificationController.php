@@ -107,7 +107,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                 $normal_server_time = $nowDate->subTime($server_timezone);
 
 
-                if ($server_time_to_send->compare($normal_server_time) === 1) {
+                if ($server_time_to_send->isLater($normal_server_time)) {
                     // greater now
                     $data['status_send'] = '1'; // pending status
                     $data['server_time_to_send'] = $server_time_to_send->toString(Varien_Date::DATETIME_INTERNAL_FORMAT);

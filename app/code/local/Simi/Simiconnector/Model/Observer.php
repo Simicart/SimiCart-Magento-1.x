@@ -61,7 +61,7 @@ class Simi_Simiconnector_Model_Observer
                     $shedule_time = ($notification['server_time_to_send']);
                     $server_time_to_send = new Zend_Date($shedule_time, Varien_Date::DATETIME_INTERNAL_FORMAT);
 
-                    if ($server_time_to_send->compare($normal_server_time) === 1) {
+                    if ($server_time_to_send->isEarlier($normal_server_time)) {
                     //if ($shedule_time <= now()) {
                         Mage::helper('simiconnector/siminotification')->sendNotice($notification->toArray());
 
