@@ -175,11 +175,16 @@ class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract
          * save To App report
          */
         try {
-            $newTransaction = Mage::getModel('simiconnector/appreport');
-            $newTransaction->setOrderId($orderId);
-            if (isset($data['params']['platform']))
-                $newTransaction->setPlatform($data['params']['platform']);
-            $newTransaction->save();
+            if(count(Mage::getModel('simiconnector/appreport')
+                ->getCollection()
+                ->addFieldToFilter('order_id', $orderId)
+                ->getData()) > 0) {
+                $newTransaction = Mage::getModel('simiconnector/appreport');
+                $newTransaction->setOrderId($orderId);
+                if (isset($data['params']['platform']))
+                    $newTransaction->setPlatform($data['params']['platform']);
+                $newTransaction->save();
+            }
         } catch (Exception $exc) {
         }
 
