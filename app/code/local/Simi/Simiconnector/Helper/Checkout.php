@@ -175,10 +175,9 @@ class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract
          * save To App report
          */
         try {
-            if(count(Mage::getModel('simiconnector/appreport')
+            if(!Mage::getModel('simiconnector/appreport')
                 ->getCollection()
-                ->addFieldToFilter('order_id', $orderId)
-                ->getData()) > 0) {
+                ->addFieldToFilter('order_id', array('nin' => $orderId))) {
                 $newTransaction = Mage::getModel('simiconnector/appreport');
                 $newTransaction->setOrderId($orderId);
                 if (isset($data['params']['platform']))
