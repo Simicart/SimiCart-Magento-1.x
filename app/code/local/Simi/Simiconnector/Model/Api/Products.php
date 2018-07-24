@@ -46,21 +46,6 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
                 //all products
                 $this->setFilterByCategoryId(Mage::app()->getStore()->getRootCategoryId());
             }
-
-            $newCollection = new Varien_Data_Collection();
-            $collection = $this->builderQuery;
-            foreach ($collection as $entity) {
-                $ids = $entity->getCategoryIds();
-                if ($ids) {
-                    if (Mage::getStoreConfig('simiconnector/general/categories_in_app'))
-                        $_visible_array = explode(',', Mage::getStoreConfig('simiconnector/general/categories_in_app'));
-                    $idArray = array_intersect($ids, $_visible_array);
-                    if (count($idArray) > 0) {
-                        $newCollection->addItem($entity);
-                    }
-                }
-            }
-            $this->builderQuery = $newCollection;
         }
     }
 
