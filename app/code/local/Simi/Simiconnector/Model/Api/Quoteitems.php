@@ -34,7 +34,7 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
             $data['params']['move_to_wishlist'] &&
             Mage::getSingleton('customer/session')->isLoggedIn()) {
             $this->moveToWishlist($data['resourceid']);
-            $this->_removed_items = [$data['resourceid']];
+            $this->_removed_items = array($data['resourceid']);
             $this->_RETURN_MESSAGE = Mage::helper('simiconnector')->__('Item has been moved to Wishlist');
         }
         $this->builderQuery = $quote->getItemsCollection();

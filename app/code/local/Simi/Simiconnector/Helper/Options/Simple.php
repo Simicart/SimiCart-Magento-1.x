@@ -23,6 +23,9 @@ class Simi_Simiconnector_Helper_Options_Simple extends Mage_Core_Helper_Abstract
             if($option->getType() == "file"){
                 $item['file_extension'] = $option->getFileExtension();
             }
+            if($option->getType() == "field"){
+                $item['max_characters'] = $option->getMaxCharacters();
+            }
 
             if ($option->getGroupByType() == Mage_Catalog_Model_Product_Option::OPTION_GROUP_SELECT) {
                 foreach ($option->getValues() as $value) {

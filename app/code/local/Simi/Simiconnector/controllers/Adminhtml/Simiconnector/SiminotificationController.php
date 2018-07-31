@@ -107,7 +107,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                 $normal_server_time = $nowDate->subTime($server_timezone);
 
 
-                if ($server_time_to_send->compare($normal_server_time) === 1) {
+                if ($server_time_to_send->isLater($normal_server_time)) {
                     // greater now
                     $data['status_send'] = '1'; // pending status
                     $data['server_time_to_send'] = $server_time_to_send->toString(Varien_Date::DATETIME_INTERNAL_FORMAT);
@@ -348,10 +348,10 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                     foreach ($states as $key => $state) {
                         $states_response .= "<option value='" . $key . '_' . $state . "'>" . $state . " </option>";
                     }
-                    echo $states_response;
+                    //echo $states_response;
                 }
             }
-            echo '';
+            //echo '';
         } else {
             $array = explode('_', $city_code);
             if (count($array)) {
@@ -366,9 +366,9 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
                     $city_name = trim(str_replace('Quận', '', $full_city_name));
                     $counties_response .= "<option value='" . $city_name . "'>" . $full_city_name . " </option>";
                 }
-                echo $counties_response;
+                //echo $counties_response;
             }
-            echo '';
+            //echo '';
         }
     }
 
@@ -389,7 +389,7 @@ class Simi_Simiconnector_Adminhtml_Simiconnector_SiminotificationController exte
 
         $request->setPost('selected', null);
 
-        echo '<p class="note"><span id="note_devices_pushed_number"> </span> <span> ' . Mage::helper('simiconnector')->__('Device(s) Selected') . '</span></p>';
+        //echo '<p class="note"><span id="note_devices_pushed_number"> </span> <span> ' . Mage::helper('simiconnector')->__('Device(s) Selected') . '</span></p>';
 
         $block = $this->getLayout()->createBlock(
             'simiconnector/adminhtml_siminotification_edit_tab_devices', 'promo_widget_chooser_device_id', array('js_form_object' => $request->getParam('form'),

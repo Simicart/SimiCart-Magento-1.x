@@ -27,7 +27,7 @@ class Simi_Simiconnector_Block_Adminhtml_Appreport_Grid extends Mage_Adminhtml_B
     {
         $collection = Mage::getResourceModel($this->_getCollectionClass());
         $appreport_table = Mage::getSingleton('core/resource')->getTableName('simiconnector/appreport');
-        $collection->getSelect()->join(array('transaction' => $appreport_table), 'transaction.order_id = main_table.entity_id');
+        $collection->getSelect()->join(array('transaction' => $appreport_table), 'transaction.order_id = main_table.entity_id')->group('entity_id');
 
         $this->setCollection($collection);
         return parent::_prepareCollection();
@@ -51,10 +51,10 @@ class Simi_Simiconnector_Block_Adminhtml_Appreport_Grid extends Mage_Adminhtml_B
                 'width' => '80px',
                 'type' => 'options',
                 'index' => 'platform',
-                'options' => [
+                'options' => array(
                     '0' => __('Native App'),
                     '1' => __('PWA')
-                ]
+                )
             )
         );
 
