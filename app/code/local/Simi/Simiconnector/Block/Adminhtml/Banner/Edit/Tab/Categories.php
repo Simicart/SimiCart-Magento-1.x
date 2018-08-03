@@ -141,11 +141,11 @@ class Simi_Simiconnector_Block_Adminhtml_Banner_Edit_Tab_Categories extends Mage
     public function getCategoryCollection()
     {
         $collection = parent::getCategoryCollection();
-
-        if (Mage::getStoreConfig('simiconnector/general/categories_in_app'))
-            $_visible_array = explode(',', Mage::getStoreConfig('simiconnector/general/categories_in_app'));
-        $collection->addFieldToFilter('entity_id', array('in' => $_visible_array));
-
+        $categories_in_app = Mage::getStoreConfig('simiconnector/general/categories_in_app');
+        if ($categories_in_app && $categories_in_app != '') {
+            $_visible_array = explode(',', $categories_in_app);
+            $collection->addFieldToFilter('entity_id', array('in' => $_visible_array));
+        }
         return $collection;
     }
 }
