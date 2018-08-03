@@ -113,4 +113,15 @@ class Simi_Simiconnector_Helper_Data extends Mage_Core_Helper_Abstract
         rmdir($folder);
         return true;
     }
+
+    public function convertDateTimeByTimezoneWebsite($date_time){
+        $websiteTimezone = Mage::getStoreConfig('general/locale/timezone');
+        if(!$websiteTimezone){
+            return $date_time;
+        }
+        date_default_timezone_set($websiteTimezone);
+        $date = date('Y-m-d H:i:s',strtotime("$date_time UTC"));
+    
+        return $date;
+    }
 }
