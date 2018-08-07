@@ -359,6 +359,9 @@ class Simi_Simiconnector_Model_Api_Quoteitems extends Simi_Simiconnector_Model_A
         $session = Mage::getSingleton('checkout/session');
         $result['cart_total'] = Mage::helper('checkout/cart')->getItemsCount();
         $result['quote_id'] = $session->getQuoteId();
+        $result['customer_email'] = Mage::getSingleton('customer/session')->isLoggedIn()?
+            Mage::getSingleton('customer/session')->getCustomer()->getEmail():
+            null;
         return $result;
     }
 
