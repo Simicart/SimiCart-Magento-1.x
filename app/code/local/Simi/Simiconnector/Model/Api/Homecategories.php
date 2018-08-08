@@ -59,6 +59,7 @@ class Simi_Simiconnector_Model_Api_Homecategories extends Simi_Simiconnector_Mod
 
             $categoryModel = Mage::getModel('catalog/category')->load($item['category_id']);
             $item['cat_name'] = $categoryModel->getName();
+            $item['url_path'] = $categoryModel->getUrlPath();
             $childCollection = $this->getVisibleChildren($item['category_id']);
             if ($childCollection->count() > 0) {
                 $item['has_children'] = TRUE;
