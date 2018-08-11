@@ -38,7 +38,8 @@ class Simi_Simiconnector_Model_Api_Urldicts extends Simi_Simiconnector_Model_Api
             
             $productListModel = Mage::getModel('simiconnector/api_products');
             unset($data['resourceid']);
-            $data['params'][self::FILTER] = $result['urldict']['category_id'];
+            $data['params'][self::FILTER] = array('cat_id'=>$result['urldict']['category_id']);
+            $data['params']['limit'] = 12;
             $productListModel->pluralKey = 'products';
             $productListModel->singularKey = 'product';
             $productListModel->setData($data);
