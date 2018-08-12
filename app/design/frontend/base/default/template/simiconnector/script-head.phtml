@@ -1,0 +1,12 @@
+
+<?php
+
+  if($this->isEnabled()):
+?>
+<meta name="apple-itunes-app" content="app-id=<?php echo $this->getIOSAppId();?>">
+<meta name="google-play-app" content="app-id=<?php echo $this->getAndroidAppId();?>">
+<link rel="apple-touch-icon" href="<?php echo $this->getIOSAppIcon();?>">
+<link rel="android-touch-icon" href="<?php echo $this->getAndroidAppIcon();?>" />
+<link rel="stylesheet" href="https://www.simicart.com/media/api/smartbanner/smart-app-banner.css" type="text/css" media="screen">
+<script src="https://www.simicart.com/media/api/smartbanner/smart-app-banner.js"></script>
+<?php endif;?>

@@ -1,7 +1,13 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
 	<default>
-	</default>
+        <reference name="head">
+            <block type="simiconnector/smartbanner" name="smartbanner_script_head" template="simiconnector/script-head.phtml" />
+        </reference>
+        <reference name="before_body_end">
+            <block type="simiconnector/smartbanner" name="smartbanner_script_footer" template="simiconnector/script-footer.phtml" />
+        </reference>
+    </default>
 	<simiconnector_index_index>
 		<reference name="content">
 			<block type="simiconnector/simiconnector" name="simiconnector" template="simiconnector/simiconnector.phtml" />
