@@ -14,7 +14,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
     protected $_method = 'callApi';
     protected $group_id;
 
-    public function setBuilderQuery() 
+    public function setBuilderQuery()
     {
         $data = $this->getData();
         if (isset($data['resourceid']) && $data['resourceid']) {
@@ -26,7 +26,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         }
     }
 
-    public function index() 
+    public function index()
     {
         $result = parent::index();
         foreach ($result['storeviews'] as $index => $storeView) {
@@ -36,7 +36,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         return $result;
     }
 
-    public function show() 
+    public function show()
     {
         //$information = parent::show();
         $country_code = Mage::getStoreConfig('general/country/default');
@@ -99,6 +99,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'is_show_price_for_guest' =>Mage::getStoreConfig('simiconnector/config_price/is_show_price_for_guest'),
                 'open_url_in_app' =>Mage::getStoreConfig('simiconnector/general/open_url_in_app'),
                 'image_aspect_ratio' => Mage::getStoreConfig('simiconnector/general/image_aspect_ratio'),
+                'customer_email' => Mage::getSingleton('customer/session')->isLoggedIn()?Mage::getSingleton('customer/session')->getCustomer()->getEmail():null,
                 'connector_version' => $connectorVersion
             ),
             'sales' => array(
@@ -216,7 +217,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         return $this->getDetail($this->storeviewInfo);
     }
 
-    public function getAllowedCountries() 
+    public function getAllowedCountries()
     {
         $list = array();
         $country_default = Mage::getStoreConfig('general/country/default');
@@ -245,7 +246,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         return $list;
     }
 
-    public function getCurrencyPosition() 
+    public function getCurrencyPosition()
     {
         $formated = Mage::app()->getStore()->getCurrentCurrency()->formatTxt(0);
         $number = Mage::app()->getStore()->getCurrentCurrency()->formatTxt(0, array('display' => Zend_Currency::NO_SYMBOL));
@@ -257,7 +258,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         return 'after';
     }
 
-    public function getCurrencies() 
+    public function getCurrencies()
     {
         $currencies = array();
         $codes = Mage::app()->getStore()->getAvailableCurrencyCodes(true);
@@ -285,7 +286,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         return $currencies;
     }
 
-    public function setCurrency($data) 
+    public function setCurrency($data)
     {
         if (isset($data['params']['currency'])) {
             $currency = $data['params']['currency'];
@@ -296,7 +297,7 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         }
     }
 
-    public function setStoreView($data) 
+    public function setStoreView($data)
     {
         if (($data['resourceid'] == 'default') || ($data['resourceid'] == Mage::app()->getStore()))
             return;
@@ -307,12 +308,12 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
         Mage::getSingleton('core/locale')->emulate($data['resourceid']);
     }
 
-    public function getCurrentStoreId() 
+    public function getCurrentStoreId()
     {
         return Mage::app()->getStore()->getId();
     }
 
-    public function getStores() 
+    public function getStores()
     {
         $storeAPIModel = Mage::getModel('simiconnector/api_stores');
         $storeAPIModel->setData($this->getData());

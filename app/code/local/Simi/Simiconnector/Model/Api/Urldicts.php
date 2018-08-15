@@ -41,8 +41,8 @@ class Simi_Simiconnector_Model_Api_Urldicts extends Simi_Simiconnector_Model_Api
             $productListModel = Mage::getModel('simiconnector/api_products');
             unset($data['resourceid']);
             $data['params'][self::FILTER] = array('cat_id'=>$result['urldict']['category_id']);
-            $data['params']['image_width'] = isset($data['params']['image_width'])?$data['params']['image_width']:200;
-            $data['params']['image_height'] = isset($data['params']['image_height'])?$data['params']['image_height']:200;
+            $data['params']['image_width'] = isset($data['params']['image_width'])?$data['params']['image_width']:180;
+            $data['params']['image_height'] = isset($data['params']['image_height'])?$data['params']['image_height']:180;
             $data['params']['limit'] = 12;
             $productListModel->pluralKey = 'products';
             $productListModel->singularKey = 'product';
