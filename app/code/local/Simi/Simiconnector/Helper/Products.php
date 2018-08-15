@@ -347,6 +347,9 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
 
     public function getImageProduct($product, $file = null, $width, $height)
     {
+        if (!$product->getData('media_gallery'))
+            $product = Mage::getModel('catalog/product')->load($product->getId());
+
         if (!is_null($width) && !is_null($height)) {
             if ($file) {
                 return Mage::helper('catalog/image')->init($product, 'thumbnail', $file)->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize($width, null)->__toString();
