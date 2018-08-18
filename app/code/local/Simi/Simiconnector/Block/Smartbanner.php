@@ -34,4 +34,8 @@ class Simi_Simiconnector_Block_Smartbanner extends Mage_Core_Block_Template
     public function getIOSAppIcon(){
     	return Mage::getStoreConfig('simiconnector/smartbanner/ios_app_icon', Mage::app()->getStore()->getId());
     }
+    
+    public function getCustomCSS(){
+        return Mage::getStoreConfig('simiconnector/smartbanner/custom_css', Mage::app()->getStore()->getId());
+    }
 }
