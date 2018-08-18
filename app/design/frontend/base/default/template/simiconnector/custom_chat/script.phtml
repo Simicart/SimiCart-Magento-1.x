@@ -1,0 +1,17 @@
+<head>
+    <title>Full screen layout demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<?php if($this->isEnabledChat()):?>
+    <?php echo $this->getHeadScript()?>
+<?php endif;?>
+</head>
+<body>
+<div id="app-container">
+    <div id="main-content"></div>
+</div>
+<?php if($this->isEnabledChat()):?>
+    <?php echo $this->getBodyScript()?>
+<?php endif;?>
+</body>
+
+

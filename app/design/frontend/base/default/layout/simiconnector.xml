@@ -2,10 +2,10 @@
 <layout version="0.1.0">
 	<default>
         <reference name="head">
-            <block type="simiconnector/smartbanner" name="smartbanner_script_head" template="simiconnector/script-head.phtml" />
+            <block type="simiconnector/smartbanner" name="smartbanner_script_head" template="simiconnector/smart_banner/script-head.phtml" />
         </reference>
         <reference name="before_body_end">
-            <block type="simiconnector/smartbanner" name="smartbanner_script_footer" template="simiconnector/script-footer.phtml" />
+            <block type="simiconnector/smartbanner" name="smartbanner_script_footer" template="simiconnector/smart_banner/script-footer.phtml" />
         </reference>
     </default>
 	<simiconnector_index_index>

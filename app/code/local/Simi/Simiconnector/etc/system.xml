@@ -1305,13 +1305,48 @@
                             <label>Custom css</label>
                             <frontend_type>textarea</frontend_type>
                             <sort_order>8</sort_order>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </custom_css>
                     </fields>
                 </smartbanner>
+                <customchat translate="label">
+                    <label>Live chat Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>2999</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable translate="label">
+                            <label>Enable</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable>
+                        <head_script translate="label">
+                            <label>Head Script</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </head_script>
+                        <body_script translate="label">
+                            <label>Body Script</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </body_script>
+                    </fields>
+                </customchat>
             </groups>
         </simiconnector>
     </sections>
