@@ -2,6 +2,7 @@
 
 class Simi_Simiconnector_Model_Api_Urldicts extends Simi_Simiconnector_Model_Api_Abstract {
 
+    public $params;
     public function setBuilderQuery(){
         $data = $this->getData();
         if (isset($data['resourceid']) && $data['resourceid']) {
@@ -12,8 +13,24 @@ class Simi_Simiconnector_Model_Api_Urldicts extends Simi_Simiconnector_Model_Api
             $this->builderQuery = $urlModel->getRewriteByRequestPath($requestPath, Mage::app()->getStore()->getId());
             if (!$this->builderQuery)
                 throw new Exception($this->_helper->__('No URL Rewrite Found'), 4);
+            $this->parseParams();
         }
     }
+
+    public function parseParams() {
+        $uri = $_SERVER['REQUEST_URI'];
+        $requestPaths = explode('?', $_SERVER['REQUEST_URI']);
+        $this->params = array();
+        foreach ($requestPaths as $key => $value) {
+            if ($key == 0)
+                continue;
+            $params = array();
+            parse_str($value, $params);
+            $this->params = array_merge($this->params, $params);
+        }
+        unset($this->params['url']);
+    }
+
     public function show() {
         $result = parent::show();
         $data = $this->getData();
@@ -25,6 +42,7 @@ class Simi_Simiconnector_Model_Api_Urldicts extends Simi_Simiconnector_Model_Api
             $apiModel->setBuilderQuery();
             $result['urldict']['simi_product_data'] = $apiModel->show();
         } else if(isset($result['urldict']['category_id']) && $result['urldict']['category_id']) {
+            $data['params'] = $this->params;
             if (isset($data['params']['get_child_cat']) && $data['params']['get_child_cat']) {
                 $apiModel = Mage::getModel('simiconnector/api_categories');
                 $result['urldict']['simi_catetory_name'] = Mage::getModel('catalog/category')
