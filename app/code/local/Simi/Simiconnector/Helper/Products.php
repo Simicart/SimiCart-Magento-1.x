@@ -215,7 +215,11 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
             if ($dir = $block_list->getDefaultDirection()) {
                 $block_toolbar->setDefaultDirection($dir);
             } else {
-                $block_toolbar->setDefaultDirection('desc');
+                $data = $this->getData();
+                if (isset($data['params']['order']))
+                    $block_toolbar->setDefaultDirection($data['params']['order']);
+                else
+                    $block_toolbar->setDefaultDirection('desc');
             }
         }
 
