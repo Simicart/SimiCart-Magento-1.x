@@ -41,7 +41,6 @@ class Simi_Simiconnector_Model_Api_Urldicts extends Simi_Simiconnector_Model_Api
             $apiModel->setBuilderQuery();
             $result['urldict']['simi_product_data'] = $apiModel->show();
         } else if(isset($result['urldict']['category_id']) && $result['urldict']['category_id']) {
-            $data['params'] = $this->params;
             if (isset($data['params']['get_child_cat']) && $data['params']['get_child_cat']) {
                 $apiModel = Mage::getModel('simiconnector/api_categories');
                 $result['urldict']['simi_catetory_name'] = Mage::getModel('catalog/category')
@@ -54,7 +53,7 @@ class Simi_Simiconnector_Model_Api_Urldicts extends Simi_Simiconnector_Model_Api
                 $apiModel->setBuilderQuery();
                 $result['urldict']['simi_category_child'] = $apiModel->show();
             }
-
+            $data['params'] = $this->params;
             $productListModel = Mage::getModel('simiconnector/api_products');
             
             unset($data['resourceid']);
