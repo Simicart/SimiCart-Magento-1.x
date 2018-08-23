@@ -18,7 +18,6 @@ class Simi_Simiconnector_Model_Api_Urldicts extends Simi_Simiconnector_Model_Api
     }
 
     public function parseParams() {
-        $uri = $_SERVER['REQUEST_URI'];
         $requestPaths = explode('?', $_SERVER['REQUEST_URI']);
         $this->params = array();
         foreach ($requestPaths as $key => $value) {
@@ -57,11 +56,25 @@ class Simi_Simiconnector_Model_Api_Urldicts extends Simi_Simiconnector_Model_Api
             }
 
             $productListModel = Mage::getModel('simiconnector/api_products');
+            
             unset($data['resourceid']);
             $data['params'][self::FILTER] = array('cat_id'=>$result['urldict']['category_id']);
             $data['params']['image_width'] = isset($data['params']['image_width'])?$data['params']['image_width']:180;
             $data['params']['image_height'] = isset($data['params']['image_height'])?$data['params']['image_height']:180;
             $data['params']['limit'] = 12;
+            
+            // Apply filter
+            $attributes = array();
+            foreach (Mage::getResourceModel('catalog/product_attribute_collection')
+                         ->getItems() as $attribute) {
+                $attributes[] = $attribute->getAttributecode();
+            }
+            $data['params'][self::FILTER]['layer'] = array();
+            foreach ($this->params as $key=>$value) {
+                if (in_array($key, $attributes)) 
+                    $data['params'][self::FILTER]['layer'][$key] = $value;
+            }
+            
             $productListModel->pluralKey = 'products';
             $productListModel->singularKey = 'product';
             $productListModel->setData($data);

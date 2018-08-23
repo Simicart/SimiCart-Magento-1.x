@@ -108,9 +108,6 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
                 $params = array();
                 foreach ($filter_layer as $key => $value) {
                     $params[(string)$key] = (string)$value;
-//                    if($key == "cat"){
-//                        $category = Mage::getModel('catalog/category')->load($value);
-//                    }
                 }
 
                 $controller->getRequest()->setParams($params);
@@ -120,18 +117,11 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
         $layout = $controller->getLayout();
         if ($is_search == 0) {
             $block = $layout->createBlock('catalog/layer_view');
-            //setCurrentCate
-            //$block->getLayer()->setCurrentCategory($category);
-            $design = Mage::getSingleton('catalog/design');
-            $settings = $design->getDesignSettings($category);
-            //if (!$settings->getPageLayout()) {
             if ($block->canShowBlock() && $category->getData('is_anchor')) {
                 $layers = $this->getItemsShopBy($block);
                 $this->_layer = $layers;
             }
-
-            //}
-
+            
             //update collection
             $block_list = $layout->createBlock('catalog/product_list');
             $block_toolbar = $layout->createBlock('catalog/product_list_toolbar');
@@ -368,37 +358,5 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
 
         return Mage::helper('catalog/image')->init($product, 'small_image')->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepFrame(FALSE)->resize(600, 600)->__toString();
     }
-
-    public function getSwatchesListProduct($_product)
-    {
-        $_product= Mage::getModel('catalog/product')->load($_product->getId());
-        if($_product && $_product->getId() && ($_attrValues = $_product->getListSwatchAttrValues()) &&Mage::helper('configurableswatches')->isEnabled() && count($_attrValues) > 0){
-            $data = array();
-            $_dimHelper = Mage::helper('configurableswatches/swatchdimensions');
-            $_swatchInnerWidth = $_dimHelper->getInnerWidth(Mage_ConfigurableSwatches_Helper_Swatchdimensions::AREA_LISTING);
-            $_swatchInnerHeight = $_dimHelper->getInnerHeight(Mage_ConfigurableSwatches_Helper_Swatchdimensions::AREA_LISTING);
-
-            foreach ($_attrValues as $_optionValue => $_optionLabel){
-                $_swatchUrl = Mage::helper('configurableswatches/productimg')->getSwatchUrl($_product, $_optionLabel, $_swatchInnerWidth, $_swatchInnerHeight, $_swatchType);
-                $_hasImage = !empty($_swatchUrl);
-                if($_hasImage){
-                    $data[] = array(
-                        'label_type' => 'image',
-                        'label' => $_swatchUrl
-                    );
-                }else{
-                    $data[] = array(
-                        'label_type' => 'text',
-                        'label' => $_optionLabel
-                    );
-                }
-            }
-
-            return $data;
-        }
-
-        return array();
-
-    }
-
+    
 }
