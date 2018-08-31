@@ -43,6 +43,7 @@ class Simi_Simiconnector_Model_Cms extends Mage_Core_Model_Abstract
     public function toOptionArray() 
     {
         $platform = array(
+            '0' => Mage::helper('simiconnector')->__('Nowhere'),
             '1' => Mage::helper('simiconnector')->__('Left Menu'),
             '2' => Mage::helper('simiconnector')->__('Category In-app')
         );
