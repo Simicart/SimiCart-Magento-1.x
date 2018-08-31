@@ -12,6 +12,9 @@ class Simi_Simiconnector_Model_Api_Urldicts extends Simi_Simiconnector_Model_Api
             $urlModel = Mage::getResourceModel('catalog/url');
             $this->builderQuery = $urlModel->getRewriteByRequestPath($requestPath, Mage::app()->getStore()->getId());
             if (!$this->builderQuery)
+                $this->builderQuery = Mage::getModel('simiconnector/cms')->getCollection()
+                    ->addFieldToFilter('cms_url', $requestPath)->getFirstItem();
+            if (!$this->builderQuery || !$this->builderQuery->getId())
                 throw new Exception($this->_helper->__('No URL Rewrite Found'), 4);
             $this->parseParams();
         }
