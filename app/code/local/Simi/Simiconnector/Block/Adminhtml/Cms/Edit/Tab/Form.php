@@ -88,8 +88,7 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tab_Form extends Mage_Adminhtm
             'name' => 'cms_title',
             )
         );
-
-
+        
         $fieldset->addField(
             'cms_content', 'editor', array(
             'name' => 'cms_content',
@@ -185,6 +184,37 @@ class Simi_Simiconnector_Block_Adminhtml_Cms_Edit_Tab_Form extends Mage_Adminhtm
             )
         );
 
+        $fieldsetPwa = $form->addFieldset('simiconnector_form_pwa',
+            array('legend' => Mage::helper('simiconnector')->__('PWA Configuration')));
+
+        $fieldsetPwa->addField(
+            'cms_url', 'text', array(
+                'label' => Mage::helper('simiconnector')->__('Url'),
+                'name' => 'cms_url',
+            )
+        );
+
+        $fieldsetPwa->addField(
+            'cms_meta_title', 'text', array(
+                'label' => Mage::helper('simiconnector')->__('Meta Title'),
+                'name' => 'cms_meta_title',
+            )
+        );
+
+        $fieldsetPwa->addField(
+            'cms_meta_desc', 'text', array(
+                'label' => Mage::helper('simiconnector')->__('Meta Description'),
+                'name' => 'cms_meta_desc',
+            )
+        );
+
+        $fieldsetPwa->addField(
+            'cms_script', 'editor', array(
+                'name' => 'cms_script',
+                'label' => Mage::helper('simiconnector')->__('Script'),
+                'style' => 'width: 600px;',
+            )
+        );
         $form->setValues($data);
         return parent::_prepareForm();
     }
