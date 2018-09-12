@@ -155,25 +155,25 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
 
             if (!$entity->getData('small_image')) {
                 $entity = Mage::getModel('catalog/product')->load($entity->getId());
-                $media_gallery = $entity->getMediaGallery();
+            }
+            $media_gallery = $entity->getMediaGallery();
 
-                foreach ($media_gallery['images'] as $image) {
-                    if ($image['disabled'] == 0) {
-                        $imagelink = $this->_helperProduct->getImageProduct($entity, $image['file'], $image_width, $image_height);
-                        $images[] = array(
-                            'url' => $imagelink,
-                            'position' => $image['position'],
-                        );
-                        break;
-                    }
-                }
-                if (!$imagelink) {
-                    $imagelink = $this->_helperProduct->getImageProduct($entity, null, $image_width, $image_height);
+            foreach ($media_gallery['images'] as $image) {
+                if ($image['disabled'] == 0) {
+                    $imagelink = $this->_helperProduct->getImageProduct($entity, $image['file'], $image_width, $image_height);
                     $images[] = array(
                         'url' => $imagelink,
-                        'position' => 1,
+                        'position' => $image['position'],
                     );
+                    break;
                 }
+            }
+            if (!$imagelink) {
+                $imagelink = $this->_helperProduct->getImageProduct($entity, null, $image_width, $image_height);
+                $images[] = array(
+                    'url' => $imagelink,
+                    'position' => 1,
+                );
             } else {
                 $imagelink = $this->_helperProduct->getImageProduct($entity, null, $image_width, $image_height);
                 $images[] = array(
