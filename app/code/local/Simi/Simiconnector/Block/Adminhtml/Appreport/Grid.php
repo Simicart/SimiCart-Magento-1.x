@@ -6,7 +6,7 @@ class Simi_Simiconnector_Block_Adminhtml_Appreport_Grid extends Mage_Adminhtml_B
     public function __construct() 
     {
         parent::__construct();
-        $this->setId('sales_order_grid');
+        $this->setId('app_transaction_sales_order_grid');
         $this->setUseAjax(true);
         $this->setDefaultSort('created_at');
         $this->setDefaultDir('DESC');
