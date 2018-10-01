@@ -55,6 +55,9 @@ class Simi_Simiconnector_Model_Server
         }
 
         if (!isset($data['resource'])) throw new Exception($this->_helper->__('Invalid method.'), 4);
+        if(!Mage::getSingleton('core/session')->getData('simiconnector_platform')) {
+            Mage::getSingleton('core/session')->setData('simiconnector_platform', 'native');
+        }
 
         $model = Mage::getSingleton($data['module'] . '/api_' . $data['resource']);
 
