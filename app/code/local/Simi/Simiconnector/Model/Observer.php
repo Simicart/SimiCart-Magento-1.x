@@ -26,7 +26,27 @@ class Simi_Simiconnector_Model_Observer
     public function saleOrderPlaceAfter($observer){
         $order = $observer->getEvent()->getOrder();
         $customer_email = $order->getCustomerEmail();
-
+        /*
+         * save To App report
+         */
+        if ($platform =
+            Mage::getSingleton('core/session')->getData('simiconnector_platform')) {
+            try {
+                $orderId = $order->getId();
+                $existedTransaction = Mage::getModel('simiconnector/appreport')
+                    ->getCollection()
+                    ->addFieldToFilter('order_id', array('nin' => $orderId))
+                    ->getFirstItem();
+                if(!$existedTransaction || !$existedTransaction->getId()) {
+                    $newTransaction = Mage::getModel('simiconnector/appreport');
+                    $newTransaction->setOrderId($orderId);
+                    $platform = ($platform == 'pwa')?'1':'0';
+                    $newTransaction->setPlatform($platform);
+                    $newTransaction->save();
+                }
+            } catch (Exception $exc) {
+            }
+        }
         if($customer_email){
             $collection = Mage::getModel('simiconnector/device')->getCollection()->addFieldToFilter('user_email',$customer_email);
             foreach ($collection as $device) {

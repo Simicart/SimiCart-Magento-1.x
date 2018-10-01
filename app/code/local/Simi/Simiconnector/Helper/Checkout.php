@@ -172,22 +172,6 @@ class Simi_Simiconnector_Helper_Checkout extends Mage_Core_Helper_Abstract
     public function processOrderAfter($orderId,&$order,$data)
     {
         /*
-         * save To App report
-         */
-        try {
-            if(!Mage::getModel('simiconnector/appreport')
-                ->getCollection()
-                ->addFieldToFilter('order_id', array('nin' => $orderId))) {
-                $newTransaction = Mage::getModel('simiconnector/appreport');
-                $newTransaction->setOrderId($orderId);
-                if (isset($data['params']['platform']))
-                    $newTransaction->setPlatform($data['params']['platform']);
-                $newTransaction->save();
-            }
-        } catch (Exception $exc) {
-        }
-
-        /*
          * App notification
          */
         if (Mage::getStoreConfig('simiconnector/notification/noti_purchase_enable')) {
