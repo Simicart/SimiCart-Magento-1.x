@@ -35,7 +35,7 @@ class Simi_Simiconnector_Model_Observer
                 $orderId = $order->getId();
                 $existedTransaction = Mage::getModel('simiconnector/appreport')
                     ->getCollection()
-                    ->addFieldToFilter('order_id', array('nin' => $orderId))
+                    ->addFieldToFilter('order_id', $orderId)
                     ->getFirstItem();
                 if(!$existedTransaction || !$existedTransaction->getId()) {
                     $newTransaction = Mage::getModel('simiconnector/appreport');
