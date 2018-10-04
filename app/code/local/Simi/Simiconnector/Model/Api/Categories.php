@@ -70,7 +70,7 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
                 if(!$cate_image_url){
                     $cate_image_url = Mage::getBaseUrl('media').'catalog/category/'.$cateModel->getThumbnail();
                 }
-                $result['categories'][$index]['thumbnail'] = $cate_image_url;
+                $catData['thumbnail'] = $cate_image_url;
             }
             if ($this->_visible_array)
                 $childCollection->addFieldToFilter('entity_id', array('in' => $this->_visible_array));
@@ -98,13 +98,14 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
                         }
                         $childArray[] = $childInfo;
                     }
-                    $result['categories'][$index]['children'] = $childArray;
+                    $catData['children'] = $childArray;
                 }
             }
             else
             {
-                $result['categories'][$index]['has_children'] = FALSE;
+                $catData[$index]['has_children'] = FALSE;
             }
+            $result['categories'][$index] = $catData;
         }
 
         return $result;
