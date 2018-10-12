@@ -118,12 +118,12 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
                 $longitude = $data['params']['longitude'];
                 $latitude = $data['params']['latitude'];
                 $dataresult = Mage::helper('simiconnector/address')->getLocationInfo($latitude, $longitude);
-                $dataresult = $dataresult['geocoding'];
-
-                $address = '';
+                $addressDetail = $dataresult;
+               /* $dataresult = $dataresult['geocoding'];
                 for ($j = 0; $j < count($dataresult->results[0]->address_components); $j++) {
                     $addressComponents = $dataresult->results[0]->address_components[$j];
                     $types = $addressComponents->types;
+                    $address = '';
                     if (in_array('street_number', $types)) {
                         $address .= $addressComponents->long_name;
                     }
@@ -154,8 +154,14 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
                     if (in_array('postal_code', $types)) {
                         $addressDetail['postcode'] = $addressComponents->long_name;
                     }
-                }
+                }*/
 
+                $addressDetail['region']    = $addressDetail['state'];
+                $addressDetail['region_id'] = $addressDetail['state'];
+                $addressDetail['country_name'] = $addressDetail['country'];
+                $addressDetail['country_id'] = $addressDetail['country'];
+                $addressDetail['postcode'] = $addressDetail['zipcode'];
+                $addressDetail['street'] = $addressDetail['address'];
                 $result['address'] = $addressDetail;
                 return $result;
             }
