@@ -76,7 +76,7 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
                 $childCollection->addFieldToFilter('entity_id', array('in' => $this->_visible_array));
             if ($childCollection->count() > 0)
             {
-                $result['categories'][$index]['has_children'] = TRUE;
+                $catData['has_children'] = TRUE;
                 if (isset($data['params']['get_child_cat']) && $data['params']['get_child_cat']) {
                     $get_child_cat_level = $data['params']['get_child_cat'];
                     $childArray = array();
@@ -103,7 +103,7 @@ class Simi_Simiconnector_Model_Api_Categories extends Simi_Simiconnector_Model_A
             }
             else
             {
-                $catData[$index]['has_children'] = FALSE;
+                $catData['has_children'] = FALSE;
             }
             $result['categories'][$index] = $catData;
         }
