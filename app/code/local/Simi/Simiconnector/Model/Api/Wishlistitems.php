@@ -18,8 +18,16 @@ class Simi_Simiconnector_Model_Api_Wishlistitems extends Simi_Simiconnector_Mode
     {
         $data = $this->getData();
         $customer = Mage::getSingleton('customer/session')->getCustomer();
-        if ($customer->getId() && ($customer->getId() != '')) {
-            $this->_WISHLIST = Mage::getModel('wishlist/wishlist')->loadByCustomer($customer, true);
+        $code = false;
+        if (isset($data['params']) && isset($data['params']['code']))
+            $code = $data['params']['code'];
+        if ($code !== false ||
+            ($customer->getId() && ($customer->getId() != ''))) {
+            if ($code !== false)
+                $this->_WISHLIST = Mage::getModel('wishlist/wishlist')->loadByCode($code);
+            else
+                $this->_WISHLIST = Mage::getModel('wishlist/wishlist')->loadByCustomer($customer, true);
+
             //check if not shared
             if (!$this->_WISHLIST->getShared()) {
                 $this->_WISHLIST->setShared('1');
