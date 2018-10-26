@@ -20,6 +20,17 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
                     $this->builderQuery = Mage::getSingleton('customer/session')->getCustomer();
                     $this->_RETURN_MESSAGE = Mage::helper('customer')->__('If there is an account associated with %s you will receive an email with a link to reset your password.', Mage::helper('customer')->htmlEscape($email));
                     break;
+                case 'createpassword':
+                    if (!isset($data['params']['password']))
+                        throw new Exception($this->_helper->__('Missing new password'), 4);
+                    if (!isset($data['params']['rptoken']))
+                        throw new Exception($this->_helper->__('Missing reset password token'), 4);
+                    $newPW = $data['params']['password'];
+                    $resetPasswordToken = $data['params']['rptoken'];
+                    $this->createPassword($newPW, $resetPasswordToken);
+                    $this->builderQuery = Mage::getSingleton('customer/session')->getCustomer();
+                    $this->_RETURN_MESSAGE = $message = __('You updated your password.');
+                    break;
                 case 'profile':
                     $this->builderQuery = Mage::getSingleton('customer/session')->getCustomer();
                     $this->builderQuery->setData('wishlist_count', $this->getWishlistCount());
@@ -120,5 +131,51 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
         if ($customer && $customer->getId())
             return (int)Mage::getModel('wishlist/wishlist')->loadByCustomer($customer)->getItemCollection()->getSize();
         return 0;
+    }
+
+    /**
+     * Reset password
+     * @var string $newpw
+     * @var string $resetPasswordToken
+     */
+    public function createPassword($newpw, $resetPasswordToken) {
+
+        $customer = $this->getCustomerFromRptoken($resetPasswordToken);
+        $errorMessages = array();
+        if (iconv_strlen($newpw) <= 0) {
+            throw new Exception($this->_helper->__('New password field cannot be empty.'));
+        }
+
+        $customer->setPassword($newpw);
+        $customer->setPasswordConfirmation($newpw);
+        $validationErrorMessages = $customer->validateResetPassword();
+        if (is_array($validationErrorMessages)) {
+            throw new Exception($validationErrorMessages[0]);
+        }
+        $customer->setRpToken(null);
+        $customer->setRpTokenCreatedAt(null);
+        $customer->cleanPasswordsValidationData();
+        $customer->save();
+    }
+
+    public function getCustomerFromRptoken($resetPasswordLinkToken) {
+        if (
+            !is_string($resetPasswordLinkToken)
+            || empty($resetPasswordLinkToken)
+        ) {
+            throw new Exception($this->_helper->__('Invalid password reset token.'), 4);
+        }
+        $customer = Mage::getModel('customer/customer')
+            ->getCollection()
+            ->addAttributeToFilter('rp_token', $resetPasswordLinkToken)
+            ->getFirstItem();
+        if (!$customer->getId())
+            throw new Exception($this->_helper->__('Invalid password reset token.'), 4);
+        $customer = Mage::getModel('customer/customer')->load($customer->getId());
+        $customerToken = $customer->getRpToken();
+        if (strcmp($customerToken, $resetPasswordLinkToken) != 0 || $customer->isResetPasswordLinkTokenExpired()) {
+            throw new Exception($this->_helper->__('Your password reset link has expired.'));
+        }
+        return $customer;
     }
 }
