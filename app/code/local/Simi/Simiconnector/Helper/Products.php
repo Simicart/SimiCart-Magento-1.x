@@ -273,7 +273,14 @@ class Simi_Simiconnector_Helper_Products extends Mage_Core_Helper_Abstract
     protected function setAttributeProducts($is_search = 0)
     {
         $storeId = Mage::app()->getStore()->getId();
-        $this->builderQuery->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes());
+        $data = $this->getData();
+        $parameters = $data['params'];
+        if (isset($parameters['fields']) && $parameters['fields']) {
+            $fields = explode(',', $parameters['fields']);
+            $this->builderQuery->addAttributeToSelect($fields);
+        } else {
+            $this->builderQuery->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes());
+        }
         $this->builderQuery->setStoreId($storeId);
         $this->builderQuery->addFinalPrice();
         Mage::getSingleton('catalog/product_status')->addVisibleFilterToCollection($this->builderQuery);

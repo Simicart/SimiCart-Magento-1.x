@@ -52,21 +52,6 @@ class Simi_Simiconnector_Model_Api_Homeproductlists extends Simi_Simiconnector_M
     private function _addInfo($dataArray) 
     {
         $listModel = Mage::getModel('simiconnector/productlist')->load($dataArray['productlist_id']);
-        $imageBaseDir = explode('/simi/', $listModel->getData('list_image'));
-        $imagesize = @getimagesize(Mage::getBaseDir('media').'/simi/'.$imageBaseDir[1]);
-        $dataArray['width'] = $imagesize[0];
-        $dataArray['height'] = $imagesize[1];
-        
-        if (!$dataArray['list_image_tablet'])
-                $dataArray['list_image_tablet'] = $dataArray['list_image'];
-        
-        if ($dataArray['list_image_tablet']) {
-            $imageBaseDir = explode('/simi/', $dataArray['list_image_tablet']);
-            $imagesize = @getimagesize(Mage::getBaseDir('media').'/simi/'.$imageBaseDir[1]);
-            $dataArray['width_tablet'] = $imagesize[0];
-            $dataArray['height_tablet'] = $imagesize[1];
-        }
-
         $typeArray = Mage::helper('simiconnector/productlist')->getListTypeId();
         $dataArray['type_name'] = $typeArray[$listModel->getData('list_type')];
         if ($this->SHOW_PRODUCT_ARRAY) {
@@ -75,7 +60,7 @@ class Simi_Simiconnector_Model_Api_Homeproductlists extends Simi_Simiconnector_M
             $productListAPIModelData = $this->getData();
             unset($productListAPIModelData['resourceid']);
             $productListAPIModel->setData($productListAPIModelData);
-            $productListAPIModel->setBuilderQuery();            
+            $productListAPIModel->setFilterByHomeList();
             $productListAPIModel->FILTER_RESULT = false;
             $productListAPIModel->builderQuery = $productCollection;
             $productListAPIModel->pluralKey = 'products';

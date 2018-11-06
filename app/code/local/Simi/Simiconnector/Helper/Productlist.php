@@ -33,11 +33,12 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
     public function getProductCollectionByType($type, $listProduct = '')
     {
         $storeId = Mage::app()->getStore()->getId();
+        $fields = 'entity_id,entity_id,entity_type_id,attribute_set_id,type_id,sku,name
+            created_at,updated_at,has_options,required_options,cat_index_position,price,tax_class_id,
+            final_price,description,short_description,is_salable';
+        $fields = explode(',', $fields);
         $collection = Mage::getResourceModel('catalog/product_collection')
-            ->addAttributeToSelect(
-                Mage::getSingleton('catalog/config')
-                ->getProductAttributes()
-            )
+            ->addAttributeToSelect($fields)
             ->addMinimalPrice()
             ->addFinalPrice()
             ->addTaxPercents()
@@ -53,7 +54,7 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
                 if (!$installer->tableExists('catalog_product_flat_'.$storeId))
                     break;
                 $collection = Mage::getResourceModel('reports/product_collection')
-                    ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
+                    ->addAttributeToSelect($fields)
                     ->addOrderedQty()->addMinimalPrice()
                     ->addTaxPercents()
                     ->addStoreFilter()
@@ -66,7 +67,7 @@ class Simi_Simiconnector_Helper_Productlist extends Mage_Core_Helper_Abstract
                 if (!$installer->tableExists('catalog_product_flat_'.$storeId))
                     break;
                 $collection = Mage::getResourceModel('reports/product_collection')
-                    ->addAttributeToSelect(Mage::getSingleton('catalog/config')->getProductAttributes())
+                    ->addAttributeToSelect($fields)
                     ->addViewsCount()
                     ->addMinimalPrice()
                     ->addTaxPercents()

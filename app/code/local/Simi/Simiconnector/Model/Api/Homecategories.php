@@ -44,19 +44,6 @@ class Simi_Simiconnector_Model_Api_Homecategories extends Simi_Simiconnector_Mod
         $data = $this->getData();
 
         foreach ($result['homecategories'] as $index => $item) {
-            $imageBaseDir = explode('/simi/', $item['simicategory_filename']);
-            $imagesize = @getimagesize(Mage::getBaseDir('media') . '/simi/' . $imageBaseDir[1]);
-            $item['width'] = $imagesize[0];
-            $item['height'] = $imagesize[1];
-            if (!$item['simicategory_filename_tablet'])
-                $item['simicategory_filename_tablet'] = $item['simicategory_filename'];
-            if ($item['simicategory_filename_tablet']) {
-                $imageBaseDir = explode('/simi/', $item['simicategory_filename_tablet']);
-                $imagesize = @getimagesize(Mage::getBaseDir('media') . '/simi/' . $imageBaseDir[1]);
-                $item['width_tablet'] = $imagesize[0];
-                $item['height_tablet'] = $imagesize[1];
-            }
-
             $categoryModel = Mage::getModel('catalog/category')->load($item['category_id']);
             $item['cat_name'] = $categoryModel->getName();
             $item['url_path'] = $categoryModel->getUrlPath();

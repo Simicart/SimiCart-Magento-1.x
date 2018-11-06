@@ -219,31 +219,36 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
 
     public function getAllowedCountries()
     {
-        $list = array();
-        $country_default = Mage::getStoreConfig('general/country/default');
-        $countries = Mage::getResourceModel('directory/country_collection')->loadByStore();
-        $cache = null;
-        foreach ($countries as $country) {
-            if ($country_default == $country->getId()) {
-                $cache = array(
-                    'country_code' => $country->getId(),
-                    'country_name' => $country->getName(),
-                    'states' => Mage::helper('simiconnector/address')->getStates($country->getId()),
-                );
-            } else {
-                $list[] = array(
-                    'country_code' => $country->getId(),
-                    'country_name' => $country->getName(),
-                    'states' => Mage::helper('simiconnector/address')->getStates($country->getId()),
-                );
+        $cacheId = 'simi_allowed_countries';
+        if (false !== ($data = Mage::app()->getCache()->load($cacheId))) {
+            return unserialize($data);
+        } else {
+            $list = array();
+            $country_default = Mage::getStoreConfig('general/country/default');
+            $countries = Mage::getResourceModel('directory/country_collection')->loadByStore();
+            $cache = null;
+            foreach ($countries as $country) {
+                if ($country_default == $country->getId()) {
+                    $cache = array(
+                        'country_code' => $country->getId(),
+                        'country_name' => $country->getName(),
+                        'states' => Mage::helper('simiconnector/address')->getStates($country->getId()),
+                    );
+                } else {
+                    $list[] = array(
+                        'country_code' => $country->getId(),
+                        'country_name' => $country->getName(),
+                        'states' => Mage::helper('simiconnector/address')->getStates($country->getId()),
+                    );
+                }
             }
-        }
 
-        if ($cache) {
-            array_unshift($list, $cache);
+            if ($cache) {
+                array_unshift($list, $cache);
+            }
+            Mage::app()->getCache()->save(serialize($list), $cacheId);
+            return $list;
         }
-
-        return $list;
     }
 
     public function getCurrencyPosition()

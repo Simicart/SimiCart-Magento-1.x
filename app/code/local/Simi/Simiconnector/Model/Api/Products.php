@@ -327,4 +327,10 @@ class Simi_Simiconnector_Model_Api_Products extends Simi_Simiconnector_Model_Api
             $this->builderQuery = Mage::helper('simiconnector/productlist')->getProductCollectionByType($type);
     }
 
+    public function setFilterByHomeList() {
+        $data = $this->getData();
+        $this->_helperProduct = Mage::helper('simiconnector/products');
+        $this->_helperProduct->setData($data);
+    }
+
 }

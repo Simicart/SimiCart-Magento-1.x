@@ -39,20 +39,8 @@ class Simi_Simiconnector_Model_Api_Homebanners extends Simi_Simiconnector_Model_
 
         $result = parent::index();
         foreach ($result['homebanners'] as $index => $item) {
-            $imageBaseDir = explode('/simi/', $item['banner_name']);
-            $imagesize = @getimagesize(Mage::getBaseDir('media').'/simi/'.$imageBaseDir[1]);
-            $item['width'] = $imagesize[0];
-            $item['height'] = $imagesize[1];
-            
             if (!$item['banner_name_tablet'])
                 $item['banner_name_tablet'] = $item['banner_name'];
-            
-            if ($item['banner_name_tablet']) {
-                $imageBaseDir = explode('/simi/', $item['banner_name_tablet']);
-                $imagesize = @getimagesize(Mage::getBaseDir('media').'/simi/'.$imageBaseDir[1]);
-                $item['width_tablet'] = $imagesize[0];
-                $item['height_tablet'] = $imagesize[1];
-            }
 
             if ($item['type'] == 2) {
                 $categoryModel = Mage::getModel('catalog/category')->load($item['category_id']);
