@@ -278,6 +278,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         }
 
         $url = 'https://fcm.googleapis.com/fcm/send';
+        unset($message['devices_pushed']);
         $fields = array(
             'registration_ids' => $registrationIDs,
             'data' => array("message" => $message),
