@@ -110,12 +110,16 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
         if ($this->_RETURN_MESSAGE) {
             $resultArray['message'] = array($this->_RETURN_MESSAGE);
         }
+        
+        if (isset($resultArray['customer']) && isset($resultArray['customer']['email'])) {
+            if (Mage::getModel('newsletter/subscriber')->loadByEmail($resultArray['customer']['email'])->isSubscribed()) {
+                $resultArray['customer']['news_letter'] = '1';
+            } else {
+                $resultArray['customer']['news_letter'] = '0';
+            }
 
-        if(isset($resultArray['customer']) && isset($resultArray['customer']['email'])
-            && Mage::getModel('newsletter/subscriber')->loadByEmail($resultArray['customer']['email'])->isSubscribed()) {
-            $resultArray['customer']['news_letter'] = '1';
-        } else {
-            $resultArray['customer']['news_letter'] = '0';
+            $hash = md5(Mage::getStoreConfig('simiconnector/general/secret_key') . $resultArray['customer']['email']);
+            $resultArray['customer']['simi_hash'] = $hash;
         }
 
         return $resultArray;
