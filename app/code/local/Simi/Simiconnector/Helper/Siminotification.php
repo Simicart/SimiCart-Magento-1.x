@@ -107,7 +107,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         }
     }
 
-    public function sendIOS($collectionDevice, $data) 
+    public function sendIOS($collectionDevice, $data)
     {
         $total = count($collectionDevice);
         if ($total == 0)
@@ -115,7 +115,7 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         $ch = $this->getDirPEMfile($data);
         $dir = $this->getDirPEMPassfile();
         $message = $data['notice_content'];
-        $body['aps'] = array(
+        $dbData = array(
             'alert' => array('title'=>$data['notice_title'],'body'=>$message),
             'sound' => 'default',
             'badge' => 1,
@@ -134,8 +134,12 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             'show_popup' => $data['show_popup'],
             'notice_id' => $data['notice_id'], // frank customize click and rate click
             'notice_history_id' => $data['notice_history_id'],// frank customize click and rate click
+            'mutable-content' => 1,// Max add for the small image of the notification.
         );
-        
+        $body = $dbData;
+        $body['aps'] = $dbData;
+
+
         $payload = json_encode($body);
         $totalDevice = 0;
 
