@@ -163,7 +163,10 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
         if (!$quote->validateMinimumAmount()) {
             throw new Exception(Mage::getStoreConfig('sales/minimum_order/error_message'), 4);
         }
-
+        $paymentData = Mage::getSingleton('checkout/session')->getData('payment_data');        
+        if($paymentData){    
+            $this->_getOnepage()->getQuote()->getPayment()->importData($paymentData); 
+        }
         $this->_getOnepage()->saveOrder();
         $this->_getOnepage()->getQuote()->save();
         $order = array('invoice_number' => $this->_getCheckoutSession()->getLastRealOrderId(),

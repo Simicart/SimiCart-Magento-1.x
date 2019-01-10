@@ -45,7 +45,7 @@ class Simi_Simiconnector_Helper_Checkout_Payment extends Mage_Core_Helper_Abstra
                 'cc_cid' => $data->cc_cid,
             );
         }
-
+        Mage::getSingleton('checkout/session')->setData('payment_data',$method);
         $this->_getOnepage()->savePayment($method);
     }
 
