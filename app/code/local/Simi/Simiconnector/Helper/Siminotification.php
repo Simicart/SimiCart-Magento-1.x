@@ -286,6 +286,9 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
         $fields = array(
             'registration_ids' => $registrationIDs,
             'data' => array("message" => $message),
+            'android' => array('priority' => 'high'),
+            'priority' => 10
+
         );
 
         $api_key = Mage::getStoreConfig('simiconnector/notification/android_secret_key', $collectionDevice[0]['storeview_id']);
