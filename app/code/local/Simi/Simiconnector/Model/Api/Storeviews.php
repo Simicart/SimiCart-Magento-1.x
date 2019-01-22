@@ -100,7 +100,9 @@ class Simi_Simiconnector_Model_Api_Storeviews extends Simi_Simiconnector_Model_A
                 'open_url_in_app' =>Mage::getStoreConfig('simiconnector/general/open_url_in_app'),
                 'image_aspect_ratio' => Mage::getStoreConfig('simiconnector/general/image_aspect_ratio'),
                 'customer_email' => Mage::getSingleton('customer/session')->isLoggedIn()?Mage::getSingleton('customer/session')->getCustomer()->getEmail():null,
-                'connector_version' => $connectorVersion
+                'connector_version' => $connectorVersion,
+                'default_title' => Mage::getStoreConfig('design/head/default_title'),
+                'default_description' => Mage::getStoreConfig('design/head/default_description'),
             ),
             'sales' => array(
                 'sales_reorder_allow' => Mage::getStoreConfig('sales/reorder/allow'),
