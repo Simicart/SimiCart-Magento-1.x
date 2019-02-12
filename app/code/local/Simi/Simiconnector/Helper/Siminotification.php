@@ -71,6 +71,13 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             $allDevices = Mage::getModel('simiconnector/device')->getCollection();
             $allDevices->addFieldToFilter('storeview_id', $data['storeview_id']);
             $allDevices->addFieldToFilter('is_demo', $data['notice_sanbox'] == '1' ? 1:0);
+            if (isset($data['device_type']) && $data['device_type']) {
+                if ($data['device_type'] == 1) {
+                    $allDevices->addFieldToFilter('plaform_id', array('neq' => 3));
+                } else if ($data['device_type'] == 2) {
+                    $allDevices->addFieldToFilter('plaform_id', array('eq' => 3));
+                }
+            }
             foreach ($allDevices as $device) {
                 $deviceArray[] = $device->getData('device_id');
             }
