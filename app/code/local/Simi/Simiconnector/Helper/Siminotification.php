@@ -43,8 +43,6 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
 
     public function send(&$data) 
     {
-
-
         if ($data['category_id']) {
             $categoryId = $data['category_id'];
             $category = Mage::getModel('catalog/category')->load($categoryId);
@@ -66,9 +64,18 @@ class Simi_Simiconnector_Helper_Siminotification extends Mage_Core_Helper_Abstra
             $productName = Mage::getModel('catalog/product')->load($productId)->getName();
             $data['product_name'] = $productName;
         }
-
-        $deviceArray = explode(',', str_replace(' ', '', $data['devices_pushed']));
-
+        if ($data['devices_pushed']) {
+            $deviceArray = explode(',', str_replace(' ', '', $data['devices_pushed']));
+        } else {
+            $deviceArray = array();
+            $allDevices = Mage::getModel('simiconnector/device')->getCollection();
+            $allDevices->addFieldToFilter('storeview_id', $data['storeview_id']);
+            $allDevices->addFieldToFilter('is_demo', $data['notice_sanbox'] == '1' ? 1:0);
+            foreach ($allDevices as $device) {
+                $deviceArray[] = $device->getData('device_id');
+            }
+            $data['devices_pushed'] = implode(',', $deviceArray);
+        }
         $collectionDevice = Mage::getModel('simiconnector/device')->getCollection()->addFieldToFilter('device_id', array('in' => $deviceArray));
         $collectionDevice2 = Mage::getModel('simiconnector/device')->getCollection()->addFieldToFilter('device_id', array('in' => $deviceArray));
 

@@ -427,10 +427,8 @@ class Simi_Simiconnector_Block_Adminhtml_Siminotification_Edit_Tab_Form extends 
 
         $fieldsetFilter->addField('devices_pushed', 'textarea', array(
             'name' => 'devices_pushed',
-            'class' => 'required-entry',
-            'required' => true,
             'label' => Mage::helper('simiconnector')->__('Device IDs'),
-            'note' => Mage::helper('simiconnector')->__('Select your Devices'),
+            'note' => Mage::helper('simiconnector')->__('Select your Devices (leave it empty to send to all Devices matching conditions above)'),
             'after_element_html' => '
                  <a id="product_link" href="javascript:void(0)" onclick="toggleMainDevices()"><img src="' . $this->getSkinUrl('images/rule_chooser_trigger.gif') . '" alt="" class="v-middle rule-chooser-trigger" title="Select Device"></a>
                 <input type="hidden" value="' . $deviceIds . '" id="device_all_ids"/>
