@@ -12,6 +12,7 @@ class Simi_Simiconnector_Model_Server
     protected $_helper;
     protected $_data = array();
     protected $_method = 'callApi';
+    public $result = [];
 
     public function __construct()
     {
@@ -66,7 +67,10 @@ class Simi_Simiconnector_Model_Server
         }
 
         if (is_callable(array(&$model, $this->_method))) {
-            return call_user_func_array(array(&$model, $this->_method), array($data));
+            $this->result = call_user_func_array(array(&$model, $this->_method), array($data));
+            Mage::dispatchEvent('simi_simiconnector_model_server_return_' . $data['resource'],
+                array('object' => $this, 'data' => $this->_data));
+            return $this->result;
         }
 
         throw new Exception($this->_helper->__('Resource cannot callable.'), 6);
