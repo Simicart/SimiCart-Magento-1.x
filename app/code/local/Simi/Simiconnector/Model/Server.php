@@ -12,7 +12,7 @@ class Simi_Simiconnector_Model_Server
     protected $_helper;
     protected $_data = array();
     protected $_method = 'callApi';
-    public $result = [];
+    public $result = array();
 
     public function __construct()
     {
