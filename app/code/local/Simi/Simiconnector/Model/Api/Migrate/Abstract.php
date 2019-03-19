@@ -37,7 +37,7 @@ abstract class Simi_Simiconnector_Model_Api_Migrate_Abstract extends Simi_Simico
             $collection->setPageSize($offset + $limit);
         }
 
-        //$all_ids = array();
+        $all_ids = array();
         $info = array();
         $total = $collection->getSize();
 
@@ -73,7 +73,7 @@ abstract class Simi_Simiconnector_Model_Api_Migrate_Abstract extends Simi_Simico
     {
         return array(
             //'all_ids' => $all_ids,
-            $this->getPluralKey() => $this->motifyFields($info),
+            $this->getPluralKey() => $this->modifyFields($info),
             'total' => $total,
             'page_size' => $page_size,
             'from' => $from,

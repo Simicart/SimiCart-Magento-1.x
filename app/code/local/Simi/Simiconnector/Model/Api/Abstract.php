@@ -23,6 +23,8 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
 
     protected $_DEFAULT_ORDER = 'entity_id';
 
+    public $_message = '';
+
     protected $_helper;
     /**
      * Singular key.
@@ -98,6 +100,23 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
     public function setPluralKey($pluralKey)
     {
         $this->pluralKey = $pluralKey;
+        return $this;
+    }
+
+    /**
+     * get Return Message
+     * @return message (array or string)
+     */
+    public function getMessage() {
+        return $this->_message;
+    }
+
+    /**
+     * Set Return Message
+     * @return message (array or string)
+     */
+    public function setMessage($messsage) {
+        $this->_message = $messsage;
         return $this;
     }
 
@@ -192,39 +211,43 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
 
     public function callApi($data)
     {
-        $this->renewCustomerSesssion($data);
         $this->setData($data);
         $this->setBuilderQuery(null);
         $this->setPluralKey($data['resource']);
         $this->setSingularKey($data['resource']);
+        $result = [];
         if ($data['is_method'] == 1) {
             if (isset($data['resourceid']) && $data['resourceid'] != '') {
-                return $this->show($data['resourceid']);
+                $result = $this->show($data['resourceid']);
             } else {
-                return $this->index();
+                $result = $this->index();
             }
         } elseif ($data['is_method'] == 2) {
             if(isset($data['params']['is_put']) && $data['params']['is_put'] == '1' && !Mage::getStoreConfig('simiconnector/methods_support/put'))
-            {
-                return $this->update($data['resourceid']);
-            }
+                $result = $this->update($data['resourceid']);
             else  if(isset($data['params']['is_delete']) && $data['params']['is_delete'] == '1' && !Mage::getStoreConfig('simiconnector/methods_support/delete'))
-            {
-                return $this->destroy($data['resourceid']);
-            }
-            return $this->store();
+                $result = $this->destroy($data['resourceid']);
+            else
+                $result = $this->store();
         } elseif ($data['is_method'] == 3) {
-            return $this->update($data['resourceid']);
+            $result = $this->update($data['resourceid']);
         } elseif ($data['is_method'] == 4) {
-            return $this->destroy($data['resourceid']);
+            $result = $this->destroy($data['resourceid']);
         }
+        if ($message = $this->getMessage()) {
+            if (is_array($message))
+                $result['message'] = $message;
+            else
+                $result['message'] = array($message);
+        }
+        return $result;
     }
 
     public function getList($info, $all_ids, $total, $page_size, $from)
     {
         return array(
             'all_ids' => $all_ids,
-            $this->getPluralKey() => $this->motifyFields($info, true),
+            $this->getPluralKey() => $this->modifyFields($info, true),
             'total' => $total,
             'page_size' => $page_size,
             'from' => $from,
@@ -233,7 +256,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
 
     public function getDetail($info)
     {
-        return array($this->getSingularKey() => $this->motifyFields($info));
+        return array($this->getSingularKey() => $this->modifyFields($info));
     }
 
     protected function filter()
@@ -295,31 +318,31 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
         }
     }
 
-    protected function motifyFields($content,$is_list=false)
+    protected function modifyFields($content,$is_list=false)
     {
         $data = $this->getData();
         $parameters = $data['params'];
         if (isset($parameters['fields']) && $parameters['fields']) {
             $fields = explode(',', $parameters['fields']);
             if(!$is_list){
-                $motify = array();
+                $modify = array();
                 foreach ($content as $key => $item) {
                     if (in_array($key, $fields)) {
-                        $motify[$key] = $item;
+                        $modify[$key] = $item;
                     }
                 }
 
-                return $motify;
+                return $modify;
             }else{
-                $motify = array();
+                $modify = array();
                 foreach ($content as $index => $item) {
                     foreach ($item as $key => $value) {
                         if (in_array($key, $fields)) {
-                            $motify[$key] = $value;
+                            $modify[$key] = $value;
                         }
                     }
 
-                    $content[$index] = $motify;
+                    $content[$index] = $modify;
                 }
 
                 return $content;
@@ -328,7 +351,7 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
             return $content;
         }
     }
-    
+
     protected  function renewCustomerSesssion($data)
     {
         Mage::helper('simiconnector/customer')->renewCustomerSesssion($data);
