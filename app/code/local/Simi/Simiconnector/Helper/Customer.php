@@ -81,10 +81,54 @@ class Simi_Simiconnector_Helper_Customer extends Mage_Core_Helper_Abstract
 
     public function validateSimiPass($username, $password)
     {
+        $tokenModel = Mage::getModel('simiconnector/customertoken')
+            ->getCollection()
+            ->addFieldToFilter('token', $password)
+            ->getFirstItem();
+        if ($tokenModel->getId() && $customerId = $tokenModel->getData('customer_id')) {
+            $customerModel = Mage::getModel('customer/customer')->load($customerId);
+            if ($customerEmail = $customerModel->getData('email')) {
+                if ($customerEmail == $username)
+                    return true;
+            }
+        }
+        /*
         if ($password == md5(Mage::getStoreConfig('simiconnector/general/secret_key') . $username)) {
             return true;
         }
-
+        */
         return false;
+    }
+
+
+    public function getToken($data) {
+        $customerSession = $this->_getSession();
+        if ($customerSession->isLoggedIn()) {
+            $customerId = $this->_getSession()->getCustomer()->getId();
+            if ($customerId) {
+                $createNewToken = false;
+                if ($data && isset($data['resourceid']) && $data['resourceid'] == 'login')
+                    $createNewToken = true;
+                else if ($data && isset($data['resource']) && $data['resource'] == 'sociallogins')
+                    $createNewToken = true;
+
+                $tokenModel = Mage::getModel('simiconnector/customertoken')
+                    ->getCollection()
+                    ->addFieldToFilter('customer_id', $customerId)
+                    ->getFirstItem();
+
+                if (!$tokenModel->getId() || $createNewToken) {
+                    $newToken = 'tk_'
+                        . md5(rand(pow(10, 9), pow(10, 10)))
+                        . md5(microtime());
+                    $tokenModel->setData('token', $newToken);
+                    $tokenModel->setData('customer_id', $customerId);
+                    $tokenModel->setData('created_time', time());
+                    $tokenModel->save();
+                }
+                return $tokenModel->getData('token');
+            }
+        }
+        return '';
     }
 }

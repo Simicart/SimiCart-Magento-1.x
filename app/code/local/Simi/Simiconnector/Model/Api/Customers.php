@@ -105,8 +105,8 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
 
     public function getDetail($info) 
     {
+        $data = $this->getData();
         $resultArray = parent::getDetail($info);
-
         if ($this->_RETURN_MESSAGE) {
             $resultArray['message'] = array($this->_RETURN_MESSAGE);
         }
@@ -118,7 +118,8 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
                 $resultArray['customer']['news_letter'] = '0';
             }
 
-            $hash = md5(Mage::getStoreConfig('simiconnector/general/secret_key') . $resultArray['customer']['email']);
+            $hash = Mage::helper('simiconnector/customer')
+                ->getToken($data);
             $resultArray['customer']['simi_hash'] = $hash;
         }
 

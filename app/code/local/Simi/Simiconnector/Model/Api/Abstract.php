@@ -211,11 +211,12 @@ abstract class Simi_Simiconnector_Model_Api_Abstract
 
     public function callApi($data)
     {
+        $this->renewCustomerSesssion($data);
         $this->setData($data);
         $this->setBuilderQuery(null);
         $this->setPluralKey($data['resource']);
         $this->setSingularKey($data['resource']);
-        $result = [];
+        $result = array();
         if ($data['is_method'] == 1) {
             if (isset($data['resourceid']) && $data['resourceid'] != '') {
                 $result = $this->show($data['resourceid']);
