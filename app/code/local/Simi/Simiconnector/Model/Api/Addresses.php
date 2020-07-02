@@ -18,7 +18,15 @@ class Simi_Simiconnector_Model_Api_Addresses extends Simi_Simiconnector_Model_Ap
     {
         $data = $this->getData();
         if (isset($data['resourceid']) && $data['resourceid']) {
-            $this->builderQuery = Mage::getModel('customer/address')->load($data['resourceid']);
+            $auth = false;
+            $customer     = Mage::getSingleton('customer/session')->getCustomer();
+            foreach ($customer->getAddresses() as $address) {
+                if ($address->getId() == $data['resourceid'])
+                    $auth = true;
+            }
+            if ($auth)
+                $this->builderQuery = Mage::getModel('customer/address')->load($data['resourceid']);
+            return;
         } else {
             if (!Mage::getSingleton('customer/session')->isLoggedIn()) {
                 throw new Exception($this->_helper->__('You have not logged in'), 4);

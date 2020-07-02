@@ -13,12 +13,6 @@ class Simi_Simiconnector_Model_Api_Devices extends Simi_Simiconnector_Model_Api_
 
     public function setBuilderQuery() 
     {
-        $data = $this->getData();
-        if (isset($data['resourceid']) && $data['resourceid']) {
-            $this->builderQuery = Mage::getModel('simiconnector/device')->load($data['resourceid']);
-        } else {
-            $this->builderQuery = Mage::getModel('simiconnector/device')->getCollection();
-        }
     }
 
     public function store() 

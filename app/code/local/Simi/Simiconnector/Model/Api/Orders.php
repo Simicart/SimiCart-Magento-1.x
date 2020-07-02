@@ -218,6 +218,15 @@ class Simi_Simiconnector_Model_Api_Orders extends Simi_Simiconnector_Model_Api_A
             Mage::dispatchEvent('simi_simiconnector_model_api_orders_onepage_show_after', array('object' => $this, 'data' => $this->detail_onepage));
             return $this->detail_onepage;
         } else {
+            $isAuth = false;
+            if (Mage::getSingleton('customer/session')->isLoggedIn()) {
+                $customerId = Mage::getSingleton('customer/session')->getCustomer()->getId();
+                if ($customerId == $this->builderQuery->getData('customer_id'))
+                    $isAuth = true;
+            }
+            if (!$isAuth)
+                throw new Exception(Mage::helper('simiconnector')->__('Not Authorized'), 6);
+
             $result = parent::show();
             if ($data['params']['reorder'] == 1) {
                 $order = Mage::getModel('sales/order')->load($data['resourceid']);

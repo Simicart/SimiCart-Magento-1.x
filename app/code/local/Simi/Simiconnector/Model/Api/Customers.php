@@ -57,9 +57,7 @@ class Simi_Simiconnector_Model_Api_Customers extends Simi_Simiconnector_Model_Ap
                     $this->builderQuery = Mage::getModel('simiconnector/customer')->getCustomerByEmail($data['params']['customer_email']);
                     break;
                 default:
-                    $this->builderQuery = Mage::getModel('customer/customer')->setWebsiteId(Mage::app()->getStore()->getWebsiteId())->load($data['resourceid']);
-                    if (!$this->builderQuery->getId())
-                        $this->builderQuery = Mage::getModel("customer/customer")->setWebsiteId(Mage::app()->getStore()->getWebsiteId())->loadByEmail($data['resourceid']);
+                    throw new Exception($this->_helper->__('Invalid Resource Id'));
                     break;
             }
         } else {
